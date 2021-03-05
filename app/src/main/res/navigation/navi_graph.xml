@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navi_graph"
+    app:startDestination="@id/fragment_first">
+    <fragment
+        android:id="@+id/fragment_first"
+        android:name="com.example.gongsanggongsang.FirstFragment"
+        android:label="FirstFragment" />
+    <fragment
+        android:id="@+id/fragment_second"
+        android:name="com.example.gongsanggongsang.SecondFragment"
+        android:label="SecondFragment" />
+    <fragment
+        android:id="@+id/fragment_third"
+        android:name="com.example.gongsanggongsang.ThirdFragment"
+        android:label="ThirdFragment" />
+    <fragment
+        android:id="@+id/fragment_fourth"
+        android:name="com.example.gongsanggongsang.FourthFragment"
+        android:label="FourthFragment" />
+    <fragment
+        android:id="@+id/fragment_fifth"
+        android:name="com.example.gongsanggongsang.FifthFragment"
+        android:label="FifthFragment" />
+</navigation>
