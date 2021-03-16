@@ -22,17 +22,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        initViewPager()
-    }
-    private fun initViewPager(){
-        val tabLayoutTextArray = arrayOf("홈", "게시판", "예약", "냉장고", "내정보")
-        val tabLayoutIconList = arrayListOf(R.drawable.basic_icon, R.drawable.basic_icon, R.drawable.basic_icon, R.drawable.basic_icon, R.drawable.basic_icon)
-        nav_host_fragment.adapter = ViewPagerAdapter(this)
-        TabLayoutMediator(tab_layout, nav_host_fragment){tab, position->
-            tab.text = tabLayoutTextArray[position]
-            tab.setIcon(tabLayoutIconList[position])
-        }.attach()
-    }
 
+        NavigationUI.setupWithNavController(main_bottom_navigation, findNavController(R.id.nav_host_fragment))
+    }
 
 }

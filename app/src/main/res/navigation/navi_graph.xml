@@ -2,6 +2,7 @@
 <navigation
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startDestination="@id/fragment_first"
     android:id="@+id/navi_graph">
     <fragment
         android:id="@+id/fragment_first"
@@ -23,4 +24,7 @@
         android:id="@+id/fragment_fifth"
         android:name="com.example.gongsanggongsang.FifthFragment"
         android:label="FifthFragment" />
+    <fragment
+        android:id="@+id/fragment_community_market"
+        android:name="com.example.gongsanggongsang.CommunityMarketFragment"/>
 </navigation>
