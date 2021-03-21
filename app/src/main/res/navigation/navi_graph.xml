@@ -1,27 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/navi_graph"
-    app:startDestination="@id/fragment_first">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainActivity"
+    app:startDestination="@id/loginFragment">
     <fragment
-        android:id="@+id/fragment_first"
-        android:name="com.example.gongsanggongsang.FirstFragment"
-        android:label="FirstFragment" />
+        android:id="@+id/loginFragment"
+        android:name="com.example.gongsanggongsang.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_smsFragment"
+            app:destination="@id/smsFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_baseFragment"
+            app:destination="@id/baseFragment" />
+    </fragment>
     <fragment
-        android:id="@+id/fragment_second"
-        android:name="com.example.gongsanggongsang.SecondFragment"
-        android:label="SecondFragment" />
+        android:id="@+id/signupFragment"
+        android:name="com.example.gongsanggongsang.SignupFragment"
+        android:label="SignupFragment" >
+        <action
+            android:id="@+id/action_signupFragment_to_baseFragment"
+            app:destination="@id/baseFragment" />
+    </fragment>
     <fragment
-        android:id="@+id/fragment_third"
-        android:name="com.example.gongsanggongsang.ThirdFragment"
-        android:label="ThirdFragment" />
+        android:id="@+id/baseFragment"
+        android:name="com.example.gongsanggongsang.BaseFragment"
+        android:label="fragment_base"
+        tools:layout="@layout/fragment_base" />
     <fragment
-        android:id="@+id/fragment_fourth"
-        android:name="com.example.gongsanggongsang.FourthFragment"
-        android:label="FourthFragment" />
-    <fragment
-        android:id="@+id/fragment_fifth"
-        android:name="com.example.gongsanggongsang.FifthFragment"
-        android:label="FifthFragment" />
+        android:id="@+id/smsFragment"
+        android:name="com.example.gongsanggongsang.SmsFragment"
+        android:label="SmsFragment" >
+        <action
+            android:id="@+id/action_smsFragment_to_signupFragment"
+            app:destination="@id/signupFragment" />
+    </fragment>
 </navigation>
