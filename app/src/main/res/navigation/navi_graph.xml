@@ -27,4 +27,7 @@
     <fragment
         android:id="@+id/fragment_community_market"
         android:name="com.example.gongsanggongsang.CommunityMarketFragment"/>
+    <fragment
+        android:id="@+id/fragment_community_write"
+        android:name="com.example.gongsanggongsang.CommunityWriteFragment"/>
 </navigation>
