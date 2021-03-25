@@ -1,6 +1,4 @@
-import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +7,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gongsanggongsang.Data.CommunityMarketPostModel
 import com.example.gongsanggongsang.R
-import com.example.gongsanggongsang.Third.CommunityRecyclerAdapter
+import com.example.gongsanggongsang.Third.CommunityPreviewRecyclerAdapter
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Source
 import kotlinx.android.synthetic.main.fragment_community_market.*
 
-class CommunityMarket : Fragment() {
+class MarketFragment : Fragment() {
     var database = FirebaseFirestore.getInstance()
 
     override fun onCreateView(
@@ -39,8 +36,8 @@ class CommunityMarket : Fragment() {
     }
     fun initRecyclerView(){
         var testlist = arrayListOf<CommunityMarketPostModel>()
-        var mCommunityRecyclerAdapter: CommunityRecyclerAdapter = CommunityRecyclerAdapter(testlist).apply {
-            listener = object : CommunityRecyclerAdapter.OnCommunityMarketItemClickListener{
+        var mCommunityRecyclerAdapter: CommunityPreviewRecyclerAdapter = CommunityPreviewRecyclerAdapter(testlist).apply {
+            listener = object : CommunityPreviewRecyclerAdapter.OnCommunityMarketItemClickListener{
                 override fun onMarketItemClick(position: Int) {
                     findNavController().navigate(R.id.communityMarketPost)
                 }

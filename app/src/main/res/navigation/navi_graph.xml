@@ -34,6 +34,13 @@
         <action
             android:id="@+id/action_baseFragment_to_communityMarket"
             app:destination="@id/communityMarket" />
+        <action
+            android:id="@+id/action_baseFragment_to_communityWith"
+            app:destination="@+id/communityWith"/>
+        <action
+            android:id="@+id/action_baseFragment_to_communitySuggest"
+            app:destination="@+id/communitySuggest"/>
+
     </fragment>
     <fragment
         android:id="@+id/smsFragment"
@@ -45,7 +52,7 @@
     </fragment>
     <fragment
         android:id="@+id/communityMarket"
-        android:name="CommunityMarket"
+        android:name="MarketFragment"
         android:label="CommunityMarket">
         <action
             android:id="@+id/action_communityMarket_to_communityMarketWrite"
@@ -53,10 +60,41 @@
     </fragment>
     <fragment
         android:id="@+id/communityMarketWrite"
-        android:name="CommunityMarketWrite"
+        android:name="MarketWriteFragment"
         android:label="CommunityMarketWrite" />
     <fragment
         android:id="@+id/communityMarketPost"
-        android:name="com.example.gongsanggongsang.Third.CommunityMarketPost"
+        android:name="com.example.gongsanggongsang.Third.MarketPostFragment"
         android:label="CommunityMarket"/>
+
+    <fragment
+        android:id="@+id/communitySuggest"
+        android:name="com.example.gongsanggongsang.Third.SuggestFragment">
+        <action
+            android:id="@+id/action_communitySuggest_to_communitySuggestWrite"
+            app:destination="@+id/communitySuggestWrite"/>
+    </fragment>
+    <fragment
+        android:id="@+id/communitySuggestWrite"
+        android:name="SuggestWriteFragment">
+
+    </fragment>
+    <fragment
+        android:id="@+id/communitySuggestPost"
+        android:name="com.example.gongsanggongsang.Third.SuggestPostFragment"/>
+
+    <fragment
+        android:id="@+id/communityWith"
+        android:name="com.example.gongsanggongsang.Third.WithFragment">
+        <action
+            android:id="@+id/action_communityWith_to_communityWithWrite"
+            app:destination="@+id/communityWithWrite"/>
+    </fragment>
+    <fragment
+        android:id="@+id/communityWithWrite"
+        android:name="WithWriteFragment"/>
+    <fragment
+        android:id="@+id/communityWithPost"
+        android:name="com.example.gongsanggongsang.Third.WithPostFragment"/>
+
 </navigation>

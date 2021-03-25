@@ -30,6 +30,12 @@ class ThirdFragment : Fragment() {
         community_market_button.setOnClickListener{
             findNavController().navigate(R.id.action_baseFragment_to_communityMarket)
         }
+        community_with_button.setOnClickListener{
+            findNavController().navigate(R.id.action_baseFragment_to_communityWith)
+        }
+        community_suggest_button.setOnClickListener{
+            findNavController().navigate(R.id.action_baseFragment_to_communitySuggest)
+        }
     }
 
 }
