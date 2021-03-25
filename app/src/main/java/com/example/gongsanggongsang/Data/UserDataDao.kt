@@ -2,6 +2,7 @@ package com.example.gongsanggongsang.Data
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import androidx.room.Query
 
 @Dao
 interface UserDataDao {
@@ -11,6 +12,7 @@ interface UserDataDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(userEntity: UserDataEntity)
+
 
 
 }
