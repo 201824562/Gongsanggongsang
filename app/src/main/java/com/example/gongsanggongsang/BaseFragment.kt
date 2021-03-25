@@ -30,7 +30,7 @@ class BaseFragment : Fragment() {
     private fun initViewPager() {
 
         //main_pager.adapter = ViewPagerAdapter(this) //뷰페이저와 뷰페이저어댑터 연결
-        main_pager.offscreenPageLimit = 2                //뷰계층구조에 보관된 페이지, view/fragment 수를 제어할 수 있다.
+        main_pager.offscreenPageLimit = 5                //뷰계층구조에 보관된 페이지, view/fragment 수를 제어할 수 있다.
         viewPagerAdapter = ViewPagerAdapter(requireActivity().supportFragmentManager, lifecycle)
         main_pager.adapter = viewPagerAdapter
         main_pager.registerOnPageChangeCallback(PageChangeCallback())

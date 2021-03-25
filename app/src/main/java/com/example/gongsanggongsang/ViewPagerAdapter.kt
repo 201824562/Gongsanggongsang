@@ -13,7 +13,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter as FragmentStateAdapter
 
 class ViewPagerAdapter(fm: FragmentManager, lc:Lifecycle) : FragmentStateAdapter(fm,lc){
 
-    override fun getItemCount(): Int = 2 //PagerViewadapter에서 관리할 View 개수를 반환한다.
+    override fun getItemCount(): Int = 5 //PagerViewadapter에서 관리할 View 개수를 반환한다.
 
     override fun createFragment(position: Int): Fragment{
         return when(position){
