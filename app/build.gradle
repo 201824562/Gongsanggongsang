@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-android-extensions' // 익스텐션 플러그인 적용
     id 'kotlin-kapt'    // Kotlin(Mvvm/Coroutine)
     id 'com.google.gms.google-services' //firbase
+    id 'androidx.navigation.safeargs'
 }
 
 android {

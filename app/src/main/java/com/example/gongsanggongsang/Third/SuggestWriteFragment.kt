@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.fragment_community_market_write.*
 import kotlinx.android.synthetic.main.fragment_community_market_write.community_market_write_contents
 import kotlinx.android.synthetic.main.fragment_community_market_write.community_market_write_title
 import kotlinx.android.synthetic.main.fragment_community_suggest_write.*
+import java.time.LocalDateTime
 
 class SuggestWriteFragment : Fragment() {
     var database = FirebaseFirestore.getInstance()
@@ -32,10 +33,12 @@ class SuggestWriteFragment : Fragment() {
             val post = CommunityMarketPostModel(0.toLong(),
                     "주용가리",
                     community_suggest_write_title.text.toString(),
-                    community_suggest_write_contents.text.toString()
+                    community_suggest_write_contents.text.toString(),
+                    LocalDateTime.now().toString()
             )
 
-            database.collection("COMMUNITY_Suggest").add(post)
+            var documentName = community_suggest_write_title.text.toString() + LocalDateTime.now().toString()
+            database.collection("COMMUNITY_Suggest").document(documentName).set(post)
             findNavController().navigate(R.id.communitySuggest)
         }
         //val navHostFragment = childFragmentManager.findFragmentById(R.id.nav_host_third) as NavHostFragment? ?: return

@@ -11,6 +11,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_community_market_write.*
 import kotlinx.android.synthetic.main.fragment_community_market_write.community_market_write_register_button
 import kotlinx.android.synthetic.main.fragment_community_with_write.*
+import java.time.LocalDateTime
 
 class WithWriteFragment : Fragment() {
     var database = FirebaseFirestore.getInstance()
@@ -28,7 +29,7 @@ class WithWriteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         community_with_write_register_button.setOnClickListener{
-            val post = CommunityMarketPostModel(0.toLong(),"주용가리",community_with_write_title.text.toString(),community_with_write_contents.text.toString())
+            val post = CommunityMarketPostModel(0.toLong(),"주용가리",community_with_write_title.text.toString(),community_with_write_contents.text.toString(), LocalDateTime.now().toString())
             database.collection("COMMUNITY_With").document().set(post)
             findNavController().navigate(R.id.communityWith)
         }
