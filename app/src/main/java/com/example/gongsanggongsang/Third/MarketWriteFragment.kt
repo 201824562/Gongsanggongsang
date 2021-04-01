@@ -4,10 +4,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.gongsanggongsang.Data.CommunityMarketPostModel
+import com.example.gongsanggongsang.data.CommunityMarketPostModel
 import com.example.gongsanggongsang.R
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_community_market_write.*
 
 class MarketWriteFragment : Fragment() {

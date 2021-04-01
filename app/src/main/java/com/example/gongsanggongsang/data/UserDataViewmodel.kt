@@ -1,12 +1,9 @@
-package com.example.gongsanggongsang.Data
+package com.example.gongsanggongsang.data
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class UserDataViewmodel(application: Application) : AndroidViewModel(application) {
     val repository: UserDataRepository = UserDataRepository(AppDatabase.getDatabase(application, viewModelScope))
@@ -17,6 +14,7 @@ class UserDataViewmodel(application: Application) : AndroidViewModel(application
     fun insert(it: UserDataClass) {
         repository.insert(it)
     }
+
 
 
 

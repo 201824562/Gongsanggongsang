@@ -1,9 +1,8 @@
-package com.example.gongsanggongsang.Data
+package com.example.gongsanggongsang.data
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.android.synthetic.main.fragment_sign_up.*
 
 //[관리자용]
 @Entity(tableName = "USER_SIGNUP_TABLE")
