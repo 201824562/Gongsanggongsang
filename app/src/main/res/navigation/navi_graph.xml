@@ -65,7 +65,12 @@
     <fragment
         android:id="@+id/communityMarketPost"
         android:name="com.example.gongsanggongsang.Third.MarketPostFragment"
-        android:label="CommunityMarket"/>
+        android:label="CommunityMarket">
+        <argument
+            app:argType="string"
+            android:name="title"
+            android:defaultValue="0"/>
+    </fragment>
 
     <fragment
         android:id="@+id/communitySuggest"

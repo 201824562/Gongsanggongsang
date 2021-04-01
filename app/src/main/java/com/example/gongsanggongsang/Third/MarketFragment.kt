@@ -2,6 +2,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,6 +11,7 @@ import com.example.gongsanggongsang.R
 import com.example.gongsanggongsang.Third.CommunityPreviewRecyclerAdapter
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_community_market.*
+import java.time.LocalDateTime
 
 class MarketFragment : Fragment() {
     var database = FirebaseFirestore.getInstance()
@@ -39,7 +41,11 @@ class MarketFragment : Fragment() {
         var mCommunityRecyclerAdapter: CommunityPreviewRecyclerAdapter = CommunityPreviewRecyclerAdapter(testlist).apply {
             listener = object : CommunityPreviewRecyclerAdapter.OnCommunityMarketItemClickListener{
                 override fun onMarketItemClick(position: Int) {
-                    findNavController().navigate(R.id.communityMarketPost)
+                    var test = getItem(position).title.toString() + getItem(position).date.toString()
+                    var bundle = bundleOf(
+                            "key" to test
+                    )
+                    findNavController().navigate(R.id.communityMarketPost, bundle)
                 }
             }
         }
@@ -54,7 +60,7 @@ class MarketFragment : Fragment() {
                 .addOnSuccessListener { result ->
                     testlist.clear()
                     for (document in result){
-                        val item = CommunityMarketPostModel(0.toLong(),"주용가리", document["title"] as String, document["contents"] as String)
+                        val item = CommunityMarketPostModel(0.toLong(),"주용가리", document["title"] as String, document["contents"] as String, document["date"] as String)
                         testlist.add(item)
                     }
                     mCommunityRecyclerAdapter.notifyDataSetChanged()

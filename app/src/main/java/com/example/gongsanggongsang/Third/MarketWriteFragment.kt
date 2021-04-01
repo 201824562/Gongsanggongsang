@@ -9,6 +9,7 @@ import com.example.gongsanggongsang.R
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_community_market_write.*
+import java.time.LocalDateTime
 
 class MarketWriteFragment : Fragment() {
     var database = FirebaseFirestore.getInstance()
@@ -26,8 +27,12 @@ class MarketWriteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         community_market_write_register_button.setOnClickListener{
-            val post = CommunityMarketPostModel(0.toLong(),"주용가리",community_market_write_title.text.toString(),community_market_write_contents.text.toString())
-            database.collection("COMMUNITY_Market").add(post)
+            val post = CommunityMarketPostModel(0,"주용가리"
+                ,community_market_write_title.text.toString()
+                ,community_market_write_contents.text.toString()
+                , LocalDateTime.now().toString())
+            var documentName = community_market_write_title.text.toString() + LocalDateTime.now().toString()
+            database.collection("COMMUNITY_Market").document(documentName).set(post)
             findNavController().navigate(R.id.communityMarket)
         }
         //val navHostFragment = childFragmentManager.findFragmentById(R.id.nav_host_third) as NavHostFragment? ?: return

@@ -11,6 +11,7 @@ import com.example.gongsanggongsang.Data.CommunityMarketPostModel
 import com.example.gongsanggongsang.R
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_community_suggest.*
+import java.time.LocalDateTime
 
 class SuggestFragment : Fragment() {
     var database = FirebaseFirestore.getInstance()
@@ -55,7 +56,7 @@ class SuggestFragment : Fragment() {
                 .addOnSuccessListener { result ->
                     testlist.clear()
                     for (document in result){
-                        val item = CommunityMarketPostModel(0.toLong(),"주용가리", document["title"] as String, document["contents"] as String)
+                        val item = CommunityMarketPostModel(0.toLong(),"주용가리", document["title"] as String, document["contents"] as String, LocalDateTime.now().toString())
                         testlist.add(item)
                     }
                     mCommunityRecyclerAdapter.notifyDataSetChanged()
