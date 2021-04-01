@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainActivity"
-    app:startDestination="@id/startFragment">
+    app:startDestination="@id/loginFragment">
 
 
     <fragment
@@ -12,11 +12,11 @@
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
+            android:id="@+id/action_loginFragment_to_smsFragment"
+            app:destination="@id/smsFragment" />
+        <action
             android:id="@+id/action_loginFragment_to_baseFragment"
             app:destination="@id/baseFragment" />
-        <action
-            android:id="@+id/action_loginFragment_to_signupFragment"
-            app:destination="@id/signupFragment" />
 
     </fragment>
     <fragment
@@ -24,8 +24,8 @@
         android:name="com.example.gongsanggongsang.SignupFragment"
         android:label="SignupFragment" >
         <action
-            android:id="@+id/action_signupFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            android:id="@+id/action_signupFragment_to_baseFragment"
+            app:destination="@id/baseFragment" />
     </fragment>
     <fragment
         android:id="@+id/baseFragment"
@@ -41,6 +41,14 @@
             android:id="@+id/action_baseFragment_to_communitySuggest"
             app:destination="@+id/communitySuggest"/>
 
+    </fragment>
+    <fragment
+        android:id="@+id/smsFragment"
+        android:name="com.example.gongsanggongsang.SmsFragment"
+        android:label="SmsFragment" >
+        <action
+            android:id="@+id/action_smsFragment_to_signupFragment"
+            app:destination="@id/signupFragment" />
     </fragment>
     <fragment
         android:id="@+id/communityMarket"
@@ -88,20 +96,5 @@
     <fragment
         android:id="@+id/communityWithPost"
         android:name="com.example.gongsanggongsang.Third.WithPostFragment"/>
-    <fragment
-        android:id="@+id/startFragment"
-        android:name="com.example.gongsanggongsang.StartFragment"
-        android:label="StartFragment" >
-        <action
-            android:id="@+id/action_startFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-        <action
-            android:id="@+id/action_startFragment_to_testAdministerFragment"
-            app:destination="@id/testAdministerFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/testAdministerFragment"
-        android:name="com.example.gongsanggongsang.Administer.TestAdministerFragment"
-        android:label="TestAdministerFragment" />
 
 </navigation>

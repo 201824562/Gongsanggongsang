@@ -1,4 +1,4 @@
-package com.example.gongsanggongsang.data
+package com.example.gongsanggongsang.Data
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
