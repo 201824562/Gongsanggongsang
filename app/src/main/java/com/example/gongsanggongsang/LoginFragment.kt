@@ -4,11 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.fragment_login.edit_text_pwd
+import kotlinx.android.synthetic.main.fragment_login.signup_btn
 
 class LoginFragment : Fragment() {
+
+    lateinit var id : String
+    lateinit var pwd : String
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -21,11 +28,22 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        signupButton.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_smsFragment)
+        signup_btn.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_signupFragment)
         }
-        loginButton.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_baseFragment)
+
+        login_btn.setOnClickListener {
+            Toast.makeText(context, "!!!!!.", Toast.LENGTH_SHORT).show()
+            id = edit_text_id.text.toString()
+            pwd = edit_text_pwd.text.toString()
+            Toast.makeText(context, "!!!2222!!.", Toast.LENGTH_SHORT).show()
+
+            if (id.isBlank() || pwd.isBlank() ){
+                Toast.makeText(context, "정보를 모두 입력해주세요.", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                findNavController().navigate(R.id.action_loginFragment_to_baseFragment)
+            }
         }
 
     }

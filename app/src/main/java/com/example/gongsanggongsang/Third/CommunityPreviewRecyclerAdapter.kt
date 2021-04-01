@@ -3,9 +3,8 @@ package com.example.gongsanggongsang.Third
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.gongsanggongsang.Data.CommunityMarketPostModel
+import com.example.gongsanggongsang.data.CommunityMarketPostModel
 import com.example.gongsanggongsang.R
 import kotlinx.android.synthetic.main.fragment_community_write_preview_item.view.*
 
