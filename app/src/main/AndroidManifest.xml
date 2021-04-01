@@ -16,7 +16,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
-
+    <uses-permission android:name="android.permission.INTERNET" />  <!-- 사용자 인터넷 접속 허용 권한 획득-->
 </manifest>

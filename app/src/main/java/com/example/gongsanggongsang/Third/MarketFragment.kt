@@ -6,7 +6,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.gongsanggongsang.Data.CommunityMarketPostModel
+import com.example.gongsanggongsang.data.CommunityMarketPostModel
 import com.example.gongsanggongsang.R
 import com.example.gongsanggongsang.Third.CommunityPreviewRecyclerAdapter
 import com.google.firebase.firestore.FirebaseFirestore
