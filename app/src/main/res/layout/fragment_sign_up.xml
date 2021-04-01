@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".SignupFragment">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/Title_layout"
         android:layout_width="match_parent"
@@ -14,219 +15,192 @@
         android:layout_marginBottom="15dp"
         android:gravity="center"
         android:orientation="horizontal">
+
         <TextView
             android:id="@+id/Title"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:gravity="center"
             android:layout_weight="10"
-            android:text="회원가입 화면"
+            android:gravity="center"
+            android:text="회원가입화면"
             android:textSize="22dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:padding="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Title_layout"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="0dp">
-
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_editor_absoluteX="16dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:gravity="center"
             android:orientation="horizontal">
-
             <TextView
-                android:id="@+id/text_name"
+                android:id="@+id/signup_idtext"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginRight="15dp"
-                android:text="이름 : " />
-
+                android:text="아이디 : "
+                android:textSize="22dp"
+                android:textStyle="bold" />
             <EditText
-                android:id="@+id/edit_text_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
+                android:id="@+id/signup_iddata"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="10"
-                android:background="@color/gray"
-                android:hint="이름을 입력하세요."
-                android:padding="8dp"
-                android:singleLine="true"
-                android:textSize="12dp" />
+                android:hint = "아이디를 입력하세요."
+                android:textSize="22dp"
+                android:textStyle="bold" />
         </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:gravity="center"
             android:orientation="horizontal">
-
             <TextView
-                android:id="@+id/text_nickname"
+                android:id="@+id/signup_pwdtext"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
                 android:layout_marginRight="15dp"
-                android:text="닉네임 : " />
-
+                android:text="비번 : "
+                android:textSize="22dp"
+                android:textStyle="bold" />
             <EditText
-                android:id="@+id/edit_text_nickname"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
+                android:id="@+id/signup_pwddata"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="10"
-                android:background="@color/gray"
-                android:hint="닉네임을 입력하세요."
-                android:padding="8dp"
-                android:singleLine="true"
-                android:textSize="12dp" />
+                android:hint = "비밀번호를 입력하세요."
+                android:textSize="22dp"
+                android:textStyle="bold" />
         </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:gravity="center"
             android:orientation="horizontal">
-
             <TextView
-                android:id="@+id/text_birthinfo"
+                android:id="@+id/signup_pwdchecktext"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
                 android:layout_marginRight="15dp"
-                android:text="생년월일 : " />
-
+                android:text="비번2 : "
+                android:textSize="22dp"
+                android:textStyle="bold" />
             <EditText
-                android:id="@+id/edit_text_birthinfo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
+                android:id="@+id/signup_pwdcheckdata"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="10"
-                android:background="@color/gray"
-                android:hint="생년월일을 입력하세요."
-                android:padding="8dp"
-                android:singleLine="true"
-                android:textSize="12dp" />
+                android:hint = "비밀번호를 재입력 ㄱ."
+                android:textSize="22dp"
+                android:textStyle="bold" />
         </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:gravity="center"
             android:orientation="horizontal">
-
             <TextView
-                android:id="@+id/text_sms_info"
+                android:id="@+id/signup_nametext"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
                 android:layout_marginRight="15dp"
-                android:text="휴대폰번호 : " />
-
+                android:text="이름 : "
+                android:textSize="22dp"
+                android:textStyle="bold" />
             <EditText
-                android:id="@+id/edit_text_smsinfo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
+                android:id="@+id/signup_namedata"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="10"
-                android:background="@color/gray"
-                android:hint="휴대폰번호를 입력하세요."
-                android:padding="8dp"
-                android:singleLine="true"
-                android:inputType="number"
-                android:maxLength="11"
-                android:textSize="12dp" />
+                android:hint = "이름을 입력하세요."
+                android:textSize="22dp"
+                android:textStyle="bold" />
         </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:gravity="center"
             android:orientation="horizontal">
-
             <TextView
-                android:id="@+id/text_id"
+                android:id="@+id/signup_birthtext"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
                 android:layout_marginRight="15dp"
-                android:text="아이디 : " />
-
+                android:text="생년월일 : "
+                android:textSize="22dp"
+                android:textStyle="bold" />
             <EditText
-                android:id="@+id/edit_text_id"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
+                android:id="@+id/signup_birthdata"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="10"
-                android:background="@color/gray"
-                android:hint="아이디를 입력하세요."
-                android:padding="8dp"
-                android:singleLine="true"
-                android:textSize="12dp" />
+                android:hint = "생일을 입력하세요."
+                android:textSize="22dp"
+                android:textStyle="bold" />
         </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:gravity="center"
             android:orientation="horizontal">
-
             <TextView
-                android:id="@+id/text_pwd"
+                android:id="@+id/signup_nicknametext"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
                 android:layout_marginRight="15dp"
-                android:text="비밀번호 : " />
-
+                android:text="닉네임 : "
+                android:textSize="22dp"
+                android:textStyle="bold" />
             <EditText
-                android:id="@+id/edit_text_pwd"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
+                android:id="@+id/signup_nicknamedata"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="10"
-                android:background="@color/gray"
-                android:hint="비밀번호를 입력하세요."
-                android:padding="8dp"
-                android:singleLine="true"
-                android:textSize="12dp" />
+                android:hint = "닉네임을 입력하세요."
+                android:textSize="22dp"
+                android:textStyle="bold" />
         </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:gravity="center"
             android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/text_pwd2"
+            <Button
+                android:id="@+id/signupButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginRight="15dp"
-                android:text="비밀번호 : "
-                android:visibility="invisible" />
-
-            <EditText
-                android:id="@+id/edit_text_pwd2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_weight="10"
-                android:background="@color/gray"
-                android:hint="비밀번호를 재입력하세요."
-                android:padding="8dp"
-                android:singleLine="true"
-                android:textSize="12dp" />
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:text="등록하기"
+                app:layout_constraintRight_toRightOf="parent" />
         </LinearLayout>
-        <Button
-            android:id="@+id/signup_btn"
-            android:layout_margin="30dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="회원가입" />
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,11 +10,6 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
-    //databinding
-    buildFeatures{
-        dataBinding = true
-    }
-
     defaultConfig {
         applicationId "com.example.gongsanggongsang"
         minSdkVersion 28
@@ -81,6 +76,7 @@ dependencies {
     kapt "androidx.lifecycle:lifecycle-compiler:$archLifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$archLifecycleVersion"
     kapt "com.android.databinding:compiler:4.0.1"
+
 
 
 }
