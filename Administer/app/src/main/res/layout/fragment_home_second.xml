@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/reservation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="예약하기"
+        android:textSize="30sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/num_of_washer"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="세탁기1"
+        app:layout_constraintTop_toBottomOf="@id/reservation"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/this_week"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text=""
+        app:layout_constraintTop_toBottomOf="@id/num_of_washer"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/week"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="1. 요일 선택"
+        app:layout_constraintTop_toBottomOf="@id/this_week"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/monday_btn"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:text="월"
+        android:layout_marginHorizontal="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/week"/>
+
+    <Button
+        android:id="@+id/tuesday_btn"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"
+        android:text="화"
+        app:layout_constraintStart_toEndOf="@id/monday_btn"
+        app:layout_constraintTop_toBottomOf="@id/week"/>
+
+    <Button
+        android:id="@+id/wednesday_btn"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"
+        android:text="수"
+        app:layout_constraintStart_toEndOf="@id/tuesday_btn"
+        app:layout_constraintTop_toBottomOf="@id/week" />
+
+    <Button
+        android:id="@+id/thursday_btn"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"
+        android:text="목"
+        app:layout_constraintStart_toEndOf="@id/wednesday_btn"
+        app:layout_constraintTop_toBottomOf="@id/week" />
+
+    <Button
+        android:id="@+id/friday_btn"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"
+        android:text="금"
+        app:layout_constraintStart_toEndOf="@id/thursday_btn"
+        app:layout_constraintTop_toBottomOf="@id/week"/>
+
+    <Button
+        android:id="@+id/saturday_btn"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"
+        android:text="토"
+        app:layout_constraintStart_toEndOf="@id/friday_btn"
+        app:layout_constraintTop_toBottomOf="@id/week" />
+
+    <Button
+        android:id="@+id/sunday_btn"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"
+        android:text="일"
+        app:layout_constraintStart_toEndOf="@id/saturday_btn"
+        app:layout_constraintTop_toBottomOf="@id/week" />
+
+    <TextView
+        android:id="@+id/time_block"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text=""
+        app:layout_constraintTop_toBottomOf="@id/monday_btn"
+        tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

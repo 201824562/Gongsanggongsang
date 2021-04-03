@@ -51,23 +51,23 @@ class BaseFragment : Fragment() {
         val checked = item.setChecked(true)
         when (checked.itemId) {
             R.id.first -> {
-                main_pager.currentItem = 0
+                main_pager.setCurrentItem(0, false)
                 return true
             }
             R.id.second-> {
-                main_pager.currentItem = 1
+                main_pager.setCurrentItem(1, false)
                 return true
             }
             R.id.third-> {
-                main_pager.currentItem = 2
+                main_pager.setCurrentItem(2, false)
                 return true
             }
             R.id.fourth-> {
-                main_pager.currentItem = 3
+                main_pager.setCurrentItem(3, false)
                 return true
             }
             R.id.fifth-> {
-                main_pager.currentItem = 4
+                main_pager.setCurrentItem(4, false)
                 return true
             }
         }

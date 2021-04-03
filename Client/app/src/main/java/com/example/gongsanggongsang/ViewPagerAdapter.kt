@@ -26,7 +26,4 @@ class ViewPagerAdapter(fm: FragmentManager, lc:Lifecycle) : FragmentStateAdapter
         }
     }
 
-    //추가?
-
-
 }

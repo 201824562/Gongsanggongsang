@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainActivity"
+    app:startDestination="@id/baseFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.gongsanggongsangAdmin.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_baseFragment"
+            app:destination="@id/baseFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_signupFragment"
+            app:destination="@id/signupFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/signupFragment"
+        android:name="com.example.gongsanggongsangAdmin.SignupFragment"
+        android:label="SignupFragment" >
+        <action
+            android:id="@+id/action_signupFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/baseFragment"
+        android:name="com.example.gongsanggongsangAdmin.BaseFragment"
+        android:label="fragment_base">
+        <action
+            android:id="@+id/action_baseFragment_to_communityMarket"
+            app:destination="@id/communityMarket" />
+        <action
+            android:id="@+id/action_baseFragment_to_communityWith"
+            app:destination="@+id/communityWith"/>
+        <action
+            android:id="@+id/action_baseFragment_to_communitySuggest"
+            app:destination="@+id/communitySuggest"/>
+
+    </fragment>
+    <fragment
+        android:id="@+id/communityMarket"
+        android:name="MarketFragment"
+        android:label="CommunityMarket">
+        <action
+            android:id="@+id/action_communityMarket_to_communityMarketWrite"
+            app:destination="@+id/communityMarketWrite"/>
+    </fragment>
+    <fragment
+        android:id="@+id/communityMarketWrite"
+        android:name="MarketWriteFragment"
+        android:label="CommunityMarketWrite" />
+    <fragment
+        android:id="@+id/communityMarketPost"
+        android:name="com.example.gongsanggongsangAdmin.Third.MarketPostFragment"
+        android:label="CommunityMarket">
+        <argument
+            app:argType="string"
+            android:name="title"
+            android:defaultValue="0"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/communitySuggest"
+        android:name="com.example.gongsanggongsangAdmin.Third.SuggestFragment">
+        <action
+            android:id="@+id/action_communitySuggest_to_communitySuggestWrite"
+            app:destination="@+id/communitySuggestWrite"/>
+    </fragment>
+    <fragment
+        android:id="@+id/communitySuggestWrite"
+        android:name="SuggestWriteFragment">
+
+    </fragment>
+    <fragment
+        android:id="@+id/communitySuggestPost"
+        android:name="com.example.gongsanggongsangAdmin.Third.SuggestPostFragment"/>
+
+    <fragment
+        android:id="@+id/communityWith"
+        android:name="com.example.gongsanggongsangAdmin.Third.WithFragment">
+        <action
+            android:id="@+id/action_communityWith_to_communityWithWrite"
+            app:destination="@+id/communityWithWrite"/>
+    </fragment>
+    <fragment
+        android:id="@+id/communityWithWrite"
+        android:name="WithWriteFragment"/>
+    <fragment
+        android:id="@+id/communityWithPost"
+        android:name="com.example.gongsanggongsangAdmin.Third.WithPostFragment"/>
+    <fragment
+        android:id="@+id/testAdministerFragment"
+        android:name="com.example.gongsanggongsangAdmin.Fifth.TestAdministerFragment"
+        android:label="TestAdministerFragment" />
+
+</navigation>

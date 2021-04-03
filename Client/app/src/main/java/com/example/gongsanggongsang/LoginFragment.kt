@@ -33,10 +33,8 @@ class LoginFragment : Fragment() {
         }
 
         login_btn.setOnClickListener {
-            Toast.makeText(context, "!!!!!.", Toast.LENGTH_SHORT).show()
             id = edit_text_id.text.toString()
             pwd = edit_text_pwd.text.toString()
-            Toast.makeText(context, "!!!2222!!.", Toast.LENGTH_SHORT).show()
 
             if (id.isBlank() || pwd.isBlank() ){
                 Toast.makeText(context, "정보를 모두 입력해주세요.", Toast.LENGTH_SHORT).show()

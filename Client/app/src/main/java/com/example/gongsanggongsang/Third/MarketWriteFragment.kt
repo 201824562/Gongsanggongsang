@@ -30,7 +30,7 @@ class MarketWriteFragment : Fragment() {
                 ,community_market_write_title.text.toString()
                 ,community_market_write_contents.text.toString()
                 , LocalDateTime.now().toString())
-            var documentName = community_market_write_title.text.toString() + LocalDateTime.now().toString()
+            var documentName = LocalDateTime.now().toString() + community_market_write_title.text.toString()
             database.collection("COMMUNITY_Market").document(documentName).set(post)
             findNavController().navigate(R.id.communityMarket)
         }

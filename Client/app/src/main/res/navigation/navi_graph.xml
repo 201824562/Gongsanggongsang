@@ -3,9 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainActivity"
-    app:startDestination="@id/startFragment">
-
-
+    app:startDestination="@id/loginFragment">
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.gongsanggongsang.LoginFragment"
@@ -17,7 +15,6 @@
         <action
             android:id="@+id/action_loginFragment_to_signupFragment"
             app:destination="@id/signupFragment" />
-
     </fragment>
     <fragment
         android:id="@+id/signupFragment"
