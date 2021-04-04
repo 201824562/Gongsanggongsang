@@ -39,6 +39,10 @@
         <action
             android:id="@+id/action_baseFragment_to_communitySuggest"
             app:destination="@+id/communitySuggest"/>
+        <action
+            android:id="@+id/action_baseFragment_to_userListFragment"
+            app:destination="@id/userListFragment"
+            app:enterAnim="@anim/fragment_open_enter" />
 
     </fragment>
     <fragment
@@ -93,8 +97,9 @@
         android:id="@+id/communityWithPost"
         android:name="com.example.gongsanggongsangAdmin.Third.WithPostFragment"/>
     <fragment
-        android:id="@+id/testAdministerFragment"
-        android:name="com.example.gongsanggongsangAdmin.Fifth.TestAdministerFragment"
-        android:label="TestAdministerFragment" />
+        android:id="@+id/userListFragment"
+        android:name="com.example.gongsanggongsangAdmin.Fifth.UserListFragment"
+        android:label="fragment_userlist"
+        tools:layout="@layout/fragment_userlist" />
 
 </navigation>

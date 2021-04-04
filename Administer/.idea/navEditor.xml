@@ -104,6 +104,11 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
+                            <entry key="action_baseFragment_to_userListFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                           </map>
                         </option>
                       </LayoutPositions>
@@ -291,13 +296,13 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="testAdministerFragment">
+                  <entry key="userListFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-352" />
-                            <option name="y" value="956" />
+                            <option name="x" value="-255" />
+                            <option name="y" value="1336" />
                           </Point>
                         </option>
                       </LayoutPositions>

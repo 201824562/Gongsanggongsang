@@ -11,13 +11,13 @@
     <item
         android:id="@+id/third"
         android:icon="@drawable/basic_icon"
-        android:title="커뮤니티" />
+        android:title="냉장고" />
     <item
         android:id="@+id/fourth"
         android:icon="@drawable/basic_icon"
-        android:title="알림" />
+        android:title="커뮤니티" />
     <item
         android:id="@+id/fifth"
         android:icon="@drawable/basic_icon"
-        android:title="마이페이지" />
+        android:title="설정" />
 </menu>

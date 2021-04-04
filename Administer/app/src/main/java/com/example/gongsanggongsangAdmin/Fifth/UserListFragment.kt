@@ -7,16 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.gongsanggongsangAdmin.data.UserDataClass
 import com.example.gongsanggongsangAdmin.R
-import kotlinx.android.synthetic.main.fragment_test_administer.*
 import androidx.fragment.app.viewModels
+import kotlinx.android.synthetic.main.fragment_userlist.*
 
-class TestAdministerFragment : Fragment() {
+class UserListFragment : Fragment() {
     private val viewModel : AdministerViewmodel by viewModels()
     private lateinit var adapter: Administer_RCV
     var userlist : List<UserDataClass> = listOf()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val rootView = inflater.inflate(R.layout.fragment_test_administer, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_userlist, container, false)
         return rootView
     }
 
@@ -27,6 +27,7 @@ class TestAdministerFragment : Fragment() {
             adapter = Administer_RCV(userlist, viewModel)
             recyclerView.adapter = adapter
         }
-
     }
+
+
 }

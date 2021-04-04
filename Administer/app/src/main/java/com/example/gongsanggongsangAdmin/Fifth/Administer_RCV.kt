@@ -5,13 +5,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gongsanggongsangAdmin.data.UserDataClass
-import com.example.gongsanggongsangAdmin.databinding.FragmentTestAdministerItemsBinding
-import kotlinx.android.synthetic.main.fragment_test_administer_items.view.*
+import com.example.gongsanggongsangAdmin.databinding.FragmentUserlistItemsBinding
+import kotlinx.android.synthetic.main.fragment_userlist_items.view.*
+
 
 class Administer_RCV( received_items : List<UserDataClass>, received_viewmodel: AdministerViewmodel) : RecyclerView.Adapter<Administer_RCV.SearchViewHolder>() {
 
     val viewmodel : AdministerViewmodel = received_viewmodel
-    private lateinit var binding : FragmentTestAdministerItemsBinding
+    private lateinit var binding : FragmentUserlistItemsBinding
     var rc_userItems = received_items
 
     override fun getItemCount(): Int {
@@ -19,7 +20,7 @@ class Administer_RCV( received_items : List<UserDataClass>, received_viewmodel: 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
-        binding = FragmentTestAdministerItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding = FragmentUserlistItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return SearchViewHolder(parent, binding)
     }
 
@@ -27,7 +28,7 @@ class Administer_RCV( received_items : List<UserDataClass>, received_viewmodel: 
         holder.bind(rc_userItems[position])
     }
 
-    inner class SearchViewHolder (received_parent: ViewGroup, binding: FragmentTestAdministerItemsBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class SearchViewHolder (received_parent: ViewGroup, binding: FragmentUserlistItemsBinding) : RecyclerView.ViewHolder(binding.root)
     {
         val parent : ViewGroup = received_parent
 
@@ -47,3 +48,5 @@ class Administer_RCV( received_items : List<UserDataClass>, received_viewmodel: 
         }
     }
 }
+
+
