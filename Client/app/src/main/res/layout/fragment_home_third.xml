@@ -7,10 +7,9 @@
     android:layout_height="match_parent"
     tools:context=".Third.ThirdFragment"
     android:orientation="vertical">
-
     <Button
         android:id="@+id/community_market_button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text= "market"
         android:textSize="24sp"
@@ -18,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"/>
     <Button
         android:id="@+id/community_with_button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text= "with"
         android:textSize="24sp"
@@ -27,7 +26,7 @@
 
     <Button
         android:id="@+id/community_suggest_button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text= "suggest"
         android:textSize="24sp"
