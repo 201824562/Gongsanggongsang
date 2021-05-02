@@ -7,9 +7,9 @@ import androidx.room.Query
 @Dao
 interface UserDataDao {
 
-    //[관리자용]
-    @Query("SELECT * from USER_SIGNUP_TABLE ORDER BY primary_id ASC")
-    fun getALLUsers(): LiveData<List<UserDataEntity>>
+
+    @Query("SELECT * from USER_SIGNUP_TABLE ORDER BY primary_id ASC LIMIT 1")
+    fun getUser(): LiveData<UserDataEntity>   //사용자용
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(userEntity: UserDataEntity)

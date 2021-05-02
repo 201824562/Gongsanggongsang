@@ -8,6 +8,6 @@ data class UserDataClass(  //xml에 binding으로 뷰와 연결해줌.
     val nickname: String,
     val birthday: String,
     val smsinfo : String,
-    val allowed: Boolean
+    var allowed: Boolean
 )
 

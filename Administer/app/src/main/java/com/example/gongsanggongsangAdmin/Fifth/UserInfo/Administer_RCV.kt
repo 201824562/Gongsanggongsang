@@ -1,4 +1,4 @@
-package com.example.gongsanggongsangAdmin.Fifth
+package com.example.gongsanggongsangAdmin.Fifth.UserInfo
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,6 +9,7 @@ import com.example.gongsanggongsangAdmin.databinding.FragmentUserlistItemsBindin
 import kotlinx.android.synthetic.main.fragment_userlist_items.view.*
 
 
+//Waiting 하는 친구의 어댑터이다.
 class Administer_RCV( received_items : List<UserDataClass>, received_viewmodel: AdministerViewmodel) : RecyclerView.Adapter<Administer_RCV.SearchViewHolder>() {
 
     val viewmodel : AdministerViewmodel = received_viewmodel
@@ -35,13 +36,13 @@ class Administer_RCV( received_items : List<UserDataClass>, received_viewmodel: 
         fun bind (data : UserDataClass){
             binding.userLogindata = data
             itemView.Yes_btn.setOnClickListener {
-                viewmodel.acceptUser(data)
-                viewmodel.updateAllusers()
+                viewmodel.acceptUser(data) //수락시 -> 이동해야됨. (데이터가)!!!!!!!!!
+                viewmodel.getAllWaitingusers()
                 Toast.makeText(parent.context, "해당 회원이 가입되었습니다.", Toast.LENGTH_SHORT).show()
             }
             itemView.No_btn.setOnClickListener {
-                viewmodel.denyUser(data)
-                viewmodel.updateAllusers()
+                viewmodel.deleteWaitingUser(data)
+                viewmodel.updateAllWaitingUsers()
                 Toast.makeText(parent.context, "해당 회원이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
             }
 

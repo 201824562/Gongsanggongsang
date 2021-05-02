@@ -10,6 +10,8 @@ class UserDataRepository(database: AppDatabase) {
     private val userDataDao = database.userDataDao()
     val allUsers: LiveData<List<UserDataEntity>> = userDataDao.getALLUsers()
 
+    var firestore = FirebaseFirestore.getInstance()   //.getReference()
+
     companion object {
         private var sInstance: UserDataRepository? = null
         fun getInstance(database: AppDatabase): UserDataRepository {
@@ -24,9 +26,7 @@ class UserDataRepository(database: AppDatabase) {
 
     fun insert(it: UserDataClass) {
 
-        var firestore = FirebaseFirestore.getInstance()   //.getReference()
-
-        firestore.collection("USER_Data").document(it.id)
+        firestore.collection("USER_INFO_WAITING").document(it.id)
                 .set(it)
                 .addOnSuccessListener {
                     Log.d(ContentValues.TAG, "Signup Successed!!")
@@ -34,7 +34,6 @@ class UserDataRepository(database: AppDatabase) {
                 .addOnFailureListener { exception ->
                     Log.w(ContentValues.TAG, "Error getting documents: ", exception)
                 }
-
     }
 }
 

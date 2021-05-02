@@ -98,7 +98,7 @@
         android:name="com.example.gongsanggongsangAdmin.Third.WithPostFragment"/>
     <fragment
         android:id="@+id/userListFragment"
-        android:name="com.example.gongsanggongsangAdmin.Fifth.UserListFragment"
+        android:name="com.example.gongsanggongsangAdmin.Fifth.UserInfo.UserListFragment"
         android:label="fragment_userlist"
         tools:layout="@layout/fragment_userlist" />
 

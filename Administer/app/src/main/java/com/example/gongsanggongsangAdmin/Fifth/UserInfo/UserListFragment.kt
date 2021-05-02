@@ -1,4 +1,4 @@
-package com.example.gongsanggongsangAdmin.Fifth
+package com.example.gongsanggongsangAdmin.Fifth.UserInfo
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,11 +22,22 @@ class UserListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getAllusers().observe(viewLifecycleOwner) { receivedUserlist ->
-            userlist = receivedUserlist
-            adapter = Administer_RCV(userlist, viewModel)
-            recyclerView.adapter = adapter
+
+        waitinglist_btn.setOnClickListener {
+            viewModel.getAllWaitingusers().observe(viewLifecycleOwner) { receivedUserlist ->
+                showRecylcerView(receivedUserlist)
+
+            }
         }
+        userlist_btn.setOnClickListener {
+
+        }
+    }
+
+    private fun showRecylcerView(userlist : List<UserDataClass>) {
+        adapter = Administer_RCV(userlist, viewModel)
+        recyclerView.adapter = adapter
+        //adapter.notifyDataSetChanged()
     }
 
 
