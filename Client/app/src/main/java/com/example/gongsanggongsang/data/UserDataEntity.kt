@@ -22,6 +22,9 @@ data class UserDataEntity(
     @ColumnInfo(name="BIRTHDAY")
     val birthday: String,
 
+    @ColumnInfo(name="SMSINFO")
+    val smsinfo : String,
+
     @ColumnInfo(name="ALLOWED")
     val allowed: Boolean = false,
 

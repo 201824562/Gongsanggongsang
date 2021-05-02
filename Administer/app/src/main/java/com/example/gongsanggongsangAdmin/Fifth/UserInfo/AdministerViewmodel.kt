@@ -1,4 +1,4 @@
-package com.example.gongsanggongsangAdmin.Fifth
+package com.example.gongsanggongsangAdmin.Fifth.UserInfo
 
 
 import android.app.Application
@@ -11,22 +11,25 @@ import com.example.gongsanggongsangAdmin.data.UserDataClass
 class AdministerViewmodel(application: Application) : AndroidViewModel(application)  {
     val repository: AdministerRepository = AdministerRepository(AppDatabase.getDatabase(application, viewModelScope))
 
-    fun updateAllusers() {
-        repository.updateAllusers()
+    fun updateAllWaitingUsers() {
+        repository.updateAllWaitingUsers()
     }
 
-    fun getAllusers() : LiveData<List<UserDataClass>> {
-        updateAllusers()
-        return repository.Final_Alluserlist
+    fun getAllWaitingusers() : LiveData<List<UserDataClass>> {
+        updateAllWaitingUsers()
+        return repository.Final_AllWaitinguserlist
     }
 
     fun acceptUser(userdata : UserDataClass){
         repository.acceptUser(userdata)
     }
 
-    fun denyUser(userdata: UserDataClass){
-        repository.denyUser(userdata)
+    fun deleteWaitingUser(userdata: UserDataClass){
+        repository.deleteWaitingUser(userdata)
     }
+
+
+
 
 
 }

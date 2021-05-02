@@ -1,4 +1,4 @@
-package com.example.gongsanggongsangAdmin.Fifth
+package com.example.gongsanggongsangAdmin.Fifth.UserInfo
 
 import android.content.ContentValues
 import android.util.Log
@@ -10,7 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 class AdministerRepository(database: AppDatabase) {
 
     val firestore = FirebaseFirestore.getInstance()
-    var Final_Alluserlist : MutableLiveData<List<UserDataClass>> = MutableLiveData()
+    var Final_AllWaitinguserlist : MutableLiveData<List<UserDataClass>> = MutableLiveData()
 
     companion object {
         private var sInstance: AdministerRepository? = null
@@ -24,32 +24,31 @@ class AdministerRepository(database: AppDatabase) {
         }
     }
 
-    fun updateAllusers() {
+    fun updateAllWaitingUsers() {
+        var Allwaitinguserlist : MutableList<UserDataClass> = mutableListOf()
 
-        var Alluserlist : MutableList<UserDataClass> = mutableListOf()
-
-        firestore.collection("USER_Data")
+        firestore.collection("USER_INFO_WAITING")
             .whereEqualTo("allowed", false)
             .get()
             .addOnSuccessListener { documents ->
                 Log.d(ContentValues.TAG, "Signup Successed!!")
                 for (document in documents) {
-                    Alluserlist.add(UserDataClass(document.data["id"].toString(), document.data["pwd"].toString(), document.data["name"].toString(),
+                    Allwaitinguserlist.add(UserDataClass(document.data["id"].toString(), document.data["pwd"].toString(), document.data["name"].toString(),
                         document.data["nickname"] as String, document.data["birthday"].toString(), document.data["smsinfo"].toString(), document.data["allowed"] as Boolean
                     ))
                 }
-                Final_Alluserlist.value = Alluserlist
+                Final_AllWaitinguserlist.value = Allwaitinguserlist
             }
             .addOnFailureListener { exception ->
                 Log.w(ContentValues.TAG, "Error getting documents: ", exception)
             }
     }
 
-    fun acceptUser(userdata : UserDataClass){
-        var map= mutableMapOf<String,Any>()
-        map["allowed"] = true
-        firestore.collection("USER_Data").document(userdata.id)
-            .update(map)
+    fun acceptUser(userdata: UserDataClass) {
+        deleteWaitingUser(userdata) //대기목록에서 삭제
+        userdata.allowed = true //승인여부
+        firestore.collection("USER_INFO").document(userdata.id) //회원목록에 등록시켜줌.
+            .set(userdata)
             .addOnSuccessListener {
                 Log.d(ContentValues.TAG, "Signup Successed!!")
             }
@@ -58,8 +57,8 @@ class AdministerRepository(database: AppDatabase) {
             }
     }
 
-    fun denyUser(userdata: UserDataClass){
-        firestore.collection("USER_Data").document(userdata.id)
+    fun deleteUser(userdata: UserDataClass){    //최종 User를 삭제하는 거!!!!!!!!!!!!!!!!!!!!!!
+        firestore.collection("USER_INFO").document(userdata.id)
             .delete()
             .addOnSuccessListener {
                 Log.d(ContentValues.TAG, "Signup Successed!!")
@@ -68,6 +67,18 @@ class AdministerRepository(database: AppDatabase) {
                 Log.w(ContentValues.TAG, "Error getting documents: ", exception)
             }
     }
+
+    fun deleteWaitingUser(userdata: UserDataClass){
+        firestore.collection("USER_INFO_WAITING").document(userdata.id)
+            .delete()
+            .addOnSuccessListener {
+                Log.d(ContentValues.TAG, "Signup Successed!!")
+            }
+            .addOnFailureListener { exception ->
+                Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+            }
+    }
+
 
 
 }

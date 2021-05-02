@@ -6,7 +6,7 @@
     app:startDestination="@id/loginFragment">
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.gongsanggongsang.LoginFragment"
+        android:name="com.example.gongsanggongsang.Login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -90,20 +90,5 @@
     <fragment
         android:id="@+id/communityWithPost"
         android:name="com.example.gongsanggongsang.Third.WithPostFragment"/>
-    <fragment
-        android:id="@+id/startFragment"
-        android:name="com.example.gongsanggongsang.StartFragment"
-        android:label="StartFragment" >
-        <action
-            android:id="@+id/action_startFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-        <action
-            android:id="@+id/action_startFragment_to_testAdministerFragment"
-            app:destination="@id/testAdministerFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/testAdministerFragment"
-        android:name="com.example.gongsanggongsang.Administer.TestAdministerFragment"
-        android:label="TestAdministerFragment" />
 
 </navigation>

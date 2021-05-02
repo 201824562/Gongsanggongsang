@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fifth.UserListFragment">
+    tools:context=".Fifth.UserInfo.UserListFragment">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/Title_layout"
         android:layout_width="match_parent"
@@ -49,28 +49,21 @@
                 android:gravity="center">
 
                 <Button
+                    android:id="@+id/userlist_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="#FFFFA1"
                     android:minWidth="0dp"
                     android:minHeight="0dp"
                     android:text="회원목록" />
-
                 <Button
+                    android:id="@+id/waitinglist_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="#FFFFA1"
                     android:minWidth="0dp"
                     android:minHeight="0dp"
                     android:text="대기목록" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="#FFFFA1"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:text="거절목록" />
             </LinearLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
