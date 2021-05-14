@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/btn_home"
+        android:icon="@drawable/lovebutton"
+        android:title="홈 화면" />
+    <item
+        android:id="@+id/btn_reservation"
+        android:icon="@drawable/lovebutton"
+        android:title="예약하기" />
+    <item
+        android:id="@+id/btn_community"
+        android:icon="@drawable/lovebutton"
+        android:title="커뮤니티" />
+    <item
+        android:id="@+id/btn_mypage"
+        android:icon="@drawable/lovebutton"
+        android:title="마이페이지" />
+</menu>

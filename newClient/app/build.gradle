@@ -1,0 +1,138 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'koin'
+    id 'kotlin-kapt'
+    id 'kotlin-parcelize'
+    id "androidx.navigation.safeargs.kotlin"
+}
+
+android {
+    signingConfigs {
+        debug {
+            storeFile file('C:\\Users\\ljy32\\.android\\debug.keystore')
+        }
+    }
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        applicationId 'userapp'
+        minSdkVersion 28
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    def BASE_URL = "BASE_URL"
+    buildTypes {
+        //디폴트
+/*        debug {
+            debuggable true
+        }*/
+        staging{
+            initWith debug
+            applicationIdSuffix ".staging"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", BASE_URL, '"www.jiyoon_stage.com"'
+        }
+        release {
+            applicationIdSuffix ".release"
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", BASE_URL, '"www.jiyoon_release.com"'
+            initWith debug //일단
+            //signingConfig signingConfigs.release -> 후에 개발자 본인 키 넣어줌. ????
+        }
+    }
+
+    flavorDimensions "store" //, "pay"
+    productFlavors{
+        googlePlay{
+            dimension "store"
+            applicationIdSuffix ".googleplay"
+            buildConfigField "String", BASE_URL, '"www.jiyoon_googlePlay.com"'
+            resValue "string", "app_name", "googlePlay"
+        }
+        appStore{
+            dimension "store"
+            applicationIdSuffix ".appstore"
+            buildConfigField "String", BASE_URL, '"www.jiyoon_appStore.com"'
+            resValue "string", "app_name", "appStore"
+        }
+/*        free{
+            dimension "pay"
+            applicationIdSuffix ".paid"
+            buildConfigField "String", BASE_URL, '"www.jiyoon_free.com"'
+            resValue "string", "app_name", "paid"
+            manifestPlaceholders variant : 'free'
+        }*/
+    }
+
+    variantFilter{ variant ->
+        def name_types = variant.flavors*.name
+        def name = name_types.join()
+
+        if (variant.buildType.name == "release" ){ //&& !name.contains("googlePlay")
+            setIgnore(true)
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
+        dataBinding false //BaseActivityDataBinding 사용할거면 해제.
+    }
+}
+
+dependencies {
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    // activity result
+    implementation 'androidx.activity:activity-ktx:1.2.2'
+    implementation 'androidx.fragment:fragment-ktx:1.3.2'
+    //androidx
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.3.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    //androidx
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    testImplementation 'androidx.arch.core:core-testing:2.1.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
+    implementation 'com.google.android.material:material:1.3.0'
+
+    // koin
+    implementation 'io.insert-koin:koin-core:3.0.1'
+    implementation 'io.insert-koin:koin-core-ext:3.0.1'
+    implementation 'io.insert-koin:koin-android:3.0.1'
+    implementation 'io.insert-koin:koin-android-ext:3.0.1'
+    testImplementation 'io.insert-koin:koin-test:3.0.1'
+
+    // retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
+    implementation 'com.squareup.retrofit2:retrofit-mock:2.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2'
+}

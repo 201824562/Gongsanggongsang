@@ -38,10 +38,13 @@ class SignupFragment : Fragment() {
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_sign_up, container, false)
         return rootView
+
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         signup_btn.setOnClickListener {
             id = edit_text_id.text.toString()
