@@ -14,17 +14,6 @@ class CommunityFragment : BaseFragment<FragmentMainhomeCommunityBinding, Communi
     override val viewmodel: CommunityViewModel by viewModels()
 
 
-    
-
-
-
-
-
-
-
-
-
-
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
