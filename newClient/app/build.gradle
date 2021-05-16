@@ -5,20 +5,15 @@ plugins {
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
     id "androidx.navigation.safeargs.kotlin"
+    id 'com.google.gms.google-services' //firbase
 }
-apply plugin: 'com.google.gms.google-services'
 
 android {
-    signingConfigs {
-        debug {
-            storeFile file('C:\\Users\\ljy32\\.android\\debug.keystore')
-        }
-    }
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId 'userapp'
+        applicationId 'com.example.userapp'
         minSdkVersion 28
         targetSdkVersion 30
         versionCode 1
@@ -27,12 +22,18 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    def BASE_URL = "BASE_URL"
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+   /* def BASE_URL = "BASE_URL"
     buildTypes {
         //디폴트
-/*        debug {
+*//*        debug {
             debuggable true
-        }*/
+        }*//*
         staging{
             initWith debug
             applicationIdSuffix ".staging"
@@ -40,7 +41,7 @@ android {
             buildConfigField "String", BASE_URL, '"www.jiyoon_stage.com"'
         }
         release {
-            applicationIdSuffix ".release"
+            applicationId ".release"
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -64,13 +65,13 @@ android {
             buildConfigField "String", BASE_URL, '"www.jiyoon_appStore.com"'
             resValue "string", "app_name", "appStore"
         }
-/*        free{
+*//*        free{
             dimension "pay"
             applicationIdSuffix ".paid"
             buildConfigField "String", BASE_URL, '"www.jiyoon_free.com"'
             resValue "string", "app_name", "paid"
             manifestPlaceholders variant : 'free'
-        }*/
+        }*//*
     }
 
     variantFilter{ variant ->
@@ -80,7 +81,7 @@ android {
         if (variant.buildType.name == "release" ){ //&& !name.contains("googlePlay")
             setIgnore(true)
         }
-    }
+    }*/
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
