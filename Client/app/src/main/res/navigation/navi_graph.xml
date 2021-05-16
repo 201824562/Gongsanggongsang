@@ -31,8 +31,14 @@
         <action
             android:id="@+id/action_baseFragment_to_communityPreviewFragment"
             app:destination="@id/communityPreviewFragment" />
+        <action
+            android:id="@+id/action_baseFragment_to_reservationDryer"
+            app:destination="@id/reservationDryer" />
     </fragment>
-
+    <fragment
+        android:id="@+id/reservationDryer"
+        android:name="com.example.gongsanggongsang.Second.ReservationDryerFragment">
+    </fragment>
     <fragment
         android:id="@+id/communityPreviewFragment"
         android:name="com.example.gongsanggongsang.Third.CommunityPreviewFragment"

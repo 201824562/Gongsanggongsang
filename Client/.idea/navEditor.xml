@@ -94,6 +94,11 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
+                            <entry key="action_baseFragment_to_reservationDryer">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                           </map>
                         </option>
                       </LayoutPositions>
@@ -166,6 +171,18 @@
                               </value>
                             </entry>
                           </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="reservationDryer">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
+                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>
