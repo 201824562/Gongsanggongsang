@@ -18,7 +18,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() {
     companion object{
-        val TOOLBAR_TITLE = "title"
+        val TOOLBAR_TITLE = "title"//ddd
     }
 
     override lateinit var  viewbinding: ActivityMainBinding
