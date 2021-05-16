@@ -4,11 +4,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.gongsanggongsang.data.CommunityPostModel
+import com.example.gongsanggongsang.data.PostDataEntity
 import com.example.gongsanggongsang.R
 import kotlinx.android.synthetic.main.fragment_community_write_preview_item.view.*
 
-class CommunityPreviewRecyclerAdapter(val communityWritePreviewItems:ArrayList<CommunityPostModel>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CommunityPreviewRecyclerAdapter(val communityWritePreviewItems:ArrayList<PostDataEntity>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface OnCommunityMarketItemClickListener{
         fun onPreviewItemClick(position: Int)
@@ -33,7 +33,7 @@ class CommunityPreviewRecyclerAdapter(val communityWritePreviewItems:ArrayList<C
 
     }
 
-    fun getItem(position: Int): CommunityPostModel {
+    fun getItem(position: Int): PostDataEntity {
         return communityWritePreviewItems[position]
     }
 
@@ -41,9 +41,9 @@ class CommunityPreviewRecyclerAdapter(val communityWritePreviewItems:ArrayList<C
         var title = itemview.community_preview_title
         var contents = itemview.community_preview_write
 
-        fun bind(communityMarketPostModel: CommunityPostModel) {
-            title.text = communityMarketPostModel.title
-            contents.text = communityMarketPostModel.contents
+        fun bind(communityMarketPostModel: PostDataEntity) {
+            title.text = communityMarketPostModel.post_title
+            contents.text = communityMarketPostModel.post_contents
        }
        init {
             itemview.setOnClickListener(){

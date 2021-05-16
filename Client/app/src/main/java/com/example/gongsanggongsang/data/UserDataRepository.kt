@@ -24,7 +24,6 @@ class UserDataRepository(database: AppDatabase) {
                     }
         }
     }
-
     val isLoginDataValid = MutableLiveData<Boolean>(false)
 
     fun insert(it: UserDataClass) {
@@ -56,8 +55,6 @@ class UserDataRepository(database: AppDatabase) {
    fun getUser() : LiveData<UserDataClass>{
        return Transformations.map(userDataDao.getUser()){mappingUserDataEntityToUserDataItem(it)}   //토큰 관리용
    }
-
-
 
     private fun mappingUserDataItemToUserDataEntity(it : UserDataClass) : UserDataEntity {
         return (UserDataEntity(it.id, it.pwd, it.name, it.nickname, it.birthday, it.smsinfo, it.allowed))
