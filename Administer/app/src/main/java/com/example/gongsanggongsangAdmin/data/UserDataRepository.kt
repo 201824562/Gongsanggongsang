@@ -25,7 +25,6 @@ class UserDataRepository(database: AppDatabase) {
     }
 
     fun insert(it: UserDataClass) {
-
         firestore.collection("USER_INFO_WAITING").document(it.id)
                 .set(it)
                 .addOnSuccessListener {

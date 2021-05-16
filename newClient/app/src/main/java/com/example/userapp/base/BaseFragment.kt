@@ -15,7 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment() , BaseView{
+abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment() , BaseView {
 
     abstract val viewbinding : VB
     abstract val viewmodel : VM
