@@ -2,9 +2,17 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navigation"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/signUpFragment">
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.example.userapp.ui.mainhome.MainFragment"
         android:label="MainFragment" />
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.example.userapp.ui.signup.SignUpFragment"
+        android:label="SignUpFragment" >
+        <action
+            android:id="@+id/action_signUpFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
 </navigation>

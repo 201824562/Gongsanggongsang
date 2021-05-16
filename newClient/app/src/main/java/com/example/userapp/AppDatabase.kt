@@ -1,5 +1,5 @@
 package com.example.userapp
-
+/*
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
@@ -9,6 +9,7 @@ import com.example.userapp.data.dao.ReservationDao
 import com.example.userapp.data.entity.ReservationEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+
 
 @Database(entities = [ReservationEntity::class], version=1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase(){
@@ -47,4 +48,4 @@ abstract class AppDatabase : RoomDatabase(){
 
         }
 
-}
+}*/
