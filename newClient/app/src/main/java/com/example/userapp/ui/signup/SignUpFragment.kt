@@ -82,7 +82,7 @@ class SignUpFragment : BaseFragment<FragmentSignupBinding, SignUpViewModel>(){
                             dialog.show()
                             delay(2000)
                             dialog.dismiss()
-                            findNavController().navigate(R.id.action_signUpFragment_to_mainFragment) }
+                            findNavController().navigate(R.id.action_signUpFragment_pop) }
                     } } }
 
 
