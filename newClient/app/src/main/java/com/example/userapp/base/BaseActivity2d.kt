@@ -7,7 +7,7 @@ import androidx.viewbinding.ViewBinding
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-abstract class BaseActivity<VB : ViewBinding, VM : ViewModel>: AppCompatActivity() {
+abstract class BaseActivity2d<VB : ViewBinding, VM : ViewModel>: AppCompatActivity() {
 
     abstract val viewbinding : VB
     abstract val viewmodel : VM
