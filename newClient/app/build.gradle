@@ -6,6 +6,7 @@ plugins {
     id 'kotlin-parcelize'
     id "androidx.navigation.safeargs.kotlin"
 }
+apply plugin: 'com.google.gms.google-services'
 
 android {
     signingConfigs {
@@ -135,4 +136,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
     implementation 'com.squareup.retrofit2:retrofit-mock:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2'
+
+    //implementation
+    implementation platform('com.google.firebase:firebase-bom:28.0.1')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 }

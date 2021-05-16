@@ -4,14 +4,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.gongsanggongsang.data.CommunityPostModel
 import com.example.gongsanggongsang.R
-import com.example.gongsanggongsang.data.CommunityCommentsModel
+import com.example.gongsanggongsang.data.PostCommentDataClass
 import kotlinx.android.synthetic.main.fragment_community_comment_item.view.*
-import kotlinx.android.synthetic.main.fragment_community_write_preview_item.view.*
 
 
-class CommunityCommentRecyclerAdapter(val communityCommentItems:ArrayList<CommunityCommentsModel>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CommunityCommentRecyclerAdapter(val communityCommentItems:ArrayList<PostCommentDataClass>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemCount(): Int {
         return communityCommentItems.size;
@@ -30,7 +28,7 @@ class CommunityCommentRecyclerAdapter(val communityCommentItems:ArrayList<Commun
         communityCommentViewHolder.bind(communityCommentModel)
     }
 
-    fun getItem(position: Int): CommunityCommentsModel {
+    fun getItem(position: Int): PostCommentDataClass {
         return communityCommentItems[position]
     }
 
@@ -39,7 +37,7 @@ class CommunityCommentRecyclerAdapter(val communityCommentItems:ArrayList<Commun
         var comment = itemview.community_comment_post
         var date = itemview.community_comment_date
 
-        fun bind(communityCommentModel: CommunityCommentsModel) {
+        fun bind(communityCommentModel: PostCommentDataClass) {
             name.text = communityCommentModel.name
             comment.text = communityCommentModel.contents
             date.text = communityCommentModel.date

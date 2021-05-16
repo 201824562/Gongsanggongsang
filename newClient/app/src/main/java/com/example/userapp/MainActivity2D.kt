@@ -12,13 +12,13 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.example.userapp.base.BaseActivity
+import com.example.userapp.base.BaseActivity2d
 import com.example.userapp.databinding.ActivityMainBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() {
+class MainActivity2D : BaseActivity2d<ActivityMainBinding, MainActivityViewModel>() {
     companion object{
-        val TOOLBAR_TITLE = "title"
+        val TOOLBAR_TITLE = "title"//dddddd
     }
 
     override lateinit var  viewbinding: ActivityMainBinding
@@ -31,7 +31,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
 
     override fun initToolbar() {
         window.apply {
-            navigationBarColor = ContextCompat.getColor(this@MainActivity, R.color.white)
+            navigationBarColor = ContextCompat.getColor(this@MainActivity2D, R.color.white)
         }
     }
 
