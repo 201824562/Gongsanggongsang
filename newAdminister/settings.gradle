@@ -1,2 +1,2 @@
-rootProject.name = "BaseStructure"
+rootProject.name = "newAdminister"
 include ':app'
