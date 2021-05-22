@@ -27,7 +27,7 @@ class SignInFragment : BaseFragment<FragmentSigninBinding, SignInViewModel>() {
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-
+        setupKeyboardHide(viewbinding.fragmentRootLayout, activity)
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {

@@ -40,6 +40,7 @@ class SignUpFragment : BaseFragment<FragmentSignupBinding, SignUpViewModel>(){
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
+        setupKeyboardHide(viewbinding.fragmentRootLayout, activity)
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
