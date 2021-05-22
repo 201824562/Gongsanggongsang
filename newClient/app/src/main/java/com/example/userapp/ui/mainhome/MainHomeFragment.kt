@@ -11,7 +11,7 @@ import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
 import com.example.userapp.databinding.FragmentMainhomeBinding
 
-class MainFragment : BaseFragment<FragmentMainhomeBinding,MainHomeViewModel>(){
+class MainFragment : BaseFragment<FragmentMainhomeBinding, MainHomeViewModel>(){
 
     override lateinit var viewbinding: FragmentMainhomeBinding
     override val viewmodel: MainHomeViewModel by viewModels()
