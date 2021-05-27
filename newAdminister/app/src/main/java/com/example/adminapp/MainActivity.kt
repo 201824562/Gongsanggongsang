@@ -64,8 +64,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
             viewbinding.toolbar.setNavigationOnClickListener{ findNavController(R.id.nav_host).navigateUp() }   //이거 필요한가?
             when (destination.id){
-                R.id.signInFragment -> hideToolbar()
-                R.id.signUpFragment -> hideToolbar()
+                R.id.introFragment -> hideToolbar()
                 R.id.mainFragment -> hideToolbar()
                 else -> showToolbarTitle("각자프래그에 맞는 이름으로 추가해주기.")
             }

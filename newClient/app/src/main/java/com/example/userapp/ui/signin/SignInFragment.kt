@@ -14,8 +14,7 @@ import com.example.userapp.databinding.FragmentSigninBinding
 class SignInFragment : BaseFragment<FragmentSigninBinding, SignInViewModel>() {
     override lateinit var viewbinding: FragmentSigninBinding
     override val viewmodel: SignInViewModel by viewModels()
-    private lateinit var userId : String
-    private lateinit var userPwd : String
+
 
     override fun initViewbinding(
         inflater: LayoutInflater,
@@ -35,19 +34,19 @@ class SignInFragment : BaseFragment<FragmentSigninBinding, SignInViewModel>() {
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
-        viewbinding.run {
-            signupBtn.setOnClickListener {
-                findNavController().navigate(R.id.action_signInFragment_to_signUpFragment)
-            }
+        viewbinding.loginBtn.setOnClickListener {
 
-            loginBtn.setOnClickListener {
-                userId = editTextId.text.toString()
-                userPwd = editTextPwd.text.toString()
-
-                if (userId.isBlank() || userPwd.isBlank()){ showToast("정보를 모두 입력해주세요.") }
-                else findNavController().navigate(R.id.action_signInFragment_to_mainFragment)
+            if (viewmodel.checkForSignInInfo(getUsersId(), getUsersPwd())) {
+                viewmodel.sendSignInInfo(getUsersId(), getUsersPwd()).observe(viewLifecycleOwner){ result ->
+                    if (result) findNavController().navigate(R.id.action_signInFragment_to_mainFragment)
+                    else showSnackbar("입력하신 정보와 일치하는 아이디/비밀번호가 없습니다.")
+               }
             }
         }
     }
+
+    private fun getUsersId() = viewbinding.editTextId.text.toString()
+    private fun getUsersPwd() = viewbinding.editTextPwd.text.toString()
+
 
 }

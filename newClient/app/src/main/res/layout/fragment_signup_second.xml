@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+    <LinearLayout
+        android:id="@+id/fragment_title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:fontFamily="@font/notosanskr_bold_hestia"
+            android:text="회원정보 입력"
+            android:textColor="@color/applemint"
+            android:textSize="24sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textSize="16sp"
+            android:textColor="@color/black_60"
+            android:fontFamily="@font/notosanskr_regular_hestia"
+            android:text="관리자님의 인증을 위해\n메이트님의 정보를 입력해주세요."/>
+    </LinearLayout>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_title_layout"
+        app:layout_constraintBottom_toTopOf="@+id/signup_btn"
+        android:clipToPadding="false">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp">
+            <EditText
+                android:id="@+id/edit_text_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_underline_warmgray"
+                android:hint="아이디 (4~13자리 이내)"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:padding="8dp"
+                android:singleLine="true"
+                android:textSize="14sp"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:textColorHint="@color/black_50"
+                android:textColor="@color/black"/>
+            <EditText
+                android:id="@+id/edit_text_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/edittext_underline_warmgray"
+                android:hint="비밀번호 (8~22자리 이내)"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:maxLength="22"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:singleLine="true"
+                android:textSize="14sp"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:textColorHint="@color/black_50"
+                android:textColor="@color/black" />
+            <EditText
+                android:id="@+id/edit_text_pwd2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/edittext_underline_warmgray"
+                android:hint="비밀번호 (8~22자리 이내)"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:maxLength="22"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:singleLine="true"
+                android:textSize="14sp"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:textColorHint="@color/black_50"
+                android:textColor="@color/black" />
+            <EditText
+                android:id="@+id/edit_text_nickname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/edittext_underline_warmgray"
+                android:hint="닉네임 (2~10자리 이내)"
+                android:padding="8dp"
+                android:singleLine="true"
+                android:textSize="14sp"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:textColorHint="@color/black_50"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+    <Button
+        android:id="@+id/signup_btn"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="172dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="회원가입 신청"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/notosanskr_bold_hestia"
+        android:background="@drawable/button_5dp_rectangle_bluegreen" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,40 +2,99 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navigation"
-    app:startDestination="@id/signInFragment">
-    <fragment
-        android:id="@+id/mainFragment"
-        android:name="com.example.userapp.ui.mainhome.MainFragment"
-        android:label="MainFragment" />
-    <fragment
-        android:id="@+id/signUpFragment"
-        android:name="com.example.userapp.ui.signup.SignUpFragment"
-        android:label="SignUpFragment" >
-        <action
-            android:id="@+id/action_signUpFragment_pop"
-            app:popUpTo="@id/signUpFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
+    app:startDestination="@id/introFragment">
     <fragment
         android:id="@+id/splashFragment"
         android:name="com.example.userapp.ui.splash.SplashFragment"
         android:label="SplashFragment" >
         <action
-            android:id="@+id/action_splashFragment_to_signInFragment"
-            app:destination="@id/signInFragment" />
-        <action
             android:id="@+id/action_splashFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            app:destination="@id/mainFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+        <action
+            android:id="@+id/action_splashFragment_to_introFragment"
+            app:destination="@id/introFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
     </fragment>
+    <fragment
+        android:id="@+id/introFragment"
+        android:name="com.example.userapp.ui.intro.IntroFragment"
+        android:label="IntroFragment" >
+        <action
+            android:id="@+id/action_introFragment_to_signInFragment"
+            app:destination="@id/signInFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+        <action
+            android:id="@+id/action_introFragment_to_signUpFragment"
+            app:destination="@id/signUpGraph"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+    </fragment>
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.userapp.ui.mainhome.MainFragment"
+        android:label="MainFragment" />
+
+    <navigation
+        android:id="@+id/signUpGraph"
+        app:startDestination="@id/signUpFirstFragment">
+        <fragment
+            android:id="@+id/signUpFirstFragment"
+            android:name="com.example.userapp.ui.signup.SignUpFirstFragment"
+            android:label="SignUpFirstFragment">
+            <action
+                android:id="@+id/action_signUpFirstFragment_to_signUpSecondFragment"
+                app:destination="@id/signUpSecondFragment"
+                app:enterAnim="@anim/slide_enter"
+                app:exitAnim="@anim/slide_exit"
+                app:popEnterAnim="@anim/slide_pop_enter"
+                app:popExitAnim="@anim/slide_pop_exit"/>
+        </fragment>
+        <fragment
+            android:id="@+id/signUpSecondFragment"
+            android:name="com.example.userapp.ui.signup.SignUpSecondFragment"
+            android:label="SignUpSecondFragment" >
+            <action
+                android:id="@+id/action_signUpSecondFragment_to_signUpWaitFragment"
+                app:destination="@id/signUpWaitFragment"
+                app:enterAnim="@anim/slide_enter"
+                app:exitAnim="@anim/slide_exit"
+                app:popEnterAnim="@anim/slide_pop_enter"
+                app:popExitAnim="@anim/slide_pop_exit"/>
+        </fragment>
+        <fragment
+            android:id="@+id/signUpWaitFragment"
+            android:name="com.example.userapp.ui.signup.SignUpWaitFragment"
+            android:label="SignUpWaitFragment" >
+            <action
+                android:id="@+id/action_signUpWaitFragment_pop"
+                app:popUpTo="@id/signUpGraph"
+                app:popUpToInclusive="true"
+                app:enterAnim="@anim/slide_enter"
+                app:exitAnim="@anim/slide_exit"
+                app:popEnterAnim="@anim/slide_pop_enter" />
+        </fragment>
+    </navigation>
     <fragment
         android:id="@+id/signInFragment"
         android:name="com.example.userapp.ui.signin.SignInFragment"
         android:label="SignInFragment" >
         <action
-            android:id="@+id/action_signInFragment_to_signUpFragment"
-            app:destination="@id/signUpFragment" />
-        <action
             android:id="@+id/action_signInFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            app:destination="@id/mainFragment"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
     </fragment>
+
 </navigation>
