@@ -36,8 +36,8 @@ class ReservationEquipmentFragment :
             emptyList(),
             onClickUsingIcon = {
                 //bottom sheet dialog
-//                val communalEquipmentDialogFragment = CommunalEquipmentDialogFragment()
-//                communalEquipmentDialogFragment.show(requireActivity().supportFragmentManager,"aaaaa")
+                val communalEquipmentDialogFragment = ReservationEquipmentDialogFragment()
+                communalEquipmentDialogFragment.show(requireActivity().supportFragmentManager,"aaaaa")
                 viewmodel.add_use(it)
             }
         )
