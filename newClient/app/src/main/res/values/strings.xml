@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name2">userapp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <!-- gradle에서 resvalue로 동일한 변수를 각각 부여했기 때문에 'app-name'은 쓸 수 없음. -->
 </resources>

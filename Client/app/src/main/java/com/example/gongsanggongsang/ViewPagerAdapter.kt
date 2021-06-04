@@ -7,6 +7,7 @@ import androidx.lifecycle.Lifecycle
 import com.example.gongsanggongsang.Fifth.FifthFragment
 import com.example.gongsanggongsang.First.FirstFragment
 import com.example.gongsanggongsang.Fourth.FourthFragment
+import com.example.gongsanggongsang.Second.CommunalBaseFragment
 import com.example.gongsanggongsang.Second.SecondFragment
 import com.example.gongsanggongsang.Third.ThirdFragment
 import androidx.viewpager2.adapter.FragmentStateAdapter as FragmentStateAdapter
@@ -18,7 +19,7 @@ class ViewPagerAdapter(fm: FragmentManager, lc:Lifecycle) : FragmentStateAdapter
     override fun createFragment(position: Int): Fragment{
         return when(position){
             0 -> FirstFragment()
-            1 -> SecondFragment()
+            1 -> CommunalBaseFragment()
             2 -> ThirdFragment()
             3 -> FourthFragment()
             4 -> FifthFragment()
