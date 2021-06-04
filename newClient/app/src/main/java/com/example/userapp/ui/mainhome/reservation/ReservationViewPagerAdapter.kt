@@ -10,18 +10,18 @@ class ReservationViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: L
     override fun getItemCount(): Int = 3
 
     override fun createFragment(position: Int): Fragment {
-        when (position) {
+        return when (position) {
             0 -> {
-                return ReservationCurrentFragment()
+                ReservationCurrentFragment()
             }
             1 -> {
-                return ReservationEquipmentFragment()
+                ReservationEquipmentFragment()
             }
             2 -> {
-                return ReservationFacilityFragment()
+                ReservationFacilityFragment()
             }
             else -> {
-                return ReservationCurrentFragment()
+                ReservationCurrentFragment()
             }
         }
     }

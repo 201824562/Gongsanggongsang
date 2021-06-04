@@ -42,14 +42,13 @@ class ReservationCurrentFragment :
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
-        viewmodel.getUseEquipmentData()
         viewmodel.UseEquipmentLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             (viewbinding.equipmentUsingRecyclerView.adapter as EquipmentUsingAdapter).setData(it)
         })
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
-
+        viewmodel.getUseEquipmentData()
     }
 }
 

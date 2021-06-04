@@ -44,13 +44,13 @@ class ReservationEquipmentFragment :
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
-        viewmodel.getEquipmentData()
         viewmodel.EquipmentLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             (viewbinding.equipmentRecyclerView.adapter as EquipmentAdapter).setData(it)
         })
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
+        viewmodel.getEquipmentData()
     }
 }
 
@@ -76,10 +76,10 @@ class EquipmentAdapter(
         //사용중일때 사용하기 버튼 없애기
         if (data.using != "no_using") {
             viewHolder.viewbinding.usingStatus.text = "using"
-            viewHolder.viewbinding.useBtn.setVisibility(View.GONE)
+            viewHolder.viewbinding.useBtn.visibility = View.GONE
         } else {
             viewHolder.viewbinding.usingStatus.text = "no_using"
-            viewHolder.viewbinding.useBtn.setVisibility(View.VISIBLE)
+            viewHolder.viewbinding.useBtn.visibility = View.VISIBLE
         }
         //사용하기 버튼
         viewHolder.viewbinding.useBtn.setOnClickListener() {

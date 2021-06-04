@@ -30,10 +30,10 @@ class ReservationFragment :
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
+        initViewPager()
         viewbinding.commonTab.addTab(viewbinding.commonTab.newTab().setText("사용/예약중"))
         viewbinding.commonTab.addTab(viewbinding.commonTab.newTab().setText("바로 사용"))
         viewbinding.commonTab.addTab(viewbinding.commonTab.newTab().setText("예약 사용"))
-        initViewPager()
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
@@ -45,13 +45,12 @@ class ReservationFragment :
     private fun initViewPager() {
         viewbinding.run {
             val tabLayoutTextArray = arrayOf("사용/예약중", "바로 사용", "예약 사용")
-            val reservationViewPagerAdapter =
-                ReservationViewPagerAdapter(requireActivity().supportFragmentManager, lifecycle)
+            val reservationViewPagerAdapter = ReservationViewPagerAdapter(requireActivity().supportFragmentManager, lifecycle)
             viewbinding.commonViewpager.adapter = reservationViewPagerAdapter
             viewbinding.commonTab.addOnTabSelectedListener(object :
                 TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
-                    viewbinding.commonViewpager.setCurrentItem(tab!!.position)
+                    viewbinding.commonViewpager.currentItem = tab!!.position
                 }
 
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
