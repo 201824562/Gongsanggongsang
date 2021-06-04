@@ -11,6 +11,7 @@ import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
 import com.example.userapp.databinding.FragmentSigninBinding
 
+
 class SignInFragment : BaseFragment<FragmentSigninBinding, SignInViewModel>() {
     override lateinit var viewbinding: FragmentSigninBinding
     override val viewmodel: SignInViewModel by viewModels()

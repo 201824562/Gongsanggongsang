@@ -13,5 +13,5 @@ data class PostDataClass(
 
     var post_date : String,
 
-    var post_comments : ArrayList<PostCommentDataClass>
+    val  post_comments : ArrayList<PostCommentDataClass>
 )

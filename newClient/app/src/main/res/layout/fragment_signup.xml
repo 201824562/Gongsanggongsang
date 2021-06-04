@@ -220,5 +220,4 @@
             android:layout_height="wrap_content"
             android:text="회원가입" />
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

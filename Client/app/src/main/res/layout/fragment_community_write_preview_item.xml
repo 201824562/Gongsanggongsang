@@ -18,4 +18,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_weight="0.8"/>
+
 </LinearLayout>

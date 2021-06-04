@@ -42,7 +42,7 @@ class CommunityWriteFragment : Fragment() {
                 "collection_name" to collection_name,
                 "document_name" to document_name
             )
-            //findNavController().navigate(R.id.communityPost, bundle)
+            findNavController().navigate(R.id.communityPost, bundle)
         }
         //val navHostFragment = childFragmentManager.findFragmentById(R.id.nav_host_third) as NavHostFragment? ?: return
         //findNavController().navigate(R.id.third)

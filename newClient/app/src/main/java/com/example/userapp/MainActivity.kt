@@ -67,6 +67,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
                 R.id.signInFragment -> hideToolbar()
                 R.id.signUpFragment -> hideToolbar()
                 R.id.mainFragment -> hideToolbar()
+
                 else -> showToolbarTitle("각자프래그에 맞는 이름으로 추가해주기.")
             }
         }
@@ -77,7 +78,10 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
         when (id) {
             R.layout.fragment_mainhome -> {
                 finish()
-                return true } }
+                return true }
+
+        }
+
         return super.onOptionsItemSelected(item)
     }
 
