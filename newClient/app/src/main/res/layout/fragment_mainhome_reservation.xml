@@ -23,6 +23,7 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        app:tabTextColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/common_title"
         app:layout_constraintBottom_toTopOf="@+id/common_viewpager">

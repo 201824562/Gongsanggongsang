@@ -1,6 +1,8 @@
 package com.example.userapp.ui.mainhome.reservation
 
 import android.os.Bundle
+import android.os.CountDownTimer
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,7 +57,7 @@ class ReservationCurrentFragment :
 
 class EquipmentUsingAdapter(
     private var dataSet: List<ReservationUseEquipment>,
-    val onClickNoUsingIcon: (ReservationUseEquipment: ReservationUseEquipment) -> Unit
+    val onClickNoUsingIcon: (ReservationUseEquipment: ReservationUseEquipment) -> Unit,
 ) :
     RecyclerView.Adapter<EquipmentUsingAdapter.EquipmentUsingViewHolder>() {
 
@@ -71,16 +73,31 @@ class EquipmentUsingAdapter(
     override fun onBindViewHolder(viewHolder: EquipmentUsingViewHolder, position: Int) {
         val data = dataSet[position]
 
-        viewHolder.viewbinding.document.text = data.document_name
-        viewHolder.viewbinding.timeGap.text = ChronoUnit.MINUTES.between(
+        data.remain_time  = (ChronoUnit.MILLIS.between(
             LocalDateTime.now(),
             LocalDateTime.parse(data.end_time)
-        ).toString() + "분 남음"
+        ))
+
+        viewHolder.viewbinding.document.text = data.document_name
+        viewHolder.viewbinding.remainTimeTextview.text = data.remain_time.toString() + "분 남음"
         viewHolder.viewbinding.noUseBtn.setOnClickListener() {
             onClickNoUsingIcon.invoke(data)
         }
+
+        //스래드로 현재 유저가 사용중인 장비의 남은 시간을 알려줌
+       object : CountDownTimer(data.remain_time, 1000) {
+
+            override fun onTick(millisUntilFinished: Long) {
+                viewHolder.viewbinding.remainTimeTextview.setText((millisUntilFinished / 60000).toString() + "분 남음")
+            }
+
+            override fun onFinish() {
+//                viewHolder.viewbinding.remainTimeTextview.setText("done!")
+            }
+        }.start()
     }
 
+    //데이터셋 변화 >> 뷰로 적용시켜주는 함수
     fun setData(newData: List<ReservationUseEquipment>) {
         dataSet = newData
         notifyDataSetChanged()

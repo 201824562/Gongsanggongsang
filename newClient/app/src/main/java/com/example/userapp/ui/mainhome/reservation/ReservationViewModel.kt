@@ -20,6 +20,8 @@ class ReservationViewModel : BaseViewModel() {
     fun getEquipmentData() {
         lateinit var document_name: String
         lateinit var using: String
+        lateinit var end_time: String
+        lateinit var category: String
 
         database.collection("COMMUNAL_Equipment")
             .addSnapshotListener { value, e ->
@@ -29,12 +31,15 @@ class ReservationViewModel : BaseViewModel() {
                 EquipmentData.clear()
                 for (document in value!!) {
                     document_name = document.id
+                    category = document.get("category") as String
                     if (document.contains("name")) {
                         using = "using"
+                        end_time = document.get("end") as String
                     } else {
                         using = "no_using"
+                        end_time = "no_endtime"
                     }
-                    EquipmentData.add(ReservationEquipment(document_name, using, 0))
+                    EquipmentData.add(ReservationEquipment(document_name, using, end_time, category))
                 }
                 EquipmentLiveData.value = EquipmentData
             }
@@ -45,6 +50,7 @@ class ReservationViewModel : BaseViewModel() {
         lateinit var name: String
         lateinit var start_time: String
         lateinit var end_time: String
+        lateinit var category: String
 
         database.collection("COMMUNAL_Equipment")
             .addSnapshotListener { value, e ->
@@ -58,6 +64,7 @@ class ReservationViewModel : BaseViewModel() {
                         name = document.getString("name") ?: " "
                         start_time = document.get("start") as String
                         end_time = document.get("end") as String
+                        category = document.get("category") as String
 
                         if (name == "kijung") { //userdata
                             UseEquipmentData.add(
@@ -65,7 +72,9 @@ class ReservationViewModel : BaseViewModel() {
                                     document_name,
                                     name,
                                     start_time,
-                                    end_time
+                                    end_time,
+                                    0,
+                                    category
                                 )
                             )
                         }

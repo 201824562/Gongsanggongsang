@@ -10,10 +10,14 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.example.userapp.base.BaseFragment
 import com.example.userapp.databinding.FragmentMainhomeReservationBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+
+//예약 base fragment
+//use tab layout, viewpager2
 
 class ReservationFragment :
     BaseFragment<FragmentMainhomeReservationBinding, ReservationViewModel>() {
@@ -30,9 +34,11 @@ class ReservationFragment :
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-//        viewbinding.commonTab.addTab(viewbinding.commonTab.newTab().setText("사용/예약중"))
-//        viewbinding.commonTab.addTab(viewbinding.commonTab.newTab().setText("바로 사용"))
-//        viewbinding.commonTab.addTab(viewbinding.commonTab.newTab().setText("예약 사용"))
+
+        viewbinding.commonTab.addTab(viewbinding.commonTab.newTab().setText("사용/예약중"))
+        viewbinding.commonTab.addTab(viewbinding.commonTab.newTab().setText("바로 사용"))
+        viewbinding.commonTab.addTab(viewbinding.commonTab.newTab().setText("예약 사용"))
+
         initViewPager()
 
     }
@@ -69,6 +75,5 @@ class ReservationFragment :
                 tab.text = tabLayoutTextArray[position]
             }.attach()
         }
-
     }
 }
