@@ -19,7 +19,7 @@ import com.example.userapp.data.repository.PostDataRepository
 import com.example.userapp.databinding.FragmentCommunityPreviewBinding
 
 
-class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, CommunityViewModel>() {
+class CommunityMainRecyclerAdapter : BaseFragment<FragmentCommunityPreviewBinding, CommunityViewModel>() {
     override lateinit var viewbinding: FragmentCommunityPreviewBinding
 
     override val viewmodel : CommunityViewModel by viewModels()
@@ -31,7 +31,7 @@ class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, C
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-       viewbinding = FragmentCommunityPreviewBinding.inflate(inflater, container, false)
+        viewbinding = FragmentCommunityPreviewBinding.inflate(inflater, container, false)
         return viewbinding.root
     }
 

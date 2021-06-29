@@ -1,6 +1,7 @@
 package com.example.userapp
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -100,7 +101,5 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     private fun hideToolbar(){
         viewbinding.toolbar.visibility = View.GONE
     }
-
-
 
 }

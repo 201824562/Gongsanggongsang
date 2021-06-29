@@ -1,5 +1,6 @@
 package com.example.userapp.ui.mainhome.community
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
@@ -24,6 +25,7 @@ class CommunityViewModel : BaseViewModel() {
     fun getDocumentPostData(collection_name: String, document_name : String) : MutableLiveData<PostDataInfo>{
         return postDataRepository.getDocumentPostData(collection_name, document_name)
     }
+
     fun insertPostData(it: PostDataInfo) {
         postDataRepository.insertPostData(it)
     }
@@ -32,6 +34,26 @@ class CommunityViewModel : BaseViewModel() {
     }
     fun deletePostData(collection_name: String, document_name: String) {
         postDataRepository.deleteDocumentPostData(collection_name, document_name)
+    }
+    fun updatePostData(collection_name: String, document_name: String, modifyTitle : String, modifyContent : String){
+        postDataRepository.modifyPostData(collection_name, document_name, modifyTitle, modifyContent)
+    }
+    fun getDocumentCommentData(it: PostDataInfo) : ArrayList<PostCommentDataClass>{
+        val post_comments_array : ArrayList<PostCommentDataClass> = arrayListOf()
+        if(it.post_comments.toString() != "null") {
+            var server_comments = it.post_comments.toString().replace("[", "").replace("]", "")
+                .replace("{", "").replace("}", "").split(",")
+            Log.v("i", server_comments.toString())
+            for (i in 0 until server_comments.size step 3) {
+                var comments_element = PostCommentDataClass(
+                    server_comments[i + 2].split("=")[1],
+                    server_comments[i + 1].split("=")[1],
+                    server_comments[i].split("=")[1]
+                )
+                post_comments_array.add(comments_element)
+            }
+        }
+        return post_comments_array
     }
 
 }

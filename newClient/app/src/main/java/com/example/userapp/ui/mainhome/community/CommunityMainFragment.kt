@@ -16,6 +16,8 @@ class CommunityMainFragment : BaseFragment<FragmentMainhomeCommunityBinding, Com
 
     override val viewmodel: CommunityViewModel by viewModels()
 
+    lateinit var collection_name_bundle : Bundle
+
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -33,27 +35,27 @@ class CommunityMainFragment : BaseFragment<FragmentMainhomeCommunityBinding, Com
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run {
-            var collection_name = ""
+            var collection_name : String
             communityMarketButton.setOnClickListener {
                 collection_name = "COMMUNITY_MARKET"
-                var bundle = bundleOf(
+                collection_name_bundle = bundleOf(
                     "collection_name" to collection_name
                 )
-                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, bundle)
+                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, collection_name_bundle)
             }
             communityWithButton.setOnClickListener {
                 collection_name = "COMMUNITY_WITH"
-                var bundle = bundleOf(
+                collection_name_bundle = bundleOf(
                     "collection_name" to collection_name
                 )
-                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, bundle)
+                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, collection_name_bundle)
             }
-            communitySuggestButton.setOnClickListener {
+            communityTendinousButton.setOnClickListener {
                 collection_name = "COMMUNITY_SUGGEST"
-                var bundle = bundleOf(
+                collection_name_bundle = bundleOf(
                     "collection_name" to collection_name
                 )
-                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, bundle)
+                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, collection_name_bundle)
             }
         }
     }

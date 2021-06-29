@@ -46,6 +46,14 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
             "collection_name" to collection_name,
             "document_name" to document_name
         )
+        viewmodel.getDocumentPostData(collection_name, document_name).observe(viewLifecycleOwner){ it
+            viewbinding.postContents.text = it.post_contents
+            viewbinding.postTitle.text = it.post_title
+            post_comments_array = viewmodel.getDocumentCommentData(it)
+            viewbinding.communityPostCommentsNumber.text = post_comments_array.size.toString()
+            initRecyclerView(post_comments_array)
+        }
+
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
@@ -53,13 +61,11 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
-        viewmodel.getDocumentPostData(collection_name, document_name).observe(viewLifecycleOwner){ it
-            viewbinding.postContents.text = it.post_contents
-            viewbinding.postTitle.text = it.post_title
-        }
+
         viewbinding.commentsRegister.setOnClickListener{
             var post_comments = PostCommentDataClass("주용가리", viewbinding.writeComment.text.toString(), LocalDateTime.now().toString())
             post_comments_array.add(post_comments)
+            viewbinding.communityPostCommentsNumber.text = post_comments_array.size.toString()
             viewmodel.insertPostCommentData(collection_name, document_name, post_comments_array)
             adapter = CommunityCommentRecyclerAdapter(post_comments_array)
             initRecyclerView(post_comments_array)
@@ -72,6 +78,7 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
         viewbinding.postModifyButton.setOnClickListener{
             findNavController().navigate(R.id.action_communityPost_to_communityModify, bundle)
         }
+
 
     }
     fun initRecyclerView(post_comments: ArrayList<PostCommentDataClass>){

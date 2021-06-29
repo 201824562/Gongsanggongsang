@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -39,17 +40,20 @@ class CommunityModifyFragment : BaseFragment<FragmentCommunityModifyBinding, Com
         collection_name = arguments?.getString("collection_name").toString()
         document_name = arguments?.getString("document_name").toString()
         viewmodel.getDocumentPostData(collection_name, document_name).observe(viewLifecycleOwner){ it
-            viewbinding.modifyWriteTitle.setText(it.post_title)
-            viewbinding.modifyWriteContents.setText(it.post_contents)
+            viewbinding.writeModifyTitle.setText(it.post_title)
+            viewbinding.writeModifyContents.setText(it.post_contents)
         }
-
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
-
+        viewbinding.writeRegisterModifyButton.setOnClickListener{
+            var modifyTitle = viewbinding.writeModifyTitle.text.toString()
+            var modifyContent = viewbinding.writeModifyContents.text.toString()
+            viewmodel.updatePostData(collection_name, document_name, modifyTitle, modifyContent)
+        }
     }
 
 }

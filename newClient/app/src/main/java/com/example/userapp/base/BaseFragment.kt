@@ -3,7 +3,11 @@ package com.example.userapp.base
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +15,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -120,5 +126,41 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment() ,
         lifecycleOwner?.lifecycle?.addObserver(observer)
         dialog.setOnDismissListener { lifecycleOwner?.lifecycle?.removeObserver(observer) }
 
+    }
+
+    // Permission
+    fun requestPermission(
+        requestPermissionLauncher: ActivityResultLauncher<String>,
+        permission: String,
+        rationaleMessage: String,
+        onGranted: () -> Unit
+    ) {
+        when {
+            ContextCompat.checkSelfPermission(requireContext(), permission) == PERMISSION_GRANTED -> {
+                onGranted()
+            }   //이미 승인 된 경우
+            shouldShowRequestPermissionRationale(permission) -> {
+                showPermissionRationale(rationaleMessage)
+            }   //처음인 경우
+            else -> requestPermissionLauncher.launch(permission)    //이전에 선택결과가 있는 경우('거절' or 승인)
+        }
+    }
+
+    private fun showPermissionRationale(message: String) {
+        androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("권한 요청")
+            .setMessage(message)
+            .setPositiveButton("확인") { _, _ ->
+                goToSettings()
+            }
+            .setNegativeButton("취소") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun goToSettings() {
+        val uri = Uri.parse("package:${requireActivity().packageName}")
+        startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, uri))
     }
 }

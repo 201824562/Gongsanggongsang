@@ -62,7 +62,8 @@ class PostDataRepository() {
                         document["post_title"] as String,
                         document["post_contents"] as String,
                         document["post_date"] as String,
-                        document["post_comments"] as ArrayList<PostCommentDataClass>)
+                        document["post_comments"] as ArrayList<PostCommentDataClass>,
+                        document["post_id"] as String)
                     postDataList.add(item)
                 }
                 collectionPostDataInfoList.value= postDataList
@@ -84,7 +85,8 @@ class PostDataRepository() {
                     result["post_title"].toString(),
                     result["post_contents"].toString(),
                     result["post_date"].toString(),
-                    arrayListOf())
+                    result["post_comments"] as ArrayList<PostCommentDataClass>,
+                    result["post_id"].toString())
                 documentPostDataInfo.value = postData
             }
     }
@@ -94,6 +96,22 @@ class PostDataRepository() {
     }
     fun deleteDocumentPostData(collection_name: String, document_name: String) {
         firestore.collection(collection_name).document(document_name).delete()
+    }
+    fun modifyPostData(collection_name: String, document_name: String, modifyTitle: String, modifyContent: String) {
+        var titleMap = mutableMapOf<String, Any>()
+        var contentMap = mutableMapOf<String, Any>()
+        titleMap["post_title"] = modifyTitle
+        contentMap["post_contents"] = modifyContent
+        firestore.collection(collection_name).document(document_name)
+            .update(titleMap)
+            .addOnSuccessListener { result ->
+
+            }
+
+        firestore.collection(collection_name).document(document_name)
+            .update(contentMap)
+            .addOnSuccessListener { result ->
+            }
     }
 
 }

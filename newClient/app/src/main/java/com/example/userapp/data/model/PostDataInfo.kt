@@ -15,5 +15,7 @@ data class PostDataInfo (
 
     val post_date : String,
 
-    val post_comments : ArrayList<PostCommentDataClass> = arrayListOf()
+    val post_comments : ArrayList<PostCommentDataClass> = arrayListOf(),
+
+    val post_id : String
 )
