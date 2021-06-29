@@ -3,8 +3,9 @@ package com.example.userapp.data.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-
 /*
+
+
 @Entity(tableName = "RESERVATION_TABLE")
 data class ReservationEntity (
     @ColumnInfo(name = "Type")

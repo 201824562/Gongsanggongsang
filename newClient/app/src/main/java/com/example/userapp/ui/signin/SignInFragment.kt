@@ -11,6 +11,7 @@ import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
 import com.example.userapp.databinding.FragmentSigninBinding
 
+
 class SignInFragment : BaseFragment<FragmentSigninBinding, SignInViewModel>() {
     override lateinit var viewbinding: FragmentSigninBinding
     override val viewmodel: SignInViewModel by viewModels()
@@ -27,7 +28,7 @@ class SignInFragment : BaseFragment<FragmentSigninBinding, SignInViewModel>() {
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-
+        setupKeyboardHide(viewbinding.fragmentRootLayout, activity)
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {

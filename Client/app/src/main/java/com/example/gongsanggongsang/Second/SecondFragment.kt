@@ -26,8 +26,5 @@ class SecondFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        category3.setOnClickListener{
-            findNavController().navigate(R.id.action_baseFragment_to_reservationDryer)
-        }
     }
 }

@@ -6,7 +6,11 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.example.userapp.ui.mainhome.MainFragment"
-        android:label="MainFragment" />
+        android:label="MainFragment" >
+        <action
+            app:destination="@+id/communityPreviewFragment"
+            android:id="@+id/action_mainFragment_to_communityPreviewFragment"/>
+    </fragment>
     <fragment
         android:id="@+id/signUpFragment"
         android:name="com.example.userapp.ui.signup.SignUpFragment"
@@ -38,4 +42,47 @@
             android:id="@+id/action_signInFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/communityPreviewFragment"
+        android:name="com.example.userapp.ui.mainhome.community.CommunityPreviewFragment">
+        <action
+            app:destination="@+id/communityPostFragment"
+            android:id="@+id/action_communityPreview_to_communityPost"/>
+        <action
+            app:destination="@+id/communityWriteFragment"
+            android:id="@+id/action_communityPreview_to_communityWrite"/>
+        <argument
+            app:argType="string"
+            android:name="collection_name"
+            android:defaultValue="0"/>
+    </fragment>
+    <fragment
+        android:id="@+id/communityWriteFragment"
+        android:name="com.example.userapp.ui.mainhome.community.CommunityWriteFragment"
+        android:label="CommunityWriteFragment">
+        <action
+            app:destination="@+id/communityPostFragment"
+            android:id="@+id/action_communityWrite_to_communityPost"
+            app:popUpTo="@id/communityWriteFragment"/>
+        <argument
+            app:argType="string"
+            android:name="collection_name"
+            android:defaultValue="0"/>
+    </fragment>
+    <fragment
+        android:id="@+id/communityModifyFragment"
+        android:name="com.example.userapp.ui.mainhome.community.CommunityModifyFragment"/>
+    <fragment
+        android:id="@+id/communityPostFragment"
+        android:name="com.example.userapp.ui.mainhome.community.CommunityPostFragment">
+        <action
+            android:id="@+id/action_communityPost_to_communityPreview"
+            app:destination="@+id/communityPreviewFragment"
+            app:popUpTo="@id/communityPostFragment"/>
+        <action
+            android:id="@+id/action_communityPost_to_communityModify"
+            app:destination="@+id/communityModifyFragment"/>
+    </fragment>
+
 </navigation>

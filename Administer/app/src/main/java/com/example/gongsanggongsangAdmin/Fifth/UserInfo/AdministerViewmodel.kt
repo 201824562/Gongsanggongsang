@@ -20,16 +20,12 @@ class AdministerViewmodel(application: Application) : AndroidViewModel(applicati
         return repository.Final_AllWaitinguserlist
     }
 
-    fun acceptUser(userdata : UserDataClass){
-        repository.acceptUser(userdata)
-    }
-
     fun deleteWaitingUser(userdata: UserDataClass){
         repository.deleteWaitingUser(userdata)
     }
 
-
-
-
+    fun acceptUser(userdata : UserDataClass){
+        repository.acceptUser(userdata)
+    }
 
 }

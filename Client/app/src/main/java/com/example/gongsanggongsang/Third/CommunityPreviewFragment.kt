@@ -60,7 +60,7 @@ class CommunityPreviewFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = mCommunityRecyclerAdapter
         }
-        /*database.collection(collection_name)
+        database.collection(collection_name)
                 .get()
                 .addOnSuccessListener { result ->
                     testlist.clear()
@@ -74,6 +74,6 @@ class CommunityPreviewFragment : Fragment() {
                         testlist.add(item)
                     }
                     mCommunityRecyclerAdapter.notifyDataSetChanged()
-                }*/
+                }
     }
 }
