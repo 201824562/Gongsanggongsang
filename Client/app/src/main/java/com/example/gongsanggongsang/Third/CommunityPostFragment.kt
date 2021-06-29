@@ -38,8 +38,6 @@ class CommunityPostFragment : Fragment() {
                 post_title.text = result["title"].toString()
                 post_contents.text = result["contents"].toString()
                 if(result["comments"].toString() != "null"){
-                    Log.v("s", result["comments"].toString())
-                    Log.v("r", result.toString())
                     var server_comments = result["comments"].toString().replace("[", "").replace("]", "")
                             .replace("{", "").replace("}", "").split(",")
                     Log.v("i", server_comments.toString())

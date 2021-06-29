@@ -15,7 +15,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashViewModel> (){
 
     override fun initViewbinding(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         viewbinding =  FragmentSplashBinding.inflate(inflater, container, false)
-        return viewbinding.root     //이때 root는 activity x. viewbinding이 속해있는 layout (-> R.layout.fragment_splash)
+        return viewbinding.root
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {

@@ -9,7 +9,6 @@ import com.example.gongsanggongsang.R
 import kotlinx.android.synthetic.main.fragment_community_write_preview_item.view.*
 
 class CommunityPreviewRecyclerAdapter(val communityWritePreviewItems:ArrayList<PostDataEntity>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
     interface OnCommunityMarketItemClickListener{
         fun onPreviewItemClick(position: Int)
     }
