@@ -1,17 +1,19 @@
 package com.example.userapp.base
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
+import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel>: AppCompatActivity() {
+abstract class BaseActivity<VB : ViewBinding, VM : BaseActivityViewModel>: AppCompatActivity() {
 
     abstract val viewbinding : VB
     abstract val viewmodel : VM
@@ -75,3 +77,4 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel>: AppCompatActi
     }*/
 
 }
+

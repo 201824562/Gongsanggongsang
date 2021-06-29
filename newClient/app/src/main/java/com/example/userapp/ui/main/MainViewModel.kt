@@ -1,11 +1,12 @@
-package com.example.userapp.ui.intro
+package com.example.userapp.ui.main
 
 import androidx.lifecycle.LiveData
 import com.example.userapp.base.BaseViewModel
 import com.example.userapp.utils.SingleLiveEvent
 import java.util.concurrent.TimeUnit
 
-class IntroViewModel : BaseViewModel() {
+//TODO : 저기 토큰 관리 마무리.
+class MainViewModel : BaseViewModel(){
 
     private val _onBackPressedEventLiveData = SingleLiveEvent<Any>()
     val onBackPressedEventLiveData: LiveData<Any> get() = _onBackPressedEventLiveData
@@ -19,4 +20,15 @@ class IntroViewModel : BaseViewModel() {
             mBackPressedAt = System.currentTimeMillis()
         }
     }
+
+    /*   fun getUserStatus() {
+       apiCall(userRepository.requestSignUpStatus(authToken), { status ->
+           when (status.data.state) {
+               UserStatus.NOT_USER -> callSessionInvalidEvent()
+               else -> {
+                   // DO Nothing
+               }
+           }
+       })
+   }*/
 }

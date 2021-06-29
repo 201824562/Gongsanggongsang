@@ -1,6 +1,7 @@
 package com.example.userapp
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -13,13 +14,12 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.example.userapp.base.BaseActivity
+import androidx.viewbinding.ViewBinding
+import com.example.userapp.base.*
 import com.example.userapp.databinding.ActivityMainBinding
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() {
-    companion object{
-        val TOOLBAR_TITLE = "title"
-    }
+    companion object{ val TOOLBAR_TITLE = "title" }
 
     override lateinit var  viewbinding: ActivityMainBinding
     override val viewmodel: MainActivityViewModel by viewModels()
@@ -76,7 +76,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         when (id) {
-            R.layout.fragment_mainhome -> {
+            R.layout.fragment_main -> {
                 finish()
                 return true } }
         return super.onOptionsItemSelected(item)
@@ -98,6 +98,14 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
         viewbinding.toolbar.visibility = View.GONE
     }
 
+    fun restartActivity() {
+        finish()
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+    }
+}
 
-
+fun <VB : ViewBinding, VM : BaseSessionViewModel> BaseSessionFragment<VB, VM>.restartActivity() {
+    val activity = this.activity as MainActivity
+    activity.restartActivity()
 }

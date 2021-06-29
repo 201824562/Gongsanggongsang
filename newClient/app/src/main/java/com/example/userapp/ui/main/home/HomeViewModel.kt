@@ -1,4 +1,4 @@
-package com.example.userapp.ui.mainhome.home
+package com.example.userapp.ui.main.home
 
 import com.example.userapp.base.BaseViewModel
 

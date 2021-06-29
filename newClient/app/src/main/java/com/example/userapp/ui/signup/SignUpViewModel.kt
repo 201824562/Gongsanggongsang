@@ -1,13 +1,13 @@
 package com.example.userapp.ui.signup
 
+import android.app.Application
 import androidx.lifecycle.LiveData
-import com.example.userapp.base.BaseViewModel
+import com.example.userapp.base.BaseSessionViewModel
 import com.example.userapp.data.model.SignUpInfo
 import com.example.userapp.data.repository.UserRepository
 import com.example.userapp.utils.RegularExpressionUtil
 
-class SignUpViewModel : BaseViewModel() {
-    val repository: UserRepository = UserRepository.getInstance()
+class SignUpViewModel(application: Application) : BaseSessionViewModel(application) {
 
     private var personalSignUpInfo : PersonalSignUpInfo ?= null
     private var signUpInfo : SignUpInfo? =null
@@ -31,8 +31,8 @@ class SignUpViewModel : BaseViewModel() {
     fun sendSignUpInfo(userId : String, userPwd : String, userNickname : String): LiveData<Boolean> {
        signUpInfo = SignUpInfo(personalSignUpInfo!!.username, personalSignUpInfo!!.userBirthday, personalSignUpInfo!!.usersSmsinfo,
            userId, userPwd, userNickname, false)
-        repository.signUp(signUpInfo!!) //성공시 라이브 데이터에 값 보내서 bind로 이동하게 해야함.(수정필요)
-        return repository.onSuccessSignupEvent
+        userRepository.signUp(signUpInfo!!) //성공시 라이브 데이터에 값 보내서 bind로 이동하게 해야함.(수정필요)
+        return userRepository.onSuccessSignupEvent
     }
 
 
@@ -108,8 +108,6 @@ class SignUpViewModel : BaseViewModel() {
     }
 
 }
-
-
 
 
 data class PersonalSignUpInfo(val username : String, val userBirthday: String, val usersSmsinfo: String)

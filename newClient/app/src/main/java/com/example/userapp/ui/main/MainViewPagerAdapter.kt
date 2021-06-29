@@ -1,14 +1,14 @@
-package com.example.userapp.ui.mainhome
+package com.example.userapp.ui.main
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.userapp.ui.mainhome.community.CommunityFragment
-import com.example.userapp.ui.mainhome.home.HomeFragment
-import com.example.userapp.ui.mainhome.reservation.ReservationFragment
-import com.example.userapp.ui.mainhome.settings.SettingsFragment
+import com.example.userapp.ui.main.community.CommunityFragment
+import com.example.userapp.ui.main.home.HomeFragment
+import com.example.userapp.ui.main.reservation.ReservationFragment
+import com.example.userapp.ui.main.settings.SettingsFragment
 
-class MainHomeViewPagerAdapter (activity: FragmentActivity) : FragmentStateAdapter(activity){
+class MainViewPagerAdapter (activity: FragmentActivity) : FragmentStateAdapter(activity){
 
     override fun getItemCount(): Int = 4 //PagerViewadapter에서 관리할 View 개수를 반환한다.
 

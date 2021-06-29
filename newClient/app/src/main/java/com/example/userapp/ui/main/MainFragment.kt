@@ -1,4 +1,4 @@
-package com.example.userapp.ui.mainhome
+package com.example.userapp.ui.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,16 +9,16 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
-import com.example.userapp.databinding.FragmentMainhomeBinding
+import com.example.userapp.databinding.FragmentMainBinding
 
-class MainFragment : BaseFragment<FragmentMainhomeBinding, MainHomeViewModel>(){
+class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>(){
 
-    override lateinit var viewbinding: FragmentMainhomeBinding
-    override val viewmodel: MainHomeViewModel by viewModels()
-    private var mainHomeViewPagerAdapter : MainHomeViewPagerAdapter? = null
+    override lateinit var viewbinding: FragmentMainBinding
+    override val viewmodel: MainViewModel by viewModels()
+    private var mainViewPagerAdapter : MainViewPagerAdapter? = null
 
     override fun initViewbinding(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        viewbinding = FragmentMainhomeBinding.inflate(inflater, container, false)
+        viewbinding = FragmentMainBinding.inflate(inflater, container, false)
         return viewbinding.root
     }
 
@@ -33,15 +33,14 @@ class MainFragment : BaseFragment<FragmentMainhomeBinding, MainHomeViewModel>(){
 
     override fun initViewFinal(savedInstanceState: Bundle?) {}
 
-
     private fun initViewPager(){
 
         viewbinding.run{
 
-            mainHomeViewPagerAdapter = MainHomeViewPagerAdapter(requireActivity())
+            mainViewPagerAdapter = MainViewPagerAdapter(requireActivity())
             mainhomeViewpager.apply {
                 offscreenPageLimit = 4
-                adapter = mainHomeViewPagerAdapter
+                adapter = mainViewPagerAdapter
                 registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
                     override fun onPageSelected(position: Int) {
                         super.onPageSelected(position)

@@ -1,4 +1,4 @@
-package com.example.userapp.ui.mainhome.reservation
+package com.example.userapp.ui.main.reservation
 
 import com.example.userapp.base.BaseViewModel
 

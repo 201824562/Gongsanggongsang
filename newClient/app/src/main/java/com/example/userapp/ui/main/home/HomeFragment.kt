@@ -1,4 +1,4 @@
-package com.example.userapp.ui.mainhome.community
+package com.example.userapp.ui.main.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,19 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.example.userapp.base.BaseFragment
-import com.example.userapp.databinding.FragmentMainhomeCommunityBinding
+import com.example.userapp.databinding.FragmentMainhomeHomeBinding
 
-class CommunityFragment : BaseFragment<FragmentMainhomeCommunityBinding, CommunityViewModel>(){
-    override lateinit var viewbinding: FragmentMainhomeCommunityBinding
-
-    override val viewmodel: CommunityViewModel by viewModels()
+class HomeFragment : BaseFragment<FragmentMainhomeHomeBinding, HomeViewModel>(){
+    override lateinit var viewbinding: FragmentMainhomeHomeBinding
+    override val viewmodel: HomeViewModel by viewModels()
 
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewbinding = FragmentMainhomeCommunityBinding.inflate(inflater, container, false)
+        viewbinding = FragmentMainhomeHomeBinding.inflate(inflater, container, false)
         return viewbinding.root
     }
 
@@ -30,5 +29,4 @@ class CommunityFragment : BaseFragment<FragmentMainhomeCommunityBinding, Communi
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
     }
-
 }

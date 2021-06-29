@@ -1,19 +1,19 @@
-package com.example.userapp
-/*
+package com.example.userapp.data
+
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.example.userapp.data.dao.ReservationDao
-import com.example.userapp.data.entity.ReservationEntity
+import com.example.userapp.data.dao.UserDao
+import com.example.userapp.data.entity.User
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
-@Database(entities = [ReservationEntity::class], version=1, exportSchema = false)
+@Database(entities = [User::class], version=1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase(){
-    abstract fun reservationDao() : ReservationDao
+    abstract fun userDao() : UserDao
 
     companion object{
         @Volatile
@@ -40,12 +40,11 @@ abstract class AppDatabase : RoomDatabase(){
                 super.onCreate(db)
                 INSTANCE?.let{ appdb ->
                     scope.launch {
-                        ReservationDatabase(appdb.reservationDao())
+                        UserDatabase(appdb.userDao())
                     }
                 }
             }
-            suspend fun ReservationDatabase(reservationDao: ReservationDao){}
-
+            suspend fun UserDatabase(userDao: UserDao){}
         }
 
-}*/
+}

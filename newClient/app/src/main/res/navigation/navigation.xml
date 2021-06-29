@@ -41,9 +41,18 @@
             app:popEnterAnim="@anim/slide_pop_enter"
             app:popExitAnim="@anim/slide_pop_exit"/>
     </fragment>
+    <action
+        android:id="@+id/action_global_introFragment"
+        app:destination="@id/introFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"
+        app:popUpTo="@id/mainFragment"
+        app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.userapp.ui.mainhome.MainFragment"
+        android:name="com.example.userapp.ui.main.MainFragment"
         android:label="MainFragment" />
 
     <navigation

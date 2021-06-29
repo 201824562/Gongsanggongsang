@@ -1,13 +1,19 @@
 package com.example.userapp.ui.signin
 
+import android.app.Application
 import androidx.lifecycle.LiveData
-import com.example.userapp.base.BaseViewModel
-import com.example.userapp.data.model.SignUpInfo
-import com.example.userapp.data.repository.UserRepository
-import com.example.userapp.ui.signup.PersonalSignUpInfo
+import com.example.userapp.base.BaseSessionViewModel
+import com.example.userapp.data.dto.UserModel
+import com.example.userapp.utils.SingleLiveEvent
 
-class SignInViewModel : BaseViewModel() {
-    val repository: UserRepository = UserRepository.getInstance()
+class SignInViewModel(application: Application) : BaseSessionViewModel(application) {
+
+    private val _onSuccessLoginUserData = SingleLiveEvent<UserModel>()
+    val onSuccessLoginUserData : LiveData<UserModel> get() = _onSuccessLoginUserData
+
+    private val _onSuccessSaveUserInfo = SingleLiveEvent<Any>()
+    val onSuccessSaveUserInfo : LiveData<Any> get() = _onSuccessSaveUserInfo
+
 
     fun checkForSignInInfo(userId : String, userPwd : String) : Boolean {
         return if (userId.isBlank()||userId.isEmpty()){
@@ -19,9 +25,15 @@ class SignInViewModel : BaseViewModel() {
         } else true
     }
 
-    fun sendSignInInfo(userId : String, userPwd : String): LiveData<Boolean> {
-        repository.signIn(userId, userPwd) //성공시 라이브 데이터에 값 보내서 bind로 이동하게 해야함.(수정필요)
-        return repository.onSuccessSignInEvent
+    fun sendSignInInfo(userId : String, userPwd : String){
+        apiCall(userRepository.signIn(userId, userPwd), { userdata ->
+            _onSuccessLoginUserData.postValue(userdata) }, {showSnackbar("로그인에 실패했습니다. 다시 시도해주세요.")})
     }
+
+    fun saveUserInfo(userData : UserModel) {
+        apiCall(userRepository.saveUserInfo(userData),{ _onSuccessSaveUserInfo.value = true} )
+    }
+
+
 
 }
