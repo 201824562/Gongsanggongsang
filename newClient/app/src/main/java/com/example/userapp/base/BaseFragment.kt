@@ -49,10 +49,14 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment() ,
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         initViewStart(savedInstanceState)
         initDataBinding(savedInstanceState)
         initViewFinal(savedInstanceState)
-        super.onViewCreated(view, savedInstanceState)
+
+        snackbarObserving()
+
     }
 
     abstract fun initViewbinding(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) : View?
@@ -61,7 +65,7 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment() ,
     abstract fun initViewFinal(savedInstanceState: Bundle?)     //세번째, 마무리 커스텀 (ex. 클릭리스너 이벤트)
 
 
-/*
+
     fun snackbarObserving() {
         viewmodel.observeSnackbarMessageString(viewLifecycleOwner) { str ->
             if (isDetached)
@@ -73,14 +77,14 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment() ,
             //(snackbar.view.findViewById(R.id.snackbar_text) as TextView).maxLines = 5
         }
     }
-*/
-
 
     @Throws(IllegalArgumentException::class)
     override fun showSnackbar(message: String) {
         if (isDetached) return
         activity?.let { activity ->
             Snackbar.make(activity.findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT).show() } }
+
+
     override fun showToast(message: String) { Toast.makeText(activity, message, Toast.LENGTH_SHORT).show() }
     override fun showToast(stringRes: Int) { Toast.makeText(activity, stringRes, Toast.LENGTH_SHORT).show() }
 

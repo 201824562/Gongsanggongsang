@@ -14,5 +14,13 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:textColorHint">@color/black</item>
         <!-- Customize your theme here. -->
+        <item name="android:textColorPrimary">@color/black</item> <!-- Toolbar Title Color -->
+        <item name="android:textColorSecondary">@color/black</item> <!-- Toolbar Up Button Color -->
+    </style>
+
+    <style name="CustomBottomSheetDialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 </resources>

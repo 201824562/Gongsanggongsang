@@ -7,23 +7,22 @@ import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.example.userapp.base.BaseActivity
+import androidx.viewbinding.ViewBinding
+import com.example.userapp.base.*
 import com.example.userapp.databinding.ActivityMainBinding
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() {
-    companion object{
-        val TOOLBAR_TITLE = "title"
-    }
+    companion object{ val TOOLBAR_TITLE = "title" }
 
     override lateinit var  viewbinding: ActivityMainBinding
-    override val viewmodel: MainActivityViewModel by viewModel()
+    override val viewmodel: MainActivityViewModel by viewModels()
     override val layoutResourceId: Int
         get() = R.layout.activity_main
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -56,7 +55,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
         setSupportActionBar(viewbinding.toolbar)
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment
         navController = navHostFragment.navController
-        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         appBarConfiguration = AppBarConfiguration(setOf(R.id.mainFragment))
         setupActionBarWithNavController(navController, appBarConfiguration)
 
@@ -65,8 +64,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
             viewbinding.toolbar.setNavigationOnClickListener{ findNavController(R.id.nav_host).navigateUp() }   //이거 필요한가?
             when (destination.id){
-                R.id.signInFragment -> hideToolbar()
-                R.id.signUpFragment -> hideToolbar()
+                R.id.introFragment, R.id.signUpWaitFragment -> hideToolbar()
+                R.id.signInFragment, R.id.signUpFirstFragment,
+                R.id.signUpSecondFragment-> showToolbarTitle("")
                 R.id.mainFragment -> hideToolbar()
 
                 else -> showToolbarTitle("각자프래그에 맞는 이름으로 추가해주기.")
@@ -77,7 +77,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         when (id) {
-            R.layout.fragment_mainhome -> {
+            R.layout.fragment_main -> {
                 finish()
                 return true }
 
@@ -102,4 +102,14 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
         viewbinding.toolbar.visibility = View.GONE
     }
 
+    fun restartActivity() {
+        finish()
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+    }
+}
+
+fun <VB : ViewBinding, VM : BaseSessionViewModel> BaseSessionFragment<VB, VM>.restartActivity() {
+    val activity = this.activity as MainActivity
+    activity.restartActivity()
 }
