@@ -1,11 +1,8 @@
-package com.example.userapp.ui.mainhome.community
+package com.example.userapp.ui.main.community
 
 import android.Manifest
-import android.content.ContentResolver
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

@@ -1,22 +1,12 @@
-package com.example.userapp.ui.mainhome.community
+package com.example.userapp.ui.main.community
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
-import com.example.userapp.data.entity.PostCommentDataClass
-import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentCommunityModifyBinding
-import com.example.userapp.databinding.FragmentCommunityWriteBinding
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.time.LocalDateTime
 
 class CommunityModifyFragment : BaseFragment<FragmentCommunityModifyBinding, CommunityViewModel>() {
     private lateinit var collection_name : String

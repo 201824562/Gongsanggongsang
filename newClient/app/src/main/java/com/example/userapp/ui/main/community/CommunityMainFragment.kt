@@ -1,4 +1,4 @@
-package com.example.userapp.ui.mainhome.community
+package com.example.userapp.ui.main.community
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -50,13 +50,12 @@ class CommunityMainFragment : BaseFragment<FragmentMainhomeCommunityBinding, Com
                 )
                 findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, collection_name_bundle)
             }
-            communityTendinousButton.setOnClickListener {
+            juyong.setOnClickListener {
                 collection_name = "COMMUNITY_SUGGEST"
-                collection_name_bundle = bundleOf(
-                    "collection_name" to collection_name
-                )
+                collection_name_bundle = bundleOf("collection_name" to collection_name)
                 findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, collection_name_bundle)
             }
+            communityTendinousButton.setOnClickListener {}
         }
     }
 }

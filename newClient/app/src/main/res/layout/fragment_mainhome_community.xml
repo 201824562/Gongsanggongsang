@@ -16,6 +16,7 @@
             android:id="@+id/community_free_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clickable="false"
             android:src="@drawable/lovebutton"
             android:layout_gravity="center"
             android:layout_marginTop="25dp"
@@ -86,6 +87,8 @@
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/juyong"
+        android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"

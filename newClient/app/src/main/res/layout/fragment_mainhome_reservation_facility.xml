@@ -5,6 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/purple_200"
-    tools:context=".ui.mainhome.reservation.ReservationFacilityFragment">
+    tools:context=".ui.main.reservation.ReservationFacilityFragment">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

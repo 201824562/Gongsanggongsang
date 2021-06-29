@@ -3,7 +3,7 @@ package com.example.userapp.ui.main
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.userapp.ui.main.community.CommunityFragment
+import com.example.userapp.ui.main.community.CommunityMainFragment
 import com.example.userapp.ui.main.home.HomeFragment
 import com.example.userapp.ui.main.reservation.ReservationFragment
 import com.example.userapp.ui.main.settings.SettingsFragment
@@ -16,7 +16,7 @@ class MainViewPagerAdapter (activity: FragmentActivity) : FragmentStateAdapter(a
         return when(position){
             0 -> HomeFragment()
             1 -> ReservationFragment()
-            2 -> CommunityFragment()
+            2 -> CommunityMainFragment()
             3 -> SettingsFragment()
             else -> error("no such position: $position")
         }

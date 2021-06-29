@@ -111,7 +111,7 @@
 
     <fragment
         android:id="@+id/communityPreviewFragment"
-        android:name="com.example.userapp.ui.mainhome.community.CommunityPreviewFragment">
+        android:name="com.example.userapp.ui.main.community.CommunityPreviewFragment">
         <action
             app:destination="@+id/communityPostFragment"
             android:id="@+id/action_communityPreview_to_communityPost"/>
@@ -125,7 +125,7 @@
     </fragment>
     <fragment
         android:id="@+id/communityWriteFragment"
-        android:name="com.example.userapp.ui.mainhome.community.CommunityWriteFragment"
+        android:name="com.example.userapp.ui.main.community.CommunityWriteFragment"
         android:label="CommunityWriteFragment">
         <action
             app:destination="@+id/communityPostFragment"
@@ -138,10 +138,10 @@
     </fragment>
     <fragment
         android:id="@+id/communityModifyFragment"
-        android:name="com.example.userapp.ui.mainhome.community.CommunityModifyFragment"/>
+        android:name="com.example.userapp.ui.main.community.CommunityModifyFragment"/>
     <fragment
         android:id="@+id/communityPostFragment"
-        android:name="com.example.userapp.ui.mainhome.community.CommunityPostFragment">
+        android:name="com.example.userapp.ui.main.community.CommunityPostFragment">
         <action
             android:id="@+id/action_communityPost_to_communityPreview"
             app:destination="@+id/communityPreviewFragment"

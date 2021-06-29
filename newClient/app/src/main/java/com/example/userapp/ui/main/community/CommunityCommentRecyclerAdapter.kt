@@ -1,12 +1,9 @@
-package com.example.userapp.ui.mainhome.community
+package com.example.userapp.ui.main.community
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.userapp.R
 import com.example.userapp.data.entity.PostCommentDataClass
-import com.example.userapp.databinding.FragmentCommunityPreviewItemBinding
 import com.example.userapp.databinding.FragmentPostCommentItemBinding
 
 

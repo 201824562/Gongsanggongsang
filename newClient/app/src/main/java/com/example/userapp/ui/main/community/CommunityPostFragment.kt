@@ -1,7 +1,6 @@
-package com.example.userapp.ui.mainhome.community
+package com.example.userapp.ui.main.community
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,10 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
 import com.example.userapp.data.entity.PostCommentDataClass
-import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentCommunityPostBinding
-import com.example.userapp.ui.mainhome.community.CommunityViewModel
-import com.google.firebase.firestore.FirebaseFirestore
 import java.time.LocalDateTime
 
 
