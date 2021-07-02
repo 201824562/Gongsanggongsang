@@ -61,6 +61,7 @@
             android:hint="비밀번호"
             android:padding="8dp"
             android:singleLine="true"
+            android:inputType="textPassword"
             android:textSize="14sp"
             android:fontFamily="@font/notosanskr_regular_hestia"
             android:textColorHint="#de000000"

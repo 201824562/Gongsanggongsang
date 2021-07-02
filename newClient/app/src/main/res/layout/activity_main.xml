@@ -21,8 +21,7 @@
             android:textSize="17sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:background="@color/transparent"
-            android:layout_gravity="center" />
+            android:background="@color/transparent" />
     </androidx.appcompat.widget.Toolbar>
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host"

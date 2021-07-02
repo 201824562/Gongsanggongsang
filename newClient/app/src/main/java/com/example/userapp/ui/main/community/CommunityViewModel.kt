@@ -40,7 +40,7 @@ class CommunityViewModel : BaseViewModel() {
     }
     fun getDocumentCommentData(it: PostDataInfo) : ArrayList<PostCommentDataClass>{
         val post_comments_array : ArrayList<PostCommentDataClass> = arrayListOf()
-        if(it.post_comments.toString() != "null") {
+        if(it.post_comments.toString() != "[]") {
             var server_comments = it.post_comments.toString().replace("[", "").replace("]", "")
                 .replace("{", "").replace("}", "").split(",")
             Log.v("i", server_comments.toString())
