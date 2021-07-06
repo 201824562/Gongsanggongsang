@@ -37,6 +37,7 @@ class ReservationCurrentFragment :
         viewbinding.equipmentUsingRecyclerView.adapter = EquipmentUsingAdapter(
             emptyList(),
             onClickNoUsingIcon = {
+                it.coroutine.cancel()
                 viewmodel.end_use(it)
             }
         )
@@ -72,28 +73,40 @@ class EquipmentUsingAdapter(
     override fun onBindViewHolder(viewHolder: EquipmentUsingViewHolder, position: Int) {
         val data = dataSet[position]
 
-        data.remain_time  = (ChronoUnit.MILLIS.between(
+        data.remain_time = (ChronoUnit.MILLIS.between(
             LocalDateTime.now(),
             LocalDateTime.parse(data.end_time)
         ))
+        println("remaintime")
+        println(data.remain_time)
+        println("\n")
+
 
         viewHolder.viewbinding.document.text = data.document_name
-        viewHolder.viewbinding.remainTimeTextview.text = data.remain_time.toString() + "분 남음"
+        //viewHolder.viewbinding.remainTimeTextview.text = (data.remain_time/60000).toString() + "분 남음"
         viewHolder.viewbinding.noUseBtn.setOnClickListener() {
             onClickNoUsingIcon.invoke(data)
         }
 
         //스래드로 현재 유저가 사용중인 장비의 남은 시간을 알려줌
-       object : CountDownTimer(data.remain_time, 1000) {
-
-            override fun onTick(millisUntilFinished: Long) {
-                viewHolder.viewbinding.remainTimeTextview.setText((millisUntilFinished / 60000).toString() + "분 남음")
+        data.coroutine.async() {
+            for (i in (data.remain_time) downTo (1000)){
+                viewHolder.viewbinding.remainTimeTextview.setText((i / 60000).toString() + "분 남음")
+                delay(1000)
+                Log.d("position",position.toString())
+                Log.d("i",i.toString())
             }
-
-            override fun onFinish() {
-//                viewHolder.viewbinding.remainTimeTextview.setText("done!")
-            }
-        }.start()
+        }
+//        object : CountDownTimer(data.remain_time, 1000) {
+//
+//            override fun onTick(millisUntilFinished: Long) {
+//                viewHolder.viewbinding.remainTimeTextview.setText((millisUntilFinished / 60000).toString() + "분 남음")
+//            }
+//
+//            override fun onFinish() {
+////                viewHolder.viewbinding.remainTimeTextview.setText("done!")
+//            }
+//        }.start()
     }
 
     //데이터셋 변화 >> 뷰로 적용시켜주는 함수

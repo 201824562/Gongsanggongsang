@@ -6,6 +6,7 @@ import com.example.userapp.data.model.ReservationEquipment
 import com.example.userapp.data.model.ReservationUseEquipment
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.*
 import java.time.LocalDateTime
 
 class ReservationViewModel : BaseViewModel() {
@@ -16,6 +17,8 @@ class ReservationViewModel : BaseViewModel() {
 
     private val UseEquipmentData = arrayListOf<ReservationUseEquipment>()
     private val EquipmentData = arrayListOf<ReservationEquipment>()
+
+    //뷰모델스코프를 이용해서 
 
     fun getEquipmentData() {
         lateinit var document_name: String
@@ -39,7 +42,15 @@ class ReservationViewModel : BaseViewModel() {
                         using = "no_using"
                         end_time = "no_endtime"
                     }
-                    EquipmentData.add(ReservationEquipment(document_name, using, end_time, category))
+
+                    EquipmentData.add(
+                        ReservationEquipment(
+                            document_name,
+                            using,
+                            end_time,
+                            category
+                        )
+                    )
                 }
                 EquipmentLiveData.value = EquipmentData
             }
@@ -51,6 +62,7 @@ class ReservationViewModel : BaseViewModel() {
         lateinit var start_time: String
         lateinit var end_time: String
         lateinit var category: String
+        var coroutine : CoroutineScope = CoroutineScope(Dispatchers.Main)
 
         database.collection("COMMUNAL_Equipment")
             .addSnapshotListener { value, e ->
@@ -74,7 +86,8 @@ class ReservationViewModel : BaseViewModel() {
                                     start_time,
                                     end_time,
                                     0,
-                                    category
+                                    category,
+                                    coroutine
                                 )
                             )
                         }
