@@ -1,7 +1,7 @@
 package com.example.userapp.ui.main.reservation
 
 import android.os.Bundle
-import android.os.CountDownTimer
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +14,7 @@ import com.example.userapp.data.model.ReservationUseEquipment
 import com.example.userapp.databinding.FragmentMainhomeReservationCurrentBinding
 import com.example.userapp.databinding.FragmentMainhomeReservationCurrentUsingItemBinding
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.*
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
