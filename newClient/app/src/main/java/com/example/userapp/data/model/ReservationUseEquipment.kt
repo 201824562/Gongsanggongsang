@@ -9,5 +9,5 @@ data class ReservationUseEquipment(
     var end_time: String,
     var remain_time: Long = 0,
     val category : String,
-    var coroutineScope: CoroutineScope
+    var coroutine: CoroutineScope
 )

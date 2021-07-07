@@ -1,6 +1,7 @@
 package com.example.userapp.ui.main.reservation
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.userapp.base.BaseViewModel
 import com.example.userapp.data.model.ReservationEquipment
 import com.example.userapp.data.model.ReservationUseEquipment
@@ -18,7 +19,12 @@ class ReservationViewModel : BaseViewModel() {
     private val UseEquipmentData = arrayListOf<ReservationUseEquipment>()
     private val EquipmentData = arrayListOf<ReservationEquipment>()
 
-    //뷰모델스코프를 이용해서 
+    //뷰모델스코프를 이용해서 제어
+    var viewmodelscope = viewModelScope
+
+    fun cancelViewModelScope(){
+        viewmodelscope.cancel()
+    }
 
     fun getEquipmentData() {
         lateinit var document_name: String
@@ -117,6 +123,7 @@ class ReservationViewModel : BaseViewModel() {
     }
 
     fun end_use(ReservationUseEquipment: ReservationUseEquipment) {
+        ReservationUseEquipment.coroutine.cancel()
         var map1 = mutableMapOf<String, Any>()
         var map2 = mutableMapOf<String, Any>()
         var map3 = mutableMapOf<String, Any>()
@@ -131,6 +138,7 @@ class ReservationViewModel : BaseViewModel() {
             .update(map2)
         database.collection("COMMUNAL_Equipment").document(ReservationUseEquipment.document_name)
             .update(map3)
+
 
         UseEquipmentLiveData.value = UseEquipmentData
     }
