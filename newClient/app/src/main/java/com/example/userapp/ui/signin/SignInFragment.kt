@@ -9,23 +9,22 @@ import androidx.navigation.fragment.findNavController
 import com.example.userapp.R
 import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.databinding.FragmentSigninBinding
+import com.example.userapp.utils.hideKeyboard
+import com.example.userapp.utils.setupKeyboardHide
 
 class SignInFragment : BaseSessionFragment<FragmentSigninBinding, SignInViewModel>() {
     override lateinit var viewbinding: FragmentSigninBinding
     override val viewmodel: SignInViewModel by viewModels()
 
 
-    override fun initViewbinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+    override fun initViewbinding(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         viewbinding = FragmentSigninBinding.inflate(inflater, container, false)
         return viewbinding.root
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-        setupKeyboardHide(viewbinding.fragmentRootLayout, activity)
+        viewbinding.content.setOnClickListener { hideKeyboard(it) }
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {

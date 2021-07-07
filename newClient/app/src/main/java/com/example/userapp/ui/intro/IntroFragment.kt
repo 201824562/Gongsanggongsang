@@ -23,9 +23,7 @@ class IntroFragment : BaseFragment<FragmentIntroBinding, IntroViewModel>(){
         return viewbinding.root
     }
 
-    override fun initViewStart(savedInstanceState: Bundle?) {
-        setupKeyboardHide(viewbinding.fragmentRootLayout, activity)
-    }
+    override fun initViewStart(savedInstanceState: Bundle?) { }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
         viewmodel.onBackPressedEventLiveData.observe(viewLifecycleOwner){ requireActivity().finish() }

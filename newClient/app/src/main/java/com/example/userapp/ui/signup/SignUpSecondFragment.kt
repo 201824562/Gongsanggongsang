@@ -4,16 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
-import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.databinding.FragmentSignupSecondBinding
+import com.example.userapp.utils.hideKeyboard
 
 
-class SignUpSecondFragment : BaseSessionFragment<FragmentSignupSecondBinding, SignUpViewModel>() {
+class SignUpSecondFragment : BaseFragment<FragmentSignupSecondBinding, SignUpViewModel>() {
+
     override lateinit var viewbinding: FragmentSignupSecondBinding
     override val viewmodel: SignUpViewModel by navGraphViewModels(R.id.signUpGraph)
 
@@ -22,9 +22,7 @@ class SignUpSecondFragment : BaseSessionFragment<FragmentSignupSecondBinding, Si
         return viewbinding.root
     }
 
-    override fun initViewStart(savedInstanceState: Bundle?) {
-        setupKeyboardHide(viewbinding.fragmentRootLayout, activity)
-    }
+    override fun initViewStart(savedInstanceState: Bundle?) { viewbinding.fragmentContent.setOnClickListener { hideKeyboard(it) } }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {    }
 
