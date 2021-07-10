@@ -4,9 +4,12 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import com.example.userapp.base.BaseSessionViewModel
 import com.example.userapp.data.dto.UserModel
+import com.example.userapp.data.repository.SignRepository
 import com.example.userapp.utils.SingleLiveEvent
 
 class SignInViewModel(application: Application) : BaseSessionViewModel(application) {
+
+    private val signRepository: SignRepository = SignRepository.getInstance()
 
     private val _onSuccessLoginUserData = SingleLiveEvent<UserModel>()
     val onSuccessLoginUserData : LiveData<UserModel> get() = _onSuccessLoginUserData
@@ -26,7 +29,7 @@ class SignInViewModel(application: Application) : BaseSessionViewModel(applicati
     }
 
     fun sendSignInInfo(userId : String, userPwd : String){
-        apiCall(userRepository.signIn(userId, userPwd), { userdata ->
+        apiCall(signRepository.signIn(userId, userPwd), { userdata ->
             _onSuccessLoginUserData.postValue(userdata) }, {showSnackbar("로그인에 실패했습니다. 다시 시도해주세요.")})
     }
 

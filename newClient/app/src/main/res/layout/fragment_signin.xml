@@ -12,6 +12,7 @@
     android:focusableInTouchMode="true"
     android:padding="16dp">
     <LinearLayout
+        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
@@ -44,23 +45,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
-            android:background="@drawable/edittext_underline_warmgray"
+            android:background="@drawable/edittext_underline_black20"
             android:hint="아이디"
             android:padding="8dp"
             android:singleLine="true"
             android:textSize="14sp"
             android:fontFamily="@font/notosanskr_regular_hestia"
             android:textColorHint="#de000000"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:imeOptions="actionNext" />
         <EditText
             android:id="@+id/edit_text_pwd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:background="@drawable/edittext_underline_warmgray"
+            android:imeOptions="actionDone"
+            android:background="@drawable/edittext_underline_black20"
             android:hint="비밀번호"
             android:padding="8dp"
             android:singleLine="true"
+            android:inputType="textPassword"
             android:textSize="14sp"
             android:fontFamily="@font/notosanskr_regular_hestia"
             android:textColorHint="#de000000"

@@ -135,6 +135,11 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit-mock:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2'
 
+    // paging library
+    implementation 'androidx.paging:paging-runtime-ktx:2.1.2'
+    implementation 'androidx.paging:paging-common-ktx:2.1.2'
+    implementation 'androidx.paging:paging-rxjava2-ktx:2.1.2'
+
     // rxjava
     implementation 'io.reactivex.rxjava2:rxjava:2.2.21'
     implementation "io.reactivex.rxjava2:rxandroid:2.1.1"

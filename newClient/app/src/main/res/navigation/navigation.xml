@@ -60,7 +60,31 @@
         app:popUpToInclusive="true" />
     <navigation
         android:id="@+id/signUpGraph"
-        app:startDestination="@id/signUpFirstFragment">
+        app:startDestination="@id/signUpPermissionFragment">
+        <fragment
+            android:id="@+id/signUpPermissionFragment"
+            android:name="com.example.userapp.ui.signup.SignUpPermissionFragment"
+            android:label="SignUpPermissionFragment" >
+            <action
+                android:id="@+id/action_signUpPermissionFragment_to_signUpAgencyFragment"
+                app:destination="@id/signUpAgencyFragment"
+                app:enterAnim="@anim/slide_enter"
+                app:exitAnim="@anim/slide_exit"
+                app:popEnterAnim="@anim/slide_pop_enter"
+                app:popExitAnim="@anim/slide_pop_exit"/>
+        </fragment>
+        <fragment
+            android:id="@+id/signUpAgencyFragment"
+            android:name="com.example.userapp.ui.signup.SignUpAgencyFragment"
+            android:label="SignUpAgencyFragment" >
+            <action
+                android:id="@+id/action_signUpAgencyFragment_to_signUpFirstFragment"
+                app:destination="@id/signUpFirstFragment"
+                app:enterAnim="@anim/slide_enter"
+                app:exitAnim="@anim/slide_exit"
+                app:popEnterAnim="@anim/slide_pop_enter"
+                app:popExitAnim="@anim/slide_pop_exit"/>
+        </fragment>
         <fragment
             android:id="@+id/signUpFirstFragment"
             android:name="com.example.userapp.ui.signup.SignUpFirstFragment"
