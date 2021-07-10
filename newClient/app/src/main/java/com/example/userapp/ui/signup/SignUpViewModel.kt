@@ -1,7 +1,10 @@
 package com.example.userapp.ui.signup
 
+import android.widget.CheckBox
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.userapp.base.BaseViewModel
+import com.example.userapp.data.model.Agency
 import com.example.userapp.data.model.SignUpInfo
 import com.example.userapp.data.repository.SignRepository
 import com.example.userapp.utils.RegularExpressionUtil
@@ -21,8 +24,8 @@ class SignUpViewModel() : BaseViewModel() {
     val onClickedFirstBtn : LiveData<Boolean> get() = _onClickedFirstBtn
     private val _onClickedSecondBtn = SingleLiveEvent<Boolean>()
     val onClickedSecondBtn : LiveData<Boolean> get() = _onClickedSecondBtn
-    private val _checkClickedState = SingleLiveEvent<Any>()
-    val checkClickedState : LiveData<Any> get() = _checkClickedState
+    private val _checkPermissionClickedState = SingleLiveEvent<Any>()
+    val checkPermissionClickedState : LiveData<Any> get() = _checkPermissionClickedState
     var clickedAllBtn : Boolean = false
     var clickedFirstBtn : Boolean = false
     var clickedSecondBtn : Boolean = false
@@ -35,31 +38,32 @@ class SignUpViewModel() : BaseViewModel() {
         _onClickedAllBtn.value = clickedAllBtn
         _onClickedFirstBtn.value = clickedAllBtn
         _onClickedSecondBtn.value = clickedAllBtn
-        observeBtnState()
+        observePermissionBtnState()
     }
 
     fun changeFirstBtnValue() {
         clickedFirstBtn = !clickedFirstBtn
         _onClickedFirstBtn.value = clickedFirstBtn
-        observeBtnState()
+        observePermissionBtnState()
     }
     fun changeFirstBtnValueTrue() {
         clickedFirstBtn = true
         _onClickedFirstBtn.postValue(clickedFirstBtn)
+        observePermissionBtnState()
     }
     fun changeSecondBtnValue() {
         clickedSecondBtn = !clickedSecondBtn
         _onClickedSecondBtn.value = clickedSecondBtn
-        observeBtnState()
+        observePermissionBtnState()
     }
     fun changeSecondBtnValueTrue() {
         clickedSecondBtn = true
         _onClickedSecondBtn.postValue(clickedSecondBtn)
+        observePermissionBtnState()
     }
-    fun observeBtnState() {
-        _checkClickedState.call()
+    fun observePermissionBtnState() {
+        _checkPermissionClickedState.call()
     }
-
     fun checkBtnState() : Boolean {
         return if (clickedFirstBtn && clickedSecondBtn) {
             clickedAllBtn = true
@@ -70,6 +74,38 @@ class SignUpViewModel() : BaseViewModel() {
             _onClickedAllBtn.value = clickedAllBtn
             false
         }
+    }
+
+    //[SignUpAgencyFragment]--------------------------------------------------------------------------------------------
+
+    //SignUpAgencyFragment 변수들
+    private val _invalidSearchResultEventLiveData = SingleLiveEvent<String>()
+    val invalidSearchResultEventLiveData : LiveData<String> get() = _invalidSearchResultEventLiveData
+    private val _validSearchResultEventLiveData = SingleLiveEvent<Any>()
+    val validSearchResultEventLiveData : LiveData<Any> get() = _validSearchResultEventLiveData
+    private val _agencyDataList = MutableLiveData<List<Agency>>()
+    val agencyDataList: LiveData<List<Agency>> get() = _agencyDataList
+    private val _checkAgencyClickedState = SingleLiveEvent<Any>()
+    val checkAgencyClickedState : LiveData<Any> get() = _checkAgencyClickedState
+
+    var clickedAgencyBtn : Boolean = false
+    var selectedAgency : Agency?  = null
+
+
+    fun clearAgencyResult() {
+        _agencyDataList.postValue(listOf())
+        _invalidSearchResultEventLiveData.postValue("검색어를 입력해주세요.")
+    }
+
+    fun loadSearchAgencyResult(keyword : String) {
+        apiCall(signRepository.getSearchAgencyResult(keyword), {
+            _agencyDataList.postValue(it)
+            _validSearchResultEventLiveData.call()
+        })
+    }
+
+    fun observeAgencyBtnState() {
+        _checkAgencyClickedState.call()
     }
 
     //[SignUpFirstFragment]--------------------------------------------------------------------------------------------
@@ -95,26 +131,26 @@ class SignUpViewModel() : BaseViewModel() {
 
     private fun checkForUserName(userName: String) : Boolean{
         return if (userName.isBlank() || userName.isEmpty()) {
-            _invalidUserIdEventLiveData.postValue("이름을 입력해주세요.")
+            _invalidUserNameEventLiveData.postValue("이름을 입력해주세요.")
             false
         } else if (userName.length < 2) {
-            _invalidUserIdEventLiveData.postValue("이름은 2글자 이상이어야 합니다.")
+            _invalidUserNameEventLiveData.postValue("이름은 2글자 이상이어야 합니다.")
             false
         } else if (!RegularExpressionUtil.validCheck(RegularExpressionUtil.Regex.NAME, userName)) {
-            _invalidUserIdEventLiveData.postValue("제대로 된 한글형식으로 입력해주세요.")
+            _invalidUserNameEventLiveData.postValue("제대로 된 한글형식으로 입력해주세요.")
             false
         } else {
-            _validUserPwdEventLiveData.call()
+            _validUserNameEventLiveData.call()
             true}
     }
 
 
     private fun checkForUserBirthday(userBirthday: String) : Boolean{
         return if (userBirthday.isBlank() || userBirthday.isEmpty()) {
-            _invalidNicknameEventLiveData.postValue("생년월일을 입력해주세요.")
+            _invalidBirthInfoEventLiveData.postValue("생년월일을 입력해주세요.")
             false
         } else if (!RegularExpressionUtil.validCheck(RegularExpressionUtil.Regex.BIRTH, userBirthday)){
-            _invalidNicknameEventLiveData.postValue("생년월일은 8자리 숫자이어야 합니다.")
+            _invalidBirthInfoEventLiveData.postValue("생년월일은 8자리 숫자이어야 합니다.")
             false
         } else {
             _validBirthInfoEventLiveData.call()
@@ -139,23 +175,18 @@ class SignUpViewModel() : BaseViewModel() {
         val checkName = checkForUserName(userName)
         val checkBirthInfo = checkForUserBirthday(userBirthday)
         val checkSmsInfo = checkForUserSmsInfo(usersSmsInfo)
-        if (checkName && checkBirthInfo && checkSmsInfo) _sendSignUpInfoEventLiveData.call()
+        if (checkName && checkBirthInfo && checkSmsInfo) _saveSignUpInfoEventLiveData.call()
     }
 
-    fun checkForSendSignUpInfo(userId : String, userPwd : String, userPwd2 : String,userNickname : String) : Boolean {
-        return if (!checkForUserId(userId)) false
-        else if (!checkForUserPwd(userPwd, userPwd2)) false
-        else checkForUserNickname(userNickname)
-    }
 
     fun saveSignUpInfo(userName : String, userBirthday : String, usersSmsInfo : String){
         personalSignUpInfo = PersonalSignUpInfo(userName, userBirthday, usersSmsInfo)
     }
 
 
-    //[SignUpFirstFragment]--------------------------------------------------------------------------------------------
+    //[SignUpSecondFragment]--------------------------------------------------------------------------------------------
 
-    //SignUpFirstFragment 변수들
+    //SignUpSecondFragment 변수들
     private val _invalidUserIdEventLiveData = SingleLiveEvent<String>()
     val invalidUserIdEventLiveData: LiveData<String> get() = _invalidUserIdEventLiveData
     private val _validUserPwdEventLiveData = SingleLiveEvent<Any>()
@@ -164,7 +195,7 @@ class SignUpViewModel() : BaseViewModel() {
     val invalidNicknameEventLiveData: LiveData<String> get() = _invalidNicknameEventLiveData
     private val _sendSignUpInfoEventLiveData = SingleLiveEvent<Any>()
     val sendSignUpInfoEventLiveData: LiveData<Any> get() = _sendSignUpInfoEventLiveData
-    
+
     private var signUpInfo : SignUpInfo? =null
 
     fun sendSignUpInfo(userId : String, userPwd : String, userNickname : String): LiveData<Boolean> {
@@ -210,6 +241,12 @@ class SignUpViewModel() : BaseViewModel() {
             showSnackbar("닉네임은 10글자 이내의 한글만 입력가능합니다.")
             false
         } else true
+    }
+
+    fun checkForSendSignUpInfo(userId : String, userPwd : String, userPwd2 : String,userNickname : String) : Boolean {
+        return if (!checkForUserId(userId)) false
+        else if (!checkForUserPwd(userPwd, userPwd2)) false
+        else checkForUserNickname(userNickname)
     }
 
 }

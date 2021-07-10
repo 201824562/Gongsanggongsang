@@ -103,10 +103,10 @@
                     android:layout_weight="1"/>
                 <ImageView
                     android:id="@+id/detailInfo_fist_btn"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:background="@drawable/ic_check_gray"
-                    android:gravity="center"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_shownext_gray"
+                    android:layout_gravity="center"/>
             </LinearLayout>
 <!--            <ScrollView
                 android:id="@+id/detailInfo_fist_content"
@@ -156,10 +156,10 @@
                     android:layout_weight="1"/>
                 <ImageView
                     android:id="@+id/detailInfo_second_btn"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:background="@drawable/ic_check_gray"
-                    android:gravity="center"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_shownext_gray"
+                    android:layout_gravity="center"/>
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

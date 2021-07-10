@@ -43,7 +43,7 @@ class SignUpPermissionFragment : BaseFragment<FragmentSignupPermissionBinding, S
                     false -> unCheckSecondBtn()
                 }
             }
-            checkClickedState.observe(viewLifecycleOwner){
+            checkPermissionClickedState.observe(viewLifecycleOwner){
                 if (viewmodel.checkBtnState()) makeNextButtonAvailable()
                 else makeNextButtonNotAvailable()
             }
@@ -56,7 +56,6 @@ class SignUpPermissionFragment : BaseFragment<FragmentSignupPermissionBinding, S
            permissionFirstBtn.setOnClickListener { viewmodel.changeFirstBtnValue() }
            permissionSecondBtn.setOnClickListener { viewmodel.changeSecondBtnValue() }
 
-           //TODO : 디테일 정보 관련해서 -> 1.내용 추가할 거 있는지 물어보기. 2.버튼요구하기.
            detailInfoFistBtn.setOnClickListener {
                val dialog = MatchedDialogBasicOneButton(requireContext(), "이용약관 동의", getString(R.string.permission_content1)).apply {
                        clickListener = object : MatchedDialogBasicOneButton.DialogButtonClickListener {
@@ -105,21 +104,21 @@ class SignUpPermissionFragment : BaseFragment<FragmentSignupPermissionBinding, S
         when (viewmodel.clickedFirstBtn) {
             true -> {
                 checkFirstBtn()
-                viewmodel.observeBtnState()
+                viewmodel.observePermissionBtnState()
             }
             false -> {
                 unCheckFirstBtn()
-                viewmodel.observeBtnState()
+                viewmodel.observePermissionBtnState()
             }
         }
         when (viewmodel.clickedSecondBtn) {
             true -> {
                 checkSecondBtn()
-                viewmodel.observeBtnState()
+                viewmodel.observePermissionBtnState()
             }
             false -> {
                 unCheckSecondBtn()
-                viewmodel.observeBtnState()
+                viewmodel.observePermissionBtnState()
             }
         }
 

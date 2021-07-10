@@ -5,9 +5,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.userapp.data.AppDatabase
 import com.example.userapp.data.dto.UserModel
+import com.example.userapp.data.model.Agency
 import com.example.userapp.data.model.SignUpInfo
 import com.example.userapp.utils.SingleLiveEvent
 import com.google.firebase.firestore.FirebaseFirestore
+import io.reactivex.Observable
 import io.reactivex.Single
 
 class SignRepository() {
@@ -91,6 +93,27 @@ class SignRepository() {
                 .addOnFailureListener { exception ->
                     Log.w(ContentValues.TAG, "Error getting documents: ", exception)
                     emitter.onError(Throwable("Error getting USERINFO at USER_INFO_WAITING"))
+                }
+        }
+    }
+
+    fun getSearchAgencyResult(keyWord : String) : Single<List<Agency>> {
+        return Single.create { emitter ->
+            firestore.collection("SIGN_UP_AGENCY").whereArrayContainsAny("location", listOf(keyWord)).get()
+                .addOnSuccessListener { documents ->
+                    Log.e("checking","CHECKING")
+                    Log.e("checking","$documents")
+                    val agencyList : MutableList<Agency> = mutableListOf()
+                    for (document in documents){
+                        Log.e("checking","${document.data["name"]}")
+                        agencyList.add(Agency(name = document["name"].toString().replace(",", " "),
+                            location = document["location"].toString().replace(",", " ")))
+                    }
+                    emitter.onSuccess(agencyList)
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                    emitter.onError(Throwable("Error getting SEARCHED AGENGYINFO at SIGN_UP_AGENCY"))
                 }
         }
     }

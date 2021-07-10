@@ -77,6 +77,27 @@
             android:layout_height="1dp"
             android:layout_marginTop="10dp"
             android:background="@color/blue_green"/>
+        <TextView
+            android:id="@+id/signup_search_warning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:layout_marginTop="4dp"
+            android:paddingLeft="8dp"
+            android:textColor="@color/pinkish_orange"
+            android:fontFamily="@font/notosanskr_regular_hestia"
+            android:text=""
+            android:visibility="gone"/>
+        <TextView
+            android:id="@+id/signup_search_result_empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:text="검색결과가 없습니다.\n공생공생에 등록되지 않았거나 잘못된 이름입니다."
+            android:textSize="12sp"
+            android:textColor="@color/black_87"
+            android:gravity="center"
+            android:visibility="gone" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/signup_search_result_rv"
             android:layout_width="match_parent"
@@ -96,6 +117,6 @@
         android:textSize="16sp"
         android:textColor="@color/white"
         android:fontFamily="@font/notosanskr_bold_hestia"
-        android:background="@drawable/button_5dp_rectangle_bluegreen" />
+        android:background="@drawable/button_5dp_rectangle_black20" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

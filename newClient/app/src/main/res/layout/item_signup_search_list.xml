@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/list_item_address_layout"
+    android:id="@+id/list_item_agency_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
@@ -43,7 +43,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:background="@drawable/checkbox_1dp_oval_black10"
         android:button="@null"
-        android:checked="false" />
+        android:checked="false"
+        android:clickable="false"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

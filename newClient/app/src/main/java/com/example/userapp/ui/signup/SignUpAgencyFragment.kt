@@ -25,35 +25,68 @@ class SignUpAgencyFragment : BaseFragment<FragmentSignupAgencyBinding, SignUpVie
         return viewbinding.root
     }
     
-    private var searchListAdapter: SearchAgencyListAdapter? = null
-    private var selectedAgency : Agency?  = null
+    private lateinit var searchListAdapter: SearchAgencyListAdapter
+    private var query : String = ""
+    private var nextBtnAvailable : Boolean = false
 
     override fun initViewStart(savedInstanceState: Bundle?) {
         setupKeyboardHide(viewbinding.fragmentRootLayout, activity)
+        clearVariables()
         setRecyclerView()
         setSearchEditTextView()
+        getCheckedInfo()
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
+        viewmodel.run {
+            agencyDataList.observe(viewLifecycleOwner){
+                if (it.isEmpty()){ showEmptyView() }
+                else {
+                    showRecyclerView()
+                    searchListAdapter.submitList(it) }
+            }
+            invalidSearchResultEventLiveData.observe(viewLifecycleOwner) { setSearchResultErrorMessage(it) }
+            validSearchResultEventLiveData.observe(viewLifecycleOwner){ setSearchResultEmptyMessage() }
+            checkAgencyClickedState.observe(viewLifecycleOwner){
+                if (selectedAgency == null) {
+                    clickedAgencyBtn = false
+                    makeNextButtonNotAvailable()
+                }
+                else {
+                    clickedAgencyBtn = true
+                    makeNextButtonAvailable()
+                }
+            }
+        }
+
+        viewbinding.signupSearchBtn.setOnClickListener {
+            query = viewbinding.signupSearchEdit.query.toString()
+            if(query.isEmpty()) {
+                viewmodel.clearAgencyResult()
+            }else{
+                submitQuery(query.lines().first().trim()) }
+        }
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run {
             signupNextbtn.setOnClickListener {
-                findNavController().navigate(R.id.action_signUpAgencyFragment_to_signUpFirstFragment)
+                if (nextBtnAvailable) findNavController().navigate(R.id.action_signUpAgencyFragment_to_signUpFirstFragment)
             }
         }
     }
 
+    private fun clearVariables(){ query = "" }
+
     private fun setRecyclerView() {
-        if(searchListAdapter == null) {
-            searchListAdapter = SearchAgencyListAdapter(object : SearchAgencyListAdapter.OnItemClickListener {
-                override fun onItemClick(v: View, position: Int) {
-                    // TODO : 클릭시 함수 만들기.
-                    selectedAgency = searchListAdapter?.currentList?.get(position)
-                }
-            })
-        }
+        searchListAdapter = SearchAgencyListAdapter(object : SearchAgencyListAdapter.OnItemClickListener {
+            override fun onItemClick(v: View, position: Int) {
+                viewmodel.selectedAgency = if (searchListAdapter.currentList[position].clicked){
+                    searchListAdapter.currentList[position]
+                } else null
+                viewmodel.observeAgencyBtnState()
+            }
+        })
         viewbinding.signupSearchResultRv.adapter = searchListAdapter
         viewbinding.signupSearchResultRv.setHasFixedSize(true)
     }
@@ -88,7 +121,50 @@ class SignUpAgencyFragment : BaseFragment<FragmentSignupAgencyBinding, SignUpVie
     }
 
     private fun submitQuery(query:String){
-        //쿼리 결과.
+        //TODO : 쿼리하는 함수 만들기. (영우오빠한테 물어보기?)
+        viewmodel.loadSearchAgencyResult(query)
+    }
+
+    private fun getCheckedInfo() {
+        when (viewmodel.clickedAgencyBtn) {
+            true -> makeNextButtonAvailable()
+            false -> makeNextButtonNotAvailable()
+        }
+    }
+
+    private fun showEmptyView(){
+        viewbinding.apply {
+            signupSearchResultEmptyView.visibility = View.VISIBLE
+            signupSearchResultRv.visibility = View.GONE
+        }
+    }
+
+    private fun showRecyclerView(){
+        viewbinding.apply {
+            signupSearchResultEmptyView.visibility = View.GONE
+            signupSearchResultRv.visibility = View.VISIBLE
+        }
+    }
+
+    private fun setSearchResultErrorMessage(message: String) {
+        viewbinding.signupSearchWarning.apply {
+            text = message
+            visibility = View.VISIBLE
+        }
+    }
+
+    private fun setSearchResultEmptyMessage() {
+        viewbinding.signupSearchWarning.text = "" }
+
+
+    private fun makeNextButtonAvailable() {
+        nextBtnAvailable = true
+        viewbinding.signupNextbtn.setBackgroundResource(R.drawable.button_5dp_rectangle_bluegreen)
+    }
+
+    private fun makeNextButtonNotAvailable() {
+        nextBtnAvailable = false
+        viewbinding.signupNextbtn.setBackgroundResource(R.drawable.button_5dp_rectangle_black20)
     }
 
 }
