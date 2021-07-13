@@ -9,6 +9,7 @@ import com.example.userapp.data.model.Agency
 import com.example.userapp.data.model.SignUpInfo
 import com.example.userapp.utils.SingleLiveEvent
 import com.google.firebase.firestore.FirebaseFirestore
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 
@@ -32,70 +33,6 @@ class SignRepository() {
     val onSuccessSignupEvent: LiveData<Boolean> get() = _onSuccessSignupEvent
 
 
-    fun signIn(userId : String, userPwd : String) : Single<UserModel> {
-        return Single.create{ emitter ->
-            firestore.collection("USER_INFO").document(userId)
-                .get()
-                .addOnSuccessListener {
-                    Log.d(ContentValues.TAG, "Found SignIn ID!!")
-                    if (it.data != null && it.data!!["id"] == userId && it.data!!["pwd"]==userPwd){
-                        //_onSuccessSignInEvent.value = true
-                        Log.d(ContentValues.TAG, "SignIn Successed!!")
-                        emitter.onSuccess(
-                            UserModel(it.data!!["id"].toString(), it.data!!["name"].toString(), it.data!!["nickname"].toString(),
-                            it.data!!["birthday"].toString(), it.data!!["SmsInfo"].toString())
-                        )
-                    }
-                    else emitter.onError(Throwable("Not Existing SignIn-Info!"))
-                }
-                .addOnFailureListener { exception ->
-                    Log.w(ContentValues.TAG, "Error getting documents: ", exception)
-                    emitter.onError(Throwable("Error getting SignIn-Info"))
-                }
-        }
-    }
-
-    fun signUp(it: SignUpInfo) {
-        firestore.collection("USER_INFO_WAITING").document(it.id)
-            .set(it)
-            .addOnSuccessListener {
-                Log.d(ContentValues.TAG, "Signup Successed!!")
-                _onSuccessSignupEvent.value = true
-            }
-            .addOnFailureListener { exception ->
-                Log.w(ContentValues.TAG, "Error getting documents: ", exception)
-                _onSuccessSignupEvent.value = false
-            }
-    }
-
-
-    fun checkUserStatusAllowed(token: String): Single<Boolean> {
-        return Single.create { emitter ->
-            firestore.collection("USER_INFO").document(token)
-                .get()
-                .addOnSuccessListener {
-                    if (it.data != null && it.data!!["id"] == token){ emitter.onSuccess(true) }
-                }
-                .addOnFailureListener { exception ->
-                    Log.w(ContentValues.TAG, "Error getting documents: ", exception)
-                    emitter.onError(Throwable("Error getting USERINFO at USER_INFO"))
-                }
-        }
-    }
-
-    fun checkUserStatusWaiting(token: String): Single<Boolean> {
-        return Single.create { emitter ->
-            firestore.collection("USER_INFO_WAITING").document(token)
-                .get()
-                .addOnSuccessListener {
-                    if (it.data != null && it.data!!["id"] == token){ emitter.onSuccess(true) }
-                }
-                .addOnFailureListener { exception ->
-                    Log.w(ContentValues.TAG, "Error getting documents: ", exception)
-                    emitter.onError(Throwable("Error getting USERINFO at USER_INFO_WAITING"))
-                }
-        }
-    }
 
     fun getSearchAgencyResult(keyWord : String) : Single<List<Agency>> {
         return Single.create { emitter ->
@@ -117,5 +54,136 @@ class SignRepository() {
                 }
         }
     }
+
+    fun checkIdFromWaitingUser(userId: String) : Single<Boolean> {
+        return Single.create { emitter ->
+            firestore.collection("USER_INFO_WAITING").whereEqualTo("id", userId)
+                .get()
+                .addOnSuccessListener {
+                    if (it.isEmpty) emitter.onSuccess(false)
+                    else emitter.onSuccess(true)
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting Id duplicate info", exception)
+                    emitter.onError(Throwable("Error getting CHECK_ID at USER_INFO_WAITING"))
+                }
+        }
+    }
+
+    fun checkIdFromAllowedUser(userId: String) : Single<Boolean> {
+        return Single.create { emitter ->
+            firestore.collection("USER_INFO").whereEqualTo("id", userId)
+                .get()
+                .addOnSuccessListener {
+                    if (it.isEmpty) emitter.onSuccess(false)
+                    else emitter.onSuccess(true)
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting Id duplicate info", exception)
+                    emitter.onError(Throwable("Error getting CHECK_ID at USER_INFO"))
+                }
+        }
+    }
+
+    fun checkNicknameFromWaitingUser(nickname: String) : Single<Boolean> {
+        return Single.create { emitter ->
+            firestore.collection("USER_INFO_WAITING").whereEqualTo("nickname", nickname)
+                .get()
+                .addOnSuccessListener {
+                    if (it.isEmpty) emitter.onSuccess(false)
+                    else emitter.onSuccess(true)
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting Nickname duplicate info", exception)
+                    emitter.onError(Throwable("Error getting CHECK_NICKNAME at USER_INFO_WAITING"))
+                }
+        }
+    }
+
+    fun checkNicknameFromAllowedUser(nickname: String) : Single<Boolean> {
+        return Single.create { emitter ->
+            firestore.collection("USER_INFO").whereEqualTo("nickname", nickname)
+                .get()
+                .addOnSuccessListener {
+                    if (it.isEmpty) emitter.onSuccess(false)
+                    else emitter.onSuccess(true)
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting Nickname duplicate info", exception)
+                    emitter.onError(Throwable("Error getting CHECK_NICKNAME at USER_INFO"))
+                }
+        }
+    }
+
+
+    fun checkUserStatusWaiting(token: String): Single<Boolean> {
+        return Single.create { emitter ->
+            firestore.collection("USER_INFO_WAITING").document()
+                .get()
+                .addOnSuccessListener {
+                    if (it.data != null && it.data!!["id"] == token){ emitter.onSuccess(true) }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                    emitter.onError(Throwable("Error getting USERINFO at USER_INFO_WAITING"))
+                }
+        }
+    }
+
+    fun checkUserStatusAllowed(token: String): Single<Boolean> {
+        return Single.create { emitter ->
+            firestore.collection("USER_INFO").document(token)
+                .get()
+                .addOnSuccessListener {
+                    if (it.data != null && it.data!!["id"] == token){ emitter.onSuccess(true) }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                    emitter.onError(Throwable("Error getting USERINFO at USER_INFO"))
+                }
+        }
+    }
+
+
+    fun signUp(it: SignUpInfo) : Completable {
+        return Completable.create { emitter ->
+            firestore.collection("USER_INFO_WAITING").document(it.id)
+                .set(it)
+                .addOnSuccessListener {
+                    Log.d(ContentValues.TAG, "Signup Successed!!")
+                    _onSuccessSignupEvent.value = true
+                    emitter.onComplete()
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                    _onSuccessSignupEvent.value = false
+                    emitter.onError(Throwable("Error doing SignUp"))
+                }
+        }
+    }
+
+    fun signIn(userId : String, userPwd : String) : Single<UserModel> {
+        return Single.create{ emitter ->
+            firestore.collection("USER_INFO").document(userId)
+                .get()
+                .addOnSuccessListener {
+                    Log.d(ContentValues.TAG, "Found SignIn ID!!")
+                    if (it.data != null && it.data!!["id"] == userId && it.data!!["pwd"]==userPwd){
+                        //_onSuccessSignInEvent.value = true
+                        Log.d(ContentValues.TAG, "SignIn Successed!!")
+                        emitter.onSuccess(
+                            UserModel(it.data!!["id"].toString(), it.data!!["name"].toString(), it.data!!["nickname"].toString(),
+                                it.data!!["birthday"].toString(), it.data!!["SmsInfo"].toString())
+                        )
+                    }
+                    else emitter.onError(Throwable("Not Existing SignIn-Info!"))
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                    emitter.onError(Throwable("Error getting SignIn-Info"))
+                }
+        }
+    }
+
 
 }

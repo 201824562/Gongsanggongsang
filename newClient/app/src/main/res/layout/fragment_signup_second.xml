@@ -74,6 +74,7 @@
                     android:inputType="text"
                     android:padding="8dp"
                     android:singleLine="true"
+                    android:maxLength="12"
                     android:textSize="12sp"
                     android:fontFamily="@font/notosanskr_regular_hestia"
                     android:textColorHint="@color/black_50"
@@ -92,7 +93,7 @@
                     android:minWidth="0dp"
                     android:textColor="@color/blue_green"
                     android:fontFamily="@font/notosanskr_regular_hestia"
-                    android:background="@drawable/button_15dp_stroke_rectangle_bluegreen" />
+                    android:background="@drawable/button_15dp_event_rectangle_bluegreen" />
             </androidx.constraintlayout.widget.ConstraintLayout>
             <TextView
                 android:id="@+id/text_id_warning"
@@ -146,7 +147,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintLeft_toRightOf="@+id/edit_text_pwd"
-                    android:background="@drawable/ic_showing_pwd"/>
+                    android:background="@drawable/image_button_pwd"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
             <TextView
                 android:id="@+id/text_pwd_warning"
@@ -200,7 +201,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintLeft_toRightOf="@+id/edit_text_pwd2"
-                    android:background="@drawable/ic_showing_pwd"/>
+                    android:background="@drawable/image_button_pwd"/>/>
             </androidx.constraintlayout.widget.ConstraintLayout>
             <TextView
                 android:id="@+id/text_pwd2_warning"
@@ -236,6 +237,7 @@
                     android:background="@drawable/edittext_underline_black20"
                     android:hint="5~10자리의 한글로 입력해주세요."
                     android:padding="8dp"
+                    android:maxLength="10"
                     android:singleLine="true"
                     android:textSize="12sp"
                     android:fontFamily="@font/notosanskr_regular_hestia"
@@ -255,7 +257,7 @@
                     android:minWidth="0dp"
                     android:textColor="@color/blue_green"
                     android:fontFamily="@font/notosanskr_regular_hestia"
-                    android:background="@drawable/button_15dp_stroke_rectangle_bluegreen" />
+                    android:background="@drawable/button_15dp_event_rectangle_bluegreen" />
             </androidx.constraintlayout.widget.ConstraintLayout>
             <TextView
                 android:id="@+id/text_nickname_warning"
