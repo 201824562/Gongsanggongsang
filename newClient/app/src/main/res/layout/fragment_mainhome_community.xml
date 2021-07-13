@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
     <LinearLayout
+        android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -17,7 +18,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="false"
-            android:src="@drawable/lovebutton"
+            android:src="@drawable/ic_community_main_free_icon"
+            android:background="@color/white"
             android:layout_gravity="center"
             android:layout_marginTop="25dp"
             android:layout_marginBottom="25dp"/>
@@ -47,6 +49,7 @@
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
+        android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -57,7 +60,8 @@
             android:id="@+id/community_emergency_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/lovebutton"
+            android:src="@drawable/ic_community_main_emergency_icon"
+            android:background="@color/white"
             android:layout_gravity="center"
             android:layout_marginTop="25dp"
             android:layout_marginBottom="25dp"/>
@@ -99,7 +103,8 @@
             android:id="@+id/community_tendinous_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/lovebutton"
+            android:src="@drawable/ic_community_main_suggest_icon"
+            android:background="@color/white"
             android:layout_gravity="center"
             android:layout_marginTop="25dp"
             android:layout_marginBottom="25dp"/>
@@ -129,6 +134,7 @@
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
+        android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -139,7 +145,8 @@
             android:id="@+id/community_with_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/lovebutton"
+            android:src="@drawable/ic_community_main_with_icon"
+            android:background="@color/white"
             android:layout_gravity="center"
             android:layout_marginTop="25dp"
             android:layout_marginBottom="25dp"/>
@@ -169,6 +176,7 @@
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
+        android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -179,7 +187,8 @@
             android:id="@+id/community_market_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/lovebutton"
+            android:src="@drawable/ic_community_main_market_icon"
+            android:background="@color/white"
             android:layout_gravity="center"
             android:layout_marginTop="25dp"
             android:layout_marginBottom="25dp"/>

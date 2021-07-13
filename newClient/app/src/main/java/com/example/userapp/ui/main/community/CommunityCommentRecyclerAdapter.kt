@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.userapp.data.entity.PostCommentDataClass
-import com.example.userapp.databinding.FragmentPostCommentItemBinding
+import com.example.userapp.databinding.FragmentCommunityCommentItemBinding
 
 
 class CommunityCommentRecyclerAdapter(val communityCommentItems:ArrayList<PostCommentDataClass>): RecyclerView.Adapter<CommunityCommentRecyclerAdapter.CommunityCommentViewHolder>() {
@@ -14,7 +14,7 @@ class CommunityCommentRecyclerAdapter(val communityCommentItems:ArrayList<PostCo
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommunityCommentViewHolder {
-        val viewbinding = FragmentPostCommentItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val viewbinding = FragmentCommunityCommentItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return  CommunityCommentViewHolder(viewbinding, parent)
     }
 
@@ -26,7 +26,7 @@ class CommunityCommentRecyclerAdapter(val communityCommentItems:ArrayList<PostCo
         return communityCommentItems[position]
     }
 
-    class CommunityCommentViewHolder(viewbinding: FragmentPostCommentItemBinding, itemview: ViewGroup) : RecyclerView.ViewHolder(viewbinding.root) {
+    class CommunityCommentViewHolder(viewbinding: FragmentCommunityCommentItemBinding, itemview: ViewGroup) : RecyclerView.ViewHolder(viewbinding.root) {
         val binding = viewbinding
 
         fun bind(it : PostCommentDataClass) {

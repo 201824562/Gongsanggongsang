@@ -116,26 +116,36 @@
             app:destination="@+id/communityPostFragment"
             android:id="@+id/action_communityPreview_to_communityPost"/>
         <action
-            app:destination="@+id/communityWriteFragment"
+            app:destination="@+id/communityWriteGraph"
             android:id="@+id/action_communityPreview_to_communityWrite"/>
         <argument
             app:argType="string"
             android:name="collection_name"
             android:defaultValue="0"/>
     </fragment>
-    <fragment
-        android:id="@+id/communityWriteFragment"
-        android:name="com.example.userapp.ui.main.community.CommunityWriteFragment"
-        android:label="CommunityWriteFragment">
-        <action
-            app:destination="@+id/communityPostFragment"
-            android:id="@+id/action_communityWrite_to_communityPost"
-            app:popUpTo="@id/communityWriteFragment"/>
-        <argument
-            app:argType="string"
-            android:name="collection_name"
-            android:defaultValue="0"/>
-    </fragment>
+    <navigation
+        android:id="@+id/communityWriteGraph"
+        app:startDestination="@id/communityWriteFragment">
+        <fragment
+            android:id="@+id/communityWriteFragment"
+            android:name="com.example.userapp.ui.main.community.CommunityWriteFragment">
+            <action
+                app:destination="@+id/communityPostFragment"
+                android:id="@+id/action_communityWrite_to_communityPost"
+                app:popUpTo="@id/communityWriteGraph"/>
+            <action
+                app:destination="@+id/communityGetPhotoFragment"
+                android:id="@+id/action_communityWrite_to_communityGetPhoto"/>
+        </fragment>
+        <fragment
+            android:id="@+id/communityGetPhotoFragment"
+            android:name="com.example.userapp.ui.main.community.CommunityGetPhotoFragment">
+            <action
+                android:id="@+id/action_communityGetPhoto_to_communityWrite"
+                app:destination="@id/communityWriteFragment"
+                app:popUpTo="@id/communityGetPhotoFragment"/>
+        </fragment>
+    </navigation>
     <fragment
         android:id="@+id/communityModifyFragment"
         android:name="com.example.userapp.ui.main.community.CommunityModifyFragment"/>
@@ -150,5 +160,6 @@
             android:id="@+id/action_communityPost_to_communityModify"
             app:destination="@+id/communityModifyFragment"/>
     </fragment>
+
 
 </navigation>

@@ -1,6 +1,6 @@
 package com.example.userapp.data.model
 
-import androidx.room.ColumnInfo
+import android.net.Uri
 import com.example.userapp.data.entity.PostCommentDataClass
 
 
@@ -17,5 +17,7 @@ data class PostDataInfo (
 
     val post_comments : ArrayList<PostCommentDataClass> = arrayListOf(),
 
-    val post_id : String
+    val post_id : String,
+
+    val post_photo_uri : ArrayList<String>
 )

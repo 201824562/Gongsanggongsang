@@ -51,11 +51,13 @@ class CommunityMainFragment : BaseFragment<FragmentMainhomeCommunityBinding, Com
                 findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, collection_name_bundle)
             }
             juyong.setOnClickListener {
-                collection_name = "COMMUNITY_SUGGEST"
+                collection_name = "3_suggest"
                 collection_name_bundle = bundleOf("collection_name" to collection_name)
                 findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, collection_name_bundle)
             }
-            communityTendinousButton.setOnClickListener {}
+            communityTendinousButton.setOnClickListener {
+                viewmodel.getCommunityMainItem()
+            }
         }
     }
 }

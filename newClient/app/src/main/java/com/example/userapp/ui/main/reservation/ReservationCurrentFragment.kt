@@ -72,10 +72,6 @@ class EquipmentUsingAdapter(
     override fun onBindViewHolder(viewHolder: EquipmentUsingViewHolder, position: Int) {
         val data = dataSet[position]
 
-        data.remain_time  = (ChronoUnit.MILLIS.between(
-            LocalDateTime.now(),
-            LocalDateTime.parse(data.end_time)
-        ))
 
         viewHolder.viewbinding.document.text = data.document_name
         viewHolder.viewbinding.remainTimeTextview.text = data.remain_time.toString() + "분 남음"

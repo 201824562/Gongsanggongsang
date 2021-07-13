@@ -81,6 +81,10 @@
                 android:textSize="14sp"
                 android:textColor="#cc000000"
                 android:lineSpacingExtra="16sp"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/post_photo_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="8dp"

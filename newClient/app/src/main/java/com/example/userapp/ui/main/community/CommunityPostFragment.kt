@@ -1,9 +1,11 @@
 package com.example.userapp.ui.main.community
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -48,7 +50,16 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
             post_comments_array = viewmodel.getDocumentCommentData(it)
             viewbinding.communityPostCommentsNumber.text = post_comments_array.size.toString()
             initRecyclerView(post_comments_array)
+            val getPhotoUri = it.post_photo_uri
+            viewbinding.postPhotoRecycler.visibility = View.VISIBLE
+            viewbinding.postPhotoRecycler.run {
+                setHasFixedSize(true)
+                layoutManager = LinearLayoutManager(context).also { it.orientation = LinearLayoutManager.HORIZONTAL }
+                adapter = CommunityAttachPhotoRecyclerAdapter(getPhotoUri)
+            }
         }
+
+
 
     }
 
@@ -56,6 +67,7 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun initViewFinal(savedInstanceState: Bundle?) {
 
         viewbinding.commentsRegister.setOnClickListener{

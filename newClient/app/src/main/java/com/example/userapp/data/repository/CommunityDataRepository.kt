@@ -1,35 +1,48 @@
 package com.example.userapp.data.repository
 
+import android.app.Activity
 import android.content.ContentValues
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
 import android.util.Log
-import androidx.lifecycle.LiveData
+import androidx.annotation.RequiresApi
+import androidx.core.net.toUri
 import androidx.lifecycle.MutableLiveData
 import com.example.userapp.data.entity.PostCommentDataClass
 import com.example.userapp.data.model.PostDataInfo
 import com.google.firebase.firestore.FirebaseFirestore
-import io.reactivex.Observable
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import java.io.ByteArrayOutputStream
+import java.net.URL
 
-class PostDataRepository() {
-
+class CommunityDataRepository() {
     private val firestore = FirebaseFirestore.getInstance()
+    private val fireStorage = FirebaseStorage.getInstance("gs://gongsanggongsang-94f86.appspot.com/")
     private var collectionPostDataInfoList : MutableLiveData<ArrayList<PostDataInfo>> = MutableLiveData()
     private var documentPostDataInfo : MutableLiveData<PostDataInfo> = MutableLiveData()
     companion object {
-        private var sInstance: PostDataRepository? = null
-        fun getInstance(): PostDataRepository {
+        private var sInstance: CommunityDataRepository? = null
+        fun getInstance(): CommunityDataRepository {
             return sInstance
                 ?: synchronized(this) {
-                    val instance = PostDataRepository()
+                    val instance = CommunityDataRepository()
                     sInstance = instance
                     instance
                 }
         }
     }
+    fun getCommunityMainItem(){
+        val name = firestore.collection("Busan").document("community").id
+    }
 
     fun insertPostData(it: PostDataInfo){
         var collection_name = it.post_category
         var document_name = it.post_title + it.post_date
-        firestore.collection(collection_name).document(document_name)
+        firestore.collection("Busan").document("community").
+        collection("3_suggest").document(document_name)
             .set(it)
             .addOnSuccessListener {success ->
                 Log.d(ContentValues.TAG, "Post Success")
@@ -42,6 +55,8 @@ class PostDataRepository() {
         var map= mutableMapOf<String,Any>()
         map["post_comments"] = post_comments_array
         firestore
+            .collection("Busan")
+            .document("community")
             .collection(collection_name)
             .document(document_name)
             .update(map)
@@ -52,7 +67,9 @@ class PostDataRepository() {
 
     fun updateCollectionPostData(collection_name: String) {
         var postDataList : ArrayList<PostDataInfo> = ArrayList<PostDataInfo>()
-        firestore.collection(collection_name)
+        firestore.collection("Busan")
+            .document("community")
+            .collection(collection_name)
             .get()
             .addOnSuccessListener { result ->
                 for (document in result){
@@ -63,7 +80,8 @@ class PostDataRepository() {
                         document["post_contents"] as String,
                         document["post_date"] as String,
                         document["post_comments"] as ArrayList<PostCommentDataClass>,
-                        document["post_id"] as String)
+                        document["post_id"] as String,
+                        document["post_photo_uri"] as ArrayList<String>)
                     postDataList.add(item)
                 }
                 collectionPostDataInfoList.value= postDataList
@@ -76,7 +94,10 @@ class PostDataRepository() {
     }
 
     fun updateDocumentPostData(collection_name: String, document_name : String){
-        firestore.collection(collection_name).document(document_name)
+        firestore.collection("Busan")
+            .document("community")
+            .collection(collection_name)
+            .document(document_name)
             .get()
             .addOnSuccessListener { result ->
                 var postData = PostDataInfo(
@@ -85,8 +106,17 @@ class PostDataRepository() {
                     result["post_title"].toString(),
                     result["post_contents"].toString(),
                     result["post_date"].toString(),
-                    result["post_comments"] as ArrayList<PostCommentDataClass>,
-                    result["post_id"].toString())
+                    if(result["post_comments"] != null){
+                        result["post_comments"] as ArrayList<PostCommentDataClass>
+                    }else{
+                        arrayListOf()
+                    },
+                    result["post_id"].toString(),
+                    if(result["post_photo_uri"] != null){
+                        result["post_photo_uri"] as ArrayList<String>
+                    }else{
+                        arrayListOf()
+                    })
                 documentPostDataInfo.value = postData
             }
     }
@@ -95,23 +125,55 @@ class PostDataRepository() {
         return documentPostDataInfo
     }
     fun deleteDocumentPostData(collection_name: String, document_name: String) {
-        firestore.collection(collection_name).document(document_name).delete()
+        firestore.collection("Busan")
+            .document("community")
+            .collection(collection_name)
+            .document(document_name).delete()
     }
     fun modifyPostData(collection_name: String, document_name: String, modifyTitle: String, modifyContent: String) {
         var titleMap = mutableMapOf<String, Any>()
         var contentMap = mutableMapOf<String, Any>()
         titleMap["post_title"] = modifyTitle
         contentMap["post_contents"] = modifyContent
-        firestore.collection(collection_name).document(document_name)
+        firestore.collection("Busan")
+            .document("community")
+            .collection(collection_name)
+            .document(document_name)
             .update(titleMap)
             .addOnSuccessListener { result ->
 
             }
 
-        firestore.collection(collection_name).document(document_name)
+        firestore.collection("Busan")
+            .document("community")
+            .collection(collection_name)
+            .document(document_name)
             .update(contentMap)
             .addOnSuccessListener { result ->
             }
     }
+    @RequiresApi(Build.VERSION_CODES.P)
+    fun uploadPhoto(bitmap_array : ArrayList<Bitmap>, uri_array : ArrayList<Uri>) {
+        var i : Int = 0
+        for(bitmap in bitmap_array){
+            val file_name = uri_array[i].toString()
+            var storageRefer : StorageReference = fireStorage.reference.child("images/").child(file_name)
+            val baos = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+            val data = baos.toByteArray()
+            var uploadTask = storageRefer.putBytes(data)
+            uploadTask.addOnFailureListener {
+                // Handle unsuccessful uploads
+            }.addOnSuccessListener { taskSnapshot ->
+                // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+                // ...
+                System.out.println("sucess");
+            }
+            i++
+        }
+
+    }
+
+
 
 }

@@ -1,85 +1,53 @@
 package com.example.userapp.ui.main.community
 
-import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.userapp.R
-import com.example.userapp.base.BaseFragment
+import androidx.recyclerview.widget.RecyclerView
 import com.example.userapp.data.model.PostDataInfo
-import com.example.userapp.databinding.FragmentCommunityPreviewBinding
+import com.example.userapp.databinding.FragmentCommunityMainItemBinding
+import com.example.userapp.databinding.FragmentCommunityPreviewItemBinding
 
 
-class CommunityMainRecyclerAdapter : BaseFragment<FragmentCommunityPreviewBinding, CommunityViewModel>() {
-    override lateinit var viewbinding: FragmentCommunityPreviewBinding
 
-    override val viewmodel : CommunityViewModel by viewModels()
+class CommunityMainRecyclerAdapter(var communityMainItemList : ArrayList<CommunityMainItem>): RecyclerView.Adapter<CommunityMainRecyclerAdapter.CommunityMainViewHolder>() {
+    val viewmodel : CommunityViewModel = CommunityViewModel()
+    interface OnCommunityMainItemClickListener{
+        fun onMainItemClick(position: Int)
+    }
+    var listener: OnCommunityMainItemClickListener? = null
 
-    private lateinit var adapter: CommunityPreviewRecyclerAdapter
-
-    override fun initViewbinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        viewbinding = FragmentCommunityPreviewBinding.inflate(inflater, container, false)
-        return viewbinding.root
+    override fun getItemCount(): Int {
+        return communityMainItemList.size
     }
 
-    override fun initViewStart(savedInstanceState: Bundle?) {
-        var collection_name= arguments?.getString("collection_name").toString()
-        var bundle = bundleOf(
-            "collection_name" to collection_name
-        )
-        initRecyclerView(collection_name)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommunityMainViewHolder {
+        val viewbinding = FragmentCommunityMainItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return  CommunityMainViewHolder(viewbinding, parent, listener)
     }
 
-    override fun initDataBinding(savedInstanceState: Bundle?) {
+    override fun onBindViewHolder(holder: CommunityMainViewHolder, position: Int) {
+        holder.bind(communityMainItemList[position])
 
     }
 
-    override fun initViewFinal(savedInstanceState: Bundle?) {
-        var collection_name= arguments?.getString("collection_name").toString()
-        var bundle = bundleOf(
-            "collection_name" to collection_name
-        )
-        viewbinding.communityWriteButton.setOnClickListener{
-            findNavController().navigate(R.id.action_communityPreview_to_communityWrite, bundle)
+    fun getItem(position: Int): CommunityMainItem {
+        return communityMainItemList[position]
+    }
 
+
+    inner class CommunityMainViewHolder(viewbinding: FragmentCommunityMainItemBinding, itemview: ViewGroup, listener: OnCommunityMainItemClickListener?) : RecyclerView.ViewHolder(viewbinding.root) {
+        val binding = viewbinding
+
+        fun bind(communityMainItem: CommunityMainItem) {
+            binding.communityMainItemImage.setImageDrawable(communityMainItem.community_main_icon)
+            binding.communityMainItemName.text = communityMainItem.community_main_name
+            binding.communityMainItemHello.text = communityMainItem.community_main_hello
         }
-    }
-    fun initRecyclerView(collection_name : String){
-        var list : ArrayList<PostDataInfo> = ArrayList()
-
-        viewbinding.communityPreviewRecyclerView.run {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context)
-            adapter = CommunityPreviewRecyclerAdapter(list)
-        }
-        viewmodel.getCollectionPostData(collection_name).observe(viewLifecycleOwner){ it
-            list.clear()
-            list.addAll(it)
-            adapter = CommunityPreviewRecyclerAdapter(it)
-            viewbinding.communityPreviewRecyclerView.adapter = adapter.apply {
-                listener =
-                    object : CommunityPreviewRecyclerAdapter.OnCommunityMarketItemClickListener {
-                        override fun onPreviewItemClick(position: Int) {
-                            var document_name = getItem(position).post_id
-                            var bundle = bundleOf(
-                                "collection_name" to collection_name,
-                                "document_name" to document_name
-                            )
-                            findNavController().navigate(R.id.action_communityPreview_to_communityPost, bundle)
-                        }
-                    }
+        init {
+            itemView.setOnClickListener(){
+                listener?.onMainItemClick(bindingAdapterPosition)
+                return@setOnClickListener
             }
-            adapter.notifyDataSetChanged()
         }
-
     }
-
 }
