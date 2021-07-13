@@ -17,6 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.*
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
+import kotlin.concurrent.timer
 
 class ReservationCurrentFragment :
     BaseFragment<FragmentMainhomeReservationCurrentBinding, ReservationViewModel>() {
@@ -34,18 +35,19 @@ class ReservationCurrentFragment :
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-        viewbinding.equipmentUsingRecyclerView.layoutManager = LinearLayoutManager(context)
-        viewbinding.equipmentUsingRecyclerView.adapter = EquipmentUsingAdapter(
-            emptyList(),
-            onClickNoUsingIcon = {
-                it.coroutine.cancel()
-                viewmodel.end_use(it)
-            }
-        )
+        viewmodel.viewmodelscope.launch(Dispatchers.Main) {
+            viewbinding.equipmentUsingRecyclerView.layoutManager = LinearLayoutManager(context)
+            viewbinding.equipmentUsingRecyclerView.adapter = EquipmentUsingAdapter(
+                emptyList(),
+                onClickNoUsingIcon = {
+                    viewmodel.end_use(it)
+                }
+            )
+        }
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
-        viewmodel.UseEquipmentLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        viewmodel.UseEquipmentLiveData.observe(viewLifecycleOwner, {
             (viewbinding.equipmentUsingRecyclerView.adapter as EquipmentUsingAdapter).setData(it)
         })
     }
@@ -57,7 +59,7 @@ class ReservationCurrentFragment :
 
 
 class EquipmentUsingAdapter(
-    private var dataSet: List<ReservationUseEquipment>,
+    private var  dataSet: List<ReservationUseEquipment>,
     val onClickNoUsingIcon: (ReservationUseEquipment: ReservationUseEquipment) -> Unit,
 ) :
     RecyclerView.Adapter<EquipmentUsingAdapter.EquipmentUsingViewHolder>() {
@@ -78,36 +80,31 @@ class EquipmentUsingAdapter(
             LocalDateTime.now(),
             LocalDateTime.parse(data.end_time)
         ))
-        println("remaintime")
-        println(data.remain_time)
-        println("\n")
-
+        println("remaintime : " + data.remain_time + "\n")
 
         viewHolder.viewbinding.document.text = data.document_name
-        //viewHolder.viewbinding.remainTimeTextview.text = (data.remain_time/60000).toString() + "분 남음"
         viewHolder.viewbinding.noUseBtn.setOnClickListener() {
             onClickNoUsingIcon.invoke(data)
         }
-
-        //스래드로 현재 유저가 사용중인 장비의 남은 시간을 알려줌
-        data.coroutine.async() {
-            for (i in (data.remain_time) downTo (1000)){
-                viewHolder.viewbinding.remainTimeTextview.setText((i / 60000).toString() + "분 남음")
-                delay(1000)
-                Log.d("position",position.toString())
-                Log.d("i",i.toString())
-            }
+        //남은시간이 음수일경우 사용종료와 같은 동작을 수행
+        if(data.remain_time < 0){
+            onClickNoUsingIcon.invoke(data)
         }
-//        object : CountDownTimer(data.remain_time, 1000) {
-//
-//            override fun onTick(millisUntilFinished: Long) {
-//                viewHolder.viewbinding.remainTimeTextview.setText((millisUntilFinished / 60000).toString() + "분 남음")
-//            }
-//
-//            override fun onFinish() {
-////                viewHolder.viewbinding.remainTimeTextview.setText("done!")
-//            }
-//        }.start()
+
+        Log.d("viewholderPosition",position.toString())
+        //dataset에 코루틴이 존재하여 돌아갈 경우 취소하고. 다른 코루틴을 생성한다 << dataset의 코루틴이 중복되는것을 막아줌
+
+        //남은시간을 처리할 코루틴
+        data.coroutine.async {
+            while(data.remain_time > 0){
+                viewHolder.viewbinding.remainTimeTextview.setText((data.remain_time / 60000).toString() + "분 남음")
+                data.remain_time -= 1000
+                delay(1000)
+                Log.e("checking position",position.toString())
+                Log.e("checking time","${data.remain_time}")
+            }
+            onClickNoUsingIcon.invoke(data)
+        }
     }
 
     //데이터셋 변화 >> 뷰로 적용시켜주는 함수

@@ -1,9 +1,7 @@
 package com.example.userapp.ui.main.reservation
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +10,9 @@ import com.example.userapp.base.BaseFragment
 import com.example.userapp.data.model.ReservationEquipment
 import com.example.userapp.databinding.FragmentMainhomeReservationEquipmentBinding
 import com.example.userapp.databinding.FragmentMainhomeReservationEquipmentItemBinding
+import com.example.userapp.utils.InputUsingTimeDialog
 import com.google.firebase.firestore.FirebaseFirestore
+
 
 class ReservationEquipmentFragment :
     BaseFragment<FragmentMainhomeReservationEquipmentBinding, ReservationViewModel>() {
@@ -36,9 +36,52 @@ class ReservationEquipmentFragment :
             emptyList(),
             onClickUsingIcon = {
                 //bottom sheet dialog
-                val communalEquipmentDialogFragment = ReservationEquipmentDialogFragment()
-                communalEquipmentDialogFragment.show(requireActivity().supportFragmentManager,"aaaaa")
-                viewmodel.add_use(it)
+//                val communalEquipmentDialogFragment = ReservationEquipmentDialogFragment()
+//                communalEquipmentDialogFragment.show(requireActivity().supportFragmentManager,"aaaaa")
+/*
+                requireContext().let{
+                    val mBottomSheetDialog =  BottomSheetDialog(it, requireContext().resources.getIdentifier("CustomBottomSheetDialogStyle","styles", it.packageName))
+                }*/
+                val sheet = InputUsingTimeDialog(requireContext()).apply {
+                    var usingMinite = 50 // 다이얼로그에서 받아온 값을 넘겨받아 데이터모델에서 적용시키는것
+                    clickListener = object : InputUsingTimeDialog.DialogButtonClickListener {
+                        override fun dialogCloseClickListener() {
+                            dismiss()
+                        }
+
+                        override fun usingClickListener() {
+                            if (usingMinite > 0) { //사용시간이 0보다 큰 경우만 사용
+                                viewmodel.add_use(it)
+                            }
+                            dismiss()
+                        }
+
+                        override fun plus5ClickListener() {
+                            usingMinite += 5
+                        }
+                        override fun plus10ClickListener() {
+                            usingMinite += 10
+                        }
+                        override fun plus15ClickListener() {
+                            usingMinite += 15
+                        }
+                    }
+                }
+                sheet.show()
+//
+//                val mBottomSheetDialog = BottomSheetDialog(requireContext(), requireContext().resources.getIdentifier("CustomBottomSheetDialogStyle","styles",context?.packageName))
+//                val sheetView = FragmentMainhomeReservationEquipmentDialogBinding.inflate(layoutInflater)
+//                mBottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+//                mBottomSheetDialog.setContentView(sheetView.root)
+//
+//                mBottomSheetDialog.window?.run {
+//                    setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//                    attributes.width = ViewGroup.LayoutParams.MATCH_PARENT
+//                    attributes.height = ViewGroup.LayoutParams.WRAP_CONTENT
+//                }
+//
+//                mBottomSheetDialog.show()
+//                viewmodel.add_use(it)
             }
         )
     }
