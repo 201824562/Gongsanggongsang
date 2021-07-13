@@ -30,7 +30,6 @@ fun Fragment.hideKeyboard(view: View) {
     imm.hideSoftInputFromWindow(view.windowToken, 0)
 }
 
-//TODO : 키보드 올라오면 뷰를 중간으로 보내기.
 fun setupKeyboardHide(view: View, activity: Activity?) {
     if (view !is EditText || view !is Button) {
         view.setOnTouchListener { _, _ ->

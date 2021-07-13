@@ -61,6 +61,10 @@
     <navigation
         android:id="@+id/signUpGraph"
         app:startDestination="@id/signUpPermissionFragment">
+        <argument
+            android:name="emptyStateAgencyFrag"
+            app:argType="boolean"
+            android:defaultValue="false"/>
         <fragment
             android:id="@+id/signUpPermissionFragment"
             android:name="com.example.userapp.ui.signup.SignUpPermissionFragment"
@@ -71,12 +75,21 @@
                 app:enterAnim="@anim/slide_enter"
                 app:exitAnim="@anim/slide_exit"
                 app:popEnterAnim="@anim/slide_pop_enter"
-                app:popExitAnim="@anim/slide_pop_exit"/>
+                app:popExitAnim="@anim/slide_pop_exit">
+                <argument
+                    android:name="emptyStateAgencyFrag"
+                    app:argType="boolean"
+                    android:defaultValue="false"/>
+            </action>
         </fragment>
         <fragment
             android:id="@+id/signUpAgencyFragment"
             android:name="com.example.userapp.ui.signup.SignUpAgencyFragment"
             android:label="SignUpAgencyFragment" >
+            <argument
+                android:name="emptyStateAgencyFrag"
+                app:argType="boolean"
+                android:defaultValue="false"/>
             <action
                 android:id="@+id/action_signUpAgencyFragment_to_signUpFirstFragment"
                 app:destination="@id/signUpFirstFragment"
@@ -104,6 +117,14 @@
             <action
                 android:id="@+id/action_signUpSecondFragment_to_signUpWaitFragment"
                 app:destination="@id/signUpWaitFragment"
+                app:enterAnim="@anim/slide_enter"
+                app:exitAnim="@anim/slide_exit"
+                app:popEnterAnim="@anim/slide_pop_enter"
+                app:popExitAnim="@anim/slide_pop_exit"/>
+            <action
+                android:id="@+id/action_signUpSecondFragment_pop"
+                app:popUpTo="@id/signUpSecondFragment"
+                app:popUpToInclusive="true"
                 app:enterAnim="@anim/slide_enter"
                 app:exitAnim="@anim/slide_exit"
                 app:popEnterAnim="@anim/slide_pop_enter"

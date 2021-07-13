@@ -2,19 +2,20 @@ package com.example.userapp.ui.signup
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import androidx.appcompat.widget.SearchView
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
-import com.example.userapp.data.model.Agency
 import com.example.userapp.databinding.FragmentSignupAgencyBinding
 import com.example.userapp.utils.setupKeyboardHide
 
+//TODO : 얘 손봐야함.
 class SignUpAgencyFragment : BaseFragment<FragmentSignupAgencyBinding, SignUpViewModel>() {
     override lateinit var viewbinding: FragmentSignupAgencyBinding
     override val viewmodel: SignUpViewModel by navGraphViewModels(R.id.signUpGraph)
@@ -24,10 +25,17 @@ class SignUpAgencyFragment : BaseFragment<FragmentSignupAgencyBinding, SignUpVie
         viewbinding = FragmentSignupAgencyBinding.inflate(inflater, container, false)
         return viewbinding.root
     }
-    
+
+    private val args: SignUpAgencyFragmentArgs by navArgs()
     private lateinit var searchListAdapter: SearchAgencyListAdapter
     private var query : String = ""
     private var nextBtnAvailable : Boolean = false
+
+    private fun clearVariables(){
+        query = ""
+        if (viewmodel.cameFromPermission) viewmodel.clearAgencyResult(false)
+        //if (args.emptyStateAgencyFrag) viewmodel.clearAgencyResult(false)
+    }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
         setupKeyboardHide(viewbinding.fragmentRootLayout, activity)
@@ -42,8 +50,8 @@ class SignUpAgencyFragment : BaseFragment<FragmentSignupAgencyBinding, SignUpVie
             agencyDataList.observe(viewLifecycleOwner){
                 if (it.isEmpty()){ showEmptyView() }
                 else {
-                    showRecyclerView()
-                    searchListAdapter.submitList(it) }
+                    searchListAdapter.submitList(it)
+                    showRecyclerView() }
             }
             invalidSearchResultEventLiveData.observe(viewLifecycleOwner) { setSearchResultErrorMessage(it) }
             validSearchResultEventLiveData.observe(viewLifecycleOwner){ setSearchResultEmptyMessage() }
@@ -62,7 +70,7 @@ class SignUpAgencyFragment : BaseFragment<FragmentSignupAgencyBinding, SignUpVie
         viewbinding.signupSearchBtn.setOnClickListener {
             query = viewbinding.signupSearchEdit.query.toString()
             if(query.isEmpty()) {
-                viewmodel.clearAgencyResult()
+                viewmodel.clearAgencyResult(true)
             }else{
                 submitQuery(query.lines().first().trim()) }
         }
@@ -76,14 +84,14 @@ class SignUpAgencyFragment : BaseFragment<FragmentSignupAgencyBinding, SignUpVie
         }
     }
 
-    private fun clearVariables(){ query = "" }
-
     private fun setRecyclerView() {
         searchListAdapter = SearchAgencyListAdapter(object : SearchAgencyListAdapter.OnItemClickListener {
             override fun onItemClick(v: View, position: Int) {
                 viewmodel.selectedAgency = if (searchListAdapter.currentList[position].clicked){
                     searchListAdapter.currentList[position]
                 } else null
+                Log.e("checking", "${searchListAdapter.currentList[position]}")
+                Log.e("checking", "${viewmodel.selectedAgency}")
                 viewmodel.observeAgencyBtnState()
             }
         })
@@ -104,7 +112,7 @@ class SignUpAgencyFragment : BaseFragment<FragmentSignupAgencyBinding, SignUpVie
                     editText.setTextColor(resources.getColor(R.color.black))
                 }
             }
-            signupSearchEdit.setOnQueryTextListener( object : SearchView.OnQueryTextListener {
+            /*signupSearchEdit.setOnQueryTextListener( object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     if(query.isNullOrEmpty()){
                         showSnackbar("검색어를 입력해주세요.")
@@ -116,7 +124,7 @@ class SignUpAgencyFragment : BaseFragment<FragmentSignupAgencyBinding, SignUpVie
                 }
                 override fun onQueryTextChange(newText: String?): Boolean {
                     return true }
-            })
+            })*/
         }
     }
 

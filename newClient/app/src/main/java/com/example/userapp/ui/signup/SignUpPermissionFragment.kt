@@ -21,7 +21,9 @@ class SignUpPermissionFragment : BaseFragment<FragmentSignupPermissionBinding, S
     }
     private var nextBtnAvailable : Boolean = false
 
-    override fun initViewStart(savedInstanceState: Bundle?) { getCheckedInfo() }
+    override fun initViewStart(savedInstanceState: Bundle?) {
+        viewmodel.cameFromPermission = true
+        getCheckedInfo() }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
         viewmodel.run {
@@ -85,7 +87,7 @@ class SignUpPermissionFragment : BaseFragment<FragmentSignupPermissionBinding, S
                showDialog(dialog, viewLifecycleOwner)
            }
            signupNextbtn.setOnClickListener {
-               if (nextBtnAvailable) findNavController().navigate(R.id.action_signUpPermissionFragment_to_signUpAgencyFragment)
+               if (nextBtnAvailable) findNavController().navigate(SignUpPermissionFragmentDirections.actionSignUpPermissionFragmentToSignUpAgencyFragment(true))
            }
        }
     }
@@ -121,7 +123,6 @@ class SignUpPermissionFragment : BaseFragment<FragmentSignupPermissionBinding, S
                 viewmodel.observePermissionBtnState()
             }
         }
-
     }
 
     private fun checkEveryBtn() {

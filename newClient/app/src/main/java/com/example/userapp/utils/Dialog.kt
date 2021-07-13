@@ -21,6 +21,7 @@ class WrapedDialogBasicTwoButton (context: Context, title: String, content: Stri
     }
 
     init {
+        //setCanceledOnTouchOutside(false)
         val binding : DialogBasicTwobuttonBinding = DialogBasicTwobuttonBinding.inflate(layoutInflater)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
