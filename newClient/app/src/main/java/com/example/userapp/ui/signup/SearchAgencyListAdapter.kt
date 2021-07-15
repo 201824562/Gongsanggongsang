@@ -26,8 +26,10 @@ class SearchAgencyListAdapter (val  listener : OnItemClickListener): ListAdapter
             }
         }
     }
+
     private var lastChecked : CheckBox ?= null
     private var lastCheckedPos : Int ?= null
+
 
     interface OnItemClickListener { fun onItemClick(v: View, position: Int) }
     inner class ViewHolder(val binding: ItemSignupSearchListBinding): RecyclerView.ViewHolder(binding.root)

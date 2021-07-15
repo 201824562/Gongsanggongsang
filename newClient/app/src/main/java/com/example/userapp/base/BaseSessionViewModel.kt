@@ -1,8 +1,6 @@
 package com.example.userapp.base
 
 import android.app.Application
-import android.content.Context
-import android.content.SharedPreferences
 import androidx.lifecycle.*
 import com.example.userapp.data.AppDatabase
 import com.example.userapp.data.repository.UserRepository
@@ -69,15 +67,16 @@ abstract class BaseSessionViewModel(application: Application)  : AndroidViewMode
             .subscribe(onSuccess, onError))
     }
 
-    open fun apiCall(completable: Completable,
-                onComplete: Action = Action{
+    open fun apiCall(
+        completable: Completable,
+        onComplete: Action = Action{
                     // default do nothing
                 },
-                onError: Consumer<Throwable> = Consumer {
+        onError: Consumer<Throwable> = Consumer {
                     _apiCallErrorEvent.postValue(it.message)
                     showSnackbar("오류가 발생했습니다. ${it.message}")
                 },
-                timeout: Long = 5){
+        timeout: Long = 5){
         addDisposable(completable.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .timeout(timeout, TimeUnit.SECONDS)
@@ -92,22 +91,8 @@ abstract class BaseSessionViewModel(application: Application)  : AndroidViewMode
     val authToken: String get() = _authToken!!
     val isTokenAvailable: Boolean get() = _authToken != null
 
-    init { _authToken = userRepository.getUserToken() }
+    init { _authToken = userRepository.getUserToken(application) }
 
-
-/*
-    //TODO : sharedPreference 활용하기.
-    val SHARED_PREFERENCES_NAME = "gongsang_client"
-    val SharedPreferences = application.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
-
-    private fun getUserToken() : String? {
-        if (_authToken != null) return authToken
-        return if (SharedPreferences.getString("gongsang_client", "") != "") {
-            _authToken = SharedPreferences.getString("gongsang_client", "")
-            authToken
-        } else null
-    }
-*/
 
     private val _sessionInvalidEvent: SingleLiveEvent<Any> = SingleLiveEvent()
     val sessionInvalidEvent: LiveData<Any> get() = _sessionInvalidEvent
