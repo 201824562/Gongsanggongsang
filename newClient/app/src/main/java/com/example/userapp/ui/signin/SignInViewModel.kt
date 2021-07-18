@@ -53,6 +53,7 @@ class SignInViewModel(application: Application) : BaseSessionViewModel(applicati
         userData?.let {
             apiCall(userRepository.saveUserInfo(it),{
                 _onSuccessSaveUserInfo.value = true
+                userRepository.saveAgencyInfo(it.agency, context)
                 userRepository.saveUserToken(it.id, context) } )
         }
     }

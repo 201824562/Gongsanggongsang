@@ -13,6 +13,7 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 
+//TODO : 와이파이(서버연결관련) 에러처리
 class SignRepository() {
 
     companion object {
@@ -173,8 +174,8 @@ class SignRepository() {
                     if (it.data != null && it.data!!["id"] == userId && it.data!!["pwd"]==userPwd){
                         Log.d(ContentValues.TAG, "SignIn Successed!!")
                         emitter.onSuccess(
-                            ReceiverSignIn(true, UserModel(it.data!!["id"].toString(), it.data!!["name"].toString(), it.data!!["nickname"].toString(),
-                                it.data!!["birthday"].toString(), it.data!!["SmsInfo"].toString())))
+                            ReceiverSignIn(true, UserModel(it.data!!["agency"].toString(), it.data!!["id"].toString(), it.data!!["name"].toString(), it.data!!["nickname"].toString(),
+                                it.data!!["birthday"].toString(), it.data!!["smsInfo"].toString())))
                     }
                     else emitter.onSuccess(ReceiverSignIn(false, null))
                 }

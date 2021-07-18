@@ -87,12 +87,16 @@ abstract class BaseSessionViewModel(application: Application)  : AndroidViewMode
 
     val userRepository: UserRepository = UserRepository.getInstance(AppDatabase.getDatabase(application, viewModelScope))
 
+    private var _agencyInfo: String? = null
+    val agencyInfo: String get() = _agencyInfo!!
     private var _authToken: String? = null
     val authToken: String get() = _authToken!!
     val isTokenAvailable: Boolean get() = _authToken != null
 
-    init { _authToken = userRepository.getUserToken(application) }
-
+    init {
+        _agencyInfo = userRepository.getAgencyInfo(application)
+        _authToken = userRepository.getUserToken(application)
+    }
 
     private val _sessionInvalidEvent: SingleLiveEvent<Any> = SingleLiveEvent()
     val sessionInvalidEvent: LiveData<Any> get() = _sessionInvalidEvent

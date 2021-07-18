@@ -23,8 +23,35 @@ class UserRepository(appDatabase: AppDatabase) {
 
     private val userdataDao = appDatabase.userDao()
     private val SHARED_PREFERENCES_TOKEN = "client_login_token"
+    private val SHARED_PREFERENCES_AGENCY = "client_agency_info"
     private var storedToken: String? = null
+    private var storedAgency: String? = null
 
+    fun getAgencyInfo(application : Application)  : String? {
+        val sharedPreferences = application.getSharedPreferences(SHARED_PREFERENCES_AGENCY, Context.MODE_PRIVATE)
+        return if (storedAgency != null) storedAgency
+        else {
+            if (sharedPreferences.getString(SHARED_PREFERENCES_AGENCY , "") != "") {
+                storedAgency = sharedPreferences.getString(SHARED_PREFERENCES_AGENCY , "")
+                storedAgency
+            }else storedAgency
+        }
+    }
+
+    fun saveAgencyInfo(agencyInfo: String, context: Context){
+        val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_AGENCY, Context.MODE_PRIVATE)
+        storedAgency = agencyInfo
+        sharedPreferences.edit {
+            putString(SHARED_PREFERENCES_AGENCY , agencyInfo)
+            apply()
+        }
+    }
+
+    fun removeAgencyInfo(context: Context) {
+        val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_AGENCY, Context.MODE_PRIVATE)
+        storedAgency = null
+        sharedPreferences.edit { remove(SHARED_PREFERENCES_AGENCY ) }
+    }
 
     fun getUserToken(application : Application)  : String? {
         val sharedPreferences = application.getSharedPreferences(SHARED_PREFERENCES_TOKEN, Context.MODE_PRIVATE)
@@ -46,7 +73,7 @@ class UserRepository(appDatabase: AppDatabase) {
         }
     }
 
-    fun removeUserToken(token: String, context: Context) {
+    fun removeUserToken(context: Context) {
         val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_TOKEN, Context.MODE_PRIVATE)
         storedToken = null
         sharedPreferences.edit { remove(SHARED_PREFERENCES_TOKEN ) }

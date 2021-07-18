@@ -14,6 +14,7 @@ import com.example.userapp.databinding.FragmentSigninBinding
 import com.example.userapp.utils.MatchedDialogSignInOneButton
 import com.example.userapp.utils.hideKeyboard
 
+//TODO : 아이디/비번 찾기 구현하기 -> Administer에 적용하기.
 class SignInFragment : BaseSessionFragment<FragmentSigninBinding, SignInViewModel>() {
     override lateinit var viewbinding: FragmentSigninBinding
     override val viewmodel: SignInViewModel by viewModels()
@@ -30,15 +31,6 @@ class SignInFragment : BaseSessionFragment<FragmentSigninBinding, SignInViewMode
 
     override fun initViewStart(savedInstanceState: Bundle?) {
         viewbinding.fragmentContent.setOnClickListener { hideKeyboard(it) }
-    }
-
-    private fun showWaitForApproveActivity() {
-        val dialog = MatchedDialogSignInOneButton(requireContext(),  "가입 승인 대기중이에요.\n공간 관리자님께 문의해주세요.").apply {
-            clickListener = object : MatchedDialogSignInOneButton.DialogButtonClickListener {
-                override fun dialogClickListener() { dismiss() }
-            }
-        }
-        showDialog(dialog, viewLifecycleOwner)
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {

@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:src="@drawable/lovebutton"/>
+        android:src="@drawable/button_love"/>
     <TextView
         android:id="@+id/community_name"
         android:text="게시판"
@@ -31,7 +31,7 @@
         android:id="@+id/community_arrow"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:src="@drawable/lovebutton"
+        android:src="@drawable/button_love"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
     <View

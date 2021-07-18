@@ -26,6 +26,7 @@ class SignUpAgencyFragment : BaseFragment<FragmentSignupAgencyBinding, SignUpVie
         return viewbinding.root
     }
 
+
     private val args: SignUpAgencyFragmentArgs by navArgs()
     private lateinit var searchListAdapter: SearchAgencyListAdapter
     private var query : String = ""
