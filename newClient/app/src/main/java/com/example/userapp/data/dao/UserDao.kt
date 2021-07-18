@@ -9,7 +9,7 @@ import io.reactivex.Single
 @Dao
 interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertUserData(userdata : User)
+    fun insertUserData(userdata : User) : Completable
 
     @Query("DELETE from user WHERE id=:userId")
     fun deleteUserData(userId : String)

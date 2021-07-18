@@ -93,7 +93,7 @@
                     android:minWidth="0dp"
                     android:textColor="@color/blue_green"
                     android:fontFamily="@font/notosanskr_regular_hestia"
-                    android:background="@drawable/button_15dp_event_rectangle_bluegreen" />
+                    android:background="@drawable/button_15dp_event_stroke_rectangle_bluegreen" />
             </androidx.constraintlayout.widget.ConstraintLayout>
             <TextView
                 android:id="@+id/text_id_warning"
@@ -257,7 +257,7 @@
                     android:minWidth="0dp"
                     android:textColor="@color/blue_green"
                     android:fontFamily="@font/notosanskr_regular_hestia"
-                    android:background="@drawable/button_15dp_event_rectangle_bluegreen" />
+                    android:background="@drawable/button_15dp_event_stroke_rectangle_bluegreen" />
             </androidx.constraintlayout.widget.ConstraintLayout>
             <TextView
                 android:id="@+id/text_nickname_warning"

@@ -43,7 +43,7 @@ class SettingsFragment : BaseSessionFragment<FragmentMainhomeSettingsBinding, Se
                 clickListener = object : WrapedDialogBasicTwoButton.DialogButtonClickListener{
                     override fun dialogCloseClickListener() { dismiss() }
                     override fun dialogDeleteClickListener() {
-                        viewmodel.deleteUserInfo("ljy3237")
+                        viewmodel.deleteUserInfo()
                         dismiss()
                     }
                 }

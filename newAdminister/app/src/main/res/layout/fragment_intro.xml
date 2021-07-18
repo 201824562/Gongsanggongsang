@@ -6,81 +6,74 @@
     android:id="@+id/fragment_root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:padding="16dp">
-    <!--    <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/Title_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-          <TextView
-                android:id="@+id/Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:layout_marginTop="148dp"
-                android:gravity="center"
-                android:text="로그인"
-                android:textColor="@color/applemint"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-        </androidx.constraintlayout.widget.ConstraintLayout>-->
     <ImageView
-        android:id="@+id/maing_image"
+        android:id="@+id/main_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="135dp"
-        android:src ="@drawable/image_main_image"
+        android:src ="@drawable/image_mainimage"
         />
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/fragment_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/maing_image">
-        <EditText
-            android:id="@+id/edit_text_id"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:layout_constraintTop_toBottomOf="@+id/main_image"
+        app:layout_constraintBottom_toTopOf="@+id/login_btn"
+        android:clipToPadding="false">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:background="@drawable/edittext_underline_warmgray"
-            android:hint="아이디"
-            android:padding="8dp"
-            android:singleLine="true"
-            android:textSize="14sp"
-            android:fontFamily="@font/notosanskr_regular_hestia"
-            android:textColorHint="#de000000"
-            android:textColor="@color/black"/>
-        <EditText
-            android:id="@+id/edit_text_pwd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/edittext_underline_warmgray"
-            android:hint="비밀번호"
-            android:padding="8dp"
-            android:singleLine="true"
-            android:textSize="14sp"
-            android:fontFamily="@font/notosanskr_regular_hestia"
-            android:textColorHint="#de000000"
-            android:textColor="@color/black" />
-        <Button
-            android:id="@+id/login_btn"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="40dp"
-            android:text="로그인"
-            android:textSize="16sp"
-            android:textColor="@color/white"
-            android:fontFamily="@font/notosanskr_bold_hestia"
-            android:background="@drawable/button_5dp_rectangle_bluegreen" />
-    </LinearLayout>
+            android:orientation="vertical">
+            <EditText
+                android:id="@+id/edit_text_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:background="@drawable/edittext_underline_black20"
+                android:hint="아이디"
+                android:padding="8dp"
+                android:singleLine="true"
+                android:textSize="14sp"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:textColorHint="#de000000"
+                android:textColor="@color/black_87"
+                android:imeOptions="actionNext" />
+            <EditText
+                android:id="@+id/edit_text_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/edittext_underline_black20"
+                android:hint="비밀번호"
+                android:padding="8dp"
+                android:singleLine="true"
+                android:inputType="textPassword"
+                android:imeOptions="actionDone"
+                android:textSize="12sp"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:textColorHint="#de000000"
+                android:textColor="@color/black_87"  />
+            <Button
+                android:id="@+id/login_btn"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="40dp"
+                android:text="로그인"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/notosanskr_bold_hestia"
+                android:background="@drawable/button_5dp_rectangle_bluegreen" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 

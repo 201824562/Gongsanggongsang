@@ -10,7 +10,12 @@ class SettingsViewModel(application: Application) : BaseSessionViewModel(applica
     private val _onSuccessDeleteUserInfo = SingleLiveEvent<Any>()
     val onSuccessDeleteUserInfo : LiveData<Any> get() = _onSuccessDeleteUserInfo
 
-    fun deleteUserInfo(userId : String) {
-        apiCall(userRepository.deleteUserInfo(userId), {_onSuccessDeleteUserInfo.value = true}, {showSnackbar("로그아웃에 실패했습니다. 잠시후에 시도해주세요.")})
+    fun deleteUserInfo() {
+        val context = getApplication<Application>().applicationContext
+        apiCall(userRepository.deleteUserInfo(authToken),
+            {   userRepository.removeAgencyInfo(context)
+                userRepository.removeUserToken(context)
+                _onSuccessDeleteUserInfo.value = true },
+            {showSnackbar("로그아웃에 실패했습니다. 잠시후에 시도해주세요.")})
     }
 }

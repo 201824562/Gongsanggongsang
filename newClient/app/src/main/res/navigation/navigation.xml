@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navigation"
-    app:startDestination="@id/introFragment">
+    app:startDestination="@id/splashFragment">
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.example.userapp.ui.main.MainFragment"
@@ -21,14 +21,18 @@
             app:enterAnim="@anim/slide_enter"
             app:exitAnim="@anim/slide_exit"
             app:popEnterAnim="@anim/slide_pop_enter"
-            app:popExitAnim="@anim/slide_pop_exit"/>
+            app:popExitAnim="@anim/slide_pop_exit"
+            app:popUpTo="@+id/splashFragment"
+            app:popUpToInclusive="true"/>
         <action
             android:id="@+id/action_splashFragment_to_introFragment"
             app:destination="@id/introFragment"
             app:enterAnim="@anim/slide_enter"
             app:exitAnim="@anim/slide_exit"
             app:popEnterAnim="@anim/slide_pop_enter"
-            app:popExitAnim="@anim/slide_pop_exit"/>
+            app:popExitAnim="@anim/slide_pop_exit"
+            app:popUpTo="@+id/splashFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/introFragment"
@@ -42,7 +46,7 @@
             app:popEnterAnim="@anim/slide_pop_enter"
             app:popExitAnim="@anim/slide_pop_exit"/>
         <action
-            android:id="@+id/action_introFragment_to_signUpFragment"
+            android:id="@+id/action_introFragment_to_signUpGraph"
             app:destination="@id/signUpGraph"
             app:enterAnim="@anim/slide_enter"
             app:exitAnim="@anim/slide_exit"
@@ -151,7 +155,10 @@
             android:id="@+id/action_signInFragment_to_mainFragment"
             app:destination="@id/mainFragment"
             app:popEnterAnim="@anim/slide_pop_enter"
-            app:popExitAnim="@anim/slide_pop_exit"/>
+            app:popExitAnim="@anim/slide_pop_exit"
+            /> <!--TODO : poping Checking 하기
+            app:popUpTo="@+id/signInFragment"
+            app:popUpToInclusive="true" -->
     </fragment>
 
     <fragment

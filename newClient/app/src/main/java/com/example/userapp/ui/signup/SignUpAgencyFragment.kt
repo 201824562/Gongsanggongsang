@@ -15,7 +15,7 @@ import com.example.userapp.base.BaseFragment
 import com.example.userapp.databinding.FragmentSignupAgencyBinding
 import com.example.userapp.utils.setupKeyboardHide
 
-//TODO : 얘 손봐야함.
+//TODO Agency : 얘 손봐야함.
 class SignUpAgencyFragment : BaseFragment<FragmentSignupAgencyBinding, SignUpViewModel>() {
     override lateinit var viewbinding: FragmentSignupAgencyBinding
     override val viewmodel: SignUpViewModel by navGraphViewModels(R.id.signUpGraph)
@@ -25,6 +25,7 @@ class SignUpAgencyFragment : BaseFragment<FragmentSignupAgencyBinding, SignUpVie
         viewbinding = FragmentSignupAgencyBinding.inflate(inflater, container, false)
         return viewbinding.root
     }
+
 
     private val args: SignUpAgencyFragmentArgs by navArgs()
     private lateinit var searchListAdapter: SearchAgencyListAdapter

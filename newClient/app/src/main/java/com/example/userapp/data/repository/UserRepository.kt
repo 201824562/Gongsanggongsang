@@ -1,24 +1,13 @@
 package com.example.userapp.data.repository
 
 import android.app.Application
-import com.google.firebase.firestore.FirebaseFirestore
-import android.content.ContentValues
 import android.content.Context
-import android.content.SharedPreferences
-import android.util.Log
-import androidx.lifecycle.LiveData
+import androidx.core.content.edit
 import com.example.userapp.data.AppDatabase
 import com.example.userapp.data.dto.UserModel
-import com.example.userapp.data.model.SignUpInfo
-import com.example.userapp.data.model.UserStatus
-import com.example.userapp.utils.SingleLiveEvent
 import io.reactivex.Completable
-import io.reactivex.Single
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
-class UserRepository(appdatabase: AppDatabase) {
+class UserRepository(appDatabase: AppDatabase) {
 
     companion object {
         private var sInstance: UserRepository? = null
@@ -32,13 +21,66 @@ class UserRepository(appdatabase: AppDatabase) {
         }
     }
 
-    private val userdataDao = appdatabase.userDao()
+    private val userdataDao = appDatabase.userDao()
+    private val SHARED_PREFERENCES_TOKEN = "client_login_token"
+    private val SHARED_PREFERENCES_AGENCY = "client_agency_info"
+    private var storedToken: String? = null
+    private var storedAgency: String? = null
+
+    fun getAgencyInfo(application : Application)  : String? {
+        val sharedPreferences = application.getSharedPreferences(SHARED_PREFERENCES_AGENCY, Context.MODE_PRIVATE)
+        return if (storedAgency != null) storedAgency
+        else {
+            if (sharedPreferences.getString(SHARED_PREFERENCES_AGENCY , "") != "") {
+                storedAgency = sharedPreferences.getString(SHARED_PREFERENCES_AGENCY , "")
+                storedAgency
+            }else storedAgency
+        }
+    }
+
+    fun saveAgencyInfo(agencyInfo: String, context: Context){
+        val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_AGENCY, Context.MODE_PRIVATE)
+        storedAgency = agencyInfo
+        sharedPreferences.edit {
+            putString(SHARED_PREFERENCES_AGENCY , agencyInfo)
+            apply()
+        }
+    }
+
+    fun removeAgencyInfo(context: Context) {
+        val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_AGENCY, Context.MODE_PRIVATE)
+        storedAgency = null
+        sharedPreferences.edit { remove(SHARED_PREFERENCES_AGENCY ) }
+    }
+
+    fun getUserToken(application : Application)  : String? {
+        val sharedPreferences = application.getSharedPreferences(SHARED_PREFERENCES_TOKEN, Context.MODE_PRIVATE)
+        return if (storedToken != null) storedToken
+        else {
+            if (sharedPreferences.getString(SHARED_PREFERENCES_TOKEN , "") != "") {
+                storedToken = sharedPreferences.getString(SHARED_PREFERENCES_TOKEN , "")
+                storedToken
+            }else storedToken
+        }
+    }
+
+    fun saveUserToken(token: String, context: Context){
+        val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_TOKEN, Context.MODE_PRIVATE)
+        storedToken = token
+        sharedPreferences.edit {
+            putString(SHARED_PREFERENCES_TOKEN , token)
+            apply()
+        }
+    }
+
+    fun removeUserToken(context: Context) {
+        val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_TOKEN, Context.MODE_PRIVATE)
+        storedToken = null
+        sharedPreferences.edit { remove(SHARED_PREFERENCES_TOKEN ) }
+    }
 
     fun saveUserInfo(userData : UserModel) : Completable{
-        return Completable.create { emitter ->
-            userdataDao.insertUserData(userData.getUserEntity())
-            emitter.onComplete()
-        }
+        return userdataDao.insertUserData(userData.getUserEntity())
     }
 
     fun deleteUserInfo(userId: String) : Completable {
@@ -46,18 +88,6 @@ class UserRepository(appdatabase: AppDatabase) {
             userdataDao.deleteUserData(userId)
             emitter.onComplete()
         }
-    }
-
-    //TODO : 이거 막힘. 미쳐부리겠따.
-    var storedToken: String? = null
-    fun getUserToken() : String? {
-        if (storedToken != null) return storedToken
-        return storedToken
-/*        val token = userdataDao.getUserToken()
-        return if (token != null) {
-            storedToken = token
-            storedToken
-        } else null*/
     }
 
 

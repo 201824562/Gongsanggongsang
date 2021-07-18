@@ -3,6 +3,7 @@ package com.example.userapp.data.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.userapp.data.model.Agency
 
 @Entity(tableName = "user")
 data class User(
@@ -16,4 +17,6 @@ data class User(
     var birth: String = "",
     @ColumnInfo(name = "phone")
     var phone: String = "",
+    @ColumnInfo(name = "agency")
+    var agency: String = ""
 )

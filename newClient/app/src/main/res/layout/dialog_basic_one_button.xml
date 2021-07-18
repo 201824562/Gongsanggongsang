@@ -42,7 +42,7 @@
         android:layout_height="1dp"
         android:layout_marginTop="16dp"
         android:background="@color/gray" />
-    <TextView
+    <Button
         android:id="@+id/dialog_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -52,6 +52,6 @@
         android:text="동의"
         android:textSize="16sp"
         android:textColor="@color/white"
-        android:background="@drawable/button_10dp_rectangle_bluegreen" />
+        android:background="@drawable/button_10dp_event_rectangle_blugreen"/>
 </LinearLayout>
 

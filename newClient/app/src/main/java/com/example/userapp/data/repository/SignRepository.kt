@@ -3,9 +3,9 @@ package com.example.userapp.data.repository
 import android.content.ContentValues
 import android.util.Log
 import androidx.lifecycle.LiveData
-import com.example.userapp.data.AppDatabase
 import com.example.userapp.data.dto.UserModel
 import com.example.userapp.data.model.Agency
+import com.example.userapp.data.model.ReceiverSignIn
 import com.example.userapp.data.model.SignUpInfo
 import com.example.userapp.utils.SingleLiveEvent
 import com.google.firebase.firestore.FirebaseFirestore
@@ -13,6 +13,7 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 
+//TODO : 와이파이(서버연결관련) 에러처리
 class SignRepository() {
 
     companion object {
@@ -43,7 +44,7 @@ class SignRepository() {
                     val agencyList : MutableList<Agency> = mutableListOf()
                     for (document in documents){
                         Log.e("checking","${document.data["name"]}")
-                        agencyList.add(Agency(name = document["name"].toString().replace(",", " "),
+                        agencyList.add(Agency(key = document["key"].toString(), name = document["name"].toString().replace(",", " "),
                             location = document["location"].toString().replace(",", " ")))
                     }
                     emitter.onSuccess(agencyList)
@@ -122,6 +123,7 @@ class SignRepository() {
                 .get()
                 .addOnSuccessListener {
                     if (it.data != null && it.data!!["id"] == token){ emitter.onSuccess(true) }
+                    else emitter.onSuccess(false)
                 }
                 .addOnFailureListener { exception ->
                     Log.w(ContentValues.TAG, "Error getting documents: ", exception)
@@ -136,6 +138,7 @@ class SignRepository() {
                 .get()
                 .addOnSuccessListener {
                     if (it.data != null && it.data!!["id"] == token){ emitter.onSuccess(true) }
+                    else emitter.onSuccess(false)
                 }
                 .addOnFailureListener { exception ->
                     Log.w(ContentValues.TAG, "Error getting documents: ", exception)
@@ -162,21 +165,19 @@ class SignRepository() {
         }
     }
 
-    fun signIn(userId : String, userPwd : String) : Single<UserModel> {
+    fun checkingAllowedsignIn(userId : String, userPwd : String) : Single<ReceiverSignIn> {
         return Single.create{ emitter ->
             firestore.collection("USER_INFO").document(userId)
                 .get()
                 .addOnSuccessListener {
                     Log.d(ContentValues.TAG, "Found SignIn ID!!")
                     if (it.data != null && it.data!!["id"] == userId && it.data!!["pwd"]==userPwd){
-                        //_onSuccessSignInEvent.value = true
                         Log.d(ContentValues.TAG, "SignIn Successed!!")
                         emitter.onSuccess(
-                            UserModel(it.data!!["id"].toString(), it.data!!["name"].toString(), it.data!!["nickname"].toString(),
-                                it.data!!["birthday"].toString(), it.data!!["SmsInfo"].toString())
-                        )
+                            ReceiverSignIn(true, UserModel(it.data!!["agency"].toString(), it.data!!["id"].toString(), it.data!!["name"].toString(), it.data!!["nickname"].toString(),
+                                it.data!!["birthday"].toString(), it.data!!["smsInfo"].toString())))
                     }
-                    else emitter.onError(Throwable("Not Existing SignIn-Info!"))
+                    else emitter.onSuccess(ReceiverSignIn(false, null))
                 }
                 .addOnFailureListener { exception ->
                     Log.w(ContentValues.TAG, "Error getting documents: ", exception)
@@ -184,6 +185,22 @@ class SignRepository() {
                 }
         }
     }
+
+    fun checkingWaitingsignIn(userId : String, userPwd : String): Single<Boolean>{
+        return Single.create{ emitter ->
+            firestore.collection("USER_INFO_WAITING").whereEqualTo("id", userId).whereEqualTo("pwd", userPwd)
+                .get()
+                .addOnSuccessListener {
+                    if (it.isEmpty) emitter.onSuccess(false)
+                    else emitter.onSuccess(true)
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                    emitter.onError(Throwable("Error getting SignIn-Info"))
+                }
+        }
+    }
+
 
 
 }

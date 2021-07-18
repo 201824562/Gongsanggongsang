@@ -54,7 +54,7 @@
             android:textSize="16sp"
             android:textColor="@color/blue_green"
             android:fontFamily="@font/notosanskr_bold_hestia"
-            android:background="@drawable/button_5dp_rectangle_white" />
+            android:background="@drawable/button_5dp_event_rectangle_white" />
         <Button
             android:id="@+id/signup_btn"
             android:layout_width="match_parent"

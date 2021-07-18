@@ -314,8 +314,7 @@ class SignUpViewModel() : BaseViewModel() {
 
 
     fun sendSignUpInfoToServer(userId : String, userPwd : String, userNickname : String){
-        //TODO : AGENCY 정보 추가하기. (이때 key값 필요할 듯.)
-        signUpInfo = SignUpInfo(personalSignUpInfo!!.username, personalSignUpInfo!!.userBirthday, personalSignUpInfo!!.usersSmsInfo,
+        signUpInfo = SignUpInfo(selectedAgency!!.key, personalSignUpInfo!!.username, personalSignUpInfo!!.userBirthday, personalSignUpInfo!!.usersSmsInfo,
             userId, userPwd, userNickname, false)
         apiCall(signRepository.signUp(signUpInfo!!), { _onSuccessSignUpEvent.call() })
     }
