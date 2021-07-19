@@ -11,9 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/mainhome_bottom_navi"
-        android:paddingTop="30dp"
-        android:paddingBottom="40dp" />
+        app:layout_constraintBottom_toTopOf="@id/mainhome_bottom_navi" />
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/mainhome_bottom_navi"
         android:layout_width="match_parent"

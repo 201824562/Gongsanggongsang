@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.main.reservation.ReservationFacilitySelect">
+
+    <TextView
+        android:id="@+id/document_name_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:text="documentname_예약"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/select_day_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="날짜선택"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/document_name_textview"/>
+
+    <TextView
+        android:id="@+id/message1_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        android:text="* 다음주 예약은 다음주 0시부터 가능합니다."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/document_name_textview"/>
+
+    <Button
+        android:id="@+id/mon_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="월"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tue_btn"
+        app:layout_constraintTop_toBottomOf="@id/select_day_textview"/>
+
+    <Button
+        android:id="@+id/tue_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="화"
+        app:layout_constraintStart_toEndOf="@id/mon_btn"
+        app:layout_constraintEnd_toStartOf="@id/wed_btn"
+        app:layout_constraintTop_toBottomOf="@id/select_day_textview"/>
+
+    <Button
+        android:id="@+id/wed_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="수"
+        app:layout_constraintStart_toEndOf="@id/tue_btn"
+        app:layout_constraintEnd_toStartOf="@id/thu_btn"
+        app:layout_constraintTop_toBottomOf="@id/select_day_textview"/>
+    <Button
+        android:id="@+id/thu_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="목"
+        app:layout_constraintStart_toEndOf="@id/wed_btn"
+        app:layout_constraintEnd_toStartOf="@id/fri_btn"
+        app:layout_constraintTop_toBottomOf="@id/select_day_textview"/>
+    <Button
+        android:id="@+id/fri_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="금"
+        app:layout_constraintStart_toEndOf="@id/thu_btn"
+        app:layout_constraintEnd_toStartOf="@id/sat_btn"
+        app:layout_constraintTop_toBottomOf="@id/select_day_textview"/>
+
+    <Button
+        android:id="@+id/sat_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="토"
+        app:layout_constraintStart_toEndOf="@id/fri_btn"
+        app:layout_constraintEnd_toStartOf="@id/sun_btn"
+        app:layout_constraintTop_toBottomOf="@id/select_day_textview"/>
+
+    <Button
+        android:id="@+id/sun_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="일"
+        app:layout_constraintStart_toEndOf="@id/sat_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/select_day_textview"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/mon_btn"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/select_time_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="시간예약"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/facility_timeslice_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/select_time_textview"
+            tools:listitem="@layout/fragment_mainhome_reservation_facility_select_item" />
+
+        <TextView
+            android:id="@+id/message2_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="최대 예약 가능한 시간 : maxtime"
+            app:layout_constraintTop_toBottomOf="@id/facility_timeslice_recyclerView"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

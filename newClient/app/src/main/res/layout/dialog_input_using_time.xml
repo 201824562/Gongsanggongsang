@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/title_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="사용시간입력"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <Button
+        android:id="@+id/back_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="X"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/document_name_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="document_name"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_textview"/>
+
+    <TextView
+        android:id="@+id/using_time_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="사용시간 입력"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/document_name_textview"/>
+
+    <TextView
+        android:id="@+id/using_time_edittext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:hint="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/using_time_textview" />
+
+    <!--android:hint="시간"-->
+
+
+    <TextView
+        android:id="@+id/bun_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="분"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/plus_5minite_btn"
+        app:layout_constraintStart_toEndOf="@id/using_time_edittext"
+        app:layout_constraintTop_toBottomOf="@id/using_time_textview" />
+
+
+    <Button
+        android:id="@+id/plus_5minite_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="+5분"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/using_time_edittext"
+        app:layout_constraintEnd_toStartOf="@id/plus_10minite_btn"/>
+
+    <Button
+        android:id="@+id/plus_10minite_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="+10분"
+        app:layout_constraintStart_toEndOf="@+id/plus_5minite_btn"
+        app:layout_constraintTop_toBottomOf="@id/using_time_edittext"
+        app:layout_constraintEnd_toStartOf="@id/plus_15minite_btn"/>
+
+    <Button
+        android:id="@+id/plus_15minite_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="+15분"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/plus_10minite_btn"
+        app:layout_constraintTop_toBottomOf="@id/using_time_edittext" />
+
+    <TextView
+        android:id="@+id/useable_time_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="최대이용가능시간 : "
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/plus_5minite_btn"/>
+
+    <TextView
+        android:id="@+id/useable_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="default 50"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@id/useable_time_textview"
+        app:layout_constraintTop_toBottomOf="@id/plus_5minite_btn"/>
+
+    <Button
+        android:id="@+id/use_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="사용하기"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/useable_time_textview" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/use_btn"
+        android:stretchColumns="*">
+
+        <TableRow>
+            <Button
+                android:id="@+id/one_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="55dp"
+                android:text="1"/>
+            <Button
+                android:id="@+id/two_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="55dp"
+                android:text="2"/>
+            <Button
+                android:id="@+id/three_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="55dp"
+                android:text="3"/>
+        </TableRow>
+        <TableRow>
+            <Button
+                android:id="@+id/four_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="55dp"
+                android:text="4"/>
+            <Button
+                android:id="@+id/five_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="55dp"
+                android:text="5"/>
+            <Button
+                android:id="@+id/six_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="55dp"
+                android:text="6"/>
+        </TableRow>
+        <TableRow>
+            <Button
+                android:id="@+id/seven_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="55dp"
+                android:text="7"/>
+            <Button
+                android:id="@+id/eight_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="55dp"
+                android:text="8"/>
+            <Button
+                android:id="@+id/nine_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="55dp"
+                android:text="9"/>
+        </TableRow>
+        <TableRow>
+            <Button
+                android:id="@+id/max_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="55dp"
+                android:text="최대"/>
+            <Button
+                android:id="@+id/zero_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="55dp"
+                android:text="0"/>
+            <Button
+                android:id="@+id/delete_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="55dp"
+                android:text="삭제"/>
+        </TableRow>
+    </TableLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

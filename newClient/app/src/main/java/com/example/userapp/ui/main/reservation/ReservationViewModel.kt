@@ -1,8 +1,10 @@
 package com.example.userapp.ui.main.reservation
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.userapp.base.BaseViewModel
 import com.example.userapp.data.model.ReservationEquipment
+import com.example.userapp.data.model.ReservationFacility
 import com.example.userapp.data.model.ReservationUseEquipment
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -14,12 +16,20 @@ class ReservationViewModel : BaseViewModel() {
 
     val UseEquipmentLiveData = MutableLiveData<List<ReservationUseEquipment>>()
     val EquipmentLiveData = MutableLiveData<List<ReservationEquipment>>()
+    val FacilityLiveData = MutableLiveData<List<ReservationFacility>>()
 
     private val UseEquipmentData = arrayListOf<ReservationUseEquipment>()
     private val EquipmentData = arrayListOf<ReservationEquipment>()
+    private val FacilityData = arrayListOf<ReservationFacility>()
 
-    //뷰모델스코프를 이용해서 
+    //뷰모델스코프를 이용해서 제어
+    var viewmodelscope = viewModelScope
 
+    fun cancelViewModelScope(){
+        viewmodelscope.cancel()
+    }
+
+    //파이어베이스에서 데이터 가져오는 함수 getEquipmentData, getUseEquipmentData, getFacilityData 통일해야함
     fun getEquipmentData() {
         lateinit var document_name: String
         lateinit var using: String
@@ -97,13 +107,44 @@ class ReservationViewModel : BaseViewModel() {
             }
     }
 
-    fun add_use(ReservationEquipment: ReservationEquipment) {
+    fun getFacilityData() {
+        lateinit var document_name: String
+        lateinit var category: String
+        var max_time: Long  //long타입은 lateinit이 안돼나?
+        var time_interval: Long
+
+        database.collection("COMMUNAL_Facility")
+            .addSnapshotListener { value, e ->
+                if (e != null) {
+                    return@addSnapshotListener
+                }
+                FacilityData.clear()
+                for (document in value!!) {
+                    document_name = document.id
+                    category = document.get("category") as String
+                    max_time = document.get("max_time") as Long
+                    time_interval = document.get("time_interval") as Long
+
+                    FacilityData.add(
+                        ReservationFacility(
+                            document_name,
+                            category,
+                            max_time,
+                            time_interval
+                        )
+                    )
+                }
+                FacilityLiveData.value = FacilityData
+            }
+    }
+
+    fun add_use(ReservationEquipment: ReservationEquipment, usingtime: Int) {
         var map1 = mutableMapOf<String, Any>()
         var map2 = mutableMapOf<String, Any>()
         var map3 = mutableMapOf<String, Any>()
 
         map1["start"] = LocalDateTime.now().toString()
-        map2["end"] = LocalDateTime.now().plusMinutes(70).toString()
+        map2["end"] = LocalDateTime.now().plusMinutes(usingtime.toLong()).toString()
         map3["name"] = "kijung" // name을 맨마지막으로 지우지 않으면 nullpointerexception 발생
 
         database.collection("COMMUNAL_Equipment").document(ReservationEquipment.document_name)
@@ -117,6 +158,7 @@ class ReservationViewModel : BaseViewModel() {
     }
 
     fun end_use(ReservationUseEquipment: ReservationUseEquipment) {
+        ReservationUseEquipment.coroutine.cancel()
         var map1 = mutableMapOf<String, Any>()
         var map2 = mutableMapOf<String, Any>()
         var map3 = mutableMapOf<String, Any>()
@@ -131,6 +173,7 @@ class ReservationViewModel : BaseViewModel() {
             .update(map2)
         database.collection("COMMUNAL_Equipment").document(ReservationUseEquipment.document_name)
             .update(map3)
+
 
         UseEquipmentLiveData.value = UseEquipmentData
     }
