@@ -141,6 +141,9 @@
         <action
             android:id="@+id/action_communityWriteFree_to_communityGetPhoto"
             app:destination="@+id/communityGetPhotoFragment"/>
+        <action
+            android:id="@+id/action_communityWriteFree_to_communityPreview"
+            app:destination="@+id/communityPreviewFragment"/>
     </fragment>
     <fragment
         android:id="@id/communityWriteEmergencyFragment"
@@ -148,6 +151,9 @@
         <action
             android:id="@+id/action_communityWriteEmergency_to_communityGetPhoto"
             app:destination="@+id/communityGetPhotoFragment"/>
+        <action
+            android:id="@+id/action_communityWriteEmergency_to_communityPreview"
+            app:destination="@+id/communityPreviewFragment"/>
     </fragment>
     <fragment
         android:id="@id/communityWriteSuggestFragment"
@@ -155,6 +161,9 @@
         <action
             android:id="@+id/action_communityWriteSuggest_to_communityGetPhoto"
             app:destination="@+id/communityGetPhotoFragment"/>
+        <action
+            android:id="@+id/action_communityWriteSuggest_to_communityPreview"
+            app:destination="@+id/communityPreviewFragment"/>
     </fragment>
     <fragment
         android:id="@id/communityWriteWithFragment"
@@ -162,6 +171,9 @@
         <action
             android:id="@+id/action_communityWriteWith_to_communityGetPhoto"
             app:destination="@+id/communityGetPhotoFragment"/>
+        <action
+            android:id="@+id/action_communityWriteWith_to_communityPreview"
+            app:destination="@+id/communityPreviewFragment"/>
     </fragment>
     <fragment
         android:id="@id/communityWriteMarketFragment"
@@ -169,6 +181,9 @@
         <action
             android:id="@+id/action_communityWriteMarket_to_communityGetPhoto"
             app:destination="@+id/communityGetPhotoFragment"/>
+        <action
+            android:id="@+id/action_communityWriteMarket_to_communityPreview"
+            app:destination="@+id/communityPreviewFragment"/>
     </fragment>
     <fragment
         android:id="@+id/communityModifyFragment"
@@ -191,42 +206,6 @@
             app:argType="string"
             android:name="document_name"
             android:defaultValue="0"/>
-    </fragment>
-
-    <fragment
-        android:id="@+id/communityWriteSuggestFragment"
-        android:name="com.example.userapp.ui.main.community.write.CommunityWriteSuggestFragment">
-        <action
-            android:id="@+id/action_communityWriteSuggest_to_communityGetPhoto"
-            app:destination="@id/communityGetPhotoFragment"/>
-    </fragment>
-    <fragment
-        android:id="@+id/communityWriteWithFragment"
-        android:name="com.example.userapp.ui.main.community.write.CommunityWriteWithFragment">
-        <action
-            android:id="@+id/action_communityWriteWith_to_communityGetPhoto"
-            app:destination="@id/communityGetPhotoFragment"/>
-    </fragment>
-    <fragment
-        android:id="@+id/communityWriteFreeFragment"
-        android:name="com.example.userapp.ui.main.community.write.CommunityWriteFreeFragment">
-        <action
-            android:id="@+id/action_communityWriteFree_to_communityGetPhoto"
-            app:destination="@id/communityGetPhotoFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/communityWriteEmergencyFragment"
-        android:name="com.example.userapp.ui.main.community.write.CommunityWriteEmergencyFragment">
-        <action
-            android:id="@+id/action_communityWriteEmergency_to_communityGetPhoto"
-            app:destination="@id/communityGetPhotoFragment"/>
-    </fragment>
-    <fragment
-        android:id="@+id/communityWriteMarketFragment"
-        android:name="com.example.userapp.ui.main.community.write.CommunityWriteMarketFragment">
-        <action
-            android:id="@+id/action_communityWriteMarket_to_communityGetPhoto"
-            app:destination="@id/communityGetPhotoFragment"/>
     </fragment>
     <fragment
         android:id="@id/communityGetPhotoFragment"

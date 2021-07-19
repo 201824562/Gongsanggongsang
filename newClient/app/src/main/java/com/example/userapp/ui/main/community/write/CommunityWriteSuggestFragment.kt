@@ -106,7 +106,7 @@ class CommunityWriteSuggestFragment : BaseFragment<FragmentCommunityWriteSuggest
                 val postDateNow: String = LocalDate.now().toString()
                 val postTimeNow : String = LocalTime.now().toString()
                 suggestPostData = PostDataInfo(
-                    "3_emergency",
+                    collection_name,
                     "juyong",
                     post_title = suggestWriteTitle.text.toString(),
                     post_contents = suggestWriteContent.text.toString(),
@@ -119,6 +119,7 @@ class CommunityWriteSuggestFragment : BaseFragment<FragmentCommunityWriteSuggest
                     post_anonymous = suggestWriteAnonymous.isChecked
                 )
                 viewmodel.insertPostData(suggestPostData)
+                findNavController().navigate(R.id.action_communityWriteSuggest_to_communityPreview)
             }
         }
     }

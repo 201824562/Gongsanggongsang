@@ -43,7 +43,7 @@ class CommunityDataRepository() {
         var collection_name = it.post_category
         var document_name = it.post_id
         firestore.collection("Busan").document("community").
-        collection("1_free").document(document_name)
+        collection(collection_name).document(document_name)
             .set(it)
             .addOnSuccessListener {success ->
                 Log.d(ContentValues.TAG, "Post Success")

@@ -78,7 +78,7 @@ class CommunityWriteFreeFragment : BaseFragment<FragmentCommunityWriteFreeBindin
                 val postDateNow: String = LocalDate.now().toString()
                 val postTimeNow : String = LocalTime.now().toString()
                 freePostData = PostDataInfo(
-                    "2_emergency",
+                    collection_name,
                     "juyong",
                     post_title = freeWriteTitle.text.toString(),
                     post_contents = freeWriteContent.text.toString(),
@@ -91,6 +91,7 @@ class CommunityWriteFreeFragment : BaseFragment<FragmentCommunityWriteFreeBindin
                     post_anonymous = freeWriteAnonymous.isChecked
                 )
                 viewmodel.insertPostData(freePostData)
+                findNavController().navigate(R.id.action_communityWriteFree_to_communityPreview)
             }
         }
     }

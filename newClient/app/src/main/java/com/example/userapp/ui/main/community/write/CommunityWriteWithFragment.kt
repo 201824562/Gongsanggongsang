@@ -77,7 +77,7 @@ class CommunityWriteWithFragment : BaseFragment<FragmentCommunityWriteWithBindin
                 val postDateNow: String = LocalDate.now().toString()
                 val postTimeNow : String = LocalTime.now().toString()
                 withPostData = PostDataInfo(
-                    "4_with",
+                    collection_name,
                     "juyong",
                     post_title = withWriteTitle.text.toString(),
                     post_contents = withWriteContent.text.toString(),
@@ -90,6 +90,7 @@ class CommunityWriteWithFragment : BaseFragment<FragmentCommunityWriteWithBindin
                     post_anonymous = withWriteAnonymous.isChecked
                 )
                 viewmodel.insertPostData(withPostData)
+                findNavController().navigate(R.id.action_communityWriteWith_to_communityPreview)
             }
         }
     }

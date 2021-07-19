@@ -77,7 +77,7 @@ class CommunityWriteMarketFragment : BaseFragment<FragmentCommunityWriteMarketBi
                 val postDateNow: String = LocalDate.now().toString()
                 val postTimeNow : String = LocalTime.now().toString()
                 marketPostData = PostDataInfo(
-                    "5_market",
+                    collection_name,
                     "juyong",
                     post_title = marketWriteTitle.text.toString(),
                     post_contents = marketWriteContent.text.toString(),
@@ -90,6 +90,7 @@ class CommunityWriteMarketFragment : BaseFragment<FragmentCommunityWriteMarketBi
                     post_anonymous = false
                 )
                 viewmodel.insertPostData(marketPostData)
+                findNavController().navigate(R.id.action_communityWriteMarket_to_communityPreview)
             }
         }
     }

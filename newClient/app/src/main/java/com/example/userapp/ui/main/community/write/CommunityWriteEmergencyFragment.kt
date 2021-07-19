@@ -110,7 +110,7 @@ class CommunityWriteEmergencyFragment : BaseFragment<FragmentCommunityWriteEmerg
                 val postDateNow: String = LocalDate.now().toString()
                 val postTimeNow : String = LocalTime.now().toString()
                 emergencyPostData = PostDataInfo(
-                    "2_emergency",
+                    collection_name,
                     "juyong",
                     post_title = emergencyWriteTitle.text.toString(),
                     post_contents = emergencyWriteContent.text.toString(),
@@ -123,6 +123,7 @@ class CommunityWriteEmergencyFragment : BaseFragment<FragmentCommunityWriteEmerg
                     post_anonymous = emergencyWriteAnonymous.isChecked
                 )
                 viewmodel.insertPostData(emergencyPostData)
+                findNavController().navigate(R.id.action_communityWriteEmergency_to_communityPreview)
             }
         }
     }
