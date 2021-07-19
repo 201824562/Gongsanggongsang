@@ -74,12 +74,14 @@
         android:textColor="@color/black"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/attach"/>
-    <ImageView
-        android:layout_width="wrap_content"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/attach_image_recycler"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/write_contents"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toTopOf="@id/write_register_button"
+        android:background="#0c000000"
+        android:visibility="invisible"/>
     <Button
         android:id="@+id/write_register_button"
         android:layout_width="wrap_content"

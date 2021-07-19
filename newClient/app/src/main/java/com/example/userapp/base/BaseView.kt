@@ -15,8 +15,6 @@ interface BaseView {
 
     fun setupKeyboardHide(view: View, activity: Activity?)
 
-
-
     //fun setToolbarTitle(title : String?)      //MainActivity에서 네비게이션 컴포넌트로 처리한다.(아마 필요없을듯)
 
     //fun loadingIndicatorObserving()

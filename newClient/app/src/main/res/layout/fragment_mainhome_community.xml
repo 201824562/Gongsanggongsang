@@ -6,17 +6,20 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
     <LinearLayout
+        android:id="@+id/community_free_button"
+        android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="17dp"
         android:layout_marginRight="17dp"
         android:orientation="horizontal">
-        <ImageButton
-            android:id="@+id/community_free_button"
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/lovebutton"
+            android:clickable="false"
+            android:src="@drawable/ic_community_main_free_icon"
+            android:background="@color/white"
             android:layout_gravity="center"
             android:layout_marginTop="25dp"
             android:layout_marginBottom="25dp"/>
@@ -46,17 +49,19 @@
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/community_emergency_button"
+        android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="17dp"
         android:layout_marginRight="17dp"
         android:orientation="horizontal">
-        <ImageButton
-            android:id="@+id/community_emergency_button"
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/lovebutton"
+            android:src="@drawable/ic_community_main_emergency_icon"
+            android:background="@color/white"
             android:layout_gravity="center"
             android:layout_marginTop="25dp"
             android:layout_marginBottom="25dp"/>
@@ -86,17 +91,19 @@
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/community_suggest_button"
+        android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="17dp"
         android:layout_marginRight="17dp"
         android:orientation="horizontal">
-        <ImageButton
-            android:id="@+id/community_tendinous_button"
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/lovebutton"
+            android:src="@drawable/ic_community_main_suggest_icon"
+            android:background="@color/white"
             android:layout_gravity="center"
             android:layout_marginTop="25dp"
             android:layout_marginBottom="25dp"/>
@@ -126,17 +133,19 @@
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/community_with_button"
+        android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="17dp"
         android:layout_marginRight="17dp"
         android:orientation="horizontal">
-        <ImageButton
-            android:id="@+id/community_with_button"
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/lovebutton"
+            android:src="@drawable/ic_community_main_with_icon"
+            android:background="@color/white"
             android:layout_gravity="center"
             android:layout_marginTop="25dp"
             android:layout_marginBottom="25dp"/>
@@ -166,17 +175,19 @@
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/community_market_button"
+        android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="17dp"
         android:layout_marginRight="17dp"
         android:orientation="horizontal">
-        <ImageButton
-            android:id="@+id/community_market_button"
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/lovebutton"
+            android:src="@drawable/ic_community_main_market_icon"
+            android:background="@color/white"
             android:layout_gravity="center"
             android:layout_marginTop="25dp"
             android:layout_marginBottom="25dp"/>

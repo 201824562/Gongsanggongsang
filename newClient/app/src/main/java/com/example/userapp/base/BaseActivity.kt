@@ -1,14 +1,19 @@
 package com.example.userapp.base
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
+import com.example.userapp.MainActivity
+import com.example.userapp.R
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel>: AppCompatActivity() {
+abstract class BaseActivity<VB : ViewBinding, VM : BaseActivityViewModel>: AppCompatActivity() {
 
     abstract val viewbinding : VB
     abstract val viewmodel : VM
@@ -34,6 +39,7 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel>: AppCompatActi
         initViewFinal(savedInstanceState)
 
         initToolbar()
+        //snackbarObserving()
     }
 
     abstract fun initViewbinding()
@@ -45,15 +51,30 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel>: AppCompatActi
 
 
 
-    fun snackbarObserving() {
-        viewmodel.observeSnackbarMessageString(this) { message ->
-            showSnackbar( message)
-        } }
-
     @Throws(IllegalArgumentException::class)
     fun showSnackbar(message: String) {
             Snackbar.make(viewbinding.root.findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT).show() }
 
     //네트워크 콜처리 & 서비스 관련 추가해주기.
 
+/*    override fun snackbarObserving(){
+        viewmodel.observeSnackbarMessageString(this){
+            val snackbar = Snackbar.make(viewbinding.root.rootView.findViewById(android.R.id.content), it, Snackbar.LENGTH_LONG)
+            (snackbar.view.findViewById(R.id.snackbar_text) as TextView).maxLines = 5
+            snackbar.show()
+
+        }
+    }*/
+
+/*    private fun toastObserving(){
+        viewmodel.observeToastMessage(this){
+            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+        }
+
+        viewmodel.observeToastMessageStr(this){
+            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+        }
+    }*/
+
 }
+
