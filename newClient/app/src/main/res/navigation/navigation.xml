@@ -2,11 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navigation"
-<<<<<<< HEAD
-    app:startDestination="@id/mainFragment">
-=======
     app:startDestination="@id/splashFragment">
->>>>>>> version2
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.example.userapp.ui.main.MainFragment"

@@ -167,6 +167,8 @@ class InputUsingTimeDialog(context: Context) : Dialog(context) { //도큐먼트 
             usingTime
         }
     }
+}
+
 class MatchedFullDialogBasicOneButton (context: Context, title: String, content: String) : Dialog(context){
     var clickListener : DialogButtonClickListener ? = null
     interface DialogButtonClickListener {
