@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.userapp.R
@@ -24,7 +25,7 @@ class IntroFragment : BaseFragment<FragmentIntroBinding, IntroViewModel>(){
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-        setupKeyboardHide(viewbinding.fragmentRootLayout, activity)
+        requireActivity().onBackPressedDispatcher.addCallback(this) { viewmodel.onBackPressed() }
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
@@ -34,7 +35,7 @@ class IntroFragment : BaseFragment<FragmentIntroBinding, IntroViewModel>(){
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run {
             signupBtn.setOnClickListener {
-                findNavController().navigate(R.id.action_introFragment_to_signUpFragment) }
+                findNavController().navigate(R.id.action_introFragment_to_signUpGraph) }
 
             loginBtn.setOnClickListener {
                 findNavController().navigate(R.id.action_introFragment_to_signInFragment) }

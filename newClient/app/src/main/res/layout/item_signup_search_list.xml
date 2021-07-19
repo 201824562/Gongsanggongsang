@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/list_item_agency_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:background="@color/transparent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:layout_marginBottom="2dp"
+    android:focusable="true">
+    <TextView
+        android:id="@+id/list_item_agency_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="16dp"
+        android:text="검색결과 기관명"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/notosanskr_regular_hestia" />
+    <TextView
+        android:id="@+id/list_item_agency_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/list_item_agency_name"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="8dp"
+        android:text="검색결과 기관주소"
+        android:textSize="12sp"
+        android:textColor="@color/black_87"
+        android:fontFamily="@font/notosanskr_regular_hestia"
+        android:background="@color/white" />
+    <CheckBox
+        android:id="@+id/item_check_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/checkbox_1dp_oval_black10"
+        android:button="@null"
+        android:checked="false"
+        android:clickable="false"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black_20"
+        app:layout_constraintTop_toBottomOf="@id/list_item_agency_location"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="16dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -88,7 +88,7 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment() ,
     override fun showToast(message: String) { Toast.makeText(activity, message, Toast.LENGTH_SHORT).show() }
     override fun showToast(stringRes: Int) { Toast.makeText(activity, stringRes, Toast.LENGTH_SHORT).show() }
 
-    override fun setupKeyboardHide(view: View, activity: Activity?) {
+    /*override fun setupKeyboardHide(view: View, activity: Activity?) {
         if (view !is EditText || view !is Button) {
             view.setOnTouchListener { _, _ ->
                 activity?.let {
@@ -103,7 +103,7 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment() ,
                 setupKeyboardHide(view.getChildAt(i), activity)
             }
         }
-    }
+    }*/
 
 /*    override fun setToolbarTitle(title: String?) {
         (activity as AppCompatActivity).apply {

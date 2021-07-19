@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.BaseStructure" parent="Theme.AppCompat.NoActionBar"> <!--"Theme.AppCompat.NoActionBar"-->
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimary">@color/applemint</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -15,5 +15,17 @@
         <item name="android:background">@color/white</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textColorHint">@color/black</item>
+        <item name="android:textColorPrimary">@color/black</item> <!-- Toolbar Title Color -->
+        <item name="android:textColorSecondary">@color/black</item> <!-- Toolbar Up Button Color -->
+        <item name="android:textViewStyle">@style/TextViewStyle</item>
+        <item name="android:buttonStyle">@style/ButtonStyle</item>
+        <item name="android:editTextStyle">@style/EditTextStyle</item>
+        <item name="android:radioButtonStyle">@style/RadioButtonStyle</item>
+        <item name="android:checkboxStyle">@style/CheckboxStyle</item>
+    </style>
+    <style name="CustomBottomSheetDialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 </resources>
