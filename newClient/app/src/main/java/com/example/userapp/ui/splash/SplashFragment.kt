@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.userapp.R
 import com.example.userapp.base.BaseSessionFragment
-import com.example.userapp.data.model.UserStatus
 import com.example.userapp.databinding.FragmentSplashBinding
 
 class SplashFragment : BaseSessionFragment<FragmentSplashBinding, SplashViewModel> (){
@@ -27,11 +26,10 @@ class SplashFragment : BaseSessionFragment<FragmentSplashBinding, SplashViewMode
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
-        viewmodel.userStatusEvent.observe(viewLifecycleOwner, { status ->
-            when (status) {
-                (UserStatus.USER) -> showMainActivity()
-                (UserStatus.NOT_USER) -> notUserEvent()
-                // (UserStatus.WAIT_APPROVE) -> showWaitForApproveActivity() //TODO : 승인 대기 상태 추가하기.
+        viewmodel.onSuccessGettingToken.observe(viewLifecycleOwner, {
+            when (it) {
+                true -> showMainActivity()
+                false -> notUserEvent()
                 else -> throw IllegalArgumentException("MemberStatus Error")
             }
         })
@@ -42,11 +40,6 @@ class SplashFragment : BaseSessionFragment<FragmentSplashBinding, SplashViewMode
     private fun showIntro() {
         findNavController().navigate(R.id.action_splashFragment_to_introFragment)
     }
-
-    //TODO : 승인 대기 상태 추가하기.
-   /* private fun showWaitForApproveActivity() {
-        findNavController().navigate(R.id.action_splashFragment_to_waitForApproveFragment)
-    }*/
 
     private fun showMainActivity() {
         findNavController().navigate(R.id.action_splashFragment_to_mainFragment)

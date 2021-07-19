@@ -36,6 +36,7 @@
             android:text="관리자님의 인증을 위해\n메이트님의 정보를 입력해주세요."/>
     </LinearLayout>
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/fragment_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -47,67 +48,227 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="16dp">
-            <EditText
-                android:id="@+id/edit_text_id"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/text_id"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/edittext_underline_warmgray"
-                android:hint="아이디 (4~13자리 이내)"
-                android:imeOptions="actionDone"
-                android:inputType="text"
-                android:padding="8dp"
-                android:singleLine="true"
+                android:paddingLeft="8dp"
+                android:text="아이디"
                 android:textSize="14sp"
-                android:fontFamily="@font/notosanskr_regular_hestia"
-                android:textColorHint="@color/black_50"
-                android:textColor="@color/black"/>
-            <EditText
-                android:id="@+id/edit_text_pwd"
+                android:textColor="@color/black_gray"
+                android:fontFamily="@font/notosanskr_regular_hestia" />
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/edit_text_id"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/check_id_btn"
+                    android:background="@drawable/edittext_underline_black20"
+                    android:hint="4~13자리로 입력해주세요."
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:padding="8dp"
+                    android:singleLine="true"
+                    android:maxLength="12"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/notosanskr_regular_hestia"
+                    android:textColorHint="@color/black_50"
+                    android:textColor="@color/black"/>
+                <Button
+                    android:id="@+id/check_id_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/edit_text_id"
+                    android:text="중복확인"
+                    android:textSize="11sp"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:textColor="@color/blue_green"
+                    android:fontFamily="@font/notosanskr_regular_hestia"
+                    android:background="@drawable/button_15dp_event_stroke_rectangle_bluegreen" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/text_id_warning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"
+                android:paddingLeft="8dp"
+                android:textColor="@color/pinkish_orange"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:text="" />
+            <TextView
+                android:id="@+id/text_pwd"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:background="@drawable/edittext_underline_warmgray"
-                android:hint="비밀번호 (8~22자리 이내)"
-                android:imeOptions="actionDone"
-                android:inputType="textPassword"
-                android:maxLength="22"
-                android:maxLines="1"
-                android:padding="8dp"
-                android:singleLine="true"
+                android:paddingLeft="8dp"
+                android:text="비밀번호"
                 android:textSize="14sp"
-                android:fontFamily="@font/notosanskr_regular_hestia"
-                android:textColorHint="@color/black_50"
-                android:textColor="@color/black" />
-            <EditText
-                android:id="@+id/edit_text_pwd2"
+                android:textColor="@color/black_gray"
+                android:fontFamily="@font/notosanskr_regular_hestia" />
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/edit_text_pwd"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/showing_pwd_btn"
+                    android:background="@drawable/edittext_underline_black20"
+                    android:fontFamily="@font/notosanskr_regular_hestia"
+                    android:hint="8~22자리의 영문/숫자로 입력해주세요."
+                    android:imeOptions="actionNext"
+                    android:inputType="textPassword"
+                    android:maxLength="22"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black_50"
+                    android:textSize="12sp" />
+                <ImageButton
+                    android:id="@+id/showing_pwd_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="11dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/edit_text_pwd"
+                    android:background="@drawable/image_button_pwd"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/text_pwd_warning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"
+                android:paddingLeft="8dp"
+                android:textColor="@color/pinkish_orange"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:text="" />
+            <TextView
+                android:id="@+id/text_pwd2"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:background="@drawable/edittext_underline_warmgray"
-                android:hint="비밀번호 (8~22자리 이내)"
-                android:imeOptions="actionDone"
-                android:inputType="textPassword"
-                android:maxLength="22"
-                android:maxLines="1"
-                android:padding="8dp"
-                android:singleLine="true"
+                android:paddingLeft="8dp"
+                android:text="비밀번호 확인"
                 android:textSize="14sp"
-                android:fontFamily="@font/notosanskr_regular_hestia"
-                android:textColorHint="@color/black_50"
-                android:textColor="@color/black" />
-            <EditText
-                android:id="@+id/edit_text_nickname"
+                android:textColor="@color/black_gray"
+                android:fontFamily="@font/notosanskr_regular_hestia" />
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/edit_text_pwd2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/showing_pwd2_btn"
+                    android:background="@drawable/edittext_underline_black20"
+                    android:fontFamily="@font/notosanskr_regular_hestia"
+                    android:hint="8~22자리의 영문/숫자로 입력해주세요."
+                    android:imeOptions="actionNext"
+                    android:inputType="textPassword"
+                    android:maxLength="22"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black_50"
+                    android:textSize="12sp" />
+                <ImageButton
+                    android:id="@+id/showing_pwd2_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="11dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/edit_text_pwd2"
+                    android:background="@drawable/image_button_pwd"/>/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/text_pwd2_warning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"
+                android:paddingLeft="8dp"
+                android:textColor="@color/pinkish_orange"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:text="" />
+            <TextView
+                android:id="@+id/text_nickname"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:background="@drawable/edittext_underline_warmgray"
-                android:hint="닉네임 (2~10자리 이내)"
-                android:padding="8dp"
-                android:singleLine="true"
+                android:paddingLeft="8dp"
+                android:text="닉네임"
                 android:textSize="14sp"
+                android:textColor="@color/black_gray"
+                android:fontFamily="@font/notosanskr_regular_hestia" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/edit_text_nickname"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/check_nickname_btn"
+                    android:background="@drawable/edittext_underline_black20"
+                    android:hint="5~10자리의 한글로 입력해주세요."
+                    android:padding="8dp"
+                    android:maxLength="10"
+                    android:singleLine="true"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/notosanskr_regular_hestia"
+                    android:textColorHint="@color/black_50"
+                    android:textColor="@color/black"/>
+                <Button
+                    android:id="@+id/check_nickname_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/edit_text_nickname"
+                    android:text="중복확인"
+                    android:textSize="11sp"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:textColor="@color/blue_green"
+                    android:fontFamily="@font/notosanskr_regular_hestia"
+                    android:background="@drawable/button_15dp_event_stroke_rectangle_bluegreen" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/text_nickname_warning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"
+                android:paddingLeft="8dp"
+                android:textColor="@color/pinkish_orange"
                 android:fontFamily="@font/notosanskr_regular_hestia"
-                android:textColorHint="@color/black_50"
-                android:textColor="@color/black"/>
+                android:text="" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
     <Button

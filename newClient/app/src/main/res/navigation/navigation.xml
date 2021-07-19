@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navigation"
-    app:startDestination="@id/introFragment">
+    app:startDestination="@id/splashFragment">
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.example.userapp.ui.main.MainFragment"
@@ -10,6 +10,13 @@
         <action
             app:destination="@+id/communityPreviewFragment"
             android:id="@+id/action_mainFragment_to_communityPreviewFragment"/>
+        <action
+            app:destination="@+id/reservationFacilitySelectFragment"
+            android:id="@+id/action_mainFragment_to_reservationFacility">
+            <argument
+                android:name="myArg"
+                app:argType="com.example.userapp.data.model.ReservationFacility" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
@@ -21,14 +28,18 @@
             app:enterAnim="@anim/slide_enter"
             app:exitAnim="@anim/slide_exit"
             app:popEnterAnim="@anim/slide_pop_enter"
-            app:popExitAnim="@anim/slide_pop_exit"/>
+            app:popExitAnim="@anim/slide_pop_exit"
+            app:popUpTo="@+id/splashFragment"
+            app:popUpToInclusive="true"/>
         <action
             android:id="@+id/action_splashFragment_to_introFragment"
             app:destination="@id/introFragment"
             app:enterAnim="@anim/slide_enter"
             app:exitAnim="@anim/slide_exit"
             app:popEnterAnim="@anim/slide_pop_enter"
-            app:popExitAnim="@anim/slide_pop_exit"/>
+            app:popExitAnim="@anim/slide_pop_exit"
+            app:popUpTo="@+id/splashFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/introFragment"
@@ -42,7 +53,7 @@
             app:popEnterAnim="@anim/slide_pop_enter"
             app:popExitAnim="@anim/slide_pop_exit"/>
         <action
-            android:id="@+id/action_introFragment_to_signUpFragment"
+            android:id="@+id/action_introFragment_to_signUpGraph"
             app:destination="@id/signUpGraph"
             app:enterAnim="@anim/slide_enter"
             app:exitAnim="@anim/slide_exit"
@@ -60,7 +71,44 @@
         app:popUpToInclusive="true" />
     <navigation
         android:id="@+id/signUpGraph"
-        app:startDestination="@id/signUpFirstFragment">
+        app:startDestination="@id/signUpPermissionFragment">
+        <argument
+            android:name="emptyStateAgencyFrag"
+            app:argType="boolean"
+            android:defaultValue="false"/>
+        <fragment
+            android:id="@+id/signUpPermissionFragment"
+            android:name="com.example.userapp.ui.signup.SignUpPermissionFragment"
+            android:label="SignUpPermissionFragment" >
+            <action
+                android:id="@+id/action_signUpPermissionFragment_to_signUpAgencyFragment"
+                app:destination="@id/signUpAgencyFragment"
+                app:enterAnim="@anim/slide_enter"
+                app:exitAnim="@anim/slide_exit"
+                app:popEnterAnim="@anim/slide_pop_enter"
+                app:popExitAnim="@anim/slide_pop_exit">
+                <argument
+                    android:name="emptyStateAgencyFrag"
+                    app:argType="boolean"
+                    android:defaultValue="false"/>
+            </action>
+        </fragment>
+        <fragment
+            android:id="@+id/signUpAgencyFragment"
+            android:name="com.example.userapp.ui.signup.SignUpAgencyFragment"
+            android:label="SignUpAgencyFragment" >
+            <argument
+                android:name="emptyStateAgencyFrag"
+                app:argType="boolean"
+                android:defaultValue="false"/>
+            <action
+                android:id="@+id/action_signUpAgencyFragment_to_signUpFirstFragment"
+                app:destination="@id/signUpFirstFragment"
+                app:enterAnim="@anim/slide_enter"
+                app:exitAnim="@anim/slide_exit"
+                app:popEnterAnim="@anim/slide_pop_enter"
+                app:popExitAnim="@anim/slide_pop_exit"/>
+        </fragment>
         <fragment
             android:id="@+id/signUpFirstFragment"
             android:name="com.example.userapp.ui.signup.SignUpFirstFragment"
@@ -80,6 +128,14 @@
             <action
                 android:id="@+id/action_signUpSecondFragment_to_signUpWaitFragment"
                 app:destination="@id/signUpWaitFragment"
+                app:enterAnim="@anim/slide_enter"
+                app:exitAnim="@anim/slide_exit"
+                app:popEnterAnim="@anim/slide_pop_enter"
+                app:popExitAnim="@anim/slide_pop_exit"/>
+            <action
+                android:id="@+id/action_signUpSecondFragment_pop"
+                app:popUpTo="@id/signUpSecondFragment"
+                app:popUpToInclusive="true"
                 app:enterAnim="@anim/slide_enter"
                 app:exitAnim="@anim/slide_exit"
                 app:popEnterAnim="@anim/slide_pop_enter"
@@ -106,7 +162,10 @@
             android:id="@+id/action_signInFragment_to_mainFragment"
             app:destination="@id/mainFragment"
             app:popEnterAnim="@anim/slide_pop_enter"
-            app:popExitAnim="@anim/slide_pop_exit"/>
+            app:popExitAnim="@anim/slide_pop_exit"
+            /> <!--TODO : poping Checking 하기
+            app:popUpTo="@+id/signInFragment"
+            app:popUpToInclusive="true" -->
     </fragment>
 
     <fragment
@@ -230,6 +289,15 @@
         <action
             android:id="@+id/action_communityGetPhoto_to_communityWriteMarket"
             app:destination="@id/communityWriteMarketFragment"/>
+    </fragment>
+
+<!--    reservation-->
+    <fragment
+        android:id="@+id/reservationFacilitySelectFragment"
+        android:name="com.example.userapp.ui.main.reservation.ReservationFacilitySelect">
+        <argument
+            android:name="myArg"
+            app:argType="com.example.userapp.data.model.ReservationFacility" />
     </fragment>
 
 </navigation>

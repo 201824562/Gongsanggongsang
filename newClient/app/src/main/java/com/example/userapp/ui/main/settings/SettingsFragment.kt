@@ -11,7 +11,7 @@ import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.databinding.FragmentMainhomeSettingsBinding
-import com.example.userapp.utils.LogoutDialog
+import com.example.userapp.utils.WrapedDialogBasicTwoButton
 import java.io.IOException
 
 class SettingsFragment : BaseSessionFragment<FragmentMainhomeSettingsBinding, SettingsViewModel>(){
@@ -39,16 +39,15 @@ class SettingsFragment : BaseSessionFragment<FragmentMainhomeSettingsBinding, Se
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.logoutBtn.setOnClickListener{
-            val dialog = LogoutDialog(requireContext(), "로그아웃하시겠습니까?", "", "로그아웃").apply {
-                clickListener = object : LogoutDialog.DialogButtonClickListener{
+            val dialog = WrapedDialogBasicTwoButton(requireContext(), "로그아웃하시겠습니까?", "", "로그아웃").apply {
+                clickListener = object : WrapedDialogBasicTwoButton.DialogButtonClickListener{
                     override fun dialogCloseClickListener() { dismiss() }
                     override fun dialogDeleteClickListener() {
-                        viewmodel.deleteUserInfo("ljy3237")
+                        viewmodel.deleteUserInfo()
                         dismiss()
                     }
                 }
             }
-            showDialog(dialog, viewLifecycleOwner)
         }
     }
 

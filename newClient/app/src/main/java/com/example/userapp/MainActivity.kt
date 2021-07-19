@@ -59,6 +59,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment
         navController = navHostFragment.navController
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
         appBarConfiguration = AppBarConfiguration(setOf(R.id.mainFragment))
         setupActionBarWithNavController(navController, appBarConfiguration)
 
@@ -68,10 +69,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
             viewbinding.toolbar.setNavigationOnClickListener{ findNavController(R.id.nav_host).navigateUp() }   //이거 필요한가?
             when (destination.id){
                 R.id.introFragment, R.id.signUpWaitFragment -> hideToolbar()
-                R.id.signInFragment, R.id.signUpFirstFragment,
-                R.id.signUpSecondFragment-> showToolbarTitle("")
-                R.id.mainFragment -> hideToolbar()
-
+                R.id.signInFragment, R.id.signUpPermissionFragment, R.id.signUpAgencyFragment,
+                R.id.signUpFirstFragment, R.id.signUpSecondFragment-> showToolbarTitle("")
+                R.id.splashFragment, R.id.mainFragment -> hideToolbar()
                 else -> showToolbarTitle("각자프래그에 맞는 이름으로 추가해주기.")
             }
         }
@@ -83,7 +83,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
             R.layout.fragment_main -> {
                 finish()
                 return true }
-
         }
 
         return super.onOptionsItemSelected(item)
@@ -95,7 +94,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
         currentFocusedView?.let {
             inputMethodManager.hideSoftInputFromWindow(currentFocusedView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS) } }
 
-    private fun showToolbarTitle(title : String){
+    private fun showToolbarTitle( title : String){
         viewbinding.toolbar.visibility = View.VISIBLE
         viewbinding.toolbarText.text = title
         supportActionBar?.show()

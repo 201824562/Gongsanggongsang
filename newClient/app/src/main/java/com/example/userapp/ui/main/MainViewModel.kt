@@ -5,7 +5,7 @@ import com.example.userapp.base.BaseViewModel
 import com.example.userapp.utils.SingleLiveEvent
 import java.util.concurrent.TimeUnit
 
-//TODO : 저기 토큰 관리 마무리.
+//Agency : 저기 토큰 관리 마무리.
 class MainViewModel : BaseViewModel(){
 
     private val _onBackPressedEventLiveData = SingleLiveEvent<Any>()

@@ -11,17 +11,15 @@ import com.example.userapp.base.BaseFragment
 import com.example.userapp.databinding.FragmentSignupWaitBinding
 
 class SignUpWaitFragment : Fragment() {
-    lateinit var viewbinding : FragmentSignupWaitBinding
+    lateinit var binding : FragmentSignupWaitBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        viewbinding= FragmentSignupWaitBinding.inflate(inflater, container, false)
-        return viewbinding.root
+        binding= FragmentSignupWaitBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewbinding.signupWaitMainBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_signUpWaitFragment_pop)
-        }
+        binding.signupWaitMainBtn.setOnClickListener { findNavController().navigate(R.id.action_signUpWaitFragment_pop) }
     }
 }

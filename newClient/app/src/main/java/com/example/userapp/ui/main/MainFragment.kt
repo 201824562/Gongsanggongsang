@@ -39,7 +39,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>(){
 
             mainViewPagerAdapter = MainViewPagerAdapter(requireActivity())
             mainhomeViewpager.apply {
-                offscreenPageLimit = 4
+                offscreenPageLimit = 5
                 adapter = mainViewPagerAdapter
                 registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
                     override fun onPageSelected(position: Int) {
@@ -48,7 +48,8 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>(){
                             0 -> R.id.btn_home
                             1 -> R.id.btn_reservation
                             2 -> R.id.btn_community
-                            3 -> R.id.btn_mypage
+                            3 -> R.id.btn_alarm
+                            4 -> R.id.btn_mypage
                             else -> error("no such position: $position") } } })
                 isUserInputEnabled = false
             }
@@ -67,8 +68,12 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>(){
                         mainhomeViewpager.setCurrentItem(2, false)
                         return@setOnNavigationItemSelectedListener true
                     }
-                    R.id.btn_mypage -> {
+                    R.id.btn_alarm -> {
                         mainhomeViewpager.setCurrentItem(3, false)
+                        return@setOnNavigationItemSelectedListener true
+                    }
+                    R.id.btn_mypage -> {
+                        mainhomeViewpager.setCurrentItem(4, false)
                         return@setOnNavigationItemSelectedListener true }
                     else -> error("no such position!")
                 }

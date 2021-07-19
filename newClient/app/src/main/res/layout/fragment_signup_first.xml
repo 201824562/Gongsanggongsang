@@ -36,6 +36,7 @@
             android:text="관리자님의 인증을 위해\n메이트님의 정보를 입력해주세요."/>
     </LinearLayout>
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/fragment_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -46,53 +47,112 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="30dp">
+            <TextView
+                android:id="@+id/text_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:text="이름"
+                android:textSize="14sp"
+                android:textColor="@color/black_gray"
+                android:fontFamily="@font/notosanskr_regular_hestia" />
             <EditText
                 android:id="@+id/edit_text_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/edittext_underline_warmgray"
-                android:hint="이름"
-                android:imeOptions="actionDone"
+                android:background="@drawable/edittext_underline_black20"
+                android:hint="이름을 입력해주세요. (ex.홍길동)"
+                android:imeOptions="actionNext"
                 android:inputType="textPersonName"
                 android:maxLength="10"
                 android:maxLines="1"
                 android:padding="8dp"
                 android:singleLine="true"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:fontFamily="@font/notosanskr_regular_hestia"
                 android:textColorHint="@color/black_50"
                 android:textColor="@color/black"/>
-            <EditText
-                android:id="@+id/edit_text_birthinfo"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/text_name_warning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"
+                android:paddingLeft="8dp"
+                android:textColor="@color/pinkish_orange"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:text="" />
+            <TextView
+                android:id="@+id/text_BirthInfo"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:background="@drawable/edittext_underline_warmgray"
-                android:hint="생년월일 8자리 (ex. 20210404)"
-                android:imeOptions="actionDone"
+                android:paddingLeft="8dp"
+                android:text="생년월일(8자리)"
+                android:textSize="14sp"
+                android:textColor="@color/black_gray"
+                android:fontFamily="@font/notosanskr_regular_hestia" />
+            <EditText
+                android:id="@+id/edit_text_BirthInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_underline_black20"
+                android:hint="생년월일을 입력해주세요. (ex.20000101)"
+                android:imeOptions="actionNext"
                 android:inputType="number"
                 android:padding="8dp"
+                android:maxLength="8"
                 android:singleLine="true"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:fontFamily="@font/notosanskr_regular_hestia"
                 android:textColorHint="@color/black_50"
                 android:textColor="@color/black"/>
-            <EditText
-                android:id="@+id/edit_text_smsinfo"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/text_BirthInfo_warning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"
+                android:paddingLeft="8dp"
+                android:textColor="@color/pinkish_orange"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:text=""/>
+            <TextView
+                android:id="@+id/text_SmsInfo"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:background="@drawable/edittext_underline_warmgray"
-                android:hint="휴대폰번호 (ex. 01012345678)"
+                android:paddingLeft="8dp"
+                android:text="휴대폰번호"
+                android:textSize="14sp"
+                android:textColor="@color/black_gray"
+                android:fontFamily="@font/notosanskr_regular_hestia" />
+            <EditText
+                android:id="@+id/edit_text_SmsInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_underline_black20"
+                android:hint="'-'없이 휴대폰번호를 입력해주세요."
                 android:imeOptions="actionDone"
                 android:inputType="number"
+                android:maxLength="11"
                 android:padding="8dp"
                 android:singleLine="true"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:fontFamily="@font/notosanskr_regular_hestia"
                 android:textColorHint="@color/black_50"
                 android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/text_SmsInfo_warning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"
+                android:paddingLeft="8dp"
+                android:textColor="@color/pinkish_orange"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:text=""/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
     <Button

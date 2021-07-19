@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/image_imageview"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/button_love"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/message1_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OOOO 사용이 시작됐어요"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/image_imageview"/>
+
+    <TextView
+        android:id="@+id/message2_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="사용완료시 꼭 사용완료 버튼을 눌러주세요"
+        android:textSize="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/message1_textview"/>
+
+    <Button
+        android:id="@+id/confirm_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="확인"
+        android:textSize="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/message2_textview"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

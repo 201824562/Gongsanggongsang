@@ -1,9 +1,10 @@
 package com.example.userapp.data.model
 
 data class SignUpInfo (
+    val agency : String,
     val name: String,
     val birthday: String,
-    val smsinfo : String,
+    val SmsInfo : String,
     val id: String,
     val pwd: String,
     val nickname: String,

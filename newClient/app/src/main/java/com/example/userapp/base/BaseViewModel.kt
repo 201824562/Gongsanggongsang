@@ -4,12 +4,14 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.userapp.utils.*
+import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Action
 import java.util.concurrent.TimeUnit
 
 abstract class BaseViewModel  : ViewModel(){
@@ -46,6 +48,22 @@ abstract class BaseViewModel  : ViewModel(){
 /*            .doOnSubscribe{ if(indicator) startLoadingIndicator() }
             .doAfterTerminate { stopLoadingIndicator() }*/
             .subscribe(onSuccess, onError))
+    }
+
+    fun apiCall(completable: Completable,
+                onComplete: Action = Action{
+                    // default do nothing
+                },
+                onError: Consumer<Throwable> = Consumer {
+                    _apiCallErrorEvent.postValue(it.message)
+                    showSnackbar("오류가 발생했습니다. ${it.message}")
+                },
+                indicator: Boolean = false,
+                timeout: Long = 5){
+        addDisposable(completable.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .timeout(timeout, TimeUnit.SECONDS)
+            .subscribe(onComplete, onError))
     }
 
     fun observeSnackbarMessageString(lifecycleOwner: LifecycleOwner, ob: (String) -> Unit){
