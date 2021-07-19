@@ -91,8 +91,7 @@
             android:gravity="end"/>
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/button_love"/>
+            android:layout_height="wrap_content" />
         <TextView
             android:id="@+id/community_preview_comments_number"
             android:layout_width="wrap_content"
