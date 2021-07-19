@@ -23,6 +23,7 @@ class CommunityDataRepository() {
     private val fireStorage = FirebaseStorage.getInstance("gs://gongsanggongsang-94f86.appspot.com/")
     private var collectionPostDataInfoList : MutableLiveData<ArrayList<PostDataInfo>> = MutableLiveData()
     private var documentPostDataInfo : MutableLiveData<PostDataInfo> = MutableLiveData()
+    private var post_photo_uri : MutableLiveData<ArrayList<String>> = MutableLiveData()
     companion object {
         private var sInstance: CommunityDataRepository? = null
         fun getInstance(): CommunityDataRepository {
@@ -40,9 +41,9 @@ class CommunityDataRepository() {
 
     fun insertPostData(it: PostDataInfo){
         var collection_name = it.post_category
-        var document_name = it.post_title + it.post_date
+        var document_name = it.post_id
         firestore.collection("Busan").document("community").
-        collection("3_suggest").document(document_name)
+        collection("1_free").document(document_name)
             .set(it)
             .addOnSuccessListener {success ->
                 Log.d(ContentValues.TAG, "Post Success")
@@ -79,9 +80,12 @@ class CommunityDataRepository() {
                         document["post_title"] as String,
                         document["post_contents"] as String,
                         document["post_date"] as String,
+                        document["post_time"] as String,
                         document["post_comments"] as ArrayList<PostCommentDataClass>,
                         document["post_id"] as String,
-                        document["post_photo_uri"] as ArrayList<String>)
+                        document["post_photo_uri"] as ArrayList<String>,
+                        document["post_state"] as String,
+                        document["post_anonymous"] as Boolean)
                     postDataList.add(item)
                 }
                 collectionPostDataInfoList.value= postDataList
@@ -106,6 +110,7 @@ class CommunityDataRepository() {
                     result["post_title"].toString(),
                     result["post_contents"].toString(),
                     result["post_date"].toString(),
+                    result["post_time"].toString(),
                     if(result["post_comments"] != null){
                         result["post_comments"] as ArrayList<PostCommentDataClass>
                     }else{
@@ -116,7 +121,9 @@ class CommunityDataRepository() {
                         result["post_photo_uri"] as ArrayList<String>
                     }else{
                         arrayListOf()
-                    })
+                    },
+                    result["post_state"].toString(),
+                result["post_anonymous"] as Boolean)
                 documentPostDataInfo.value = postData
             }
     }
@@ -171,9 +178,37 @@ class CommunityDataRepository() {
             }
             i++
         }
-
     }
-
+    fun getPhoto(uri_array: ArrayList<String>) : MutableLiveData<ArrayList<String>> {
+        var post_data: ArrayList<String> = arrayListOf()
+        for (uri in uri_array) {
+            var u = "file://" + uri
+            var storageRefer: StorageReference = fireStorage.reference.child("images/").child(u)
+            storageRefer.downloadUrl.addOnSuccessListener {
+                System.out.println(it.toString())
+                post_data.add(it.toString())
+            }
+        }
+        post_photo_uri.value = post_data
+        return post_photo_uri
+    }
+    fun getPostPhotoData(collection_name: String, document_name: String) : MutableLiveData<ArrayList<String>>{
+        firestore.collection("Busan")
+            .document("community")
+            .collection(collection_name)
+            .document(document_name)
+            .get()
+            .addOnSuccessListener { result ->
+                var photo_server_uri =
+                    if(result["post_photo_uri"] != null){
+                        result["post_photo_uri"] as ArrayList<String>
+                    }else{
+                        arrayListOf()
+                    }
+                post_photo_uri.value = photo_server_uri
+            }
+        return post_photo_uri
+    }
 
 
 }

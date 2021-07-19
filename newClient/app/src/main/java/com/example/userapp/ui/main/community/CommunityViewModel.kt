@@ -12,10 +12,8 @@ import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.data.repository.CommunityDataRepository
 
 class CommunityViewModel : BaseViewModel() {
-
+    var selected_items : ArrayList<String> = arrayListOf()
     private val communityDataRepository : CommunityDataRepository = CommunityDataRepository.getInstance()
-    private var postItem : ArrayList<PostDataInfo> = arrayListOf()
-    private var selected_items : ArrayList<String> = arrayListOf()
 
     fun getCommunityMainItem() {
         return communityDataRepository.getCommunityMainItem()
@@ -59,6 +57,15 @@ class CommunityViewModel : BaseViewModel() {
         }
         return post_comments_array
     }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    fun uploadPhoto(bitmap_array : ArrayList<Bitmap>, uri_array : ArrayList<Uri>){
+        communityDataRepository.uploadPhoto(bitmap_array, uri_array)
+    }
+    fun getPostPhotoData(collection_name: String, document_name: String) : MutableLiveData<ArrayList<String>> {
+        return communityDataRepository.getPostPhotoData(collection_name, document_name)
+    }
+
     fun selectPhoto(select_photo_uri : String) {
         if(select_photo_uri in selected_items){
             selected_items.remove(select_photo_uri)
@@ -70,10 +77,6 @@ class CommunityViewModel : BaseViewModel() {
     }
     fun getPhoto() : ArrayList<String>{
         return selected_items
-    }
-    @RequiresApi(Build.VERSION_CODES.P)
-    fun uploadPhoto(bitmap_array : ArrayList<Bitmap>, uri_array : ArrayList<Uri>){
-        communityDataRepository.uploadPhoto(bitmap_array, uri_array)
     }
 
 }

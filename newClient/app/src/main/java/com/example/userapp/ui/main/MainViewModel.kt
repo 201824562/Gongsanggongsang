@@ -21,6 +21,7 @@ class MainViewModel : BaseViewModel(){
         }
     }
 
+
     /*   fun getUserStatus() {
        apiCall(userRepository.requestSignUpStatus(authToken), { status ->
            when (status.data.state) {

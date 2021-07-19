@@ -29,6 +29,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController : NavController
 
+    //TODO : 메인액티비티를 사용하지 않고 정식으로 넘겨주는 걸로 바꿀것.
+    var selected_items : ArrayList<String> = arrayListOf()
+
     override fun initToolbar() {
         window.apply {
             navigationBarColor = ContextCompat.getColor(this@MainActivity, R.color.white)
@@ -106,6 +109,18 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
         finish()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+    }
+    fun selectPhoto(select_photo_uri : String) {
+        if(select_photo_uri in selected_items){
+            selected_items.remove(select_photo_uri)
+        }
+        else{
+            selected_items.add(select_photo_uri)
+        }
+        System.out.println(select_photo_uri)
+    }
+    fun getPhoto() : ArrayList<String>{
+        return selected_items
     }
 }
 

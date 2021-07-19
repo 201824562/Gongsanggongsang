@@ -1,4 +1,4 @@
-package com.example.userapp.ui.main.community
+package com.example.userapp.ui.main.community.post
 
 import android.content.Context
 import android.view.View
@@ -7,8 +7,11 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.LinearLayout
 import com.bumptech.glide.Glide
+import com.example.userapp.MainActivityViewModel
+import com.example.userapp.ui.main.MainViewModel
+import com.example.userapp.ui.main.community.CommunityViewModel
 
-class CommunityGetPhotoGridAdapter(val context: Context, uri_arr:ArrayList<String>, viewModel: CommunityViewModel) : BaseAdapter() {
+class CommunityShowPhotoGridAdapter(val context: Context, uri_arr:ArrayList<String>, viewModel: CommunityViewModel) : BaseAdapter() {
     private var photo_url_items = ArrayList<String>()
     private var viewModel = viewModel
     init {
@@ -28,14 +31,13 @@ class CommunityGetPhotoGridAdapter(val context: Context, uri_arr:ArrayList<Strin
     }
 
     override fun getView(p: Int, convertView: View?, parent: ViewGroup?): View {
-
         val imageView = ImageView(context)
         val display = context.getResources().getDisplayMetrics()
         imageView.setOnClickListener {
             viewModel.selectPhoto(photo_url_items[p])
         }
         imageView.scaleType = ImageView.ScaleType.CENTER_CROP
-        imageView.layoutParams = LinearLayout.LayoutParams(display.widthPixels/3,display.widthPixels/3)
+        imageView.layoutParams = LinearLayout.LayoutParams(display.widthPixels/5, display.heightPixels/5)
         Glide.with(context).load(photo_url_items[p]).into(imageView)
 
         return imageView

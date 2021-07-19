@@ -37,26 +37,35 @@ class CommunityMainFragment : BaseFragment<FragmentMainhomeCommunityBinding, Com
         viewbinding.run {
             var collection_name : String
             communityMarketButton.setOnClickListener {
-                collection_name = "COMMUNITY_MARKET"
+                collection_name = "5_market"
                 collection_name_bundle = bundleOf(
                     "collection_name" to collection_name
                 )
                 findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, collection_name_bundle)
             }
             communityWithButton.setOnClickListener {
-                collection_name = "COMMUNITY_WITH"
+                collection_name = "4_with"
                 collection_name_bundle = bundleOf(
                     "collection_name" to collection_name
                 )
                 findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, collection_name_bundle)
             }
-            juyong.setOnClickListener {
+            communitySuggestButton.setOnClickListener {
                 collection_name = "3_suggest"
                 collection_name_bundle = bundleOf("collection_name" to collection_name)
                 findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, collection_name_bundle)
             }
-            communityTendinousButton.setOnClickListener {
-                viewmodel.getCommunityMainItem()
+            communityEmergencyButton.setOnClickListener {
+                collection_name = "2_emergency"
+                collection_name_bundle = bundleOf("collection_name" to collection_name)
+                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, collection_name_bundle)
+
+            }
+            communityFreeButton.setOnClickListener{
+                collection_name = "1_free"
+                collection_name_bundle = bundleOf("collection_name" to collection_name)
+                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, collection_name_bundle)
+
             }
         }
     }

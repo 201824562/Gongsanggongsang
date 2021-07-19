@@ -1,4 +1,4 @@
-package com.example.userapp.ui.main.community
+package com.example.userapp.ui.main.community.post
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

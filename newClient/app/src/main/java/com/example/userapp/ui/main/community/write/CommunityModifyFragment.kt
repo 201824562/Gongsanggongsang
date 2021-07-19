@@ -1,4 +1,4 @@
-package com.example.userapp.ui.main.community
+package com.example.userapp.ui.main.community.write
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.example.userapp.base.BaseFragment
 import com.example.userapp.databinding.FragmentCommunityModifyBinding
+import com.example.userapp.ui.main.community.CommunityViewModel
 
 class CommunityModifyFragment : BaseFragment<FragmentCommunityModifyBinding, CommunityViewModel>() {
     private lateinit var collection_name : String

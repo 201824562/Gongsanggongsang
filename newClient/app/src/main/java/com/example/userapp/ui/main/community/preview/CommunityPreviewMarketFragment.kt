@@ -1,4 +1,4 @@
-package com.example.userapp.ui.main.community
+package com.example.userapp.ui.main.community.preview
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,29 +12,28 @@ import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentCommunityPreviewBinding
+import com.example.userapp.ui.main.community.CommunityViewModel
 
 
-class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, CommunityViewModel>() {
+class CommunityPreviewMarketFragment : BaseFragment<FragmentCommunityPreviewBinding, CommunityViewModel>() {
     override lateinit var viewbinding: FragmentCommunityPreviewBinding
 
     override val viewmodel : CommunityViewModel by viewModels()
 
-    private lateinit var adapter: CommunityPreviewRecyclerAdapter
+    private lateinit var adapter: CommunityPreviewMarketRecyclerAdapter
 
+    private lateinit var collection_name: String
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-       viewbinding = FragmentCommunityPreviewBinding.inflate(inflater, container, false)
+        viewbinding = FragmentCommunityPreviewBinding.inflate(inflater, container, false)
         return viewbinding.root
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-        var collection_name= arguments?.getString("collection_name").toString()
-        var bundle = bundleOf(
-            "collection_name" to collection_name
-        )
+        collection_name= arguments?.getString("collection_name").toString()
         initRecyclerView(collection_name)
     }
 
@@ -43,14 +42,9 @@ class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, C
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
-        var collection_name= arguments?.getString("collection_name").toString()
         var bundle = bundleOf(
             "collection_name" to collection_name
         )
-        viewbinding.communityWriteButton.setOnClickListener{
-            findNavController().navigate(R.id.action_communityPreview_to_communityWrite, bundle)
-
-        }
     }
     fun initRecyclerView(collection_name : String){
         var list : ArrayList<PostDataInfo> = ArrayList()
@@ -58,15 +52,16 @@ class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, C
         viewbinding.communityPreviewRecyclerView.run {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
-            adapter = CommunityPreviewRecyclerAdapter(list)
+            adapter = CommunityPreviewMarketRecyclerAdapter(list)
         }
         viewmodel.getCollectionPostData(collection_name).observe(viewLifecycleOwner){ it
             list.clear()
             list.addAll(it)
-            adapter = CommunityPreviewRecyclerAdapter(it)
+            adapter = CommunityPreviewMarketRecyclerAdapter(it)
             viewbinding.communityPreviewRecyclerView.adapter = adapter.apply {
                 listener =
-                    object : CommunityPreviewRecyclerAdapter.OnCommunityMarketItemClickListener {
+                    object :
+                        CommunityPreviewMarketRecyclerAdapter.OnCommunityMarketItemClickListener {
                         override fun onPreviewItemClick(position: Int) {
                             var document_name = getItem(position).post_id
                             var bundle = bundleOf(

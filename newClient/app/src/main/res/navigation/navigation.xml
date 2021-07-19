@@ -111,47 +111,71 @@
 
     <fragment
         android:id="@+id/communityPreviewFragment"
-        android:name="com.example.userapp.ui.main.community.CommunityPreviewFragment">
+        android:name="com.example.userapp.ui.main.community.preview.CommunityPreviewFragment">
         <action
             app:destination="@+id/communityPostFragment"
             android:id="@+id/action_communityPreview_to_communityPost"/>
         <action
-            app:destination="@+id/communityWriteGraph"
-            android:id="@+id/action_communityPreview_to_communityWrite"/>
+            app:destination="@+id/communityWriteEmergencyFragment"
+            android:id="@+id/action_communityPreview_to_communityWriteEmergency"/>
+        <action
+            app:destination="@+id/communityWriteFreeFragment"
+            android:id="@+id/action_communityPreview_to_communityWriteFree"/>
+        <action
+            app:destination="@+id/communityWriteSuggestFragment"
+            android:id="@+id/action_communityPreview_to_communityWriteSuggest"/>
+        <action
+            app:destination="@+id/communityWriteWithFragment"
+            android:id="@+id/action_communityPreview_to_communityWriteWith"/>
+        <action
+            app:destination="@+id/communityWriteMarketFragment"
+            android:id="@+id/action_communityPreview_to_communityWriteMarket"/>
         <argument
             app:argType="string"
             android:name="collection_name"
             android:defaultValue="0"/>
     </fragment>
-    <navigation
-        android:id="@+id/communityWriteGraph"
-        app:startDestination="@id/communityWriteFragment">
-        <fragment
-            android:id="@+id/communityWriteFragment"
-            android:name="com.example.userapp.ui.main.community.CommunityWriteFragment">
-            <action
-                app:destination="@+id/communityPostFragment"
-                android:id="@+id/action_communityWrite_to_communityPost"
-                app:popUpTo="@id/communityWriteGraph"/>
-            <action
-                app:destination="@+id/communityGetPhotoFragment"
-                android:id="@+id/action_communityWrite_to_communityGetPhoto"/>
-        </fragment>
-        <fragment
-            android:id="@+id/communityGetPhotoFragment"
-            android:name="com.example.userapp.ui.main.community.CommunityGetPhotoFragment">
-            <action
-                android:id="@+id/action_communityGetPhoto_to_communityWrite"
-                app:destination="@id/communityWriteFragment"
-                app:popUpTo="@id/communityGetPhotoFragment"/>
-        </fragment>
-    </navigation>
+    <fragment
+        android:id="@id/communityWriteFreeFragment"
+        android:name="com.example.userapp.ui.main.community.write.CommunityWriteFreeFragment">
+        <action
+            android:id="@+id/action_communityWriteFree_to_communityGetPhoto"
+            app:destination="@+id/communityGetPhotoFragment"/>
+    </fragment>
+    <fragment
+        android:id="@id/communityWriteEmergencyFragment"
+        android:name="com.example.userapp.ui.main.community.write.CommunityWriteEmergencyFragment">
+        <action
+            android:id="@+id/action_communityWriteEmergency_to_communityGetPhoto"
+            app:destination="@+id/communityGetPhotoFragment"/>
+    </fragment>
+    <fragment
+        android:id="@id/communityWriteSuggestFragment"
+        android:name="com.example.userapp.ui.main.community.write.CommunityWriteSuggestFragment">
+        <action
+            android:id="@+id/action_communityWriteSuggest_to_communityGetPhoto"
+            app:destination="@+id/communityGetPhotoFragment"/>
+    </fragment>
+    <fragment
+        android:id="@id/communityWriteWithFragment"
+        android:name="com.example.userapp.ui.main.community.write.CommunityWriteWithFragment">
+        <action
+            android:id="@+id/action_communityWriteWith_to_communityGetPhoto"
+            app:destination="@+id/communityGetPhotoFragment"/>
+    </fragment>
+    <fragment
+        android:id="@id/communityWriteMarketFragment"
+        android:name="com.example.userapp.ui.main.community.write.CommunityWriteMarketFragment">
+        <action
+            android:id="@+id/action_communityWriteMarket_to_communityGetPhoto"
+            app:destination="@+id/communityGetPhotoFragment"/>
+    </fragment>
     <fragment
         android:id="@+id/communityModifyFragment"
-        android:name="com.example.userapp.ui.main.community.CommunityModifyFragment"/>
+        android:name="com.example.userapp.ui.main.community.write.CommunityModifyFragment"/>
     <fragment
         android:id="@+id/communityPostFragment"
-        android:name="com.example.userapp.ui.main.community.CommunityPostFragment">
+        android:name="com.example.userapp.ui.main.community.post.CommunityPostFragment">
         <action
             android:id="@+id/action_communityPost_to_communityPreview"
             app:destination="@+id/communityPreviewFragment"
@@ -159,7 +183,74 @@
         <action
             android:id="@+id/action_communityPost_to_communityModify"
             app:destination="@+id/communityModifyFragment"/>
+        <argument
+            app:argType="string"
+            android:name="collection_name"
+            android:defaultValue="0"/>
+        <argument
+            app:argType="string"
+            android:name="document_name"
+            android:defaultValue="0"/>
     </fragment>
 
+    <fragment
+        android:id="@+id/communityWriteSuggestFragment"
+        android:name="com.example.userapp.ui.main.community.write.CommunityWriteSuggestFragment">
+        <action
+            android:id="@+id/action_communityWriteSuggest_to_communityGetPhoto"
+            app:destination="@id/communityGetPhotoFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/communityWriteWithFragment"
+        android:name="com.example.userapp.ui.main.community.write.CommunityWriteWithFragment">
+        <action
+            android:id="@+id/action_communityWriteWith_to_communityGetPhoto"
+            app:destination="@id/communityGetPhotoFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/communityWriteFreeFragment"
+        android:name="com.example.userapp.ui.main.community.write.CommunityWriteFreeFragment">
+        <action
+            android:id="@+id/action_communityWriteFree_to_communityGetPhoto"
+            app:destination="@id/communityGetPhotoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/communityWriteEmergencyFragment"
+        android:name="com.example.userapp.ui.main.community.write.CommunityWriteEmergencyFragment">
+        <action
+            android:id="@+id/action_communityWriteEmergency_to_communityGetPhoto"
+            app:destination="@id/communityGetPhotoFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/communityWriteMarketFragment"
+        android:name="com.example.userapp.ui.main.community.write.CommunityWriteMarketFragment">
+        <action
+            android:id="@+id/action_communityWriteMarket_to_communityGetPhoto"
+            app:destination="@id/communityGetPhotoFragment"/>
+    </fragment>
+    <fragment
+        android:id="@id/communityGetPhotoFragment"
+        android:name="com.example.userapp.ui.main.community.write.CommunityGetPhotoFragment">
+        <argument
+            app:argType="string"
+            android:name="collection_name"
+            android:defaultValue="0"/>
+        <action
+            android:id="@+id/action_communityGetPhoto_to_communityWriteFree"
+            app:destination="@id/communityWriteFreeFragment"
+            app:popUpTo="@id/communityGetPhotoFragment"/>
+        <action
+            android:id="@+id/action_communityGetPhoto_to_communityWriteEmergency"
+            app:destination="@id/communityWriteEmergencyFragment"/>
+        <action
+            android:id="@+id/action_communityGetPhoto_to_communityWriteSuggest"
+            app:destination="@id/communityWriteSuggestFragment"/>
+        <action
+            android:id="@+id/action_communityGetPhoto_to_communityWriteWith"
+            app:destination="@id/communityWriteWithFragment"/>
+        <action
+            android:id="@+id/action_communityGetPhoto_to_communityWriteMarket"
+            app:destination="@id/communityWriteMarketFragment"/>
+    </fragment>
 
 </navigation>

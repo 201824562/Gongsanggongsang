@@ -1,5 +1,6 @@
-package com.example.userapp.ui.main.community
+package com.example.userapp.ui.main.community.write
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,25 +10,25 @@ import com.example.userapp.databinding.FragmentCommunityAttachImageItemBinding
 
 
 
-class CommunityAttachPhotoRecyclerAdapter(val attachPhotoItems:ArrayList<String>): RecyclerView.Adapter<CommunityAttachPhotoRecyclerAdapter.CommunityAttachPhotoViewHolder>() {
+class CommunityPostPhotoRecyclerAdapter(val attachPhotoItems:ArrayList<Uri>): RecyclerView.Adapter<CommunityPostPhotoRecyclerAdapter.CommunityPostPhotoViewHolder>() {
 
     override fun getItemCount(): Int {
         return attachPhotoItems.size;
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommunityAttachPhotoViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommunityPostPhotoViewHolder {
         val viewbinding = FragmentCommunityAttachImageItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return  CommunityAttachPhotoViewHolder(viewbinding, parent)
+        return  CommunityPostPhotoViewHolder(viewbinding, parent)
     }
 
-    override fun onBindViewHolder(holder: CommunityAttachPhotoViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CommunityPostPhotoViewHolder, position: Int) {
         holder.bind(attachPhotoItems[position])
     }
 
 
-    class CommunityAttachPhotoViewHolder(viewbinding: FragmentCommunityAttachImageItemBinding, itemview: ViewGroup) : RecyclerView.ViewHolder(viewbinding.root) {
+    class CommunityPostPhotoViewHolder(viewbinding: FragmentCommunityAttachImageItemBinding, itemview: ViewGroup) : RecyclerView.ViewHolder(viewbinding.root) {
         val binding = viewbinding
-        fun bind(it : String) {
+        fun bind(it : Uri) {
             Glide.with(itemView).load(it).
             apply(RequestOptions.overrideOf(300, 300))
                 .apply(RequestOptions.centerCropTransform())

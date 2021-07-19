@@ -1,4 +1,4 @@
-package com.example.userapp.ui.main.community
+package com.example.userapp.ui.main.community.write
 
 import android.content.Context
 import android.view.View
@@ -7,9 +7,17 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.LinearLayout
 import com.bumptech.glide.Glide
+import com.example.userapp.MainActivity
+import com.example.userapp.MainActivityViewModel
+import com.example.userapp.ui.main.MainViewModel
+import com.example.userapp.ui.main.community.CommunityViewModel
 
-class CommunityShowPhotoGridAdapter(val context: Context, uri_arr:ArrayList<String>, viewModel: CommunityViewModel) : BaseAdapter() {
+class CommunityGetPhotoGridAdapter(val context: Context, uri_arr:ArrayList<String>, viewModel: CommunityViewModel) : BaseAdapter() {
     private var photo_url_items = ArrayList<String>()
+    interface OnCommunityLocalPhotoItemClickListener{
+        fun onLocalPhotoItemClick(position: Int)
+    }
+    var listener: OnCommunityLocalPhotoItemClickListener? = null
     private var viewModel = viewModel
     init {
         this.photo_url_items = uri_arr
@@ -19,7 +27,7 @@ class CommunityShowPhotoGridAdapter(val context: Context, uri_arr:ArrayList<Stri
         return photo_url_items.size
     }
 
-    override fun getItem(position: Int): Any {
+    override fun getItem(position: Int): String {
         return photo_url_items[position]
     }
 
@@ -28,15 +36,18 @@ class CommunityShowPhotoGridAdapter(val context: Context, uri_arr:ArrayList<Stri
     }
 
     override fun getView(p: Int, convertView: View?, parent: ViewGroup?): View {
+
         val imageView = ImageView(context)
         val display = context.getResources().getDisplayMetrics()
         imageView.setOnClickListener {
-            viewModel.selectPhoto(photo_url_items[p])
+            listener?.onLocalPhotoItemClick(p)
+            return@setOnClickListener
         }
         imageView.scaleType = ImageView.ScaleType.CENTER_CROP
-        imageView.layoutParams = LinearLayout.LayoutParams(display.widthPixels/5, display.heightPixels/5)
+        imageView.layoutParams = LinearLayout.LayoutParams(display.widthPixels/3,display.widthPixels/3)
         Glide.with(context).load(photo_url_items[p]).into(imageView)
 
         return imageView
     }
+
 }

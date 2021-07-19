@@ -1,11 +1,11 @@
-package com.example.userapp.ui.main.community
+package com.example.userapp.ui.main.community.preview
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentCommunityPreviewItemBinding
-
+import com.example.userapp.ui.main.community.CommunityViewModel
 
 
 class CommunityPreviewRecyclerAdapter(var postDataList : ArrayList<PostDataInfo>): RecyclerView.Adapter<CommunityPreviewRecyclerAdapter.CommunityPreviewViewHolder>() {
