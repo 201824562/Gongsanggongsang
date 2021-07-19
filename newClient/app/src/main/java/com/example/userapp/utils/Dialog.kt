@@ -9,9 +9,11 @@ import android.view.Gravity
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.example.userapp.databinding.DialogBasicTwobuttonBinding
+import com.example.userapp.databinding.DialogConfirmUsingBinding
+import com.example.userapp.databinding.DialogFinishUsingBinding
 import com.example.userapp.databinding.DialogInputUsingTimeBinding
-import com.example.userapp.databinding.FragmentMainhomeReservationEquipmentDialogBinding
 import kotlin.system.exitProcess
 
 
@@ -52,10 +54,7 @@ class InputUsingTimeDialog(context: Context) : Dialog(context) { //도큐먼트 
 
     interface DialogButtonClickListener {
         fun dialogCloseClickListener()
-        fun usingClickListener()
-        fun plus5ClickListener()
-        fun plus10ClickListener()
-        fun plus15ClickListener()
+        fun usingClickListener(usingTime: Int)
     }
 
     init {
@@ -72,25 +71,24 @@ class InputUsingTimeDialog(context: Context) : Dialog(context) { //도큐먼트 
 
         // 다이얼로그 처리
         binding.backBtn.setOnClickListener { clickListener?.dialogCloseClickListener() }
-        binding.useBtn.setOnClickListener { clickListener?.usingClickListener() }
+        binding.useBtn.setOnClickListener {
+            clickListener?.usingClickListener(usingTime)
+        }
         // + 버튼 처
         binding.plus5miniteBtn.setOnClickListener {
             usingTime += 5
             usingTime = excessMax(usingTime)
             binding.usingTimeEdittext.text = usingTime.toString()
-            clickListener?.plus5ClickListener()
         }
         binding.plus10miniteBtn.setOnClickListener {
             usingTime += 10
             usingTime = excessMax(usingTime)
             binding.usingTimeEdittext.text = usingTime.toString()
-            clickListener?.plus10ClickListener()
         }
         binding.plus15miniteBtn.setOnClickListener {
             usingTime += 15
             usingTime = excessMax(usingTime)
             binding.usingTimeEdittext.text = usingTime.toString()
-            clickListener?.plus15ClickListener()
         }
         //키패드처리
         binding.oneBtn.setOnClickListener {
@@ -168,25 +166,62 @@ class InputUsingTimeDialog(context: Context) : Dialog(context) { //도큐먼트 
         }
     }
 }
-/*
 
-class confirmUsingDialog(context: Context, usingTime: Int) : Dialog(context) { // 도큐먼트 이름도 받아와야 함
+class ConfirmUsingDialog(context: Context, usingTime: Int) : Dialog(context) { // 도큐먼트 이름도 받아와야 함
 
     var clickListener: DialogButtonClickListener? = null
 
     interface DialogButtonClickListener {
-        fun dialogCloseClickListener()
-        fun dialogDeleteClickListener()
+        fun dialogAgainClickListener()
+        fun dialogUsingClickListener()
     }
 
     init {
-        //val binding: DialogBasicTwobuttonBinding = DialogBasicTwobuttonBinding.inflate(layoutInflater)
+        val binding = DialogConfirmUsingBinding.inflate(layoutInflater)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
+        setCancelable(false)    // 다이얼로그외에 다른 화면을 눌렀을 때 나가는 것을 방지
         setContentView(binding.root)
         window?.run {
+            setGravity(Gravity.BOTTOM)
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            attributes.width = ViewGroup.LayoutParams.WRAP_CONTENT
+            attributes.width = ViewGroup.LayoutParams.MATCH_PARENT
             attributes.height = ViewGroup.LayoutParams.WRAP_CONTENT
         } ?: exitProcess(0)
+        binding.againInputTimeBtn.setOnClickListener { clickListener?.dialogAgainClickListener() }
+        binding.startUsingBtn.setOnClickListener {
+            clickListener?.dialogUsingClickListener()
+
+            val finishUsingDialog = FinishUsingDialog(context).apply {
+                clickListener = object : FinishUsingDialog.DialogButtonClickListener {
+                    override fun dialogConfirmClickListener() {
+                        dismiss()
+                    }
+                }
+            }
+            finishUsingDialog.show()
+        }
     }
-}*/
+}
+
+class FinishUsingDialog(context: Context) : Dialog(context) {
+
+    var clickListener: DialogButtonClickListener? = null
+
+    interface DialogButtonClickListener {
+        fun dialogConfirmClickListener()
+    }
+
+    init {
+        val binding = DialogFinishUsingBinding.inflate(layoutInflater)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        setCancelable(false)    // 다이얼로그외에 다른 화면을 눌렀을 때 나가는 것을 방지
+        setContentView(binding.root)
+        window?.run {
+            setGravity(Gravity.BOTTOM)
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            attributes.width = ViewGroup.LayoutParams.MATCH_PARENT
+            attributes.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        } ?: exitProcess(0)
+        binding.confirmBtn.setOnClickListener { clickListener?.dialogConfirmClickListener() }
+    }
+}

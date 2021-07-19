@@ -17,5 +17,4 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/fragment_mainhome_reservation_equipment_item" />
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>

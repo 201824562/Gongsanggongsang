@@ -10,6 +10,13 @@
         <action
             app:destination="@+id/communityPreviewFragment"
             android:id="@+id/action_mainFragment_to_communityPreviewFragment"/>
+        <action
+            app:destination="@+id/reservationFacilitySelectFragment"
+            android:id="@+id/action_mainFragment_to_reservationFacility">
+            <argument
+                android:name="myArg"
+                app:argType="com.example.userapp.data.model.ReservationFacility" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
@@ -149,6 +156,15 @@
         <action
             android:id="@+id/action_communityPost_to_communityModify"
             app:destination="@+id/communityModifyFragment"/>
+    </fragment>
+
+<!--    reservation-->
+    <fragment
+        android:id="@+id/reservationFacilitySelectFragment"
+        android:name="com.example.userapp.ui.main.reservation.ReservationFacilitySelect">
+        <argument
+            android:name="myArg"
+            app:argType="com.example.userapp.data.model.ReservationFacility" />
     </fragment>
 
 </navigation>
