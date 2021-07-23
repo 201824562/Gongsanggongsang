@@ -3,6 +3,7 @@ package com.example.userapp.ui.main.community.preview
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentCommunityPreviewItemBinding
 import com.example.userapp.ui.main.community.CommunityViewModel
@@ -37,6 +38,9 @@ class CommunityPreviewRecyclerAdapter(var postDataList : ArrayList<PostDataInfo>
         val binding = viewbinding
 
         fun bind(postDataInfo: PostDataInfo) {
+            if(postDataInfo.post_photo_uri?.size != 0){
+                Glide.with(binding.communityPreviewThumbnail).load(postDataInfo.post_photo_uri?.get(0))
+            }
             binding.communityPreviewName.text = postDataInfo.post_name
             binding.communityPreviewTitle.text = postDataInfo.post_title
             binding.communityPreviewContents.text = postDataInfo.post_contents

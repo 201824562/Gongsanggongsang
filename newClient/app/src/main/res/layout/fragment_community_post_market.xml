@@ -74,16 +74,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <TextView
-                    android:id="@+id/market_post_category"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="category"
-                    android:textStyle="normal"
-                    android:textSize="14sp"
-                    android:textColor="#7f000000"
-                    android:letterSpacing="-0.03"
-                    android:lineSpacingExtra="6sp"/>
-                <TextView
                     android:id="@+id/market_post_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -155,7 +145,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/post_contents"
+                android:id="@+id/market_post_contents"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="contents"

@@ -16,15 +16,12 @@ import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.MainActivity
-import com.example.userapp.MainActivityViewModel
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentCommunityWriteFreeBinding
-import com.example.userapp.ui.main.MainViewModel
 import com.example.userapp.ui.main.community.CommunityViewModel
 import java.time.LocalDate
 import java.time.LocalTime

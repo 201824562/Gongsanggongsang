@@ -127,7 +127,7 @@ class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, C
                                 "collection_name" to collection_name,
                                 "document_name" to document_name
                             )
-                            findNavController().navigate(R.id.action_communityPreview_to_communityPost, bundle)
+                            findNavController().navigate(R.id.action_communityPreview_to_communityPostMarket, bundle)
                         }
                     }
             }

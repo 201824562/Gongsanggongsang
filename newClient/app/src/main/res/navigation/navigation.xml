@@ -167,7 +167,9 @@
             app:popUpTo="@+id/signInFragment"
             app:popUpToInclusive="true" -->
     </fragment>
-
+    <fragment
+        android:id="@+id/communityPostMarketFragment"
+        android:name="com.example.userapp.ui.main.community.post.CommunityPostMarketFragment"/>
     <fragment
         android:id="@+id/communityPreviewFragment"
         android:name="com.example.userapp.ui.main.community.preview.CommunityPreviewFragment">
@@ -189,6 +191,9 @@
         <action
             app:destination="@+id/communityWriteMarketFragment"
             android:id="@+id/action_communityPreview_to_communityWriteMarket"/>
+        <action
+            app:destination="@+id/communityPostMarketFragment"
+            android:id="@+id/action_communityPreview_to_communityPostMarket"/>
         <argument
             app:argType="string"
             android:name="collection_name"

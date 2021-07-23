@@ -1,14 +1,11 @@
 package com.example.userapp.data.repository
 
-import android.app.Activity
 import android.content.ContentValues
 import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.core.net.toUri
 import androidx.lifecycle.MutableLiveData
 import com.example.userapp.data.entity.PostCommentDataClass
 import com.example.userapp.data.model.PostDataInfo
@@ -16,14 +13,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.io.ByteArrayOutputStream
-import java.net.URL
 
 class CommunityDataRepository() {
     private val firestore = FirebaseFirestore.getInstance()
     private val fireStorage = FirebaseStorage.getInstance("gs://gongsanggongsang-94f86.appspot.com/")
     private var collectionPostDataInfoList : MutableLiveData<ArrayList<PostDataInfo>> = MutableLiveData()
     private var documentPostDataInfo : MutableLiveData<PostDataInfo> = MutableLiveData()
-    private var post_photo_uri : MutableLiveData<ArrayList<String>> = MutableLiveData()
+    var postDataPhotoUrl : MutableLiveData<ArrayList<String>> = MutableLiveData()
     companion object {
         private var sInstance: CommunityDataRepository? = null
         fun getInstance(): CommunityDataRepository {
@@ -179,35 +175,57 @@ class CommunityDataRepository() {
             i++
         }
     }
-    fun getPhoto(uri_array: ArrayList<String>) : MutableLiveData<ArrayList<String>> {
-        var post_data: ArrayList<String> = arrayListOf()
-        for (uri in uri_array) {
-            var u = "file://" + uri
-            var storageRefer: StorageReference = fireStorage.reference.child("images/").child(u)
-            storageRefer.downloadUrl.addOnSuccessListener {
-                System.out.println(it.toString())
-                post_data.add(it.toString())
-            }
-        }
-        post_photo_uri.value = post_data
-        return post_photo_uri
+
+    //TODO: 로컬 데이터 말고 원격 데이터로
+    fun getPostPhotoData(collection_name: String, document_name: String): MutableLiveData<ArrayList<String>> {
+        upDatePhotoData(collection_name, document_name)
+        Log.e("checking!!!plz", "${post_data_array}")
+        getPhoto(post_data_array)
+        Log.e("checking!!!plz", "${postDataPhotoUrl.value}")
+        return postDataPhotoUrl
     }
-    fun getPostPhotoData(collection_name: String, document_name: String) : MutableLiveData<ArrayList<String>>{
+
+    var post_data_array: ArrayList<String> = arrayListOf()
+    private fun upDatePhotoData(collection_name: String, document_name: String) {
+        //var post_data: ArrayList<String> = arrayListOf()
         firestore.collection("Busan")
             .document("community")
             .collection(collection_name)
             .document(document_name)
             .get()
             .addOnSuccessListener { result ->
-                var photo_server_uri =
+                post_data_array =
                     if(result["post_photo_uri"] != null){
-                        result["post_photo_uri"] as ArrayList<String>
-                    }else{
-                        arrayListOf()
+                        result["post_photo_uri"] as ArrayList<String> }
+                    else{ arrayListOf() }
+                Log.e("checking!!!plz", "${post_data_array}")
+                /*getPhoto(photo_server_uri)*/
+                /*for (uri in photo_server_uri) {
+                    var u = "file://" + uri
+                    var storageRefer: StorageReference = fireStorage.reference.child("images/").child(u)
+                    storageRefer.downloadUrl.addOnSuccessListener {
+                        System.out.println(it.toString())
+                        post_data.add(it.toString())
+                        Log.e("checkinggg", "$post_data")
                     }
-                post_photo_uri.value = photo_server_uri
+                    post_photo_uri.value = post_data
+                }*/
             }
-        return post_photo_uri
+    }
+
+    fun getPhoto(uri_array: ArrayList<String>) : MutableLiveData<ArrayList<String>>{
+        var postData: ArrayList<String> = arrayListOf()
+        for (uri in uri_array) {
+            var u = "file://" + uri
+            var storageRefer: StorageReference = fireStorage.reference.child("images/").child(u)
+            storageRefer.downloadUrl.addOnSuccessListener {
+                //System.out.println(it.toString())
+                postData.add(it.toString())
+                Log.e("checkinggg", "$postData")
+            }
+            postDataPhotoUrl.value = postData
+        }
+        return postDataPhotoUrl
     }
 
 

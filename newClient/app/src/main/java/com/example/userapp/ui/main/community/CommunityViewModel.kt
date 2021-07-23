@@ -62,9 +62,12 @@ class CommunityViewModel : BaseViewModel() {
     fun uploadPhoto(bitmap_array : ArrayList<Bitmap>, uri_array : ArrayList<Uri>){
         communityDataRepository.uploadPhoto(bitmap_array, uri_array)
     }
-    fun getPostPhotoData(collection_name: String, document_name: String) : MutableLiveData<ArrayList<String>> {
-        return communityDataRepository.getPostPhotoData(collection_name, document_name)
+
+    fun getPostPhotoData(photoUri : ArrayList<String>) : MutableLiveData<ArrayList<String>> {
+        return communityDataRepository.getPhoto(photoUri)
     }
+
+
 
     fun selectPhoto(select_photo_uri : String) {
         if(select_photo_uri in selected_items){
