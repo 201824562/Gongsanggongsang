@@ -67,7 +67,9 @@ class CommunityViewModel : BaseViewModel() {
         return communityDataRepository.getPhoto(photoUri)
     }
 
-
+    fun getNoticeCategoryPostData(collectionName : String) : MutableLiveData<ArrayList<PostDataInfo>> {
+        return communityDataRepository.getNoticeCategoryPostData(collectionName)
+    }
 
     fun selectPhoto(select_photo_uri : String) {
         if(select_photo_uri in selected_items){

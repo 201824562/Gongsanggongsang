@@ -12,6 +12,7 @@ import com.example.userapp.data.model.PostDataInfo
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import io.reactivex.Single
 import java.io.ByteArrayOutputStream
 
 class CommunityDataRepository() {
@@ -19,6 +20,11 @@ class CommunityDataRepository() {
     private val fireStorage = FirebaseStorage.getInstance("gs://gongsanggongsang-94f86.appspot.com/")
     private var collectionPostDataInfoList : MutableLiveData<ArrayList<PostDataInfo>> = MutableLiveData()
     private var documentPostDataInfo : MutableLiveData<PostDataInfo> = MutableLiveData()
+
+    private var homeNoticePostDataInfoList : MutableLiveData<ArrayList<PostDataInfo>> = MutableLiveData()
+    private var homeEventPostDataInfoList : MutableLiveData<ArrayList<PostDataInfo>> = MutableLiveData()
+    private var homeEtcPostPostDataInfoList : MutableLiveData<ArrayList<PostDataInfo>> = MutableLiveData()
+
     var postDataPhotoUrl : MutableLiveData<ArrayList<String>> = MutableLiveData()
     companion object {
         private var sInstance: CommunityDataRepository? = null
@@ -226,6 +232,36 @@ class CommunityDataRepository() {
             postDataPhotoUrl.value = postData
         }
         return postDataPhotoUrl
+    }
+
+    fun updateNoticeCategoryPostData(noticeCategory : String) {
+        var noticeDataList: ArrayList<PostDataInfo> = arrayListOf()
+        firestore.collection("Busan").document("community").collection("notice")
+            .whereEqualTo("post_category", noticeCategory)
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val item = PostDataInfo(
+                        document["post_category"] as String,
+                        document["post_name"] as String,
+                        document["post_title"] as String,
+                        document["post_contents"] as String,
+                        document["post_date"] as String,
+                        document["post_time"] as String,
+                        document["post_comments"] as ArrayList<PostCommentDataClass>,
+                        document["post_id"] as String,
+                        document["post_photo_uri"] as ArrayList<String>,
+                        document["post_state"] as String,
+                        document["post_anonymous"] as Boolean
+                    )
+                    noticeDataList.add(item)
+                }
+                collectionPostDataInfoList.value = noticeDataList
+            }
+    }
+    fun getNoticeCategoryPostData(noticeCategory: String) : MutableLiveData<ArrayList<PostDataInfo>>{
+        updateNoticeCategoryPostData(noticeCategory)
+        return collectionPostDataInfoList
     }
 
 

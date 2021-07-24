@@ -5,18 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import com.example.userapp.MainActivity
-import com.example.userapp.MainActivityViewModel
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
 import com.example.userapp.databinding.FragmentCommunityGetPhotoBinding
-import com.example.userapp.ui.main.MainViewModel
 import com.example.userapp.ui.main.community.CommunityViewModel
-import com.example.userapp.ui.main.community.preview.CommunityPreviewMarketRecyclerAdapter
 
 class CommunityGetPhotoFragment : BaseFragment<FragmentCommunityGetPhotoBinding, CommunityViewModel>() {
     override lateinit var viewbinding: FragmentCommunityGetPhotoBinding
@@ -43,7 +38,7 @@ class CommunityGetPhotoFragment : BaseFragment<FragmentCommunityGetPhotoBinding,
                         CommunityGetPhotoGridAdapter.OnCommunityLocalPhotoItemClickListener {
                         override fun onLocalPhotoItemClick(position: Int) {
                             let {
-                                ac.selected_items.add(getItem(position))
+                                ac.selectedItems.add(getItem(position))
                             }
                             System.out.println(getItem(position))
                         }

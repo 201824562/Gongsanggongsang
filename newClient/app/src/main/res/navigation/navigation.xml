@@ -7,6 +7,7 @@
         android:id="@+id/mainFragment"
         android:name="com.example.userapp.ui.main.MainFragment"
         android:label="MainFragment" >
+
         <action
             app:destination="@+id/communityPreviewFragment"
             android:id="@+id/action_mainFragment_to_communityPreviewFragment"/>
@@ -17,7 +18,13 @@
                 android:name="myArg"
                 app:argType="com.example.userapp.data.model.ReservationFacility" />
         </action>
+        <action
+            android:id="@+id/action_mainFragment_to_mainhomeNoticeFragment"
+            app:destination="@id/mainhomeNoticeFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/mainhomeNoticeFragment"
+        android:name="com.example.userapp.ui.main.home.HomeNoticeFragment"/>
     <fragment
         android:id="@+id/splashFragment"
         android:name="com.example.userapp.ui.splash.SplashFragment"

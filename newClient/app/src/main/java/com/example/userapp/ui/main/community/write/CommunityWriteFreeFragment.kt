@@ -51,7 +51,7 @@ class CommunityWriteFreeFragment : BaseFragment<FragmentCommunityWriteFreeBindin
     override fun initViewStart(savedInstanceState: Bundle?) {
         val ac = activity as MainActivity
         getLocalPhotoUri = ac.getPhoto()
-        ac.selected_items = arrayListOf()
+        ac.selectedItems = arrayListOf()
         viewbinding.freeWritePhotoRecycler.visibility = View.VISIBLE
         viewbinding.freeWritePhotoRecycler.run {
             setHasFixedSize(true)

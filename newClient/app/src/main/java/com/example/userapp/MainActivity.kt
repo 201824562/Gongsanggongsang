@@ -30,7 +30,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     private lateinit var navController : NavController
 
     //TODO : 메인액티비티를 사용하지 않고 정식으로 넘겨주는 걸로 바꿀것.
-    var selected_items : ArrayList<String> = arrayListOf()
+    var selectedItems : ArrayList<String> = arrayListOf()
 
     override fun initToolbar() {
         window.apply {
@@ -110,16 +110,16 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
         startActivity(intent)
     }
     fun selectPhoto(select_photo_uri : String) {
-        if(select_photo_uri in selected_items){
-            selected_items.remove(select_photo_uri)
+        if(select_photo_uri in selectedItems){
+            selectedItems.remove(select_photo_uri)
         }
         else{
-            selected_items.add(select_photo_uri)
+            selectedItems.add(select_photo_uri)
         }
         System.out.println(select_photo_uri)
     }
     fun getPhoto() : ArrayList<String>{
-        return selected_items
+        return selectedItems
     }
 }
 

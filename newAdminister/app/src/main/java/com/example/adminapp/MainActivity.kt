@@ -24,7 +24,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     companion object{
         val TOOLBAR_TITLE = "title"
     }
-
+    var selectedItems : ArrayList<String> = arrayListOf()
     override lateinit var  viewbinding: ActivityMainBinding
     override val viewmodel: MainActivityViewModel by viewModels()
     override val layoutResourceId: Int
@@ -103,6 +103,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
         finish()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+    }
+    fun getPhoto() : ArrayList<String>{
+        return selectedItems
     }
 
 }
