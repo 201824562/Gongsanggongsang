@@ -122,7 +122,7 @@ class EquipmentUsingAdapter(
     //데이터셋 변화 >> 뷰로 적용시켜주는 함수
     fun setData(newData: List<ReservationUseEquipment>) {
         dataSet = newData
-        notifyDataSetChanged()
+        //notifyDataSetChanged()
     }
 
     override fun getItemCount() = dataSet.size

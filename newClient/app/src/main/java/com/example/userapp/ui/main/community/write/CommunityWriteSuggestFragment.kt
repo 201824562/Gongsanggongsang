@@ -18,7 +18,6 @@ import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.MainActivity
 import com.example.userapp.MainActivityViewModel
@@ -26,7 +25,6 @@ import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentCommunityWriteSuggestBinding
-import com.example.userapp.ui.main.MainViewModel
 import com.example.userapp.ui.main.community.CommunityViewModel
 import java.time.LocalDate
 import java.time.LocalTime
@@ -103,11 +101,18 @@ class CommunityWriteSuggestFragment : BaseFragment<FragmentCommunityWriteSuggest
                 getPhotoPermission()
             }
             suggestWriteRegisterButton.setOnClickListener {
+                val ac = activity as MainActivity
+                val userAgency : String = ac.getUserData()!!.agency
+                val userName : String = ac.getUserData()!!.nickname
                 val postDateNow: String = LocalDate.now().toString()
                 val postTimeNow : String = LocalTime.now().toString()
+                var postAnonymous : Boolean = false
+                if(suggestWriteAnonymous.isChecked){
+                    postAnonymous = true
+                }
                 suggestPostData = PostDataInfo(
                     collection_name,
-                    "juyong",
+                    userName,
                     post_title = suggestWriteTitle.text.toString(),
                     post_contents = suggestWriteContent.text.toString(),
                     post_date = postDateNow,
@@ -116,10 +121,14 @@ class CommunityWriteSuggestFragment : BaseFragment<FragmentCommunityWriteSuggest
                     post_id = postDateNow + postTimeNow + "juyong",
                     post_photo_uri = getLocalPhotoUri,
                     post_state = suggestWriteCategory,
-                    post_anonymous = suggestWriteAnonymous.isChecked
+                    post_anonymous = postAnonymous
                 )
-                viewmodel.insertPostData(suggestPostData)
-                findNavController().navigate(R.id.action_communityWriteSuggest_to_communityPreview)
+                bundle = bundleOf(
+                    "collection_name" to collection_name,
+                    "document_name" to suggestPostData.post_id
+                )
+                viewmodel.insertPostData(userAgency, suggestPostData)
+                findNavController().navigate(R.id.action_communityWriteSuggest_to_communityPost, bundle)
             }
         }
     }

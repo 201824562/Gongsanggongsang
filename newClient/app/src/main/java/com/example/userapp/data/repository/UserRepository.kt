@@ -3,8 +3,10 @@ package com.example.userapp.data.repository
 import android.app.Application
 import android.content.Context
 import androidx.core.content.edit
+import androidx.lifecycle.LiveData
 import com.example.userapp.data.AppDatabase
 import com.example.userapp.data.dto.UserModel
+import com.example.userapp.data.entity.User
 import io.reactivex.Completable
 
 class UserRepository(appDatabase: AppDatabase) {
@@ -77,6 +79,10 @@ class UserRepository(appDatabase: AppDatabase) {
         val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_TOKEN, Context.MODE_PRIVATE)
         storedToken = null
         sharedPreferences.edit { remove(SHARED_PREFERENCES_TOKEN ) }
+    }
+
+    fun getUserInfo() : LiveData<User> {
+        return userdataDao.getUserData()
     }
 
     fun saveUserInfo(userData : UserModel) : Completable{

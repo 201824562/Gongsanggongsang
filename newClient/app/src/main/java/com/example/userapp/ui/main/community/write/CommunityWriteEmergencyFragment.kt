@@ -18,23 +18,21 @@ import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.MainActivity
-import com.example.userapp.MainActivityViewModel
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentCommunityWriteEmergencyBinding
-import com.example.userapp.ui.main.MainViewModel
 import com.example.userapp.ui.main.community.CommunityViewModel
 import java.time.LocalDate
 import java.time.LocalTime
 
 
 class CommunityWriteEmergencyFragment : BaseFragment<FragmentCommunityWriteEmergencyBinding, CommunityViewModel>() {
-    private var collection_name = "2_emergency"
-    private lateinit var document_name : String
+    private var collectionName = "2_emergency"
+    private lateinit var documentName : String
+    private lateinit var modify : String
     private lateinit var bundle: Bundle
     override lateinit var viewbinding: FragmentCommunityWriteEmergencyBinding
     override val viewmodel: CommunityViewModel by viewModels()
@@ -42,9 +40,14 @@ class CommunityWriteEmergencyFragment : BaseFragment<FragmentCommunityWriteEmerg
     private lateinit var emergencyWriteCategory : String
     private lateinit var emergencyPostData : PostDataInfo
     private var getLocalPhotoUri : ArrayList<String> = arrayListOf()
+    private var getRemotePhotoUri : ArrayList<String> = arrayListOf()
+    private var getRemoteDatabasePhotoUri : ArrayList<String> = arrayListOf()
     private val bitmapArray : ArrayList<Bitmap> = arrayListOf()
     private val uriArray : ArrayList<Uri> = arrayListOf()
+    private lateinit var userAgency : String
+    lateinit var userName : String
 
+    var postPhotoUri : ArrayList<String> = arrayListOf()
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,9 +59,24 @@ class CommunityWriteEmergencyFragment : BaseFragment<FragmentCommunityWriteEmerg
 
     @RequiresApi(Build.VERSION_CODES.P)
     override fun initViewStart(savedInstanceState: Bundle?) {
+        val ac : MainActivity = activity as MainActivity
+        userAgency = ac.getUserData()!!.agency
+        userName = ac.getUserData()!!.nickname
+        modify = arguments?.getString("modify").toString()
+        documentName = arguments?.getString("postId").toString()
         bundle = bundleOf(
-            "collection_name" to collection_name
+            "collection_name" to collectionName
         )
+        if(modify == "modify"){
+            viewmodel.getDocumentPostData(userAgency, collectionName, documentName).observe(viewLifecycleOwner){
+                viewbinding.emergencyWriteTitle.setText(it.post_title)
+                viewbinding.emergencyWriteContent.setText(it.post_contents)
+
+            }
+            viewmodel.getPostPhotoData(postPhotoUri).observe(viewLifecycleOwner){
+
+            }
+        }
         viewbinding.emergencyWriteCategorySelect.adapter = ArrayAdapter(requireContext(), R.layout.fragment_community_write_category_item, categorySpinnerArray)
         viewbinding.emergencyWriteCategorySelect.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -84,7 +102,6 @@ class CommunityWriteEmergencyFragment : BaseFragment<FragmentCommunityWriteEmerg
             }
         }
         //TODO: mainActivity clear 처리
-        val ac = activity as MainActivity
         getLocalPhotoUri = ac.getPhoto()
 
         viewbinding.emergencyWritePhotoRecycler.visibility = View.VISIBLE
@@ -109,21 +126,29 @@ class CommunityWriteEmergencyFragment : BaseFragment<FragmentCommunityWriteEmerg
             emergencyWriteRegisterButton.setOnClickListener {
                 val postDateNow: String = LocalDate.now().toString()
                 val postTimeNow : String = LocalTime.now().toString()
+                var postAnonymous : Boolean = false
+                if(emergencyWriteAnonymous.isChecked){
+                    postAnonymous = true
+                }
                 emergencyPostData = PostDataInfo(
-                    collection_name,
-                    "juyong",
+                    collectionName,
+                    post_name = userName,
                     post_title = emergencyWriteTitle.text.toString(),
                     post_contents = emergencyWriteContent.text.toString(),
                     post_date = postDateNow,
                     post_time = postTimeNow,
                     post_comments = arrayListOf(),
-                    post_id = postDateNow + postTimeNow + "juyong",
+                    post_id = postDateNow + postTimeNow + userName,
                     post_photo_uri = getLocalPhotoUri,
                     post_state = emergencyWriteCategory,
-                    post_anonymous = emergencyWriteAnonymous.isChecked
+                    post_anonymous = postAnonymous
                 )
-                viewmodel.insertPostData(emergencyPostData)
-                findNavController().navigate(R.id.action_communityWriteEmergency_to_communityPreview)
+                bundle = bundleOf(
+                    "collection_name" to collectionName,
+                    "document_name" to emergencyPostData.post_id
+                )
+                viewmodel.insertPostData(userAgency, emergencyPostData)
+                findNavController().navigate(R.id.action_communityWriteEmergency_to_communityPost, bundle)
             }
         }
     }
@@ -142,7 +167,6 @@ class CommunityWriteEmergencyFragment : BaseFragment<FragmentCommunityWriteEmerg
     }
 
     private fun getAllPhoto(){
-        System.out.println("get");
         val cursor = activity?.contentResolver?.query(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
             null,
@@ -160,7 +184,7 @@ class CommunityWriteEmergencyFragment : BaseFragment<FragmentCommunityWriteEmerg
             cursor.close()
         }
         val bundle = bundleOf(
-            "collection_name" to collection_name,
+            "collection_name" to collectionName,
             "photoUriArray" to uriArr
         )
         findNavController().navigate(R.id.action_communityWriteEmergency_to_communityGetPhoto, bundle)
@@ -180,6 +204,13 @@ class CommunityWriteEmergencyFragment : BaseFragment<FragmentCommunityWriteEmerg
                 )
             )
             bitmapArray.add(bitmap)
+        }
+    }
+    private fun initPhotoRecycler(photoUri : ArrayList<String>){
+        viewbinding.emergencyWritePhotoRecycler.run {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context).also { it.orientation = LinearLayoutManager.HORIZONTAL }
+            adapter = CommunityAttachPhotoRecyclerAdapter(photoUri)
         }
     }
 

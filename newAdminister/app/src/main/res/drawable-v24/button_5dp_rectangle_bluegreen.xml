@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/blue_green"/>
+    <corners android:radius="5dp"/>
+</shape>
+
+    <!--    <item android:state_focused="false">
+               <solid android:color="@color/cloudy_green"/>
+               <corners android:radius="5dp"/>
+           </item>
+           버튼 클릭시 변화 추가해주기.
+           -->

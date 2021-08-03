@@ -1,11 +1,12 @@
-package com.example.userapp.ui.main.community.preview
+package com.example.adminapp.ui.main.community.preview
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.userapp.data.model.PostDataInfo
-import com.example.userapp.databinding.FragmentCommunityPreviewMarketItemBinding
-import com.example.userapp.ui.main.community.CommunityViewModel
+import com.bumptech.glide.Glide
+import com.example.adminapp.data.model.PostDataInfo
+import com.example.adminapp.databinding.FragmentCommunityPreviewMarketItemBinding
+import com.example.adminapp.ui.main.community.CommunityViewModel
 
 
 class CommunityPreviewMarketRecyclerAdapter(var postDataList : ArrayList<PostDataInfo>): RecyclerView.Adapter<CommunityPreviewMarketRecyclerAdapter.CommunityPreviewMarketViewHolder>() {
@@ -37,12 +38,14 @@ class CommunityPreviewMarketRecyclerAdapter(var postDataList : ArrayList<PostDat
         val binding = viewbinding
 
         fun bind(postDataInfo: PostDataInfo) {
-            //binding.communityMarketPreviewThumbnail
+            if(postDataInfo.post_photo_uri?.size != 0){
+                Glide.with(binding.communityMarketPreviewThumbnail).load(postDataInfo.post_photo_uri?.get(0))
+            }
             binding.communityMarketPreviewTitle.text = postDataInfo.post_title
-            //binding.communityMarketPreviewPrice.text
+            binding.communityMarketPreviewPrice.text = postDataInfo.post_state
             binding.communityMarketPreviewContent.text = postDataInfo.post_contents
             binding.communityMarketPreviewTime.text = postDataInfo.post_date
-            //binding.communityMarketPreviewCommentNumber
+            binding.communityMarketPreviewCommentNumber.text = postDataInfo.post_comments.size.toString()
 
         }
         init {

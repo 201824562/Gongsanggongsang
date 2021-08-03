@@ -4,7 +4,10 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 
 data class PostCommentDataClass (
-    var name : String,
-    var contents : String,
-    var date : String
+    var commentName : String,
+    var commentContents : String,
+    var commentDate : String,
+    var commentTime : String,
+    var commentAnonymous : Boolean,
+    var commentId : String,
 )

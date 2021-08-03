@@ -16,7 +16,6 @@ import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.MainActivity
 import com.example.userapp.MainActivityViewModel
@@ -24,7 +23,6 @@ import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentCommunityWriteWithBinding
-import com.example.userapp.ui.main.MainViewModel
 import com.example.userapp.ui.main.community.CommunityViewModel
 import java.time.LocalDate
 import java.time.LocalTime
@@ -32,11 +30,9 @@ import java.time.LocalTime
 
 class CommunityWriteWithFragment : BaseFragment<FragmentCommunityWriteWithBinding, CommunityViewModel>() {
     private val collection_name = "4_with"
-    private lateinit var document_name : String
     private lateinit var bundle: Bundle
     override lateinit var viewbinding: FragmentCommunityWriteWithBinding
     override val viewmodel: CommunityViewModel by viewModels()
-    private val mainViewModel : MainActivityViewModel by viewModels()
     private lateinit var withPostData : PostDataInfo
     private var getLocalPhotoUri : ArrayList<String> = arrayListOf()
     private val bitmapArray : ArrayList<Bitmap> = arrayListOf()
@@ -74,23 +70,34 @@ class CommunityWriteWithFragment : BaseFragment<FragmentCommunityWriteWithBindin
                 getPhotoPermission()
             }
             withWriteRegisterButton.setOnClickListener {
+                val ac = activity as MainActivity
+                val userAgency : String = ac.getUserData()!!.agency
+                val userName : String = ac.getUserData()!!.nickname
                 val postDateNow: String = LocalDate.now().toString()
                 val postTimeNow : String = LocalTime.now().toString()
+                var postAnonymous : Boolean = false
+                if(withWriteAnonymous.isChecked){
+                    postAnonymous = true
+                }
                 withPostData = PostDataInfo(
                     collection_name,
-                    "juyong",
+                    userName,
                     post_title = withWriteTitle.text.toString(),
                     post_contents = withWriteContent.text.toString(),
                     post_date = postDateNow,
                     post_time = postTimeNow,
                     post_comments = arrayListOf(),
-                    post_id = postDateNow + postTimeNow + "juyong",
+                    post_id = postDateNow + postTimeNow + userName,
                     post_photo_uri = getLocalPhotoUri,
-                    post_state = "모집",
-                    post_anonymous = withWriteAnonymous.isChecked
+                    post_state = "모집 중",
+                    post_anonymous = postAnonymous
                 )
-                viewmodel.insertPostData(withPostData)
-                findNavController().navigate(R.id.action_communityWriteWith_to_communityPreview)
+                bundle = bundleOf(
+                    "collection_name" to collection_name,
+                    "document_name" to withPostData.post_id
+                )
+                viewmodel.insertPostData(userAgency, withPostData)
+                findNavController().navigate(R.id.action_communityWriteWith_to_communityPost, bundle)
             }
         }
     }
