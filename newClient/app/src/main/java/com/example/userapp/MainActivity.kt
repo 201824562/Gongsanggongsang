@@ -70,7 +70,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
             when (destination.id){
                 R.id.introFragment, R.id.signUpWaitFragment -> hideToolbar()
                 R.id.signInFragment, R.id.signUpPermissionFragment, R.id.signUpAgencyFragment,
-                R.id.signUpFirstFragment, R.id.signUpSecondFragment-> showToolbarTitle("")
+                R.id.signUpFirstFragment, R.id.signUpSecondFragment, R.id.reservationFacilitySelectFragment-> showToolbarTitle("")
                 R.id.splashFragment, R.id.mainFragment -> hideToolbar()
                 else -> showToolbarTitle("각자프래그에 맞는 이름으로 추가해주기.")
             }

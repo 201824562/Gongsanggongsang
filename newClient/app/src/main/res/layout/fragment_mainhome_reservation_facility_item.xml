@@ -42,6 +42,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/reservation_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_18dp_storke_rectangle_bluegreen"
+        android:fontFamily="@font/notosanskr_regular_hestia"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:text="예약하기"
+        android:textColor="@color/blue_green"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
