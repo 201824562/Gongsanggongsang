@@ -166,3 +166,42 @@ class FacilityReserveAdapter(
 
     override fun getItemCount() = dataSet.size
 }
+
+class FacilityReserveAdapter(
+    private var  dataSet: List<ReservationReserveFacility>,
+    val onClickNoUsingIcon: (ReservationReserveFacility: ReservationReserveFacility) -> Unit,
+) :
+    RecyclerView.Adapter<FacilityReserveAdapter.FacilityReserveViewHolder>() {
+
+    class FacilityReserveViewHolder(val viewbinding: FragmentMainhomeReservationCurrentReserveItemBinding) :
+        RecyclerView.ViewHolder(viewbinding.root)
+
+    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): FacilityReserveViewHolder {
+        val view = LayoutInflater.from(viewGroup.context)
+            .inflate(R.layout.fragment_mainhome_reservation_current_reserve_item, viewGroup, false)
+        return FacilityReserveViewHolder(FragmentMainhomeReservationCurrentReserveItemBinding.bind(view))
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun onBindViewHolder(viewHolder: FacilityReserveViewHolder, position: Int) {
+        val data = dataSet[position]
+
+        viewHolder.viewbinding.documentNameTextview.text = data.document_name
+        viewHolder.viewbinding.reserveTimeTextview.text = "00월 00일" +
+                data.timeSlotList.first().chunked(2)[0] + ":" + data.timeSlotList.first().chunked(2)[1] +
+                "~" + data.timeSlotList.last().chunked(2)[0] + ":" + data.timeSlotList.last().chunked(2)[1]
+
+       viewHolder.viewbinding.cancelReserveBtn.setOnClickListener() {
+            onClickNoUsingIcon.invoke(data)
+        }
+
+    }
+
+    //데이터셋 변화 >> 뷰로 적용시켜주는 함수
+    fun setData(newData: List<ReservationReserveFacility>) {
+        dataSet = newData
+        notifyDataSetChanged()
+    }
+
+    override fun getItemCount() = dataSet.size
+}
