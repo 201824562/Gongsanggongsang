@@ -60,6 +60,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment
         navController = navHostFragment.navController
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
         appBarConfiguration = AppBarConfiguration(setOf(R.id.mainFragment))
         setupActionBarWithNavController(navController, appBarConfiguration)
 
@@ -69,6 +70,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
             viewbinding.toolbar.setNavigationOnClickListener{ findNavController(R.id.nav_host).navigateUp() }   //이거 필요한가?
             when (destination.id){
                 R.id.splashFragment, R.id.introFragment, R.id.mainFragment -> hideToolbar()
+                R.id.reservationDetailEquipmentFragment,
+                R.id.reservationEditFragment, R.id.reservationEditDetailFragment,
+                R.id.reservationSelectAddFragment,R.id.reservationAddFragment -> hideToolbar()
                 else -> showToolbarTitle("각자프래그에 맞는 이름으로 추가해주기.")
             }
         }

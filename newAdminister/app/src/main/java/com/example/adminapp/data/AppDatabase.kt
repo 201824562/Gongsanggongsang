@@ -6,13 +6,16 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.adminapp.data.dao.AdminDao
-import com.example.adminapp.data.entity.Admin
+import com.example.adminapp.data.dao.CategoryDao
+import com.example.adminapp.data.entity.AdminEntity
+import com.example.adminapp.data.entity.CategoryEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [Admin::class], version=1, exportSchema = false)
+@Database(entities = [AdminEntity::class, CategoryEntity::class], version=1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase(){
     abstract fun adminDao() : AdminDao
+    abstract fun categoryDao() : CategoryDao
 
     companion object{
         @Volatile
@@ -39,11 +42,13 @@ abstract class AppDatabase : RoomDatabase(){
             super.onCreate(db)
             INSTANCE?.let{ appdb ->
                 scope.launch {
-                    AdminDatabase(appdb.adminDao())
+                    adminDatabase(appdb.adminDao())
+                    categoryResource(appdb.categoryDao())
                 }
             }
         }
-        suspend fun AdminDatabase(userDao: AdminDao){}
+        suspend fun adminDatabase(userDao: AdminDao){}
+        suspend fun categoryResource(categoryDao : CategoryDao) {}
     }
 
 }

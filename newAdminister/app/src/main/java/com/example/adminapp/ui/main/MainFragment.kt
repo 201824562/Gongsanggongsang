@@ -11,6 +11,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.adminapp.R
 import com.example.adminapp.base.BaseFragment
 import com.example.adminapp.databinding.FragmentMainBinding
+import com.example.adminapp.utils.setupKeyboardHide
 
 class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>(){
 

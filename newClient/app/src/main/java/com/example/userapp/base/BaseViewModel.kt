@@ -29,8 +29,6 @@ abstract class BaseViewModel  : ViewModel(){
 
 
     private val snackbarMessageString = SnackbarMessageString()
-/*    private val toastMessage = ToastMessage()
-    private val toastMessageString = ToastMessageString()*/
 
     private val _apiCallErrorEvent:SingleLiveEvent<String> = SingleLiveEvent()
     val apiCallErrorEvent: LiveData<String> get() = _apiCallErrorEvent
@@ -69,16 +67,6 @@ abstract class BaseViewModel  : ViewModel(){
     fun observeSnackbarMessageString(lifecycleOwner: LifecycleOwner, ob: (String) -> Unit){
         snackbarMessageString.observe(lifecycleOwner, ob)
     }
-/*
-
-    fun observeToastMessage(lifecycleOwner: LifecycleOwner, ob: (Int) -> Unit){
-        toastMessage.observe(lifecycleOwner, ob)
-    }
-
-    fun observeToastMessageStr(lifecycleOwner: LifecycleOwner, ob: (String) -> Unit){
-        toastMessageString.observe(lifecycleOwner, ob)
-    }
-*/
 
     fun showSnackbar(str: String){
         snackbarMessageString.postValue(str)

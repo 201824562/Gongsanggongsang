@@ -7,6 +7,36 @@
         android:id="@+id/mainFragment"
         android:name="com.example.adminapp.ui.main.MainFragment"
         android:label="MainFragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_reservationEditFragment"
+            app:destination="@id/reservationEditFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+        <action
+            android:id="@+id/action_mainFragment_to_reservationSelectAddFragment"
+            app:destination="@id/reservationSelectAddFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+        <action
+            android:id="@+id/action_mainFragment_to_reservationDetailEquipmentFragment"
+            app:destination="@id/reservationDetailEquipmentFragment"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit">
+            <argument
+                android:name="equipmentData"
+                app:argType="com.example.adminapp.data.model.ReservationEquipmentData"
+                app:nullable="true"
+                android:defaultValue="@null"/>
+            <argument
+                android:name="equipmentSettingData"
+                app:argType="com.example.adminapp.data.model.ReservationEquipmentSettingData"
+                app:nullable="true"
+                android:defaultValue="@null" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
@@ -52,4 +82,117 @@
         app:popExitAnim="@anim/nav_default_pop_exit_anim"
         app:popUpTo="@id/mainFragment"
         app:popUpToInclusive="true" />
+    <fragment
+        android:id="@+id/reservationEditFragment"
+        android:name="com.example.adminapp.ui.main.reservation.edit.ReservationEditFragment"
+        android:label="ReservationEditFragment" >
+        <action
+            android:id="@+id/action_reservationEditFragment_pop"
+            app:popUpTo="@id/reservationEditFragment"
+            app:popUpToInclusive="true"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+        <action
+            android:id="@+id/action_reservationEditFragment_to_reservationEditDetailFragment"
+            app:destination="@id/reservationEditDetailFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit" >
+            <argument
+                android:name="reservationItem"
+                app:argType="com.example.adminapp.data.model.ReservationItem"
+                app:nullable="true"
+                android:defaultValue="@null"/>
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/reservationEditDetailFragment"
+        android:name="com.example.adminapp.ui.main.reservation.edit.ReservationEditDetailFragment"
+        android:label="ReservationEditDetailFragment" >
+        <argument
+            android:name="reservationItem"
+            app:argType="com.example.adminapp.data.model.ReservationItem"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+        <action
+            android:id="@+id/action_reservationEditDetailFragment_pop"
+            app:popUpTo="@id/reservationEditDetailFragment"
+            app:popUpToInclusive="true"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+    </fragment>
+    <fragment
+        android:id="@+id/reservationSelectAddFragment"
+        android:name="com.example.adminapp.ui.main.reservation.add.ReservationSelectAddFragment"
+        android:label="ReservationSelectAddFragment" >
+        <argument
+            android:name="reservationType"
+            app:argType="com.example.adminapp.data.model.ReservationType"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_reservationSelectAddFragment_to_reservationAddFragment"
+            app:destination="@id/reservationAddFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+        <action
+            android:id="@+id/action_reservationSelectAddFragment_pop"
+            app:popUpTo="@id/reservationSelectAddFragment"
+            app:popUpToInclusive="true"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+    </fragment>
+    <fragment
+        android:id="@+id/reservationAddFragment"
+        android:name="com.example.adminapp.ui.main.reservation.add.ReservationAddFragment"
+        android:label="ReservationAddFragment" >
+        <argument
+            android:name="reservationType"
+            app:argType="com.example.adminapp.data.model.ReservationType"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_reservationAddFragment_pop"
+            app:popUpTo="@id/reservationAddFragment"
+            app:popUpToInclusive="true"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+    </fragment>
+    <fragment
+        android:id="@+id/reservationDetailEquipmentFragment"
+        android:name="com.example.adminapp.ui.main.reservation.ReservationDetailEquipmentFragment"
+        android:label="ReservationDetailEquipmentFragment" >
+        <argument
+            android:name="equipmentData"
+            app:argType="com.example.adminapp.data.model.ReservationEquipmentData"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+        <argument
+            android:name="equipmentSettingData"
+            app:argType="com.example.adminapp.data.model.ReservationEquipmentSettingData"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_reservationDetailEquipmentFragment_pop"
+            app:popUpTo="@id/reservationDetailEquipmentFragment"
+            app:popUpToInclusive="true"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+        <action
+            android:id="@+id/action_reservationDetailEquipmentFragment_to_reservationEditDetailFragment"
+            app:destination="@id/reservationEditDetailFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit" >
+            <argument
+                android:name="reservationItem"
+                app:argType="com.example.adminapp.data.model.ReservationItem"
+                app:nullable="true"
+                android:defaultValue="@null"/>
+        </action>
+    </fragment>
 </navigation>

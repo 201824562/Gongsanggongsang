@@ -31,8 +31,6 @@ abstract class BaseSessionViewModel(application: Application)  : AndroidViewMode
     }
 
     private val snackbarMessageString = SnackbarMessageString()
-/*    private val toastMessage = ToastMessage()
-    private val toastMessageString = ToastMessageString()*/
 
     fun showSnackbar(str: String){
         snackbarMessageString.postValue(str)
@@ -41,17 +39,21 @@ abstract class BaseSessionViewModel(application: Application)  : AndroidViewMode
     fun observeSnackbarMessageString(lifecycleOwner: LifecycleOwner, ob: (String) -> Unit){
         snackbarMessageString.observe(lifecycleOwner, ob)
     }
-/*
 
-    fun observeToastMessage(lifecycleOwner: LifecycleOwner, ob: (Int) -> Unit){
-        toastMessage.observe(lifecycleOwner, ob)
+
+
+    val userRepository: UserRepository = UserRepository.getInstance(AppDatabase.getDatabase(application, viewModelScope))
+
+    private var _agencyInfo: String? = null
+    val agencyInfo: String get() = _agencyInfo!!
+    private var _authToken: String? = null
+    val authToken: String get() = _authToken!!
+    val isTokenAvailable: Boolean get() = _authToken != null
+
+    init {
+        _agencyInfo = userRepository.getAgencyInfo(application)
+        _authToken = userRepository.getUserToken(application)
     }
-
-    fun observeToastMessageStr(lifecycleOwner: LifecycleOwner, ob: (String) -> Unit){
-        toastMessageString.observe(lifecycleOwner, ob)
-    }
-*/
-
 
     private val _apiCallErrorEvent:SingleLiveEvent<String> = SingleLiveEvent()
     val apiCallErrorEvent: LiveData<String> get() = _apiCallErrorEvent
@@ -83,25 +85,11 @@ abstract class BaseSessionViewModel(application: Application)  : AndroidViewMode
             .subscribe(onComplete, onError))
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------
 
-    val userRepository: UserRepository = UserRepository.getInstance(AppDatabase.getDatabase(application, viewModelScope))
-
-    private var _agencyInfo: String? = null
-    val agencyInfo: String get() = _agencyInfo!!
-    private var _authToken: String? = null
-    val authToken: String get() = _authToken!!
-    val isTokenAvailable: Boolean get() = _authToken != null
-
-    init {
-        _agencyInfo = userRepository.getAgencyInfo(application)
-        _authToken = userRepository.getUserToken(application)
-    }
 
     private val _sessionInvalidEvent: SingleLiveEvent<Any> = SingleLiveEvent()
     val sessionInvalidEvent: LiveData<Any> get() = _sessionInvalidEvent
 
-    //이거 필요한지?
     fun callSessionInvalidEvent() {
         _sessionInvalidEvent.call()
     }
