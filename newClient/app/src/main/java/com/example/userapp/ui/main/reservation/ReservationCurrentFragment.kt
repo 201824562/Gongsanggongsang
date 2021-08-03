@@ -1,5 +1,6 @@
 package com.example.userapp.ui.main.reservation
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,8 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
+import com.example.userapp.data.model.ReservationReserveFacility
 import com.example.userapp.data.model.ReservationUseEquipment
 import com.example.userapp.databinding.FragmentMainhomeReservationCurrentBinding
+import com.example.userapp.databinding.FragmentMainhomeReservationCurrentReserveItemBinding
 import com.example.userapp.databinding.FragmentMainhomeReservationCurrentUsingItemBinding
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.*
@@ -35,25 +38,34 @@ class ReservationCurrentFragment :
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-        viewmodel.viewmodelscope.launch(Dispatchers.Main) {
-            viewbinding.equipmentUsingRecyclerView.layoutManager = LinearLayoutManager(context)
-            viewbinding.equipmentUsingRecyclerView.adapter = EquipmentUsingAdapter(
-                emptyList(),
-                onClickNoUsingIcon = {
-                    viewmodel.end_use(it)
-                }
-            )
-        }
+        viewbinding.equipmentUsingRecyclerView.layoutManager = LinearLayoutManager(context)
+        viewbinding.equipmentUsingRecyclerView.adapter = EquipmentUsingAdapter(
+            emptyList(),
+            onClickNoUsingIcon = {
+                viewmodel.end_use(it)
+            }
+        )
+        viewbinding.facilityReserveRecyclerView.layoutManager = LinearLayoutManager(context)
+        viewbinding.facilityReserveRecyclerView.adapter = FacilityReserveAdapter(
+            emptyList(),
+            onClickNoUsingIcon = {
+                viewmodel.cancel_reserve(it)
+            }
+        )
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
         viewmodel.UseEquipmentLiveData.observe(viewLifecycleOwner, {
             (viewbinding.equipmentUsingRecyclerView.adapter as EquipmentUsingAdapter).setData(it)
         })
+        viewmodel.FacilityReserveLiveData.observe(viewLifecycleOwner, {
+            (viewbinding.facilityReserveRecyclerView.adapter as FacilityReserveAdapter).setData(it)
+        })
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewmodel.getUseEquipmentData()
+        //viewmodel.getReserveFacilityData()
     }
 }
 
@@ -109,6 +121,45 @@ class EquipmentUsingAdapter(
 
     //데이터셋 변화 >> 뷰로 적용시켜주는 함수
     fun setData(newData: List<ReservationUseEquipment>) {
+        dataSet = newData
+        notifyDataSetChanged()
+    }
+
+    override fun getItemCount() = dataSet.size
+}
+
+class FacilityReserveAdapter(
+    private var  dataSet: List<ReservationReserveFacility>,
+    val onClickNoUsingIcon: (ReservationReserveFacility: ReservationReserveFacility) -> Unit,
+) :
+    RecyclerView.Adapter<FacilityReserveAdapter.FacilityReserveViewHolder>() {
+
+    class FacilityReserveViewHolder(val viewbinding: FragmentMainhomeReservationCurrentReserveItemBinding) :
+        RecyclerView.ViewHolder(viewbinding.root)
+
+    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): FacilityReserveViewHolder {
+        val view = LayoutInflater.from(viewGroup.context)
+            .inflate(R.layout.fragment_mainhome_reservation_current_reserve_item, viewGroup, false)
+        return FacilityReserveViewHolder(FragmentMainhomeReservationCurrentReserveItemBinding.bind(view))
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun onBindViewHolder(viewHolder: FacilityReserveViewHolder, position: Int) {
+        val data = dataSet[position]
+
+        viewHolder.viewbinding.documentNameTextview.text = data.document_name
+        viewHolder.viewbinding.reserveTimeTextview.text = "00월 00일" +
+                data.timeSlotList.first().chunked(2)[0] + ":" + data.timeSlotList.first().chunked(2)[1] +
+                "~" + data.timeSlotList.last().chunked(2)[0] + ":" + data.timeSlotList.last().chunked(2)[1]
+
+       viewHolder.viewbinding.cancelReserveBtn.setOnClickListener() {
+            onClickNoUsingIcon.invoke(data)
+        }
+
+    }
+
+    //데이터셋 변화 >> 뷰로 적용시켜주는 함수
+    fun setData(newData: List<ReservationReserveFacility>) {
         dataSet = newData
         notifyDataSetChanged()
     }

@@ -76,7 +76,7 @@ class FacilityAdapter(
         viewHolder.viewbinding.documentNameTextview.text = data.document_name
 
         //사용하기 버튼
-        viewHolder.viewbinding.documentNameTextview.setOnClickListener() {
+        viewHolder.viewbinding.reservationBtn.setOnClickListener() {
             onClickUsingIcon.invoke(data)
         }
     }
