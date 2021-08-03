@@ -57,24 +57,6 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseActivityViewModel>: AppCo
 
     //네트워크 콜처리 & 서비스 관련 추가해주기.
 
-/*    override fun snackbarObserving(){
-        viewmodel.observeSnackbarMessageString(this){
-            val snackbar = Snackbar.make(viewbinding.root.rootView.findViewById(android.R.id.content), it, Snackbar.LENGTH_LONG)
-            (snackbar.view.findViewById(R.id.snackbar_text) as TextView).maxLines = 5
-            snackbar.show()
-
-        }
-    }*/
-
-/*    private fun toastObserving(){
-        viewmodel.observeToastMessage(this){
-            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
-        }
-
-        viewmodel.observeToastMessageStr(this){
-            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
-        }
-    }*/
 
 }
 

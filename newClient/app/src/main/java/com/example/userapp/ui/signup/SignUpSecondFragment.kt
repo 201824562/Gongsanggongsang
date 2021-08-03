@@ -18,7 +18,6 @@ import androidx.navigation.navGraphViewModels
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
 import com.example.userapp.databinding.FragmentSignupSecondBinding
-import com.example.userapp.utils.CustomTypefaceSpan
 import com.example.userapp.utils.hideKeyboard
 
 

@@ -8,5 +8,4 @@ data class SignUpInfo (
     val id: String,
     val pwd: String,
     val nickname: String,
-    var allowed: Boolean
-    )
+    var allowed: Boolean)

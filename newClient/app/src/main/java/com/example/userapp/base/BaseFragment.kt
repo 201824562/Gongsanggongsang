@@ -88,34 +88,6 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment() ,
     override fun showToast(message: String) { Toast.makeText(activity, message, Toast.LENGTH_SHORT).show() }
     override fun showToast(stringRes: Int) { Toast.makeText(activity, stringRes, Toast.LENGTH_SHORT).show() }
 
-    /*override fun setupKeyboardHide(view: View, activity: Activity?) {
-        if (view !is EditText || view !is Button) {
-            view.setOnTouchListener { _, _ ->
-                activity?.let {
-                    val imm = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(it.currentFocus?.windowToken, 0)
-                }
-                return@setOnTouchListener false
-            }
-        }
-        if (view is ViewGroup) {
-            for (i in 0 until view.childCount) {
-                setupKeyboardHide(view.getChildAt(i), activity)
-            }
-        }
-    }*/
-
-/*    override fun setToolbarTitle(title: String?) {
-        (activity as AppCompatActivity).apply {
-            setSupportActionBar(findViewById(R.id.toolbar))
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            when (!TextUtils.isEmpty(title)) {
-                true -> supportActionBar?.title = title
-                false -> supportActionBar?.setDisplayShowTitleEnabled(false)
-            }
-        }
-    }*/
-
 
     // lifecycle aware dialog
     fun showDialog(dialog: Dialog, lifecycleOwner: LifecycleOwner?, cancelable: Boolean = true, dismissHandler: (() -> Unit)? = null) {
@@ -146,7 +118,7 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment() ,
             shouldShowRequestPermissionRationale(permission) -> {
                 showPermissionRationale(rationaleMessage)
             }   //처음인 경우
-            else -> requestPermissionLauncher.launch(permission)    //이전에 선택결과가 있는 경우('거절' or 승인)
+            else -> requestPermissionLauncher.launch(permission)
         }
     }
 

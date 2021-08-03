@@ -7,18 +7,18 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.InsetDrawable
 import android.view.ViewGroup
 import android.view.Window
+import com.example.adminapp.databinding.DialogBasicOnebuttonBinding
 import com.example.adminapp.databinding.DialogBasicTwobuttonBinding
-import com.example.adminapp.databinding.DialogSiginOnebuttonBinding
 
 import kotlin.system.exitProcess
 
 
-class WrapedDialogBasicTwoButton (context: Context, title: String, content: String, btnText: String) : Dialog(context){
+class WrapedDialogBasicTwoButton (context: Context, content: String, closeBtnText: String, customBtnText: String) : Dialog(context){
 
     var clickListener : DialogButtonClickListener ? = null
     interface DialogButtonClickListener {
         fun dialogCloseClickListener()
-        fun dialogDeleteClickListener()
+        fun dialogCustomClickListener()
     }
 
     init {
@@ -32,11 +32,13 @@ class WrapedDialogBasicTwoButton (context: Context, title: String, content: Stri
             attributes.height = ViewGroup.LayoutParams.WRAP_CONTENT
         } ?: exitProcess(0)
 
-        binding.dialogTitle.text = title
-        binding.dialogContent.text = content
-        binding.dialogDeleteBtn.text = btnText
-        binding.dialogCloseBtn.setOnClickListener { clickListener?.dialogCloseClickListener()}
-        binding.dialogDeleteBtn.setOnClickListener { clickListener?.dialogDeleteClickListener() }
+        binding.run {
+            dialogContent.text = content
+            dialogCloseBtn.text = closeBtnText
+            dialogCustomBtn.text = customBtnText
+            dialogCloseBtn.setOnClickListener { clickListener?.dialogCloseClickListener()}
+            dialogCustomBtn.setOnClickListener { clickListener?.dialogCustomClickListener() }
+        }
     }
 }
 /*
@@ -67,11 +69,9 @@ class MatchedFullDialogBasicOneButton (context: Context, title: String, content:
 
 class MatchedDialogSignInOneButton (context: Context, content: String) : Dialog(context){
     var clickListener : DialogButtonClickListener ? = null
-    interface DialogButtonClickListener {
-        fun dialogClickListener()
-    }
+    interface DialogButtonClickListener { fun dialogClickListener() }
     init {
-        val binding : DialogSiginOnebuttonBinding = DialogSiginOnebuttonBinding.inflate(layoutInflater)
+        val binding : DialogBasicOnebuttonBinding = DialogBasicOnebuttonBinding.inflate(layoutInflater)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
         window?.run {

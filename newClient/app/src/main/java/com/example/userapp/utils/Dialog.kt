@@ -5,8 +5,8 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.view.Gravity
 import android.graphics.drawable.InsetDrawable
+import android.view.Gravity
 import android.view.ViewGroup
 import android.view.Window
 import com.example.userapp.databinding.DialogBasicOneButtonBinding
@@ -28,7 +28,6 @@ class WrapedDialogBasicTwoButton (context: Context, title: String, content: Stri
         fun dialogCloseClickListener()
         fun dialogDeleteClickListener()
     }
-
     init {
         //setCanceledOnTouchOutside(false)
         val binding : DialogBasicTwobuttonBinding = DialogBasicTwobuttonBinding.inflate(layoutInflater)

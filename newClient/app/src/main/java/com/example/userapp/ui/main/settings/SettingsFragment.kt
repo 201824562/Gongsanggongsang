@@ -48,6 +48,7 @@ class SettingsFragment : BaseSessionFragment<FragmentMainhomeSettingsBinding, Se
                     }
                 }
             }
+            showDialog(dialog, viewLifecycleOwner)
         }
     }
 

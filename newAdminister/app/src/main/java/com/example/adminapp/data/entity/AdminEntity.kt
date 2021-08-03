@@ -6,7 +6,7 @@ import com.google.firebase.firestore.auth.User
 import io.reactivex.Completable
 
 @Entity(tableName = "admin")
-data class Admin(
+data class AdminEntity(
     @PrimaryKey @ColumnInfo(name = "id")
     var id: String = "",
     @ColumnInfo(name = "name")

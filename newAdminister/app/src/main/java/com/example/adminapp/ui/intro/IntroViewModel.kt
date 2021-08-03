@@ -4,7 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.adminapp.base.BaseSessionViewModel
-import com.example.adminapp.data.dto.AdminModel
+import com.example.adminapp.data.model.Admin
 import com.example.adminapp.data.model.AdminStatus
 import com.example.adminapp.data.repository.SignRepository
 import com.example.adminapp.utils.SingleLiveEvent
@@ -20,7 +20,7 @@ class IntroViewModel (application: Application) : BaseSessionViewModel(applicati
     val onSuccessSaveUserInfo : LiveData<Any> get() = _onSuccessSaveUserInfo
     private val _userStatusEvent = SingleLiveEvent<AdminStatus>()
     val adminStatusEvent : LiveData<AdminStatus> get() = _userStatusEvent
-    private var adminData : AdminModel?= null
+    private var adminData : Admin?= null
 
 
    fun checkForSignInInfo(adminId : String, adminPwd : String) : Boolean {

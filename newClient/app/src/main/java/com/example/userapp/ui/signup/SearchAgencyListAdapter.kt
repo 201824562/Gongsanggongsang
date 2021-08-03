@@ -54,12 +54,10 @@ class SearchAgencyListAdapter (val  listener : OnItemClickListener): ListAdapter
                     else {
                         if (lastChecked != null){
                             lastCheckedPos?.let { pos -> getItem(pos).clicked = false}
-                            lastChecked!!.isChecked = false
-                            lastChecked = null
-                            lastCheckedPos = null }
+                            lastChecked!!.isChecked = false}
+                            lastChecked = holder.binding.itemCheckBox
+                            lastCheckedPos = position
                         agencyItem.clicked = true
-                        lastChecked = holder.binding.itemCheckBox
-                        lastCheckedPos = position
                         holder.binding.itemCheckBox.isChecked = true
                     }
                     listener.onItemClick(holder.itemView, position)

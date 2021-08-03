@@ -2,7 +2,7 @@ package com.example.adminapp.data.repository
 
 import android.content.ContentValues
 import android.util.Log
-import com.example.adminapp.data.dto.AdminModel
+import com.example.adminapp.data.model.Admin
 import com.example.adminapp.data.model.ReceiverSignIn
 import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.Single
@@ -50,7 +50,7 @@ class SignRepository() {
                     if (it.data != null && it.data!!["id"] == adminId && it.data!!["pwd"]==adminPwd){
                         Log.d(ContentValues.TAG, "SignIn Successed!!")
                         emitter.onSuccess(
-                            ReceiverSignIn(true, AdminModel(it.data!!["agency"].toString(), it.data!!["id"].toString(), it.data!!["name"].toString(),
+                            ReceiverSignIn(true, Admin(it.data!!["agency"].toString(), it.data!!["id"].toString(), it.data!!["name"].toString(),
                                  it.data!!["smsInfo"].toString())
                             ))
                     }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_add_View"
+    android:layout_width="83sp"
+    android:layout_height="83sp"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@drawable/view_5dp_event_stroke_rectangle_applemint"
+    android:padding="15dp"
+    android:layout_gravity="center"
+    android:layout_marginRight="7dp">
+    <ImageView
+        android:id="@+id/item_add_image"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginBottom="12sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/item_add_name"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="@color/transparent"/>
+    <TextView
+        android:id="@+id/item_add_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="추가하기"
+        android:textSize="12sp"
+        android:textColor="@color/black_87"
+        android:background="@color/transparent"
+        android:fontFamily="@font/notosanskr_bold_hestia" />
+</androidx.constraintlayout.widget.ConstraintLayout>

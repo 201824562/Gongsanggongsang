@@ -12,12 +12,15 @@
     <color name="black_50">#80000000</color>
     <color name="black_20">#33000000</color>
     <color name="black_gray">#444444</color>
+    <color name="light_gray">#ededed</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray"> #E5E5E5</color>
     <color name="pink">#FFBEC3</color>
     <color name="pinkish_orange">#ff7146</color>
+    <color name="light_orange">#ffede4</color>
     <color name="transparent">#00000000</color>
     <color name="applemint">#2e7972</color>
+    <color name="light_applemint">#e1f2ef</color>
     <color name="warm_gray">#707070</color>
     <color name="cloudy_green">#cfe1df</color>
     <color name="blue_green">#116761</color>

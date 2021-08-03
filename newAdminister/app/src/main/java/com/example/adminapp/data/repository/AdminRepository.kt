@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.core.content.edit
 import com.example.adminapp.data.AppDatabase
-import com.example.adminapp.data.dto.AdminModel
+import com.example.adminapp.data.model.Admin
 import io.reactivex.Completable
 
 class AdminRepository(appDatabase: AppDatabase) {
@@ -80,8 +80,8 @@ class AdminRepository(appDatabase: AppDatabase) {
         sharedPreferences.edit { remove(SHARED_PREFERENCES_TOKEN ) }
     }
 
-    fun saveAdminInfo(adminData : AdminModel) : Completable {
-        return adminDao.insertAdminData(adminData.getAdminEntity())
+    fun saveAdminInfo(adminData : Admin) : Completable {
+        return adminDao.insertAdminData(adminData.makeAdminEntity())
     }
 
     fun deleteAdminInfo(adminId: String) : Completable {

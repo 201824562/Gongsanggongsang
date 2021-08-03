@@ -60,11 +60,11 @@ class ReservationEquipmentFragment :
                                     dismiss()
                                 }
                             }
-                            confirmUsingDialog.show()
+                            showDialog(confirmUsingDialog, viewLifecycleOwner)
                         }
                     }
                 }
-                inputUsingTimeDialog.show()
+                showDialog(inputUsingTimeDialog, viewLifecycleOwner)
             }
         )
     }
