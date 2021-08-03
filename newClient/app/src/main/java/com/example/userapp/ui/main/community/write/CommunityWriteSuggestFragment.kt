@@ -103,6 +103,10 @@ class CommunityWriteSuggestFragment : BaseFragment<FragmentCommunityWriteSuggest
             suggestWriteRegisterButton.setOnClickListener {
                 val postDateNow: String = LocalDate.now().toString()
                 val postTimeNow : String = LocalTime.now().toString()
+                var postThumbnail : String = ""
+                if(getLocalPhotoUri.isNotEmpty()){
+                    postThumbnail = getLocalPhotoUri.get(0)
+                }
                 suggestPostData = PostDataInfo(
                     collection_name,
                     "juyong",
@@ -113,6 +117,7 @@ class CommunityWriteSuggestFragment : BaseFragment<FragmentCommunityWriteSuggest
                     post_comments = arrayListOf(),
                     post_id = postDateNow + postTimeNow + "juyong",
                     post_photo_uri = getLocalPhotoUri,
+                    postThumbnail,
                     post_state = suggestWriteCategory,
                     post_anonymous = suggestWriteAnonymous.isChecked
                 )

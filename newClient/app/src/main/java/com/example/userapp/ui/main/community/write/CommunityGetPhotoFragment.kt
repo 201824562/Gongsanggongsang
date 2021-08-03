@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -16,8 +17,9 @@ import com.example.userapp.ui.main.community.CommunityViewModel
 class CommunityGetPhotoFragment : BaseFragment<FragmentCommunityGetPhotoBinding, CommunityViewModel>() {
     override lateinit var viewbinding: FragmentCommunityGetPhotoBinding
     override val viewmodel : CommunityViewModel by viewModels()
-
+    private var localSelectedPhotoItem : ArrayList<String> = arrayListOf()
     lateinit var collection_name : String
+    var howManyPhoto  = 0
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -28,8 +30,8 @@ class CommunityGetPhotoFragment : BaseFragment<FragmentCommunityGetPhotoBinding,
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
+
         collection_name = arguments?.getString("collection_name").toString()
-        var ac = activity as MainActivity
         var photoUriArray : ArrayList<String> = arguments?.getStringArrayList("photoUriArray") as ArrayList<String>
         val adapter = context?.let { CommunityGetPhotoGridAdapter(it, photoUriArray, viewmodel) }
             ?.apply {
@@ -38,9 +40,18 @@ class CommunityGetPhotoFragment : BaseFragment<FragmentCommunityGetPhotoBinding,
                         CommunityGetPhotoGridAdapter.OnCommunityLocalPhotoItemClickListener {
                         override fun onLocalPhotoItemClick(position: Int) {
                             let {
-                                ac.selectedItems.add(getItem(position))
+                                if(getItem(position) in localSelectedPhotoItem){
+                                    localSelectedPhotoItem.remove(getItem(position))
+                                    howManyPhoto--
+                                    viewbinding.selectHowmanyPhoto.setText(howManyPhoto.toString())
+                                }
+                                else{
+                                    localSelectedPhotoItem.add(getItem(position))
+                                    howManyPhoto++
+                                    viewbinding.selectHowmanyPhoto.setText(howManyPhoto.toString())
+                                }
                             }
-                            System.out.println(getItem(position))
+
                         }
                 }
             }
@@ -54,16 +65,20 @@ class CommunityGetPhotoFragment : BaseFragment<FragmentCommunityGetPhotoBinding,
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.selectPhotoButton.setOnClickListener{
-            var uriArray : ArrayList<String> = viewmodel.getPhoto()
-            var bundle = bundleOf(
-                "uriArray" to uriArray
-            )
-            when(collection_name){
-                "1_free" -> findNavController().navigate(R.id.action_communityGetPhoto_to_communityWriteFree)
-                "2_emergency" -> findNavController().navigate(R.id.action_communityGetPhoto_to_communityWriteEmergency)
-                "3_suggest" -> findNavController().navigate(R.id.action_communityGetPhoto_to_communityWriteSuggest)
-                "4_with" -> findNavController().navigate(R.id.action_communityGetPhoto_to_communityWriteWith)
-                "5_market" -> findNavController().navigate(R.id.action_communityGetPhoto_to_communityWriteMarket)
+            if(howManyPhoto <= 5){
+                var uriArray : ArrayList<String> = viewmodel.getPhoto()
+                var ac = activity as MainActivity
+                ac.selectedItems = this.localSelectedPhotoItem
+                when(collection_name){
+                    "1_free" -> findNavController().navigate(R.id.action_communityGetPhoto_to_communityWriteFree)
+                    "2_emergency" -> findNavController().navigate(R.id.action_communityGetPhoto_to_communityWriteEmergency)
+                    "3_suggest" -> findNavController().navigate(R.id.action_communityGetPhoto_to_communityWriteSuggest)
+                    "4_with" -> findNavController().navigate(R.id.action_communityGetPhoto_to_communityWriteWith)
+                    "5_market" -> findNavController().navigate(R.id.action_communityGetPhoto_to_communityWriteMarket)
+                }
+            }
+            else{
+                Toast.makeText(context, "허용 가능한 사진 수를 초과하였습니다.", Toast.LENGTH_SHORT)
             }
         }
     }

@@ -74,6 +74,10 @@ class CommunityWriteFreeFragment : BaseFragment<FragmentCommunityWriteFreeBindin
             freeWriteRegisterButton.setOnClickListener {
                 val postDateNow: String = LocalDate.now().toString()
                 val postTimeNow : String = LocalTime.now().toString()
+                var postThumbnail : String = ""
+                if(getLocalPhotoUri.isNotEmpty()){
+                    postThumbnail = getLocalPhotoUri.get(0)
+                }
                 freePostData = PostDataInfo(
                     collection_name,
                     "juyong",
@@ -84,6 +88,7 @@ class CommunityWriteFreeFragment : BaseFragment<FragmentCommunityWriteFreeBindin
                     post_comments = arrayListOf(),
                     post_id = postDateNow + postTimeNow + "juyong",
                     post_photo_uri = getLocalPhotoUri,
+                    postThumbnail,
                     post_state = "none",
                     post_anonymous = freeWriteAnonymous.isChecked
                 )

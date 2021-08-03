@@ -2,6 +2,7 @@ package com.example.userapp.ui.main.community.post
 
 import android.os.Build
 import android.os.Bundle
+import android.provider.Telephony
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +19,10 @@ import com.example.userapp.databinding.FragmentCommunityPostBinding
 import com.example.userapp.databinding.FragmentCommunityPostMarketBinding
 import com.example.userapp.ui.main.community.CommunityViewModel
 import com.example.userapp.ui.main.community.write.CommunityAttachPhotoRecyclerAdapter
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import java.time.LocalDateTime
+import kotlin.math.log
 
 
 class CommunityPostMarketFragment : BaseFragment<FragmentCommunityPostMarketBinding, CommunityViewModel>(){
@@ -34,6 +38,7 @@ class CommunityPostMarketFragment : BaseFragment<FragmentCommunityPostMarketBind
     private lateinit var photoAdapter : CommunityAttachPhotoRecyclerAdapter
     private var getPhotoUri : ArrayList<String> = arrayListOf()
     var test : ArrayList<String> = arrayListOf()
+
 
     override fun initViewbinding(
         inflater: LayoutInflater,
@@ -56,18 +61,16 @@ class CommunityPostMarketFragment : BaseFragment<FragmentCommunityPostMarketBind
             viewbinding.marketPostTitle.text = it.post_title
             viewbinding.marketPostPrice.text = it.post_state
             post_comments_array = viewmodel.getDocumentCommentData(it)
+
             viewmodel.getPostPhotoData(it.post_photo_uri).observe(viewLifecycleOwner){ it
-                Log.e("check", "$it")
                 initPhotoRecyclerView(it)
+                getPhotoUri.clear()
             }
-            getPhotoUri = it.post_photo_uri
+
             viewbinding.communityPostCommentsNumber.text = post_comments_array.size.toString()
             initCommentRecyclerView(post_comments_array)
-            //getPhotoUri = it.post_photo_uri
         }
-        /*viewmodel.getPostPhotoData().observe(viewLifecycleOwner){ it
-            initPhotoRecyclerView(it)
-        }*/
+
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
@@ -76,10 +79,6 @@ class CommunityPostMarketFragment : BaseFragment<FragmentCommunityPostMarketBind
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun initViewFinal(savedInstanceState: Bundle?) {
-        viewmodel.getPostPhotoData(getPhotoUri).observe(viewLifecycleOwner){ it
-            Log.e("check", "$it")
-            initPhotoRecyclerView(it)
-        }
         viewbinding.run{
             commentsRegister.setOnClickListener{
                 var post_comments = PostCommentDataClass("주용가리", viewbinding.writeComment.text.toString(), LocalDateTime.now().toString())
@@ -114,6 +113,5 @@ class CommunityPostMarketFragment : BaseFragment<FragmentCommunityPostMarketBind
             adapter = CommunityAttachPhotoRecyclerAdapter(photo_uri)
         }
     }
-
 
 }

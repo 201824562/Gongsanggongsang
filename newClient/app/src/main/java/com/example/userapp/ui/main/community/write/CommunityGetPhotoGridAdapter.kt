@@ -1,19 +1,24 @@
 package com.example.userapp.ui.main.community.write
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.example.userapp.MainActivity
 import com.example.userapp.MainActivityViewModel
+import com.example.userapp.R
 import com.example.userapp.ui.main.MainViewModel
 import com.example.userapp.ui.main.community.CommunityViewModel
 
 class CommunityGetPhotoGridAdapter(val context: Context, uri_arr:ArrayList<String>, viewModel: CommunityViewModel) : BaseAdapter() {
     private var photo_url_items = ArrayList<String>()
+    private var selectedItems = arrayListOf<Int>()
     interface OnCommunityLocalPhotoItemClickListener{
         fun onLocalPhotoItemClick(position: Int)
     }
@@ -36,11 +41,18 @@ class CommunityGetPhotoGridAdapter(val context: Context, uri_arr:ArrayList<Strin
     }
 
     override fun getView(p: Int, convertView: View?, parent: ViewGroup?): View {
-
         val imageView = ImageView(context)
-        val display = context.getResources().getDisplayMetrics()
+        val display = context.resources.displayMetrics
         imageView.setOnClickListener {
             listener?.onLocalPhotoItemClick(p)
+            if(p in selectedItems){
+                imageView.colorFilter = null;
+                selectedItems.remove(p)
+            }
+            else{
+                imageView.setColorFilter(Color.parseColor("#cfe1df"), PorterDuff.Mode.OVERLAY);
+                selectedItems.add(p)
+            }
             return@setOnClickListener
         }
         imageView.scaleType = ImageView.ScaleType.CENTER_CROP

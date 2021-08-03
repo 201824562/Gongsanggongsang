@@ -1,5 +1,6 @@
 package com.example.userapp.ui.main.community
 
+import android.app.Application
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
@@ -7,11 +8,14 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import com.example.userapp.base.BaseViewModel
+import com.example.userapp.data.AppDatabase
 import com.example.userapp.data.entity.PostCommentDataClass
+import com.example.userapp.data.entity.User
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.data.repository.CommunityDataRepository
+import com.example.userapp.data.repository.UserRepository
 
-class CommunityViewModel : BaseViewModel() {
+class CommunityViewModel() : BaseViewModel() {
     var selected_items : ArrayList<String> = arrayListOf()
     private val communityDataRepository : CommunityDataRepository = CommunityDataRepository.getInstance()
 
@@ -64,9 +68,11 @@ class CommunityViewModel : BaseViewModel() {
     }
 
     fun getPostPhotoData(photoUri : ArrayList<String>) : MutableLiveData<ArrayList<String>> {
-        return communityDataRepository.getPhoto(photoUri)
+        return communityDataRepository.getDataPhoto(photoUri)
     }
-
+    fun getPostPhotoThumbnailData(uri : String) : MutableLiveData<String> {
+        return communityDataRepository.getPhotoThumbnailData(uri)
+    }
     fun getNoticeCategoryPostData(collectionName : String) : MutableLiveData<ArrayList<PostDataInfo>> {
         return communityDataRepository.getNoticeCategoryPostData(collectionName)
     }

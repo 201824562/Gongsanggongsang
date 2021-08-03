@@ -8,12 +8,12 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentCommunityPreviewBinding
 import com.example.userapp.ui.main.community.CommunityViewModel
-
 
 class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, CommunityViewModel>() {
     override lateinit var viewbinding: FragmentCommunityPreviewBinding
@@ -25,7 +25,6 @@ class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, C
 
     private lateinit var collection_name : String
     private lateinit var collection_name_bundle : Bundle
-
 
     override fun initViewbinding(
         inflater: LayoutInflater,
@@ -39,6 +38,9 @@ class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, C
     override fun initViewStart(savedInstanceState: Bundle?) {
         collection_name= arguments?.getString("collection_name").toString()
         val test = arrayListOf<String>().toTypedArray()
+
+        var ac = activity as MainActivity
+        ac.selectedItems.clear()
 
         collection_name_bundle = bundleOf(
             "uriArray" to test,

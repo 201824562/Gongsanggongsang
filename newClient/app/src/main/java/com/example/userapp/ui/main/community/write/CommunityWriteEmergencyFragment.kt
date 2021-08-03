@@ -106,6 +106,10 @@ class CommunityWriteEmergencyFragment : BaseFragment<FragmentCommunityWriteEmerg
             emergencyWriteRegisterButton.setOnClickListener {
                 val postDateNow: String = LocalDate.now().toString()
                 val postTimeNow : String = LocalTime.now().toString()
+                var postThumbnail : String = ""
+                if(getLocalPhotoUri.isNotEmpty()){
+                    postThumbnail = getLocalPhotoUri.get(0)
+                }
                 emergencyPostData = PostDataInfo(
                     collection_name,
                     "juyong",
@@ -116,6 +120,7 @@ class CommunityWriteEmergencyFragment : BaseFragment<FragmentCommunityWriteEmerg
                     post_comments = arrayListOf(),
                     post_id = postDateNow + postTimeNow + "juyong",
                     post_photo_uri = getLocalPhotoUri,
+                    postThumbnail,
                     post_state = emergencyWriteCategory,
                     post_anonymous = emergencyWriteAnonymous.isChecked
                 )

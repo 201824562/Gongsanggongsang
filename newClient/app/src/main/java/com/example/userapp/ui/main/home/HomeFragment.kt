@@ -24,6 +24,7 @@ class HomeFragment : BaseFragment<FragmentMainhomeHomeBinding, HomeViewModel>(){
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
+        viewmodel
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {

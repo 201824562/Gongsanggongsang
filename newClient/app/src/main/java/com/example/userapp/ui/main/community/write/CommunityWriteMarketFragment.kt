@@ -73,6 +73,10 @@ class CommunityWriteMarketFragment : BaseFragment<FragmentCommunityWriteMarketBi
             marketWriteRegisterButton.setOnClickListener {
                 val postDateNow: String = LocalDate.now().toString()
                 val postTimeNow : String = LocalTime.now().toString()
+                var postThumbnail : String = ""
+                if(getLocalPhotoUri.isNotEmpty()){
+                    postThumbnail = getLocalPhotoUri.get(0)
+                }
                 marketPostData = PostDataInfo(
                     collection_name,
                     "juyong",
@@ -83,6 +87,7 @@ class CommunityWriteMarketFragment : BaseFragment<FragmentCommunityWriteMarketBi
                     post_comments = arrayListOf(),
                     post_id = postDateNow + postTimeNow + "juyong",
                     post_photo_uri = getLocalPhotoUri,
+                    postThumbnail,
                     post_state = marketWritePrice.text.toString(),
                     post_anonymous = false
                 )

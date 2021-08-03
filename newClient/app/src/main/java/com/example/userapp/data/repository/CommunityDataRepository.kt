@@ -12,7 +12,6 @@ import com.example.userapp.data.model.PostDataInfo
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import io.reactivex.Single
 import java.io.ByteArrayOutputStream
 
 class CommunityDataRepository() {
@@ -21,11 +20,8 @@ class CommunityDataRepository() {
     private var collectionPostDataInfoList : MutableLiveData<ArrayList<PostDataInfo>> = MutableLiveData()
     private var documentPostDataInfo : MutableLiveData<PostDataInfo> = MutableLiveData()
 
-    private var homeNoticePostDataInfoList : MutableLiveData<ArrayList<PostDataInfo>> = MutableLiveData()
-    private var homeEventPostDataInfoList : MutableLiveData<ArrayList<PostDataInfo>> = MutableLiveData()
-    private var homeEtcPostPostDataInfoList : MutableLiveData<ArrayList<PostDataInfo>> = MutableLiveData()
-
-    var postDataPhotoUrl : MutableLiveData<ArrayList<String>> = MutableLiveData()
+    private var postDataPhotoUrl : MutableLiveData<ArrayList<String>> = MutableLiveData()
+    private var postDataPhotoThumbnailUrl : MutableLiveData<String> = MutableLiveData()
     companion object {
         private var sInstance: CommunityDataRepository? = null
         fun getInstance(): CommunityDataRepository {
@@ -86,6 +82,7 @@ class CommunityDataRepository() {
                         document["post_comments"] as ArrayList<PostCommentDataClass>,
                         document["post_id"] as String,
                         document["post_photo_uri"] as ArrayList<String>,
+                        document["post_photo_thumbnail"] as String,
                         document["post_state"] as String,
                         document["post_anonymous"] as Boolean)
                     postDataList.add(item)
@@ -120,10 +117,11 @@ class CommunityDataRepository() {
                     },
                     result["post_id"].toString(),
                     if(result["post_photo_uri"] != null){
-                        result["post_photo_uri"] as ArrayList<String>
+                       result["post_photo_uri"] as ArrayList<String>
                     }else{
                         arrayListOf()
                     },
+                    result["post_photo_thumbnail"] as String,
                     result["post_state"].toString(),
                 result["post_anonymous"] as Boolean)
                 documentPostDataInfo.value = postData
@@ -183,55 +181,47 @@ class CommunityDataRepository() {
     }
 
     //TODO: 로컬 데이터 말고 원격 데이터로
-    fun getPostPhotoData(collection_name: String, document_name: String): MutableLiveData<ArrayList<String>> {
+    /*fun getPostPhotoData(collection_name: String, document_name: String): MutableLiveData<ArrayList<String>> {
         upDatePhotoData(collection_name, document_name)
         Log.e("checking!!!plz", "${post_data_array}")
         getPhoto(post_data_array)
         Log.e("checking!!!plz", "${postDataPhotoUrl.value}")
         return postDataPhotoUrl
-    }
+    }*/
 
-    var post_data_array: ArrayList<String> = arrayListOf()
-    private fun upDatePhotoData(collection_name: String, document_name: String) {
-        //var post_data: ArrayList<String> = arrayListOf()
-        firestore.collection("Busan")
-            .document("community")
-            .collection(collection_name)
-            .document(document_name)
-            .get()
-            .addOnSuccessListener { result ->
-                post_data_array =
-                    if(result["post_photo_uri"] != null){
-                        result["post_photo_uri"] as ArrayList<String> }
-                    else{ arrayListOf() }
-                Log.e("checking!!!plz", "${post_data_array}")
-                /*getPhoto(photo_server_uri)*/
-                /*for (uri in photo_server_uri) {
-                    var u = "file://" + uri
-                    var storageRefer: StorageReference = fireStorage.reference.child("images/").child(u)
-                    storageRefer.downloadUrl.addOnSuccessListener {
-                        System.out.println(it.toString())
-                        post_data.add(it.toString())
-                        Log.e("checkinggg", "$post_data")
-                    }
-                    post_photo_uri.value = post_data
-                }*/
-            }
-    }
-
-    fun getPhoto(uri_array: ArrayList<String>) : MutableLiveData<ArrayList<String>>{
-        var postData: ArrayList<String> = arrayListOf()
+    fun upDatePhotoData(uri_array: ArrayList<String>) {
+        val postData: ArrayList<String> = arrayListOf()
         for (uri in uri_array) {
-            var u = "file://" + uri
-            var storageRefer: StorageReference = fireStorage.reference.child("images/").child(u)
+            val u = "file://" + uri
+            val storageRefer: StorageReference = fireStorage.reference.child("images/").child(u)
             storageRefer.downloadUrl.addOnSuccessListener {
                 //System.out.println(it.toString())
                 postData.add(it.toString())
-                Log.e("checkinggg", "$postData")
+                postDataPhotoUrl.value = postData
             }
-            postDataPhotoUrl.value = postData
         }
+        Log.e("check", "${postData}")
+    }
+
+
+    fun getDataPhoto(uri_array: ArrayList<String>) : MutableLiveData<ArrayList<String>>{
+        upDatePhotoData(uri_array)
         return postDataPhotoUrl
+    }
+    fun updatePhotoThumbnailData(uri : String) {
+        var postDataThumbnail : String = ""
+        val u = "file://" + uri
+        val storageRefer: StorageReference = fireStorage.reference.child("images/").child(u)
+        storageRefer.downloadUrl.addOnSuccessListener {
+            //System.out.println(it.toString())
+            postDataThumbnail = it.toString()
+            postDataPhotoThumbnailUrl.value = postDataThumbnail
+            Log.e("check_preview", "${postDataThumbnail}")
+        }
+    }
+    fun getPhotoThumbnailData(uri : String) : MutableLiveData<String> {
+        updatePhotoThumbnailData(uri)
+        return postDataPhotoThumbnailUrl
     }
 
     fun updateNoticeCategoryPostData(noticeCategory : String) {
@@ -251,6 +241,7 @@ class CommunityDataRepository() {
                         document["post_comments"] as ArrayList<PostCommentDataClass>,
                         document["post_id"] as String,
                         document["post_photo_uri"] as ArrayList<String>,
+                        document["post_photo_thumbnail"] as String,
                         document["post_state"] as String,
                         document["post_anonymous"] as Boolean
                     )

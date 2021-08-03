@@ -22,6 +22,8 @@ data class PostDataInfo(
 
     val post_photo_uri: ArrayList<String>,
 
+    val post_photo_thumbnail : String,
+
     val post_state: String,
 
     val post_anonymous: Boolean

@@ -74,6 +74,10 @@ class CommunityWriteWithFragment : BaseFragment<FragmentCommunityWriteWithBindin
             withWriteRegisterButton.setOnClickListener {
                 val postDateNow: String = LocalDate.now().toString()
                 val postTimeNow : String = LocalTime.now().toString()
+                var postThumbnail : String = ""
+                if(getLocalPhotoUri.isNotEmpty()){
+                    postThumbnail = getLocalPhotoUri.get(0)
+                }
                 withPostData = PostDataInfo(
                     collection_name,
                     "juyong",
@@ -84,6 +88,7 @@ class CommunityWriteWithFragment : BaseFragment<FragmentCommunityWriteWithBindin
                     post_comments = arrayListOf(),
                     post_id = postDateNow + postTimeNow + "juyong",
                     post_photo_uri = getLocalPhotoUri,
+                    postThumbnail,
                     post_state = "모집",
                     post_anonymous = withWriteAnonymous.isChecked
                 )

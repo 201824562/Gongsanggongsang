@@ -52,15 +52,18 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
             "collection_name" to collection_name,
             "document_name" to document_name
         )
-        viewmodel.getDocumentPostData(collection_name, document_name).observe(viewLifecycleOwner) {
-            it
+        viewmodel.getDocumentPostData(collection_name, document_name).observe(viewLifecycleOwner) { it
             viewbinding.postContents.text = it.post_contents
             viewbinding.postTitle.text = it.post_title
             viewbinding.postCategory.text = it.post_state
             post_comments_array = viewmodel.getDocumentCommentData(it)
             viewbinding.communityPostCommentsNumber.text = post_comments_array.size.toString()
             initCommentRecyclerView(post_comments_array)
-            //getPhotoUri = it.post_photo_uri
+            getPhotoUri = it.post_photo_uri
+            viewmodel.getPostPhotoData(it.post_photo_uri).observe(viewLifecycleOwner){ it
+                initPhotoRecyclerView(it)
+                getPhotoUri.clear()
+            }
         }
 
     }
