@@ -37,12 +37,12 @@
                 app:nullable="true"
                 android:defaultValue="@null" />
         </action>
+        <action
             android:id="@+id/action_mainFragment_to_mainhomeNoticeFragment"
             app:destination="@id/mainhomeNoticeFragment" />
         <action
             app:destination="@+id/communityPreviewFragment"
             android:id="@+id/action_mainFragment_to_communityPreviewFragment"/>
-        <action
     </fragment>
     <fragment
         android:id="@+id/mainhomeNoticeFragment"
