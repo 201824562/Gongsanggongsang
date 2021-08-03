@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
+import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.databinding.FragmentMainhomeCommunityBinding
 
 class CommunityMainFragment : BaseFragment<FragmentMainhomeCommunityBinding, CommunityViewModel>(){

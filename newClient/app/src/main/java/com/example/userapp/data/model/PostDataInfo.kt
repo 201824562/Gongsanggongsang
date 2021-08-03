@@ -16,13 +16,11 @@ data class PostDataInfo(
 
     val post_time: String,
 
-    val post_comments: ArrayList<PostCommentDataClass> = arrayListOf(),
+    val post_comments : ArrayList<String>,
 
     val post_id: String,
 
     val post_photo_uri: ArrayList<String>,
-
-    val post_photo_thumbnail : String,
 
     val post_state: String,
 

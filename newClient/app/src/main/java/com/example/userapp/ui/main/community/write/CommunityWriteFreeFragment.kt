@@ -29,7 +29,6 @@ import java.time.LocalTime
 
 class CommunityWriteFreeFragment : BaseFragment<FragmentCommunityWriteFreeBinding, CommunityViewModel>() {
     private val collection_name = "1_free"
-    private lateinit var document_name : String
     private lateinit var bundle: Bundle
     override lateinit var viewbinding: FragmentCommunityWriteFreeBinding
     override val viewmodel: CommunityViewModel by viewModels()
@@ -72,28 +71,34 @@ class CommunityWriteFreeFragment : BaseFragment<FragmentCommunityWriteFreeBindin
                 getPhotoPermission()
             }
             freeWriteRegisterButton.setOnClickListener {
+                val ac = activity as MainActivity
+                val userAgency : String = ac.getUserData()!!.agency
+                val userName : String = ac.getUserData()!!.nickname
                 val postDateNow: String = LocalDate.now().toString()
                 val postTimeNow : String = LocalTime.now().toString()
-                var postThumbnail : String = ""
-                if(getLocalPhotoUri.isNotEmpty()){
-                    postThumbnail = getLocalPhotoUri.get(0)
+                var postAnonymous : Boolean = false
+                if(freeWriteAnonymous.isChecked){
+                    postAnonymous = true
                 }
                 freePostData = PostDataInfo(
                     collection_name,
-                    "juyong",
+                    userName,
                     post_title = freeWriteTitle.text.toString(),
                     post_contents = freeWriteContent.text.toString(),
                     post_date = postDateNow,
                     post_time = postTimeNow,
                     post_comments = arrayListOf(),
-                    post_id = postDateNow + postTimeNow + "juyong",
+                    post_id = postDateNow + postTimeNow + userName,
                     post_photo_uri = getLocalPhotoUri,
-                    postThumbnail,
                     post_state = "none",
-                    post_anonymous = freeWriteAnonymous.isChecked
+                    post_anonymous = postAnonymous
                 )
-                viewmodel.insertPostData(freePostData)
-                findNavController().navigate(R.id.action_communityWriteFree_to_communityPreview)
+                bundle = bundleOf(
+                    "collection_name" to collection_name,
+                    "document_name" to freePostData.post_id
+                )
+                viewmodel.insertPostData(userAgency, freePostData)
+                findNavController().navigate(R.id.action_communityWriteFree_to_communityPost, bundle)
             }
         }
     }

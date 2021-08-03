@@ -1,6 +1,5 @@
 package com.example.userapp.ui.main.community
 
-import android.app.Application
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
@@ -8,58 +7,37 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import com.example.userapp.base.BaseViewModel
-import com.example.userapp.data.AppDatabase
 import com.example.userapp.data.entity.PostCommentDataClass
-import com.example.userapp.data.entity.User
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.data.repository.CommunityDataRepository
-import com.example.userapp.data.repository.UserRepository
 
 class CommunityViewModel() : BaseViewModel() {
     var selected_items : ArrayList<String> = arrayListOf()
     private val communityDataRepository : CommunityDataRepository = CommunityDataRepository.getInstance()
 
-    fun getCommunityMainItem() {
-        return communityDataRepository.getCommunityMainItem()
+    fun getCollectionPostData(agency: String, collection_name: String) : MutableLiveData<ArrayList<PostDataInfo>>{
+        return communityDataRepository.getCollectionPostData(agency, collection_name)
     }
-
-    fun getCollectionPostData(collection_name: String) : MutableLiveData<ArrayList<PostDataInfo>>{
-        return communityDataRepository.getCollectionPostData(collection_name)
+    fun getDocumentPostData(agency: String, collection_name: String, document_name : String) : MutableLiveData<PostDataInfo>{
+        return communityDataRepository.getDocumentPostData(agency, collection_name, document_name)
     }
-    fun getDocumentPostData(collection_name: String, document_name : String) : MutableLiveData<PostDataInfo>{
-        return communityDataRepository.getDocumentPostData(collection_name, document_name)
+    fun insertPostData(agency : String, it: PostDataInfo) {
+        communityDataRepository.insertPostData(agency, it)
     }
-    fun insertPostData(it: PostDataInfo) {
-        communityDataRepository.insertPostData(it)
+    fun insertPostCommentData(agency: String, collection_name: String, document_name: String, postComment : PostCommentDataClass){
+        communityDataRepository.insertPostCommentData(agency, collection_name, document_name, postComment)
     }
-    fun insertPostCommentData(collection_name: String, document_name: String, post_comments_array : ArrayList<PostCommentDataClass>){
-        communityDataRepository.insertPostCommentData(collection_name, document_name, post_comments_array)
+    fun deletePostData(agency: String, collection_name: String, document_name: String) {
+        communityDataRepository.deleteDocumentPostData(agency, collection_name, document_name)
     }
-    fun deletePostData(collection_name: String, document_name: String) {
-        communityDataRepository.deleteDocumentPostData(collection_name, document_name)
+    fun updatePostData(agency: String, collection_name: String, document_name: String, modifyTitle : String, modifyContent : String){
+        communityDataRepository.modifyPostData(agency, collection_name, document_name, modifyTitle, modifyContent)
     }
-    fun updatePostData(collection_name: String, document_name: String, modifyTitle : String, modifyContent : String){
-        communityDataRepository.modifyPostData(collection_name, document_name, modifyTitle, modifyContent)
+    fun modifyPostPartData(agency: String, collection_name: String, document_name: String, partKey: String, modifyContent: Any){
+        communityDataRepository.modifyPostPartData(agency, collection_name, document_name, partKey, modifyContent)
     }
-    fun getDocumentCommentData(it: PostDataInfo) : ArrayList<PostCommentDataClass>{
-        val post_comments_array : ArrayList<PostCommentDataClass> = arrayListOf()
-        if(it.post_comments.toString() != "[]") {
-            var server_comments = it.post_comments.toString().replace("[", "").replace("]", "")
-                .replace("{", "").replace("}", "").split(",")
-            Log.v("i", server_comments.toString())
-            for (i in 0 until server_comments.size step 3) {
-                var comments_element = PostCommentDataClass(
-                    server_comments[i + 2].split("=")[1],
-                    server_comments[i + 1].split("=")[1],
-                    server_comments[i].split("=")[1]
-                )
-                post_comments_array.add(comments_element)
-            }
-        }
-        else{
-            return arrayListOf()
-        }
-        return post_comments_array
+    fun getDocumentCommentData(agency: String, collection_name: String, document_name: String) : MutableLiveData<ArrayList<PostCommentDataClass>> {
+        return communityDataRepository.getDocumentPostCommentData(agency, collection_name, document_name)
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
@@ -70,11 +48,14 @@ class CommunityViewModel() : BaseViewModel() {
     fun getPostPhotoData(photoUri : ArrayList<String>) : MutableLiveData<ArrayList<String>> {
         return communityDataRepository.getDataPhoto(photoUri)
     }
+    fun deletePostPhoto(){
+        communityDataRepository.deletePhotoData()
+    }
     fun getPostPhotoThumbnailData(uri : String) : MutableLiveData<String> {
         return communityDataRepository.getPhotoThumbnailData(uri)
     }
-    fun getNoticeCategoryPostData(collectionName : String) : MutableLiveData<ArrayList<PostDataInfo>> {
-        return communityDataRepository.getNoticeCategoryPostData(collectionName)
+    fun getNoticeCategoryPostData(agency: String, collectionName : String) : MutableLiveData<ArrayList<PostDataInfo>> {
+        return communityDataRepository.getNoticeCategoryPostData(agency, collectionName)
     }
 
     fun selectPhoto(select_photo_uri : String) {

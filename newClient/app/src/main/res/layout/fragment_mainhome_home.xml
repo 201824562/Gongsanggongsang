@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="18dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="18dp">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -48,12 +48,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_community_main_market_icon"
+                    android:src="@drawable/ic_mainhome_direct_reservation_icon"
                     android:background="@color/transparent"/>
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_community_main_market_icon"
+                    android:src="@drawable/ic_mainhome_reservation_icon"
                     android:layout_weight="1"
                     android:background="@color/transparent"/>
                 <ImageButton
@@ -65,13 +65,13 @@
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_community_main_market_icon"
+                    android:src="@drawable/ic_community_main_emergency_icon"
                     android:layout_weight="1"
                     android:background="@color/transparent"/>
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_community_main_market_icon"
+                    android:src="@drawable/ic_community_main_suggest_icon"
                     android:layout_weight="1"
                     android:background="@color/transparent"/>
             </LinearLayout>
@@ -175,6 +175,11 @@
                     android:textSize="14sp"
                     android:layout_marginLeft="10dp"/>
             </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                app:layout_constraintTop_toBottomOf="@id/main_home_notice_1"
+                android:background="#0c000000"/>
             <LinearLayout
                 android:id="@+id/main_home_notice_2"
                 android:layout_width="match_parent"
@@ -201,6 +206,11 @@
                     android:textSize="14sp"
                     android:layout_marginLeft="10dp"/>
             </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                app:layout_constraintTop_toBottomOf="@id/main_home_notice_2"
+                android:background="#0c000000"/>
             <LinearLayout
                 android:id="@+id/main_home_notice_3"
                 android:layout_width="match_parent"
@@ -228,6 +238,11 @@
                     android:textSize="14sp"
                     tools:text="22시 이후에는 소음에 주의해주세요."/>
             </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                app:layout_constraintTop_toBottomOf="@id/main_home_notice_3"
+                android:background="#0c000000"/>
             <LinearLayout
                 android:id="@+id/main_home_mate_title"
                 android:layout_width="match_parent"

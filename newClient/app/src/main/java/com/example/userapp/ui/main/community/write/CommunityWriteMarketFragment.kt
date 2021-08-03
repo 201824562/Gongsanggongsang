@@ -71,28 +71,31 @@ class CommunityWriteMarketFragment : BaseFragment<FragmentCommunityWriteMarketBi
                 getPhotoPermission()
             }
             marketWriteRegisterButton.setOnClickListener {
+                val ac = activity as MainActivity
+                val userAgency : String = ac.getUserData()!!.agency
+                val userName : String = ac.getUserData()!!.nickname
                 val postDateNow: String = LocalDate.now().toString()
                 val postTimeNow : String = LocalTime.now().toString()
-                var postThumbnail : String = ""
-                if(getLocalPhotoUri.isNotEmpty()){
-                    postThumbnail = getLocalPhotoUri.get(0)
-                }
+                var postAnonymous : Boolean = false
                 marketPostData = PostDataInfo(
                     collection_name,
-                    "juyong",
+                    userName,
                     post_title = marketWriteTitle.text.toString(),
                     post_contents = marketWriteContent.text.toString(),
                     post_date = postDateNow,
                     post_time = postTimeNow,
                     post_comments = arrayListOf(),
-                    post_id = postDateNow + postTimeNow + "juyong",
+                    post_id = postDateNow + postTimeNow + userName,
                     post_photo_uri = getLocalPhotoUri,
-                    postThumbnail,
                     post_state = marketWritePrice.text.toString(),
                     post_anonymous = false
                 )
-                viewmodel.insertPostData(marketPostData)
-                findNavController().navigate(R.id.action_communityWriteMarket_to_communityPreview)
+                bundle = bundleOf(
+                    "collection_name" to collection_name,
+                    "document_name" to marketPostData.post_id
+                )
+                viewmodel.insertPostData(userAgency, marketPostData)
+                findNavController().navigate(R.id.action_communityWriteMarket_to_communityPostMarket, bundle)
             }
         }
     }

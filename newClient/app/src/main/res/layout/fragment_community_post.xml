@@ -23,6 +23,7 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
+            android:id="@+id/post_toolbar_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="normal"
@@ -57,6 +58,7 @@
         android:layout_height="0dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="18dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintTop_toBottomOf="@+id/post_toolbar"
         app:layout_constraintBottom_toTopOf="@+id/register">
 
@@ -72,7 +74,6 @@
                     android:id="@+id/post_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="category"
                     android:textStyle="normal"
                     android:textSize="14sp"
                     android:textColor="#7f000000"
@@ -83,12 +84,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="title"
-                    android:textStyle="normal"
+                    android:textStyle="bold"
                     android:textSize="16sp"
                     android:textColor="@color/black"
                     android:letterSpacing="-0.03"
-                    android:lineSpacingExtra="8sp"
-                    android:layout_marginLeft="6dp"/>
+                    android:lineSpacingExtra="8sp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -99,7 +99,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/invalid_name"
+                    android:src="@drawable/ic_basic_profile_photo"
                     android:layout_gravity="center"/>
                 <TextView
                     android:text="작성자"
@@ -132,12 +132,14 @@
                     android:layout_height="wrap_content"
                     android:background="@color/transparent"
                     android:textSize="12sp"
+                    android:visibility="invisible"
                     android:text="수정"/>
                 <Button
                     android:id="@+id/post_remove_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@color/transparent"
+                    android:visibility="invisible"
                     android:textSize="12sp"
                     android:text="삭제"/>
             </LinearLayout>
@@ -155,10 +157,38 @@
                 android:id="@+id/post_photo_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-            <ImageView
-                android:id="@+id/post_photo"
+            <LinearLayout
+                android:id="@+id/post_with_complete"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:background="#19ff9966"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="normal"
+                    android:textSize="14sp"
+                    android:textColor="#cc000000"
+                    android:lineSpacingExtra="6sp"
+                    android:text="함께할 메이트님들이 다\n모집되었나요?"
+                    android:background="@color/transparent"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="20dp"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="모집완료 처리하기"
+                    android:textStyle="normal"
+                    android:textSize="14sp"
+                    android:textColor="@color/pale_orange"
+                    android:background="@drawable/button_with_complete"
+                    android:lineSpacingExtra="6sp"
+                    android:gravity="center"
+                    android:layout_marginLeft="20dp"
+                    android:padding="5dp" />
+
+            </LinearLayout>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="8dp"
@@ -204,13 +234,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:orientation="horizontal">
-        <CheckBox
-            android:id="@+id/community_post_no_name_check"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="익명"
-            android:textColor="@color/black"
-            android:layout_gravity="center"/>
         <EditText
             android:id="@+id/write_comment"
             android:layout_width="wrap_content"

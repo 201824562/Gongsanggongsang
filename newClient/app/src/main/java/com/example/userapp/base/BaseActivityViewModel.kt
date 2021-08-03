@@ -1,11 +1,13 @@
 package com.example.userapp.base
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.userapp.utils.SingleLiveEvent
 
 
-open class BaseActivityViewModel: ViewModel() {
+open class BaseActivityViewModel(application: Application): AndroidViewModel(application) {
     private val  _onPermissionResult = SingleLiveEvent<Any>()
     val onPermissionResult: LiveData<Any> = _onPermissionResult
 

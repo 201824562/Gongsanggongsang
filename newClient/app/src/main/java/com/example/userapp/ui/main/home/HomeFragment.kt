@@ -6,14 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
 import com.example.userapp.databinding.FragmentMainhomeHomeBinding
+import com.example.userapp.ui.main.community.CommunityViewModel
 
-class HomeFragment : BaseFragment<FragmentMainhomeHomeBinding, HomeViewModel>(){
+class HomeFragment : BaseFragment<FragmentMainhomeHomeBinding, CommunityViewModel>(){
     override lateinit var viewbinding: FragmentMainhomeHomeBinding
-    override val viewmodel: HomeViewModel by viewModels()
-
+    override val viewmodel: CommunityViewModel by viewModels()
+    var agency = ""
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -24,7 +26,8 @@ class HomeFragment : BaseFragment<FragmentMainhomeHomeBinding, HomeViewModel>(){
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-        viewmodel
+        val ac = activity as MainActivity
+        agency = ac.getUserData()!!.agency
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
@@ -34,6 +37,26 @@ class HomeFragment : BaseFragment<FragmentMainhomeHomeBinding, HomeViewModel>(){
         viewbinding.run {
             mainHomeNoticeAllButton.setOnClickListener {
                 findNavController().navigate(R.id.action_mainFragment_to_mainhomeNoticeFragment)
+            }
+            viewmodel.getCollectionPostData(agency, "notice").observe(viewLifecycleOwner){
+                if(it.size >= 3){
+                    mainHomeNotice1Title.setText(it[0].post_title)
+                    mainHomeNotice1Date.setText(it[0].post_date)
+                    mainHomeNotice2Title.setText(it[1].post_title)
+                    mainHomeNotice2Date.setText(it[1].post_date)
+                    mainHomeNotice3Title.setText(it[2].post_title)
+                    mainHomeNotice3Date.setText(it[2].post_date)
+                }
+                else if(it.size == 2){
+                    mainHomeNotice1Title.setText(it[0].post_title)
+                    mainHomeNotice1Date.setText(it[0].post_date)
+                    mainHomeNotice2Title.setText(it[1].post_title)
+                    mainHomeNotice2Date.setText(it[1].post_date)
+                }
+                else if(it.size == 1){
+                    mainHomeNotice1Title.setText(it[0].post_title)
+                    mainHomeNotice1Date.setText(it[0].post_date)
+                }
             }
         }
     }

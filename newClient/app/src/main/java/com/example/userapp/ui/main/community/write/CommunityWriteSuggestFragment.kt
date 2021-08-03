@@ -101,15 +101,18 @@ class CommunityWriteSuggestFragment : BaseFragment<FragmentCommunityWriteSuggest
                 getPhotoPermission()
             }
             suggestWriteRegisterButton.setOnClickListener {
+                val ac = activity as MainActivity
+                val userAgency : String = ac.getUserData()!!.agency
+                val userName : String = ac.getUserData()!!.nickname
                 val postDateNow: String = LocalDate.now().toString()
                 val postTimeNow : String = LocalTime.now().toString()
-                var postThumbnail : String = ""
-                if(getLocalPhotoUri.isNotEmpty()){
-                    postThumbnail = getLocalPhotoUri.get(0)
+                var postAnonymous : Boolean = false
+                if(suggestWriteAnonymous.isChecked){
+                    postAnonymous = true
                 }
                 suggestPostData = PostDataInfo(
                     collection_name,
-                    "juyong",
+                    userName,
                     post_title = suggestWriteTitle.text.toString(),
                     post_contents = suggestWriteContent.text.toString(),
                     post_date = postDateNow,
@@ -117,12 +120,15 @@ class CommunityWriteSuggestFragment : BaseFragment<FragmentCommunityWriteSuggest
                     post_comments = arrayListOf(),
                     post_id = postDateNow + postTimeNow + "juyong",
                     post_photo_uri = getLocalPhotoUri,
-                    postThumbnail,
                     post_state = suggestWriteCategory,
-                    post_anonymous = suggestWriteAnonymous.isChecked
+                    post_anonymous = postAnonymous
                 )
-                viewmodel.insertPostData(suggestPostData)
-                findNavController().navigate(R.id.action_communityWriteSuggest_to_communityPreview)
+                bundle = bundleOf(
+                    "collection_name" to collection_name,
+                    "document_name" to suggestPostData.post_id
+                )
+                viewmodel.insertPostData(userAgency, suggestPostData)
+                findNavController().navigate(R.id.action_communityWriteSuggest_to_communityPost, bundle)
             }
         }
     }

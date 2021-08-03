@@ -9,6 +9,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
 import com.example.userapp.data.model.PostDataInfo
@@ -20,6 +21,7 @@ class HomeNoticeFragment : BaseFragment<FragmentMainhomeHomeNoticeBinding, Commu
     override val viewmodel: CommunityViewModel by viewModels()
     private lateinit var noticePreviewRecyclerAdapter: CommunityPreviewRecyclerAdapter
     private var noticePreviewItem : ArrayList<PostDataInfo> = arrayListOf()
+    var agency = ""
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,7 +44,9 @@ class HomeNoticeFragment : BaseFragment<FragmentMainhomeHomeNoticeBinding, Commu
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
-        viewmodel.getCollectionPostData("notice").observe(viewLifecycleOwner){ it
+        val ac = activity as MainActivity
+        agency = ac.getUserData()!!.agency
+        viewmodel.getCollectionPostData(agency, "notice").observe(viewLifecycleOwner){ it
             noticePreviewItem = it
             noticePreviewRecyclerAdapter.notifyDataSetChanged()
             viewbinding.mainhomeNoticeRecyclerView.adapter = noticePreviewRecyclerAdapter.apply {
@@ -63,26 +67,26 @@ class HomeNoticeFragment : BaseFragment<FragmentMainhomeHomeNoticeBinding, Commu
         }
         viewbinding.run {
             mainhomeNoticeShowAllButton.setOnClickListener {
-                viewmodel.getCollectionPostData("notice").observe(viewLifecycleOwner){
+                viewmodel.getCollectionPostData(agency, "notice").observe(viewLifecycleOwner){
                     noticePreviewItem = it
                     noticePreviewRecyclerAdapter.notifyDataSetChanged()
                 }
             }
             mainhomeNoticeShowNoticeButton.setOnClickListener {
-                viewmodel.getNoticeCategoryPostData("공지").observe(viewLifecycleOwner){
+                viewmodel.getNoticeCategoryPostData(agency,"공지").observe(viewLifecycleOwner){
                     noticePreviewItem = it
                     noticePreviewRecyclerAdapter.notifyDataSetChanged()
                 }
             }
             mainhomeNoticeShowEventButton.setOnClickListener {
-                viewmodel.getNoticeCategoryPostData("행사").observe(viewLifecycleOwner){
+                viewmodel.getNoticeCategoryPostData(agency,"행사").observe(viewLifecycleOwner){
                     noticePreviewItem = it
                     noticePreviewRecyclerAdapter.notifyDataSetChanged()
                 }
 
             }
             mainhomeNoticeShowEtcButton.setOnClickListener {
-                viewmodel.getNoticeCategoryPostData("기타").observe(viewLifecycleOwner){
+                viewmodel.getNoticeCategoryPostData(agency,"기타").observe(viewLifecycleOwner){
                     noticePreviewItem = it
                     noticePreviewRecyclerAdapter.notifyDataSetChanged()
                 }

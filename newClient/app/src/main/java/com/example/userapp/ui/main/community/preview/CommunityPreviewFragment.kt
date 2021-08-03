@@ -23,9 +23,9 @@ class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, C
     private lateinit var communityPreviewRecyclerAdapter: CommunityPreviewRecyclerAdapter
     private lateinit var communityPreviewMarketRecyclerAdapter: CommunityPreviewMarketRecyclerAdapter
 
-    private lateinit var collection_name : String
-    private lateinit var collection_name_bundle : Bundle
-
+    private lateinit var collectionName : String
+    private lateinit var collectionNameBundle : Bundle
+    var agency = ""
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -36,16 +36,22 @@ class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, C
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-        collection_name= arguments?.getString("collection_name").toString()
-        val test = arrayListOf<String>().toTypedArray()
-
-        var ac = activity as MainActivity
-        ac.selectedItems.clear()
-
-        collection_name_bundle = bundleOf(
-            "uriArray" to test,
+        collectionName= arguments?.getString("collection_name").toString()
+        collectionNameBundle = bundleOf(
+            "colletion_name" to collectionName
         )
-        if(collection_name.equals("5_market")){
+        var ac = activity as MainActivity
+        agency = ac.getUserData()!!.agency
+        ac.selectedItems.clear()
+        viewmodel.deletePostPhoto()
+        when(collectionName){
+            "1_free" -> viewbinding.previewToolbarName.text = "자유게시판"
+            "2_emergency" -> viewbinding.previewToolbarName.text = "긴급게시판"
+            "3_suggest" -> viewbinding.previewToolbarName.text = "건의게시판"
+            "4_with" -> viewbinding.previewToolbarName.text = "함께게시판"
+            "5_market" -> viewbinding.previewToolbarName.text = "장터게시판"
+        }
+        if(collectionName == "5_market"){
             initMarketRecyclerView()
         }
         else{
@@ -60,12 +66,12 @@ class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, C
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run{
             previewWriteRegisterButton.setOnClickListener{
-                when(collection_name){
-                    "1_free" -> findNavController().navigate(R.id.action_communityPreview_to_communityWriteFree, collection_name_bundle)
-                    "2_emergency" -> findNavController().navigate(R.id.action_communityPreview_to_communityWriteEmergency, collection_name_bundle)
-                    "3_suggest" -> findNavController().navigate(R.id.action_communityPreview_to_communityWriteSuggest, collection_name_bundle)
-                    "4_with" -> findNavController().navigate(R.id.action_communityPreview_to_communityWriteWith, collection_name_bundle)
-                    "5_market" -> findNavController().navigate(R.id.action_communityPreview_to_communityWriteMarket, collection_name_bundle)
+                when(collectionName){
+                    "1_free" -> findNavController().navigate(R.id.action_communityPreview_to_communityWriteFree, collectionNameBundle)
+                    "2_emergency" -> findNavController().navigate(R.id.action_communityPreview_to_communityWriteEmergency, collectionNameBundle)
+                    "3_suggest" -> findNavController().navigate(R.id.action_communityPreview_to_communityWriteSuggest, collectionNameBundle)
+                    "4_with" -> findNavController().navigate(R.id.action_communityPreview_to_communityWriteWith, collectionNameBundle)
+                    "5_market" -> findNavController().navigate(R.id.action_communityPreview_to_communityWriteMarket, collectionNameBundle)
                 }
             }
             previewSearchButton.setOnClickListener {
@@ -78,14 +84,7 @@ class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, C
 
     }
     fun initMarketElseRecyclerView(){
-        var list : ArrayList<PostDataInfo> = ArrayList()
-
-        /*viewbinding.communityPreviewRecyclerView.run {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context)
-            adapter = CommunityPreviewRecyclerAdapter(list)
-        }*/
-        viewmodel.getCollectionPostData(collection_name).observe(viewLifecycleOwner){ it
+        viewmodel.getCollectionPostData(agency, collectionName).observe(viewLifecycleOwner){ it
             viewbinding.communityPreviewRecyclerView.run {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(context)
@@ -96,10 +95,10 @@ class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, C
                 listener =
                     object : CommunityPreviewRecyclerAdapter.OnCommunityMarketItemClickListener {
                         override fun onPreviewItemClick(position: Int) {
-                            var document_name = getItem(position).post_id
+                            var documentName = getItem(position).post_id
                             var bundle = bundleOf(
-                                "collection_name" to collection_name,
-                                "document_name" to document_name
+                                "collection_name" to collectionName,
+                                "document_name" to documentName
                             )
                             findNavController().navigate(R.id.action_communityPreview_to_communityPost, bundle)
                         }
@@ -115,7 +114,7 @@ class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, C
             layoutManager = LinearLayoutManager(context)
             adapter = CommunityPreviewMarketRecyclerAdapter(list)
         }
-        viewmodel.getCollectionPostData(collection_name).observe(viewLifecycleOwner){ it
+        viewmodel.getCollectionPostData(agency, collectionName).observe(viewLifecycleOwner){ it
             list.clear()
             list.addAll(it)
             communityPreviewMarketRecyclerAdapter = CommunityPreviewMarketRecyclerAdapter(it)
@@ -124,10 +123,10 @@ class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, C
                     object :
                         CommunityPreviewMarketRecyclerAdapter.OnCommunityMarketItemClickListener {
                         override fun onPreviewItemClick(position: Int) {
-                            var document_name = getItem(position).post_id
+                            var documentName = getItem(position).post_id
                             var bundle = bundleOf(
-                                "collection_name" to collection_name,
-                                "document_name" to document_name
+                                "collection_name" to collectionName,
+                                "document_name" to documentName
                             )
                             findNavController().navigate(R.id.action_communityPreview_to_communityPostMarket, bundle)
                         }

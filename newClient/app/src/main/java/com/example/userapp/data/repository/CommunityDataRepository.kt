@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.userapp.data.entity.PostCommentDataClass
 import com.example.userapp.data.model.PostDataInfo
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.io.ByteArrayOutputStream
@@ -21,6 +22,7 @@ class CommunityDataRepository() {
     private var documentPostDataInfo : MutableLiveData<PostDataInfo> = MutableLiveData()
 
     private var postDataPhotoUrl : MutableLiveData<ArrayList<String>> = MutableLiveData()
+    private var postDataCommentList : MutableLiveData<ArrayList<PostCommentDataClass>> = MutableLiveData()
     private var postDataPhotoThumbnailUrl : MutableLiveData<String> = MutableLiveData()
     companion object {
         private var sInstance: CommunityDataRepository? = null
@@ -33,14 +35,11 @@ class CommunityDataRepository() {
                 }
         }
     }
-    fun getCommunityMainItem(){
-        val name = firestore.collection("Busan").document("community").id
-    }
 
-    fun insertPostData(it: PostDataInfo){
+    fun insertPostData(agency: String, it: PostDataInfo){
         var collection_name = it.post_category
         var document_name = it.post_id
-        firestore.collection("Busan").document("community").
+        firestore.collection(agency).document("community").
         collection(collection_name).document(document_name)
             .set(it)
             .addOnSuccessListener {success ->
@@ -50,25 +49,28 @@ class CommunityDataRepository() {
                 Log.w(ContentValues.TAG, "Error", exception)
             }
     }
-    fun insertPostCommentData(collection_name: String, document_name: String, post_comments_array : ArrayList<PostCommentDataClass>){
+    fun insertPostCommentData(agency: String, collection_name: String, document_name: String, postComment : PostCommentDataClass){
         var map= mutableMapOf<String,Any>()
-        map["post_comments"] = post_comments_array
+        map["post_comments"] = postComment
         firestore
-            .collection("Busan")
+            .collection(agency)
             .document("community")
             .collection(collection_name)
             .document(document_name)
-            .update(map)
+            .collection("post_comment")
+            .document(postComment.commentDate + postComment.commentTime + postComment.commentName)
+            .set(postComment)
             .addOnSuccessListener {
 
             }
     }
 
-    fun updateCollectionPostData(collection_name: String) {
+    fun updateCollectionPostData(agency: String, collection_name: String) {
         var postDataList : ArrayList<PostDataInfo> = ArrayList<PostDataInfo>()
-        firestore.collection("Busan")
+        firestore.collection(agency)
             .document("community")
             .collection(collection_name)
+            .orderBy("post_id", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { result ->
                 for (document in result){
@@ -79,10 +81,9 @@ class CommunityDataRepository() {
                         document["post_contents"] as String,
                         document["post_date"] as String,
                         document["post_time"] as String,
-                        document["post_comments"] as ArrayList<PostCommentDataClass>,
+                        document["post_comments"] as ArrayList<String>,
                         document["post_id"] as String,
                         document["post_photo_uri"] as ArrayList<String>,
-                        document["post_photo_thumbnail"] as String,
                         document["post_state"] as String,
                         document["post_anonymous"] as Boolean)
                     postDataList.add(item)
@@ -91,13 +92,41 @@ class CommunityDataRepository() {
             }
     }
 
-    fun getCollectionPostData(collection_name: String) : MutableLiveData<ArrayList<PostDataInfo>>{
-        updateCollectionPostData(collection_name)
+    fun getCollectionPostData(agency: String, collection_name: String) : MutableLiveData<ArrayList<PostDataInfo>>{
+        updateCollectionPostData(agency, collection_name)
         return collectionPostDataInfoList
     }
+    fun updateDocumentPostCommentData(agency: String, collection_name: String, document_name : String) {
+        var postCommentDataList : ArrayList<PostCommentDataClass> = arrayListOf()
+        firestore.collection(agency)
+            .document("community")
+            .collection(collection_name)
+            .document(document_name)
+            .collection("post_comment")
+            .orderBy("commentTime", Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result){
+                    val item = PostCommentDataClass(
+                        document["commentName"] as String,
+                        document["commentContents"] as String,
+                        document["commentDate"] as String,
+                        document["commentTime"] as String,
+                        document["commentAnonymous"] as Boolean,
+                        document["commentId"] as String,)
+                    postCommentDataList.add(item)
+                }
+                postDataCommentList.value= postCommentDataList
+            }
 
-    fun updateDocumentPostData(collection_name: String, document_name : String){
-        firestore.collection("Busan")
+    }
+    fun getDocumentPostCommentData(agency: String, collection_name: String, document_name : String) : MutableLiveData<ArrayList<PostCommentDataClass>>{
+        updateDocumentPostCommentData(agency, collection_name, document_name)
+        return postDataCommentList
+    }
+
+    fun updateDocumentPostData(agency: String, collection_name: String, document_name : String){
+        firestore.collection(agency)
             .document("community")
             .collection(collection_name)
             .document(document_name)
@@ -110,39 +139,46 @@ class CommunityDataRepository() {
                     result["post_contents"].toString(),
                     result["post_date"].toString(),
                     result["post_time"].toString(),
-                    if(result["post_comments"] != null){
-                        result["post_comments"] as ArrayList<PostCommentDataClass>
-                    }else{
-                        arrayListOf()
-                    },
+                    result["post_comments"] as ArrayList<String>,
                     result["post_id"].toString(),
                     if(result["post_photo_uri"] != null){
                        result["post_photo_uri"] as ArrayList<String>
                     }else{
                         arrayListOf()
                     },
-                    result["post_photo_thumbnail"] as String,
                     result["post_state"].toString(),
                 result["post_anonymous"] as Boolean)
                 documentPostDataInfo.value = postData
             }
     }
-    fun getDocumentPostData(collection_name: String, document_name: String) : MutableLiveData<PostDataInfo>{
-        updateDocumentPostData(collection_name, document_name)
+    fun getDocumentPostData(agency: String, collection_name: String, document_name: String) : MutableLiveData<PostDataInfo>{
+        updateDocumentPostData(agency, collection_name, document_name)
         return documentPostDataInfo
     }
-    fun deleteDocumentPostData(collection_name: String, document_name: String) {
-        firestore.collection("Busan")
+    fun deleteDocumentPostData(agency: String, collection_name: String, document_name: String) {
+        firestore.collection(agency)
             .document("community")
             .collection(collection_name)
             .document(document_name).delete()
     }
-    fun modifyPostData(collection_name: String, document_name: String, modifyTitle: String, modifyContent: String) {
+    fun modifyPostPartData(agency: String, collection_name: String, document_name: String, partKey: String, modifyContent: Any){
+        var modifyMap = mutableMapOf<String, Any>()
+        modifyMap[partKey] = modifyContent
+        firestore.collection(agency)
+            .document("community")
+            .collection(collection_name)
+            .document(document_name)
+            .update(modifyMap)
+            .addOnSuccessListener { result ->
+
+            }
+    }
+    fun modifyPostData(agency: String, collection_name: String, document_name: String, modifyTitle: String, modifyContent: String) {
         var titleMap = mutableMapOf<String, Any>()
         var contentMap = mutableMapOf<String, Any>()
         titleMap["post_title"] = modifyTitle
         contentMap["post_contents"] = modifyContent
-        firestore.collection("Busan")
+        firestore.collection(agency)
             .document("community")
             .collection(collection_name)
             .document(document_name)
@@ -151,7 +187,7 @@ class CommunityDataRepository() {
 
             }
 
-        firestore.collection("Busan")
+        firestore.collection(agency)
             .document("community")
             .collection(collection_name)
             .document(document_name)
@@ -166,7 +202,7 @@ class CommunityDataRepository() {
             val file_name = uri_array[i].toString()
             var storageRefer : StorageReference = fireStorage.reference.child("images/").child(file_name)
             val baos = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos)
             val data = baos.toByteArray()
             var uploadTask = storageRefer.putBytes(data)
             uploadTask.addOnFailureListener {
@@ -180,33 +216,27 @@ class CommunityDataRepository() {
         }
     }
 
-    //TODO: 로컬 데이터 말고 원격 데이터로
-    /*fun getPostPhotoData(collection_name: String, document_name: String): MutableLiveData<ArrayList<String>> {
-        upDatePhotoData(collection_name, document_name)
-        Log.e("checking!!!plz", "${post_data_array}")
-        getPhoto(post_data_array)
-        Log.e("checking!!!plz", "${postDataPhotoUrl.value}")
-        return postDataPhotoUrl
-    }*/
-
     fun upDatePhotoData(uri_array: ArrayList<String>) {
         val postData: ArrayList<String> = arrayListOf()
         for (uri in uri_array) {
-            val u = "file://" + uri
+            val u = "file://$uri"
             val storageRefer: StorageReference = fireStorage.reference.child("images/").child(u)
             storageRefer.downloadUrl.addOnSuccessListener {
-                //System.out.println(it.toString())
+                System.out.println(it.toString())
                 postData.add(it.toString())
                 postDataPhotoUrl.value = postData
             }
         }
-        Log.e("check", "${postData}")
     }
 
 
     fun getDataPhoto(uri_array: ArrayList<String>) : MutableLiveData<ArrayList<String>>{
+        deletePhotoData()
         upDatePhotoData(uri_array)
         return postDataPhotoUrl
+    }
+    fun deletePhotoData() {
+        postDataPhotoUrl.postValue(arrayListOf())
     }
     fun updatePhotoThumbnailData(uri : String) {
         var postDataThumbnail : String = ""
@@ -224,9 +254,9 @@ class CommunityDataRepository() {
         return postDataPhotoThumbnailUrl
     }
 
-    fun updateNoticeCategoryPostData(noticeCategory : String) {
+    fun updateNoticeCategoryPostData(agency: String, noticeCategory : String) {
         var noticeDataList: ArrayList<PostDataInfo> = arrayListOf()
-        firestore.collection("Busan").document("community").collection("notice")
+        firestore.collection(agency).document("community").collection("notice")
             .whereEqualTo("post_category", noticeCategory)
             .get()
             .addOnSuccessListener { result ->
@@ -238,10 +268,9 @@ class CommunityDataRepository() {
                         document["post_contents"] as String,
                         document["post_date"] as String,
                         document["post_time"] as String,
-                        document["post_comments"] as ArrayList<PostCommentDataClass>,
+                        document["post_comments"] as ArrayList<String>,
                         document["post_id"] as String,
                         document["post_photo_uri"] as ArrayList<String>,
-                        document["post_photo_thumbnail"] as String,
                         document["post_state"] as String,
                         document["post_anonymous"] as Boolean
                     )
@@ -250,8 +279,8 @@ class CommunityDataRepository() {
                 collectionPostDataInfoList.value = noticeDataList
             }
     }
-    fun getNoticeCategoryPostData(noticeCategory: String) : MutableLiveData<ArrayList<PostDataInfo>>{
-        updateNoticeCategoryPostData(noticeCategory)
+    fun getNoticeCategoryPostData(agency: String, noticeCategory: String) : MutableLiveData<ArrayList<PostDataInfo>>{
+        updateNoticeCategoryPostData(agency, noticeCategory)
         return collectionPostDataInfoList
     }
 
