@@ -38,7 +38,7 @@ class SplashFragment : BaseSessionFragment<FragmentSplashBinding, SplashViewMode
     override fun initViewFinal(savedInstanceState: Bundle?) {}
 
     private fun showIntro() {
-        findNavController().navigate(R.id.action_splashFragment_to_introFragment)
+        findNavController().navigate(R.id.action_splashFragment_to_signInGraph)
     }
 
     private fun showMainActivity() {
@@ -47,7 +47,7 @@ class SplashFragment : BaseSessionFragment<FragmentSplashBinding, SplashViewMode
 
     private fun notUserEvent() {  // App 내 Token 은 유효하지만 서버 Token 이 유효하지 않을 때
         try { } catch (e: Exception) {
-            findNavController().navigate(R.id.action_global_introFragment)
+            findNavController().navigate(R.id.action_global_signInFragment)
         } finally {
             showIntro()
         }

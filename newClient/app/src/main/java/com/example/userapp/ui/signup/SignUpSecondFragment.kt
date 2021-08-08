@@ -17,11 +17,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
+import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.databinding.FragmentSignupSecondBinding
 import com.example.userapp.utils.hideKeyboard
 
 
-class SignUpSecondFragment : BaseFragment<FragmentSignupSecondBinding, SignUpViewModel>() {
+class SignUpSecondFragment : BaseSessionFragment<FragmentSignupSecondBinding, SignUpViewModel>() {
 
     override lateinit var viewbinding: FragmentSignupSecondBinding
     override val viewmodel: SignUpViewModel by navGraphViewModels(R.id.signUpGraph)
@@ -60,7 +61,7 @@ class SignUpSecondFragment : BaseFragment<FragmentSignupSecondBinding, SignUpVie
                     false -> setNicknameNotChecked() }
             }
             sendSignUpInfoEventLiveData.observe(viewLifecycleOwner){
-                viewmodel.sendSignUpInfoToServer(getUsersId(), getUsersPwd(), getUsersNickname())
+                viewmodel.sendSignUpInfoToServer(getUserId(), getUserPwd(), getUserNickname())
             }
             onSuccessSignUpEvent.observe(viewLifecycleOwner){ findNavController().navigate(R.id.action_signUpSecondFragment_to_signUpWaitFragment) }
         }
@@ -70,7 +71,7 @@ class SignUpSecondFragment : BaseFragment<FragmentSignupSecondBinding, SignUpVie
 
         viewbinding.run {
             editTextId.setOnFocusChangeListener { v, hasFocus ->
-                if (hasFocus && (getUsersId().isEmpty()|| getUsersId().isBlank())) {
+                if (hasFocus && (getUserId().isEmpty()|| getUserId().isBlank())) {
                     setIdErrorMessage("4~13자리로 입력해주세요.")
                     setPwdEmptyMessage()
                     setPwd2EmptyMessage()
@@ -78,7 +79,7 @@ class SignUpSecondFragment : BaseFragment<FragmentSignupSecondBinding, SignUpVie
                 }
             }
             editTextPwd.setOnFocusChangeListener { v, hasFocus ->
-                if (hasFocus && (getUsersPwd().isEmpty()||getUsersPwd().isBlank())) {
+                if (hasFocus && (getUserPwd().isEmpty()||getUserPwd().isBlank())) {
                     setPwdErrorMessage("8~22자리의 영문/숫자로 입력해주세요.")
                     setIdEmptyMessage()
                     setPwd2EmptyMessage()
@@ -86,15 +87,15 @@ class SignUpSecondFragment : BaseFragment<FragmentSignupSecondBinding, SignUpVie
                 }
             }
             editTextPwd2.setOnFocusChangeListener { v, hasFocus ->
-                if (hasFocus && (getUsersPwd().isEmpty()|| getUsersPwd().isBlank())) {
+                if (hasFocus && (getUserPwd().isEmpty()|| getUserPwd().isBlank())) {
                     setPwd2ErrorMessage("비밀번호를 먼저 입력해주세요.")
                     setIdEmptyMessage()
                     setPwdEmptyMessage()
                     setNicknameEmptyMessage()
-                }else if (hasFocus && getUsersPwd().isNotEmpty() && getUsersPwd().isNotBlank()) setPwdEmptyMessage()
+                }else if (hasFocus && getUserPwd().isNotEmpty() && getUserPwd().isNotBlank()) setPwdEmptyMessage()
             }
             editTextNickname.setOnFocusChangeListener { v, hasFocus ->
-                if (hasFocus && (getUsersNickname().isEmpty()|| getUsersNickname().isBlank())) {
+                if (hasFocus && (getUserNickname().isEmpty()|| getUserNickname().isBlank())) {
                     setNicknameErrorMessage("5~10자리의 한글로 입력해주세요.")
                     setIdEmptyMessage()
                     setPwdEmptyMessage()
@@ -130,16 +131,16 @@ class SignUpSecondFragment : BaseFragment<FragmentSignupSecondBinding, SignUpVie
                 else editTextPwd2.inputType = 0x00000081
             }
 
-            checkIdBtn.setOnClickListener { if(viewmodel.checkForUserId(getUsersId())) viewmodel.checkIdFromServer(getUsersId()) }
-            checkNicknameBtn.setOnClickListener { if(viewmodel.checkForUserNickname(getUsersNickname())) viewmodel.checkNicknameFromServer(getUsersNickname()) }
-            signupBtn.setOnClickListener { viewmodel.checkForSendSignUpInfo(getUsersId(), getUsersPwd(), getUsersPwd2(), getUsersNickname()) }
+            checkIdBtn.setOnClickListener { if(viewmodel.checkForUserId(getUserId())) viewmodel.checkIdFromServer(getUserId()) }
+            checkNicknameBtn.setOnClickListener { if(viewmodel.checkForUserNickname(getUserNickname())) viewmodel.checkNicknameFromServer(getUserNickname()) }
+            signupBtn.setOnClickListener { viewmodel.checkForSendSignUpInfo(getUserId(), getUserPwd(), getUserPwd2(), getUserNickname()) }
         }
     }
 
-    private fun getUsersId() = viewbinding.editTextId.text.toString().trim()
-    private fun getUsersPwd() = viewbinding.editTextPwd.text.toString().trim()
-    private fun getUsersPwd2() = viewbinding.editTextPwd2.text.toString().trim()
-    private fun getUsersNickname() = viewbinding.editTextNickname.text.toString().trim()
+    private fun getUserId() = viewbinding.editTextId.text.toString().trim()
+    private fun getUserPwd() = viewbinding.editTextPwd.text.toString().trim()
+    private fun getUserPwd2() = viewbinding.editTextPwd2.text.toString().trim()
+    private fun getUserNickname() = viewbinding.editTextNickname.text.toString().trim()
 
 
     private fun setIdErrorMessage(message: String) {

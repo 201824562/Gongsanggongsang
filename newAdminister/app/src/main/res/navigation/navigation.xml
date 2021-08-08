@@ -43,6 +43,27 @@
         <action
             app:destination="@+id/communityPreviewFragment"
             android:id="@+id/action_mainFragment_to_communityPreviewFragment"/>
+        <action
+            android:id="@+id/action_mainFragment_to_settingsChangePwdFragment"
+            app:destination="@id/settingsChangePwdFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+        <action
+            android:id="@+id/action_mainFragment_to_settingsAllowUserFragment"
+            app:destination="@id/settingsAllowUserFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+        <action
+            android:id="@+id/action_mainFragment_to_settingsManageUserFragment"
+            app:destination="@id/settingsManageUserFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
     </fragment>
     <fragment
         android:id="@+id/mainhomeNoticeFragment"
@@ -75,36 +96,94 @@
             app:popUpTo="@+id/splashFragment"
             app:popUpToInclusive="true"/>
         <action
-            android:id="@+id/action_splashFragment_to_introFragment"
-            app:destination="@id/introFragment"
+            android:id="@+id/action_splashFragment_to_signInGraph"
+            app:destination="@id/signInGraph"
             app:enterAnim="@anim/slide_enter"
             app:exitAnim="@anim/slide_exit"
             app:popEnterAnim="@anim/slide_pop_enter"
             app:popExitAnim="@anim/slide_pop_exit"
             app:popUpTo="@+id/splashFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
-    <fragment
-        android:id="@+id/introFragment"
-        android:name="com.example.adminapp.ui.intro.IntroFragment"
-        android:label="IntroFragment" >
-        <action
-            android:id="@+id/action_introFragment_to_mainFragment"
-            app:destination="@id/mainFragment"
-            app:enterAnim="@anim/slide_enter"
-            app:exitAnim="@anim/slide_exit"
-            app:popEnterAnim="@anim/slide_pop_enter"
-            app:popExitAnim="@anim/slide_pop_exit"/>
+            app:popUpToInclusive="true" >
+        </action>
     </fragment>
     <action
-        android:id="@+id/action_global_introFragment"
-        app:destination="@id/introFragment"
+        android:id="@+id/action_global_signInFragment"
+        app:destination="@id/signInFragment"
         app:enterAnim="@anim/nav_default_enter_anim"
         app:exitAnim="@anim/nav_default_exit_anim"
         app:popEnterAnim="@anim/nav_default_pop_enter_anim"
         app:popExitAnim="@anim/nav_default_pop_exit_anim"
         app:popUpTo="@id/mainFragment"
         app:popUpToInclusive="true" />
+    <navigation
+        android:id="@+id/signInGraph"
+        app:startDestination="@id/signInFragment">
+        <argument
+            android:name="findInfoType"
+            app:argType="com.example.adminapp.ui.signin.FindInfoType"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+        <fragment
+            android:id="@+id/signInFragment"
+            android:name="com.example.adminapp.ui.signin.SignInFragment"
+            android:label="SignInFragment" >
+            <action
+                android:id="@+id/action_signInFragment_to_mainFragment"
+                app:destination="@id/mainFragment"
+                app:popEnterAnim="@anim/slide_pop_enter"
+                app:popExitAnim="@anim/slide_pop_exit"
+                />
+            <action
+                android:id="@+id/action_signInFragment_to_signInFindInfoFragment"
+                app:destination="@id/signInFindInfoFragment"
+                app:enterAnim="@anim/slide_enter"
+                app:exitAnim="@anim/slide_exit"
+                app:popEnterAnim="@anim/slide_pop_enter"
+                app:popExitAnim="@anim/slide_pop_exit" >
+                <argument
+                    android:name="findInfoType"
+                    app:argType="com.example.adminapp.ui.signin.FindInfoType"
+                    app:nullable="true"
+                    android:defaultValue="@null"/>
+            </action>
+        </fragment>
+        <fragment
+            android:id="@+id/signInFindInfoFragment"
+            android:name="com.example.adminapp.ui.signin.SignInFindInfoFragment"
+            android:label="SignInFindInfoFragment">
+            <argument
+                android:name="findInfoType"
+                app:argType="com.example.adminapp.ui.signin.FindInfoType"
+                app:nullable="true"
+                android:defaultValue="@null"/>
+            <action
+                android:id="@+id/action_signInFindInfoFragment_to_signInFindInfoResultFragment"
+                app:destination="@id/signInFindInfoResultFragment"
+                app:popUpTo="@id/signInFindInfoFragment"
+                app:popUpToInclusive="true"
+                app:exitAnim="@anim/slide_exit"
+                app:popEnterAnim="@anim/slide_pop_enter"
+                app:popExitAnim="@anim/slide_pop_exit">
+            </action>
+        </fragment>
+        <fragment
+            android:id="@+id/signInFindInfoResultFragment"
+            android:name="com.example.adminapp.ui.signin.SignInFindInfoResultFragment"
+            android:label="SignInFindInfoResultFragment">
+            <action
+                android:id="@+id/action_signInFindInfoResultFragment_pop"
+                app:popUpTo="@id/signInFindInfoResultFragment"
+                app:popUpToInclusive="true"
+                app:popEnterAnim="@anim/slide_pop_enter"
+                app:popExitAnim="@anim/slide_pop_exit" />
+            <action
+                android:id="@+id/action_signInFindInfoResultFragment_to_signInFindInfoFragment"
+                app:destination="@id/signInFindInfoFragment"
+                app:popUpTo="@id/signInFindInfoResultFragment"
+                app:popUpToInclusive="true" >
+            </action>
+        </fragment>
+    </navigation>
     <fragment
         android:id="@+id/reservationEditFragment"
         android:name="com.example.adminapp.ui.main.reservation.edit.ReservationEditFragment"
@@ -345,5 +424,38 @@
         <action
             android:id="@+id/action_communityGetPhoto_to_communityWriteMarket"
             app:destination="@id/communityWriteMarketFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/settingsChangePwdFragment"
+        android:name="com.example.adminapp.ui.main.settings.SettingsChangePwdFragment"
+        android:label="SettingsChangePwdFragment" >
+        <action
+            android:id="@+id/action_settingsChangePwdFragment_pop"
+            app:popUpTo="@id/settingsChangePwdFragment"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsAllowUserFragment"
+        android:name="com.example.adminapp.ui.main.settings.SettingsAllowUserFragment"
+        android:label="SettingsAllowUserFragment" >
+        <action
+            android:id="@+id/action_settingsAllowUserFragment_pop"
+            app:popUpTo="@id/settingsAllowUserFragment"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsManageUserFragment"
+        android:name="com.example.adminapp.ui.main.settings.SettingsManageUserFragment"
+        android:label="SettingsManageUserFragment">
+        <action
+            android:id="@+id/action_settingsManageUserFragment_pop"
+            app:popUpTo="@id/settingsManageUserFragment"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

@@ -22,6 +22,7 @@ class ReservationRepository() {
                     instance
                 }
         }
+
         private val FIRESTORE_RESERVATION = "RESERVATION"
         private val FIRESTORE_RESERVATION_EQUIPMENT = "EQUIPMENT"
         private val FIRESTORE_RESERVATION_EQUIPMENT_SETTINGS = "EQUIPMENT_SETTINGS"
@@ -52,7 +53,7 @@ class ReservationRepository() {
                             ReservationEquipmentData(
                                 it.getLong("icon")!!.toInt(),
                                 it.get("name") as String,
-                                it.get("username") as String,
+                                it.get("user") as String,
                                 it.get("startTime") as String,
                                 it.get("endTime") as String,
                                 it.getLong("intervalTime")!!,
@@ -115,7 +116,7 @@ class ReservationRepository() {
                             ReservationEquipmentData(
                                 document.getLong("icon")!!.toInt(),
                                 document.get("name") as String,
-                                document.get("username") as String,
+                                document.get("user") as String,
                                 startTime,
                                 endTime,
                                 document.getLong("intervalTime")!!,

@@ -27,7 +27,9 @@ class HomeFragment : BaseFragment<FragmentMainhomeHomeBinding, CommunityViewMode
 
     override fun initViewStart(savedInstanceState: Bundle?) {
         val ac = activity as MainActivity
-        agency = ac.getUserData()!!.agency
+        ac.getUserData()?.let {
+            agency = it.agency
+        }
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {

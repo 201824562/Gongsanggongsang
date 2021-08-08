@@ -6,7 +6,8 @@ data class Admin(
     val agency : String = "",
     val id: String = "",
     val name: String = "",
+    val birth: String = "",
     val phone: String = ""
 ){
-    fun makeAdminEntity() : AdminEntity { return AdminEntity(id, name, phone, agency) }
+    fun makeAdminEntity() : AdminEntity { return AdminEntity(id, name, birth, phone, agency) }
 }

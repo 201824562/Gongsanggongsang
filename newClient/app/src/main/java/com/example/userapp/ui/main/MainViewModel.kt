@@ -22,7 +22,7 @@ class MainViewModel : BaseViewModel(){
     }
 
 
-    /*   fun getUserStatus() {
+    /*   fun getUsertatus() {
        apiCall(userRepository.requestSignUpStatus(authToken), { status ->
            when (status.data.state) {
                UserStatus.NOT_USER -> callSessionInvalidEvent()

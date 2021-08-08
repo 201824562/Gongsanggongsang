@@ -20,7 +20,7 @@ data class ReservationFacilityItem(val data : ReservationFacilitySettingData, va
 }
 
 @Parcelize
-data class ReservationEquipmentData(val icon : Int, val name : String, val username : String="", val startTime: String = "", val endTime: String = "", val intervalTime: Long=0L, val using: Boolean = false, val usable : Boolean = true/*, val icon : Int*/) :
+data class ReservationEquipmentData(val icon : Int, val name : String, val user : String="", val startTime: String = "", val endTime: String = "", val intervalTime: Long=0L, val using: Boolean = false, val usable : Boolean = true/*, val icon : Int*/) :
     Parcelable
 
 //TODO : 아이콘 & 기기 이름 -> setting 말고에도 다 추가필요!!!!!!!!!(대작업 필요) + usable(사용가능) 설정 필요.

@@ -1,19 +1,17 @@
 package com.example.userapp.ui.signup
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.userapp.base.BaseViewModel
+import com.example.userapp.base.BaseSessionViewModel
 import com.example.userapp.data.model.Agency
 import com.example.userapp.data.model.SignUpInfo
-import com.example.userapp.data.repository.SignRepository
 import com.example.userapp.utils.RegularExpressionUtils
 import com.example.userapp.utils.SingleLiveEvent
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 
-class SignUpViewModel() : BaseViewModel() {
-
-    private val signRepository: SignRepository = SignRepository.getInstance()
+class SignUpViewModel(application: Application) : BaseSessionViewModel(application) {
 
     private val _onClickedAllBtn = SingleLiveEvent<Boolean>()
     val onClickedAllBtn : LiveData<Boolean> get() = _onClickedAllBtn
@@ -36,13 +34,13 @@ class SignUpViewModel() : BaseViewModel() {
     private val _validUserNameEventLiveData = SingleLiveEvent<Any>()
     val validUserNameEventLiveData: LiveData<Any> get() = _validUserNameEventLiveData
     private val _invalidBirthInfoEventLiveData = SingleLiveEvent<String>()
-    val invalidBirthInfoEventLiveData: LiveData<String> get() = _invalidBirthInfoEventLiveData
-    private val _validBirthInfoEventLiveData = SingleLiveEvent<Any>()
-    val validBirthInfoEventLiveData: LiveData<Any> get() = _validBirthInfoEventLiveData
-    private val _invalidSmsInfoEventLiveData = SingleLiveEvent<String>()
-    val invalidSmsInfoEventLiveData: LiveData<String> get() = _invalidSmsInfoEventLiveData
-    private val _validSmsInfoEventLiveData = SingleLiveEvent<Any>()
-    val validSmsInfoEventLiveData: LiveData<Any> get() = _validSmsInfoEventLiveData
+    val invalidUserBirthEventLiveData: LiveData<String> get() = _invalidBirthInfoEventLiveData
+    private val _validUserBirthEventLiveData = SingleLiveEvent<Any>()
+    val validUserBirthEventLiveData: LiveData<Any> get() = _validUserBirthEventLiveData
+    private val _invalidUserSmsEventLiveData = SingleLiveEvent<String>()
+    val invalidUserSmsEventLiveData: LiveData<String> get() = _invalidUserSmsEventLiveData
+    private val _validUserSmsEventLiveData = SingleLiveEvent<Any>()
+    val validUserSmsEventLiveData: LiveData<Any> get() = _validUserSmsEventLiveData
     private val _saveSignUpInfoEventLiveData = SingleLiveEvent<Any>()
     val saveSignUpInfoEventLiveData: LiveData<Any> get() = _saveSignUpInfoEventLiveData
     private val _invalidUserIdEventLiveData = SingleLiveEvent<String>()
@@ -143,7 +141,7 @@ class SignUpViewModel() : BaseViewModel() {
     }
 
     fun loadSearchAgencyResult(keyword : String) {
-        apiCall(signRepository.getSearchAgencyResult(keyword), {
+        apiCall(userRepository.getSearchAgencyResult(keyword), {
             _agencyDataList.postValue(it)
             _validSearchResultEventLiveData.call()
         })
@@ -177,20 +175,20 @@ class SignUpViewModel() : BaseViewModel() {
             _invalidBirthInfoEventLiveData.postValue("생년월일은 8자리 숫자이어야 합니다.")
             false
         } else {
-            _validBirthInfoEventLiveData.call()
+            _validUserBirthEventLiveData.call()
             true
         }
     }
 
     private fun checkForUserSmsInfo(usersSmsInfo: String) : Boolean {
         return if (usersSmsInfo.isBlank() || usersSmsInfo.isEmpty()){
-            _invalidSmsInfoEventLiveData.postValue("전화번호를 입력해주세요.")
+            _invalidUserSmsEventLiveData.postValue("전화번호를 입력해주세요.")
             false
         } else if (!RegularExpressionUtils.validCheck(RegularExpressionUtils.Regex.PHONE, usersSmsInfo)){
-            _invalidSmsInfoEventLiveData.postValue("전화번호를 확인해주세요.")
+            _invalidUserSmsEventLiveData.postValue("전화번호를 확인해주세요.")
             false
         } else{
-            _validSmsInfoEventLiveData.call()
+            _validUserSmsEventLiveData.call()
             true
         }
     }
@@ -238,7 +236,7 @@ class SignUpViewModel() : BaseViewModel() {
 
 
     fun checkIdFromServer(userId: String) {
-        apiCall(Single.zip(signRepository.checkIdFromWaitingUser(userId), signRepository.checkIdFromAllowedUser(userId),
+        apiCall(Single.zip(userRepository.checkIdFromWaitingUser(userId), userRepository.checkIdFromAllowedUser(userId),
             BiFunction<Boolean, Boolean, Boolean> { waitingIdExist, allowedIdExist ->
                 if (waitingIdExist) return@BiFunction false
                 else if (allowedIdExist) return@BiFunction false
@@ -271,7 +269,7 @@ class SignUpViewModel() : BaseViewModel() {
     }
 
     fun checkNicknameFromServer(nickname: String) {
-        apiCall(Single.zip(signRepository.checkNicknameFromWaitingUser(nickname), signRepository.checkNicknameFromAllowedUser(nickname),
+        apiCall(Single.zip(userRepository.checkNicknameFromWaitingUser(nickname), userRepository.checkNicknameFromAllowedUser(nickname),
             BiFunction<Boolean, Boolean, Boolean> { waitingNicknameExist, allowedNicknameExist ->
                 if (waitingNicknameExist) return@BiFunction false
                 else if (allowedNicknameExist) return@BiFunction false
@@ -316,7 +314,7 @@ class SignUpViewModel() : BaseViewModel() {
     fun sendSignUpInfoToServer(userId : String, userPwd : String, userNickname : String){
         signUpInfo = SignUpInfo(selectedAgency!!.key, personalSignUpInfo!!.username, personalSignUpInfo!!.userBirthday, personalSignUpInfo!!.usersSmsInfo,
             userId, userPwd, userNickname, false)
-        apiCall(signRepository.signUp(signUpInfo!!), { _onSuccessSignUpEvent.call() })
+        apiCall(userRepository.signUp(signUpInfo!!), { _onSuccessSignUpEvent.call() })
     }
 
 }

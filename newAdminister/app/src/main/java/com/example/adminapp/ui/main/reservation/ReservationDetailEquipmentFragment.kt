@@ -134,7 +134,7 @@ class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReserva
                 else{
                     reserveDetailItemIconBackground.background = ContextCompat.getDrawable(requireContext(), R.drawable.view_oval_light_orange)
                     reserveDetailItemState.text = USING_STATE
-                    reserveDetailItemUserName.text = item.username
+                    reserveDetailItemUserName.text = item.user
                     reserveDetailItemUsedTime.text = NO_USING_STRING //TODO : 계산필요
                     reserveDetailItemLeftTime.text = NO_USING_STRING //TODO : 계산필요
                     reserveDetailItemStartTime.text = item.startTime

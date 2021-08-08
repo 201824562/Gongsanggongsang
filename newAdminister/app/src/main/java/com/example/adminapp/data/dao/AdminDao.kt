@@ -18,7 +18,7 @@ interface AdminDao {
     fun deleteAdminData(userId : String)
 
     @Query("SELECT * from admin ORDER BY id DESC LIMIT 1 ")
-    fun getAdminData() : LiveData<AdminEntity>
+    fun getAdminData() : LiveData<AdminEntity?>
 
     @Query("SELECT id from admin ORDER BY id DESC LIMIT 1 ")
     fun getAdminToken() : String?
