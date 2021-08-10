@@ -1,13 +1,18 @@
 package com.example.userapp.ui.main.reservation
 
+import android.app.Application
+import android.service.autofill.UserData
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.userapp.base.BaseSessionViewModel
 import com.example.userapp.base.BaseViewModel
+import com.example.userapp.data.dto.UserModel
 import com.example.userapp.data.entity.DayTimeSlot
 import com.example.userapp.data.entity.ReservationTimeData
 import com.example.userapp.data.entity.UnableTimeList
+import com.example.userapp.data.entity.User
 import com.example.userapp.data.model.*
 import com.google.common.collect.ArrayListMultimap
 import com.google.firebase.firestore.FieldValue
@@ -16,7 +21,10 @@ import kotlinx.coroutines.*
 import okhttp3.internal.userAgent
 import java.time.LocalDateTime
 
-class ReservationViewModel : BaseViewModel() {
+class ReservationViewModel(application: Application) : BaseSessionViewModel(application) {
+    init {
+        val userInfo : User?= null
+    }
     val database = FirebaseFirestore.getInstance()
 
     val UseEquipmentLiveData = MutableLiveData<List<ReservationUseEquipment>>()
@@ -54,23 +62,21 @@ class ReservationViewModel : BaseViewModel() {
 
     //파이어베이스에서 데이터 가져오는 함수 getEquipmentData, getUseEquipmentData, getFacilityData 통일해야함
     fun getEquipmentData() {
-        lateinit var document_name: String
         lateinit var using: String
         lateinit var end_time: String
-        lateinit var category: String
 
-        database.collection("COMMUNAL_Equipment")
+        database.collection("한국장학재단_부산").document("RESERVATION")
+            .collection("EQUIPMENT")
             .addSnapshotListener { value, e ->
                 if (e != null) {
                     return@addSnapshotListener
                 }
                 EquipmentData.clear()
                 for (document in value!!) {
-                    document_name = document.id
-                    category = document.get("category") as String
-                    if (document.contains("name")) {
+//                    Log.e("error checking!",(document.get("user") as String))
+                    if (document.get("user") as String != "" || !(document.get("usable") as Boolean)) {
                         using = "using"
-                        end_time = document.get("end") as String
+                        end_time = document.get("endTime") as String
                     } else {
                         using = "no_using"
                         end_time = "no_endtime"
@@ -78,10 +84,10 @@ class ReservationViewModel : BaseViewModel() {
 
                     EquipmentData.add(
                         ReservationEquipment(
-                            document_name,
+                            document.id,
                             using,
                             end_time,
-                            category
+                            document.get("icon") as Long
                         )
                     )
                 }
@@ -90,39 +96,41 @@ class ReservationViewModel : BaseViewModel() {
     }
 
     fun getUseEquipmentData() {
-        lateinit var document_name: String
-        lateinit var name: String
-        lateinit var start_time: String
-        lateinit var end_time: String
-        lateinit var category: String
+        lateinit var tmpId: String
         var coroutine: CoroutineScope = CoroutineScope(Dispatchers.Main)
 
-        database.collection("COMMUNAL_Equipment")
+
+        database.collection("한국장학재단_부산").document("RESERVATION")
+        .collection("EQUIPMENT")
             .addSnapshotListener { value, e ->
                 if (e != null) {
                     return@addSnapshotListener
                 }
                 UseEquipmentData.clear()
                 for (document in value!!) {
-                    document_name = document.id
-                    if (document.getString("name") != null) {
-                        name = document.getString("name") ?: " "
-                        start_time = document.get("start") as String
-                        end_time = document.get("end") as String
-                        category = document.get("category") as String
-
-                        if (name == "kijung") { //userdata
+                    if (document.get("user") as String != "") {
+                        tmpId = document.getString("user") ?: " "
+                        if (tmpId == authToken) { //userdata
                             UseEquipmentData.add(
                                 ReservationUseEquipment(
-                                    document_name,
-                                    name,
-                                    start_time,
-                                    end_time,
+                                    document.id,
+                                    tmpId,
+                                    document.get("startTime") as String,
+                                    document.get("endTime") as String,
                                     0,
-                                    category,
+                                    document.get("icon") as Long,
                                     coroutine
                                 )
                             )
+                            Log.e("ReservationUseEquipment",ReservationUseEquipment(
+                                document.id,
+                                tmpId,
+                                document.get("startTime") as String,
+                                document.get("endTime") as String,
+                                0,
+                                document.get("icon") as Long,
+                                coroutine
+                            ).toString())
                         }
                     }
                 }
@@ -251,41 +259,58 @@ class ReservationViewModel : BaseViewModel() {
 
 
 
-    fun add_use(ReservationEquipment: ReservationEquipment, usingtime: Int) {
+    fun add_use(userInfo : UserModel, ReservationEquipment: ReservationEquipment, usingtime: Int) {
         var map1 = mutableMapOf<String, Any>()
         var map2 = mutableMapOf<String, Any>()
         var map3 = mutableMapOf<String, Any>()
+        var map4 = mutableMapOf<String, Any>()
 
-        map1["start"] = LocalDateTime.now().toString()
-        map2["end"] = LocalDateTime.now().plusMinutes(usingtime.toLong()).toString()
-        map3["name"] = "kijung" // name을 맨마지막으로 지우지 않으면 nullpointerexception 발생
+        map1["startTime"] = LocalDateTime.now().toString()
+        map2["endTime"] = LocalDateTime.now().plusMinutes(usingtime.toLong()).toString()
+        map3["user"] = authToken
+        map4["using"] = true
 
-        database.collection("COMMUNAL_Equipment").document(ReservationEquipment.document_name)
+        database.collection("한국장학재단_부산").document("RESERVATION")
+            .collection("EQUIPMENT").document(ReservationEquipment.document_name)
             .update(map1)
-        database.collection("COMMUNAL_Equipment").document(ReservationEquipment.document_name)
+        database.collection("한국장학재단_부산").document("RESERVATION")
+            .collection("EQUIPMENT").document(ReservationEquipment.document_name)
             .update(map2)
-        database.collection("COMMUNAL_Equipment").document(ReservationEquipment.document_name)
+        database.collection("한국장학재단_부산").document("RESERVATION")
+            .collection("EQUIPMENT").document(ReservationEquipment.document_name)
             .update(map3)
+        database.collection("한국장학재단_부산").document("RESERVATION")
+            .collection("EQUIPMENT").document(ReservationEquipment.document_name)
+            .update(map4)
+
 
         EquipmentLiveData.value = EquipmentData
     }
 
     fun end_use(ReservationUseEquipment: ReservationUseEquipment) {
         ReservationUseEquipment.coroutine.cancel()
-        var map1 = mutableMapOf<String, Any>()
-        var map2 = mutableMapOf<String, Any>()
-        var map3 = mutableMapOf<String, Any>()
+        var map1 = mutableMapOf<String, Any?>()
+        var map2 = mutableMapOf<String, Any?>()
+        var map3 = mutableMapOf<String, Any?>()
+        var map4 = mutableMapOf<String, Any>()
 
-        map1["name"] = FieldValue.delete()
-        map2["start"] = FieldValue.delete()
-        map3["end"] = FieldValue.delete()
+        map1["user"] = ""
+        map2["startTime"] = ""
+        map3["endTime"] = ""
+        map4["using"] = false
 
-        database.collection("COMMUNAL_Equipment").document(ReservationUseEquipment.document_name)
+        database.collection("한국장학재단_부산").document("RESERVATION")
+            .collection("EQUIPMENT").document(ReservationUseEquipment.document_name)
             .update(map1)
-        database.collection("COMMUNAL_Equipment").document(ReservationUseEquipment.document_name)
+        database.collection("한국장학재단_부산").document("RESERVATION")
+            .collection("EQUIPMENT").document(ReservationUseEquipment.document_name)
             .update(map2)
-        database.collection("COMMUNAL_Equipment").document(ReservationUseEquipment.document_name)
+        database.collection("한국장학재단_부산").document("RESERVATION")
+            .collection("EQUIPMENT").document(ReservationUseEquipment.document_name)
             .update(map3)
+        database.collection("한국장학재단_부산").document("RESERVATION")
+            .collection("EQUIPMENT").document(ReservationUseEquipment.document_name)
+            .update(map4)
 
 
         UseEquipmentLiveData.value = UseEquipmentData

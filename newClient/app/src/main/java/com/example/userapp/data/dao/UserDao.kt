@@ -15,7 +15,7 @@ interface UserDao {
     fun deleteUserData(userId : String)
 
     @Query("SELECT * from user ORDER BY id DESC LIMIT 1 ")
-    fun getUserData() : LiveData<User>
+    fun getUserData() : User?
 
     @Query("SELECT id from user ORDER BY id DESC LIMIT 1 ")
     fun getUserToken() : String?

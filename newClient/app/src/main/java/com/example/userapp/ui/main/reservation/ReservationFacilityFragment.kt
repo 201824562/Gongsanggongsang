@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
+import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.data.model.ReservationEquipment
 import com.example.userapp.data.model.ReservationFacility
 import com.example.userapp.databinding.FragmentMainhomeReservationEquipmentItemBinding
@@ -22,7 +23,7 @@ import com.example.userapp.utils.InputUsingTimeDialog
 import com.google.firebase.firestore.FirebaseFirestore
 
 class ReservationFacilityFragment :
-    BaseFragment<FragmentMainhomeReservationFacilityBinding, ReservationViewModel>() {
+    BaseSessionFragment<FragmentMainhomeReservationFacilityBinding, ReservationViewModel>() {
     override lateinit var viewbinding: FragmentMainhomeReservationFacilityBinding
     override val viewmodel: ReservationViewModel by viewModels()
     val database = FirebaseFirestore.getInstance()
