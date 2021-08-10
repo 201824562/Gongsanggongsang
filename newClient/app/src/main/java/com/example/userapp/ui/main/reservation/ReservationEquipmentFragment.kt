@@ -1,39 +1,42 @@
 package com.example.userapp.ui.main.reservation
 
-import android.app.ProgressDialog.show
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.userapp.MainActivity
 import com.example.userapp.R
-import com.example.userapp.base.BaseFragment
+import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.data.dto.UserModel
 import com.example.userapp.data.model.ReservationEquipment
 import com.example.userapp.databinding.FragmentMainhomeReservationEquipmentBinding
 import com.example.userapp.databinding.FragmentMainhomeReservationEquipmentItemBinding
 import com.example.userapp.utils.ConfirmUsingDialog
-import com.example.userapp.utils.FinishUsingDialog
 import com.example.userapp.utils.InputUsingTimeDialog
 import com.google.firebase.firestore.FirebaseFirestore
 
 
 class ReservationEquipmentFragment :
-    BaseFragment<FragmentMainhomeReservationEquipmentBinding, ReservationViewModel>() {
+    BaseSessionFragment<FragmentMainhomeReservationEquipmentBinding, ReservationViewModel>() {
     override lateinit var viewbinding: FragmentMainhomeReservationEquipmentBinding
     override val viewmodel: ReservationViewModel by viewModels()
     val database = FirebaseFirestore.getInstance()
+    private var ac: MainActivity? = null
+    private lateinit var userInfo : UserModel
 
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewbinding =
-            FragmentMainhomeReservationEquipmentBinding.inflate(inflater, container, false)
+        viewbinding = FragmentMainhomeReservationEquipmentBinding.inflate(inflater, container, false)
         return viewbinding.root
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
+        ac = activity as MainActivity
+        ac?.let { userInfo = it.getUserData() }
         viewbinding.equipmentRecyclerView.layoutManager = LinearLayoutManager(context)
         viewbinding.equipmentRecyclerView.adapter = EquipmentAdapter(
             emptyList(),
@@ -54,7 +57,8 @@ class ReservationEquipmentFragment :
 
                                 override fun dialogUsingClickListener() {
                                     if (usingtime > 0) { //사용시간이 0보다 큰 경우만 사용
-                                        viewmodel.add_use(it,usingtime)
+
+                                        viewmodel.add_use(userInfo,it,usingtime)
                                     }
                                     confirmUsingDialog.dismiss()
                                     dismiss()

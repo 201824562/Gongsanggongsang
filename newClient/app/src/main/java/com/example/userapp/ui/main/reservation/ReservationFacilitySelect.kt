@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
+import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.data.entity.DayTimeSlot
 import com.example.userapp.data.entity.ReservationTimeData
 import com.example.userapp.data.model.ReservationFacilityDayInfo
@@ -25,7 +26,7 @@ import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.HashMap
 
-class ReservationFacilitySelect : BaseFragment<FragmentMainhomeReservationFacilitySelectBinding, ReservationViewModel>() {
+class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservationFacilitySelectBinding, ReservationViewModel>() {
     override lateinit var viewbinding: FragmentMainhomeReservationFacilitySelectBinding
     override val viewmodel: ReservationViewModel by viewModels()
     val database = FirebaseFirestore.getInstance()

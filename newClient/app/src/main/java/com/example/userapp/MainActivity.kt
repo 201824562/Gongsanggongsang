@@ -3,15 +3,12 @@ package com.example.userapp
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -19,9 +16,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.viewbinding.ViewBinding
 import com.example.userapp.base.*
-import com.example.userapp.data.entity.User
+import com.example.userapp.data.dto.UserModel
 import com.example.userapp.databinding.ActivityMainBinding
-import java.security.acl.Owner
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() {
     companion object{ val TOOLBAR_TITLE = "title" }
@@ -33,9 +29,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController : NavController
-
-
-    private var userData : User? = null
+    private var userData : UserModel? = null
     var selectedItems : ArrayList<String> = arrayListOf()
 
     override fun initToolbar() {
@@ -47,19 +41,21 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     override fun initViewbinding() {
         viewbinding =  ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewbinding.root)
-
-        viewmodel.getUserInfo().observe(this, {
-            userData = it
-            Log.e("checking", "$userData")
-        })
-
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {}
 
-    override fun initDataBinding(savedInstanceState: Bundle?) {}
+    override fun initDataBinding(savedInstanceState: Bundle?) {
+        viewmodel.onSuccessGettingUserInfo.observe(this, {
+            userData = it
+        })
+        viewmodel.onSuccessGettingNullUserInfo.observe(this, {
+            //restartActivity()
+        })
+    }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
+        viewmodel.getUserInfo()
         setToolbarWithNavcontroller()
     }
 
@@ -124,8 +120,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     fun getPhoto() : ArrayList<String>{
         return selectedItems
     }
-    fun getUserData() : User?{
-        return this.userData
+    fun getUserData() : UserModel{
+        return this.userData!!
     }
 }
 
