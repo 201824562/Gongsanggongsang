@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
+import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.data.model.ReservationReserveFacility
 import com.example.userapp.data.model.ReservationUseEquipment
 import com.example.userapp.databinding.FragmentMainhomeReservationCurrentBinding
@@ -23,7 +24,7 @@ import java.time.temporal.ChronoUnit
 import kotlin.concurrent.timer
 
 class ReservationCurrentFragment :
-    BaseFragment<FragmentMainhomeReservationCurrentBinding, ReservationViewModel>() {
+    BaseSessionFragment<FragmentMainhomeReservationCurrentBinding, ReservationViewModel>() {
     override lateinit var viewbinding: FragmentMainhomeReservationCurrentBinding
     override val viewmodel: ReservationViewModel by viewModels()
     val database = FirebaseFirestore.getInstance()
@@ -69,7 +70,6 @@ class ReservationCurrentFragment :
     }
 }
 
-
 class EquipmentUsingAdapter(
     private var  dataSet: List<ReservationUseEquipment>,
     val onClickNoUsingIcon: (ReservationUseEquipment: ReservationUseEquipment) -> Unit,
@@ -90,7 +90,7 @@ class EquipmentUsingAdapter(
 
         data.remain_time = (ChronoUnit.MILLIS.between(
             LocalDateTime.now(),
-            LocalDateTime.parse(data.end_time)
+            LocalDateTime.parse(data.endTime)
         ))
         println("remaintime : " + data.remain_time + "\n")
 
@@ -122,11 +122,50 @@ class EquipmentUsingAdapter(
     //데이터셋 변화 >> 뷰로 적용시켜주는 함수
     fun setData(newData: List<ReservationUseEquipment>) {
         dataSet = newData
-        //notifyDataSetChanged()
+        notifyDataSetChanged()
     }
 
     override fun getItemCount() = dataSet.size
 }
+
+//class FacilityReserveAdapter(
+//    private var  dataSet: List<ReservationReserveFacility>,
+//    val onClickNoUsingIcon: (ReservationReserveFacility: ReservationReserveFacility) -> Unit,
+//) :
+//    RecyclerView.Adapter<FacilityReserveAdapter.FacilityReserveViewHolder>() {
+//
+//    class FacilityReserveViewHolder(val viewbinding: FragmentMainhomeReservationCurrentReserveItemBinding) :
+//        RecyclerView.ViewHolder(viewbinding.root)
+//
+//    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): FacilityReserveViewHolder {
+//        val view = LayoutInflater.from(viewGroup.context)
+//            .inflate(R.layout.fragment_mainhome_reservation_current_reserve_item, viewGroup, false)
+//        return FacilityReserveViewHolder(FragmentMainhomeReservationCurrentReserveItemBinding.bind(view))
+//    }
+//
+//    @SuppressLint("SetTextI18n")
+//    override fun onBindViewHolder(viewHolder: FacilityReserveViewHolder, position: Int) {
+//        val data = dataSet[position]
+//
+//        viewHolder.viewbinding.documentNameTextview.text = data.document_name
+//        viewHolder.viewbinding.reserveTimeTextview.text = "00월 00일" +
+//                data.timeSlotList.first().chunked(2)[0] + ":" + data.timeSlotList.first().chunked(2)[1] +
+//                "~" + data.timeSlotList.last().chunked(2)[0] + ":" + data.timeSlotList.last().chunked(2)[1]
+//
+//       viewHolder.viewbinding.cancelReserveBtn.setOnClickListener() {
+//            onClickNoUsingIcon.invoke(data)
+//        }
+//
+//    }
+//
+//    //데이터셋 변화 >> 뷰로 적용시켜주는 함수
+//    fun setData(newData: List<ReservationReserveFacility>) {
+//        dataSet = newData
+//        notifyDataSetChanged()
+//    }
+//
+//    override fun getItemCount() = dataSet.size
+//}
 
 class FacilityReserveAdapter(
     private var  dataSet: List<ReservationReserveFacility>,
@@ -155,7 +194,6 @@ class FacilityReserveAdapter(
        viewHolder.viewbinding.cancelReserveBtn.setOnClickListener() {
             onClickNoUsingIcon.invoke(data)
         }
-
     }
 
     //데이터셋 변화 >> 뷰로 적용시켜주는 함수

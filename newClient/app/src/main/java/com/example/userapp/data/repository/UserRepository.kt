@@ -4,10 +4,13 @@ import android.app.Application
 import android.content.Context
 import androidx.core.content.edit
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import com.example.userapp.data.AppDatabase
 import com.example.userapp.data.dto.UserModel
 import com.example.userapp.data.entity.User
 import io.reactivex.Completable
+import io.reactivex.Single
+import java.lang.Exception
 
 class UserRepository(appDatabase: AppDatabase) {
 
@@ -81,8 +84,15 @@ class UserRepository(appDatabase: AppDatabase) {
         sharedPreferences.edit { remove(SHARED_PREFERENCES_TOKEN ) }
     }
 
-    fun getUserInfo() : LiveData<User> {
-        return userdataDao.getUserData()
+    fun getUserInfo() : Single<UserModel> {
+        return Single.create<UserModel> { emitter ->
+            val userEntityData = userdataDao.getUserData()
+            try {
+                if (userEntityData == null) emitter.onError(Throwable("Error of Getting UserInfo"))
+                else emitter.onSuccess(userEntityData.getUserModel())
+            }catch (e : Exception){
+            }
+        }
     }
 
     fun saveUserInfo(userData : UserModel) : Completable{
