@@ -6,6 +6,13 @@ import kotlinx.android.parcel.RawValue
 import java.time.LocalTime
 
 
+data class ReservationEquipmentLog(val icon : Int, val name : String, val userId : String="", val userName : String="",
+                                   val reservationState : String = "", val reservationType : String = "", val startTime: String = "", val endTime: String = "")
+
+data class ReservationFacilityLog(val icon : Int, val name : String, val userId : String="", val userName : String="",
+                                      val reservationState : String = "", val reservationType : String = "",val startTime: String = "", val endTime: String = "",
+                                      val able : Boolean = true)
+
 data class ReservationEquipmentItem(val data : ReservationEquipmentSettingData, val equipmentData : ReservationEquipmentData)
 
 data class ReservationFacilityItem(val data : ReservationFacilitySettingData, val unableTimeList : List<ReservationUnableTimeItem>){
@@ -20,10 +27,9 @@ data class ReservationFacilityItem(val data : ReservationFacilitySettingData, va
 }
 
 @Parcelize
-data class ReservationEquipmentData(val icon : Int, val name : String, val username : String="", val startTime: String = "", val endTime: String = "", val intervalTime: Long=0L, val using: Boolean = false, val usable : Boolean = true/*, val icon : Int*/) :
+data class ReservationEquipmentData(val icon : Int, val name : String, val user : String="", val startTime: String = "", val endTime: String = "", val intervalTime: Long=0L, val using: Boolean = false, val usable : Boolean = true/*, val icon : Int*/) :
     Parcelable
 
-//TODO : 아이콘 & 기기 이름 -> setting 말고에도 다 추가필요!!!!!!!!!(대작업 필요) + usable(사용가능) 설정 필요.
 data class ReservationFacilityData(val index : Int, val user: String, val data : ReservationTimeData, var buttonSelected : Boolean = false)
 
 data class ReservationFacilityListData(/*val name : String, val type : ReservationUnableTimeType, */val monday : List<ReservationFacilityData>, val tuesday : List<ReservationFacilityData>,
@@ -47,8 +53,3 @@ data class ReservationData(var icon : Int, var name : String, var intervalTime :
 
 @Parcelize
 enum class ReservationType : Parcelable { EQUIPMENT, FACILITY }
-
-enum class ReservationFragmentType {REGULAR, EDIT}
-
-@Parcelize
-data class ReservationArgumentType(val fragmentType : ReservationFragmentType , val reservationType : ReservationType) : Parcelable

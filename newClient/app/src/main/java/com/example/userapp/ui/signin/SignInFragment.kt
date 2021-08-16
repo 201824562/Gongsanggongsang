@@ -1,23 +1,25 @@
 package com.example.userapp.ui.signin
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import com.example.userapp.R
 import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.data.model.UserStatus
 import com.example.userapp.databinding.FragmentSigninBinding
-import com.example.userapp.utils.MatchedDialogSignInOneButton
+import com.example.userapp.utils.WrapedDialogBasicOneButton
 import com.example.userapp.utils.hideKeyboard
+import kotlinx.android.parcel.Parcelize
 
-//TODO : 아이디/비번 찾기 구현하기 -> Administer에 적용하기.
 class SignInFragment : BaseSessionFragment<FragmentSigninBinding, SignInViewModel>() {
     override lateinit var viewbinding: FragmentSigninBinding
-    override val viewmodel: SignInViewModel by viewModels()
+    override val viewmodel: SignInViewModel by navGraphViewModels(R.id.signInGraph)
 
     private var idInfoExist : Boolean = false
     private var pwdInfoExist : Boolean = false
@@ -35,6 +37,7 @@ class SignInFragment : BaseSessionFragment<FragmentSigninBinding, SignInViewMode
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
         viewmodel.run {
+            clearTypeData()
             userStatusEvent.observe(viewLifecycleOwner) {
                 when (it) {
                     UserStatus.NOT_USER -> showErrorDialog("로그인에 실패했습니다.\n아이디나 비밀번호를 확인해주세요.")
@@ -48,10 +51,13 @@ class SignInFragment : BaseSessionFragment<FragmentSigninBinding, SignInViewMode
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run {
-            loginBtn.setOnClickListener {
-                if (nextBtnAvailable) {
-                    viewmodel.sendSignInInfo(getUsersId(), getUsersPwd())
-                }
+            findIdBtn.setOnClickListener {
+                viewmodel.findInfoType = FindInfoType.ID
+                findNavController().navigate(R.id.action_signInFragment_to_signInFindInfoFragment)
+            }
+            findPwdBtn.setOnClickListener {
+                viewmodel.findInfoType = FindInfoType.PWD
+                findNavController().navigate(R.id.action_signInFragment_to_signInFindInfoFragment)
             }
             editTextId.addTextChangedListener {
                 idInfoExist = !(it.toString().isEmpty() || it.toString().isBlank())
@@ -63,11 +69,16 @@ class SignInFragment : BaseSessionFragment<FragmentSigninBinding, SignInViewMode
                 if (checkInfoExistState()) makeNextButtonAvailable()
                 else makeNextButtonNotAvailable()
             }
+            loginBtn.setOnClickListener {
+                if (nextBtnAvailable) {
+                    viewmodel.sendSignInInfo(getUserId(), getUserPwd())
+                }
+            }
         }
     }
 
-    private fun getUsersId() = viewbinding.editTextId.text.toString().trim()
-    private fun getUsersPwd() = viewbinding.editTextPwd.text.toString().trim()
+    private fun getUserId() = viewbinding.editTextId.text.toString().trim()
+    private fun getUserPwd() = viewbinding.editTextPwd.text.toString().trim()
 
     private fun checkInfoExistState() : Boolean { return idInfoExist && pwdInfoExist }
     private fun makeNextButtonAvailable() {
@@ -77,13 +88,13 @@ class SignInFragment : BaseSessionFragment<FragmentSigninBinding, SignInViewMode
         nextBtnAvailable = false
         viewbinding.loginBtn.setBackgroundResource(R.drawable.button_5dp_rectangle_black20) }
     private fun showErrorDialog(errorMessage : String){
-        val dialog = MatchedDialogSignInOneButton(requireContext(),  errorMessage).apply {
-            clickListener = object : MatchedDialogSignInOneButton.DialogButtonClickListener {
+        val dialog = WrapedDialogBasicOneButton(requireContext(),  errorMessage).apply {
+            clickListener = object : WrapedDialogBasicOneButton.DialogButtonClickListener {
                 override fun dialogClickListener() { dismiss() }
             }
         }
         showDialog(dialog, viewLifecycleOwner)
     }
-
-
 }
+@Parcelize
+enum class FindInfoType() : Parcelable { ID, PWD }

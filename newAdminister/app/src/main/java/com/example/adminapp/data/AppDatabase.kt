@@ -12,7 +12,7 @@ import com.example.adminapp.data.entity.CategoryEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [AdminEntity::class, CategoryEntity::class], version=1, exportSchema = false)
+@Database(entities = [AdminEntity::class, CategoryEntity::class], version=2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase(){
     abstract fun adminDao() : AdminDao
     abstract fun categoryDao() : CategoryDao

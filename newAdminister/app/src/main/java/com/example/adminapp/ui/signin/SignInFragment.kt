@@ -1,23 +1,23 @@
-package com.example.adminapp.ui.intro
+package com.example.adminapp.ui.signin
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.adminapp.R
 import com.example.adminapp.base.BaseSessionFragment
 import com.example.adminapp.data.model.AdminStatus
-import com.example.adminapp.databinding.FragmentIntroBinding
-import com.example.adminapp.utils.MatchedDialogSignInOneButton
+import com.example.adminapp.databinding.FragmentSigninBinding
+import com.example.adminapp.utils.WrapedDialogBasicOneButton
 import com.example.adminapp.utils.hideKeyboard
+import kotlinx.android.parcel.Parcelize
 
-//TODO : 아이디/비번 찾기 구현하기 -> Administer에 적용하기.
-class IntroFragment : BaseSessionFragment<FragmentIntroBinding, IntroViewModel>(){
-    override lateinit var viewbinding: FragmentIntroBinding
-    override val viewmodel: IntroViewModel by viewModels()
+class SignInFragment : BaseSessionFragment<FragmentSigninBinding, SignInViewModel>(){
+    override lateinit var viewbinding: FragmentSigninBinding
+    override val viewmodel: SignInViewModel by viewModels()
 
     private var idInfoExist : Boolean = false
     private var pwdInfoExist : Boolean = false
@@ -29,12 +29,12 @@ class IntroFragment : BaseSessionFragment<FragmentIntroBinding, IntroViewModel>(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewbinding = FragmentIntroBinding.inflate(inflater, container, false)
+        viewbinding = FragmentSigninBinding.inflate(inflater, container, false)
         return viewbinding.root
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-        viewbinding.fragmentContent.setOnClickListener { hideKeyboard(it) }
+        viewbinding.fragmentRootLayout.setOnClickListener { hideKeyboard(it) }
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
@@ -47,22 +47,30 @@ class IntroFragment : BaseSessionFragment<FragmentIntroBinding, IntroViewModel>(
                     AdminStatus.ADMIN -> viewmodel.saveUserInfo()
                     else -> showErrorDialog("오류가 발생했습니다. 다시 시도하거나 문의해주세요.") }
             }
-            onSuccessSaveUserInfo.observe(viewLifecycleOwner) { findNavController().navigate(R.id.action_introFragment_to_mainFragment) }
+            onSuccessSaveUserInfo.observe(viewLifecycleOwner) { findNavController().navigate(R.id.action_signInFragment_to_mainFragment) }
         }
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
-        viewbinding.loginBtn.setOnClickListener {
+        viewbinding.run{
+            findIdBtn.setOnClickListener {
+                findNavController().navigate(SignInFragmentDirections.actionSignInFragmentToSignInFindInfoFragment(FindInfoType.ID))
+            }
+            findPwdBtn.setOnClickListener {
+                findNavController().navigate(SignInFragmentDirections.actionSignInFragmentToSignInFindInfoFragment(FindInfoType.PWD))
+            }
+            loginBtn.setOnClickListener {
                 if (viewmodel.checkForSignInInfo(getAdminId(), getAdminPwd())) viewmodel.sendSignInInfo(getAdminId(), getAdminPwd()) }
 
+        }
     }
 
     private fun getAdminId() = viewbinding.editTextId.text.toString().trim()
     private fun getAdminPwd() = viewbinding.editTextPwd.text.toString().trim()
 
     private fun showErrorDialog(errorMessage : String){
-        val dialog = MatchedDialogSignInOneButton(requireContext(),  errorMessage).apply {
-            clickListener = object : MatchedDialogSignInOneButton.DialogButtonClickListener {
+        val dialog = WrapedDialogBasicOneButton(requireContext(),  errorMessage).apply {
+            clickListener = object : WrapedDialogBasicOneButton.DialogButtonClickListener {
                 override fun dialogClickListener() { dismiss() }
             }
         }
@@ -71,3 +79,6 @@ class IntroFragment : BaseSessionFragment<FragmentIntroBinding, IntroViewModel>(
 
 
 }
+
+@Parcelize
+enum class FindInfoType() : Parcelable { ID, PWD }

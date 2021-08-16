@@ -12,11 +12,12 @@ import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
+import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.databinding.FragmentSignupAgencyBinding
 import com.example.userapp.utils.setupKeyboardHide
 
 //TODO Agency : 얘 손봐야함.
-class SignUpAgencyFragment : BaseFragment<FragmentSignupAgencyBinding, SignUpViewModel>() {
+class SignUpAgencyFragment : BaseSessionFragment<FragmentSignupAgencyBinding, SignUpViewModel>() {
     override lateinit var viewbinding: FragmentSignupAgencyBinding
     override val viewmodel: SignUpViewModel by navGraphViewModels(R.id.signUpGraph)
 

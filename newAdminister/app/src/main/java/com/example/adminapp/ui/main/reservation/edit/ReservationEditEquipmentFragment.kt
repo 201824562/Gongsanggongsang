@@ -20,6 +20,7 @@ import com.example.adminapp.databinding.ItemReservationEditSettingBinding
 import com.example.adminapp.ui.main.reservation.ReservationViewModel
 import com.example.adminapp.ui.main.reservation.edit.ReservationEditFragmentDirections
 
+//TODO : 디버깅 - 두번째부터 리사이클러뷰 아이템 표현 이상. 이유 모름.
 class ReservationEditEquipmentFragment : BaseSessionFragment<FragmentReservationEditChildBinding, ReservationEditViewModel>() {
 
     override lateinit var viewbinding: FragmentReservationEditChildBinding
@@ -41,11 +42,11 @@ class ReservationEditEquipmentFragment : BaseSessionFragment<FragmentReservation
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewmodel.getReservationEquipmentSettingDataList().observe(viewLifecycleOwner){
-            reservationEditEquipmentSettingRVAdapter.submitList(it)
+            reservationEditEquipmentSettingRVAdapter.submitList(it) //TODO : 디버깅
         }
     }
 
-    private fun setRecyclerView() {
+    private fun setRecyclerView() {             //TODO : 디버깅
         reservationEditEquipmentSettingRVAdapter = ReservationEditEquipmentSettingRVAdapter(object : ReservationEditEquipmentSettingRVAdapter.OnItemClickListener {
             override fun onItemClick(position: Int, equipmentSettingData: ReservationEquipmentSettingData) {
                 val reservationItem = ReservationItem(ReservationType.EQUIPMENT, ReservationData(equipmentSettingData.icon, equipmentSettingData.name,
@@ -80,7 +81,7 @@ class ReservationEditEquipmentSettingRVAdapter(private val  listener : OnItemCli
         return ViewHolder(ItemReservationEditSettingBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) { //TODO : 디버깅
         getItem(position)?.let { item ->
             holder.binding.reserveEditItemIcon.load(item.icon)
             holder.binding.reserveEditItemName.text = item.name

@@ -2,10 +2,10 @@ package com.example.adminapp.ui.main.reservation
 
 import android.content.Context
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -19,7 +19,9 @@ import com.example.adminapp.data.model.*
 import com.example.adminapp.databinding.FragmentReservationChildBinding
 import com.example.adminapp.databinding.ItemReservationBinding
 import com.example.adminapp.ui.main.MainFragmentDirections
-import com.example.adminapp.ui.main.reservation.edit.ReservationEditFragmentDirections
+import java.time.Duration
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
 class ReservationEquipmentFragment : BaseSessionFragment<FragmentReservationChildBinding, ReservationViewModel>() {
@@ -55,7 +57,7 @@ class ReservationEquipmentFragment : BaseSessionFragment<FragmentReservationChil
     }
 
     private fun setRecyclerView() {
-        reservationEquipmentRVAdapter = ReservationEquipmentRVAdapter(requireContext(), object : ReservationEquipmentRVAdapter.OnItemClickListener {
+        reservationEquipmentRVAdapter = ReservationEquipmentRVAdapter(requireContext(), viewmodel, object : ReservationEquipmentRVAdapter.OnItemClickListener {
             override fun onItemClick(position: Int, equipmentData: ReservationEquipmentData) {
                 equipmentDataBundle = equipmentData
                 viewmodel.getReservationEquipmentSettingData(equipmentData.name)
@@ -65,7 +67,8 @@ class ReservationEquipmentFragment : BaseSessionFragment<FragmentReservationChil
     }
 }
 
-class ReservationEquipmentRVAdapter(private val context : Context, private val  listener : OnItemClickListener)
+class ReservationEquipmentRVAdapter(private val context : Context, private val viewmodel : ReservationViewModel,
+                                    private val  listener : OnItemClickListener)
     : ListAdapter<ReservationEquipmentData, ReservationEquipmentRVAdapter.ViewHolder>(AddressDiffCallback) {
 
     companion object {
@@ -81,7 +84,7 @@ class ReservationEquipmentRVAdapter(private val context : Context, private val  
 
     interface OnItemClickListener { fun onItemClick(position: Int, equipmentData : ReservationEquipmentData) }
 
-    inner class ViewHolder(val binding: ItemReservationBinding): RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(val binding: ItemReservationBinding): RecyclerView.ViewHolder(binding.root) { var timer : CountDownTimer? = null }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(ItemReservationBinding.inflate(LayoutInflater.from(parent.context), parent, false))
@@ -89,6 +92,7 @@ class ReservationEquipmentRVAdapter(private val context : Context, private val  
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         getItem(position)?.let { item ->
+            if (holder.timer != null) { holder.timer!!.cancel() }
             holder.binding.reserveItemIcon.load(item.icon)
             holder.binding.reserveEditItemName.text = item.name
             if (!item.usable){
@@ -106,13 +110,21 @@ class ReservationEquipmentRVAdapter(private val context : Context, private val  
                     holder.binding.reserveItemIconBackground.background = ContextCompat.getDrawable(context, R.drawable.view_oval_light_orange)
                     holder.binding.reservationState.text = "사용중"
                     holder.binding.reservationUsingStateInfo.visibility = View.VISIBLE
-                    holder.binding.reservationEndTime.text = item.endTime //TODO : 계산필요
-                    holder.binding.reservationLeftTime.text = item.endTime //TODO : 계산필요
+                    holder.binding.reservationEndTime.text = getHourMinuteString(item.endTime)
+                    holder.timer = object : CountDownTimer(calculateDuration(item.endTime).toMillis(), 1000) {
+                        override fun onTick(millisUntilFinished: Long) {
+                            val minute = (millisUntilFinished/60000)
+                            val second = (millisUntilFinished%60000)/1000
+                            holder.binding.reservationLeftTimeMinute.text = minute.toString()
+                            holder.binding.reservationLeftTimeSecond.text = if (second<10) "0${second}" else second.toString()
+                        }
+                        override fun onFinish() { viewmodel.finishReservationEquipmentData(item.name) } }.start()
                 }
             }
             holder.binding.itemEditSetting.setOnClickListener { listener.onItemClick(position, item) }
         }
-
     }
+
+
 
 }

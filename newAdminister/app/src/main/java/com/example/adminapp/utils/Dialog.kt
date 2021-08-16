@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.InsetDrawable
 import android.view.ViewGroup
 import android.view.Window
+import com.example.adminapp.databinding.DialogAccentTwobuttonBinding
 import com.example.adminapp.databinding.DialogBasicOnebuttonBinding
 import com.example.adminapp.databinding.DialogBasicTwobuttonBinding
 
@@ -27,8 +28,8 @@ class WrapedDialogBasicTwoButton (context: Context, content: String, closeBtnTex
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
         window?.run {
-            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            attributes.width = ViewGroup.LayoutParams.WRAP_CONTENT
+            setBackgroundDrawable(InsetDrawable(ColorDrawable(Color.TRANSPARENT), 30))
+            attributes.width = ViewGroup.LayoutParams.MATCH_PARENT
             attributes.height = ViewGroup.LayoutParams.WRAP_CONTENT
         } ?: exitProcess(0)
 
@@ -41,33 +42,38 @@ class WrapedDialogBasicTwoButton (context: Context, content: String, closeBtnTex
         }
     }
 }
-/*
 
-class MatchedFullDialogBasicOneButton (context: Context, title: String, content: String) : Dialog(context){
+class MatchedDialogAccentTwoButton (context: Context, content: String, closeBtnText: String, customBtnText: String) : Dialog(context){
+
     var clickListener : DialogButtonClickListener ? = null
     interface DialogButtonClickListener {
         fun dialogCloseClickListener()
-        fun dialogClickListener()
+        fun dialogCustomClickListener()
     }
+
     init {
-        val binding : DialogBasicOneButtonBinding = DialogBasicOneButtonBinding.inflate(layoutInflater)
+        //setCanceledOnTouchOutside(false)
+        val binding : DialogAccentTwobuttonBinding = DialogAccentTwobuttonBinding.inflate(layoutInflater)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
         window?.run {
-            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setBackgroundDrawable(InsetDrawable(ColorDrawable(Color.TRANSPARENT), 30))
             attributes.width = ViewGroup.LayoutParams.MATCH_PARENT
-            attributes.height = ViewGroup.LayoutParams.MATCH_PARENT
+            attributes.height = ViewGroup.LayoutParams.WRAP_CONTENT
         } ?: exitProcess(0)
 
-        binding.dialogTitle.text = title
-        binding.dialogContent.text = content
-        binding.dialogCloseBtn.setOnClickListener { clickListener?.dialogCloseClickListener()}
-        binding.dialogBtn.setOnClickListener { clickListener?.dialogClickListener() }
+        binding.run {
+            dialogContent.text = content
+            dialogCloseBtn.text = closeBtnText
+            dialogCustomBtn.text = customBtnText
+            dialogCloseBtn.setOnClickListener { clickListener?.dialogCloseClickListener()}
+            dialogCustomBtn.setOnClickListener { clickListener?.dialogCustomClickListener() }
+        }
     }
 }
-*/
 
-class MatchedDialogSignInOneButton (context: Context, content: String) : Dialog(context){
+
+class WrapedDialogBasicOneButton (context: Context, content: String) : Dialog(context){
     var clickListener : DialogButtonClickListener ? = null
     interface DialogButtonClickListener { fun dialogClickListener() }
     init {

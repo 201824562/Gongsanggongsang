@@ -25,4 +25,5 @@
     <color name="dark_brown">#220000</color>
     <color name="pale_orange">#ff9966</color>
     <color name="pale_gray">#e1f2ef</color>
+    <color name="light_gray">#ededed</color>
 </resources>
