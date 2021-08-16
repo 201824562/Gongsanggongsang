@@ -7,12 +7,12 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.adminapp.data.dao.AdminDao
 import com.example.adminapp.data.dao.CategoryDao
-import com.example.adminapp.data.entity.AdminEntity
+import com.example.adminapp.data.entity.Admin
 import com.example.adminapp.data.entity.CategoryEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [AdminEntity::class, CategoryEntity::class], version=2, exportSchema = false)
+@Database(entities = [Admin::class, CategoryEntity::class], version=2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase(){
     abstract fun adminDao() : AdminDao
     abstract fun categoryDao() : CategoryDao

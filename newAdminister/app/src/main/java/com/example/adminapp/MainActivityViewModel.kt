@@ -5,15 +5,22 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.example.adminapp.base.BaseActivityViewModel
 import com.example.adminapp.data.AppDatabase
-import com.example.adminapp.data.model.Admin
+import com.example.adminapp.data.model.AdminModel
 import com.example.adminapp.data.repository.AdminRepository
-import com.google.firebase.firestore.auth.User
+import com.example.adminapp.utils.SingleLiveEvent
 
 open class MainActivityViewModel(application: Application) : BaseActivityViewModel(application) {
 
     private val adminRepository : AdminRepository  = AdminRepository.getInstance(AppDatabase.getDatabase(application, viewModelScope))
 
-    fun getAdminInfo() : LiveData<Admin?> {
-        return adminRepository.getAdminInfo()
+    private val _onSuccessGettingAdminInfo = SingleLiveEvent<AdminModel>()
+    val onSuccessGettingAdminInfo : LiveData<AdminModel> get() = _onSuccessGettingAdminInfo
+    private val _onSuccessGettingNullAdminInfo  = SingleLiveEvent<AdminModel>()
+    val onSuccessGettingNullAdminInfo : LiveData<AdminModel> get() = _onSuccessGettingNullAdminInfo
+
+    fun getAdminInfo() {
+        apiCall(adminRepository.getAdminInfo(), {
+            _onSuccessGettingAdminInfo.postValue(it) },
+            { _onSuccessGettingNullAdminInfo.call() })
     }
 }

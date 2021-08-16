@@ -2,14 +2,10 @@ package com.example.userapp.ui.signin
 
 import android.app.Application
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.viewModelScope
 import com.example.userapp.base.BaseSessionViewModel
-import com.example.userapp.data.AppDatabase
 import com.example.userapp.data.dto.UserModel
 import com.example.userapp.data.model.ReceiverSignIn
 import com.example.userapp.data.model.UserStatus
-import com.example.userapp.data.repository.UserRepository
-import com.example.userapp.ui.signup.PersonalSignUpInfo
 import com.example.userapp.utils.RegularExpressionUtils
 import com.example.userapp.utils.SingleLiveEvent
 import io.reactivex.Single
@@ -134,7 +130,7 @@ class SignInViewModel(application: Application) : BaseSessionViewModel(applicati
 
     fun sendSignInInfo(userId : String, userPwd : String) {
         apiCall(
-            Single.zip(userRepository.checkingAllowedsignIn(userId, userPwd), userRepository.checkingWaitingSignIn(userId, userPwd),
+            Single.zip(userRepository.checkingAllowedSignIn(userId, userPwd), userRepository.checkingWaitingSignIn(userId, userPwd),
             BiFunction<ReceiverSignIn, Boolean, UserStatus> { receivedAllowedData, waitingBoolean ->
                 var status = UserStatus.NOT_USER
                 if (receivedAllowedData.boolean) {

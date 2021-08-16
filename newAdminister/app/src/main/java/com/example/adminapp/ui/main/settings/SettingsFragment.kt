@@ -47,14 +47,12 @@ class SettingsFragment : BaseSessionFragment<FragmentSettingsBinding, SettingsVi
 
     private fun showProfile(){
         (activity as MainActivity).getAdminData().let {
-            if (it!= null){
-                viewbinding.run {
-                    userNickname.text = "관리자"
-                    userName.text = it.name
-                    userAgency.text = it.agency
-                    userBirth.text = showBirthText(it.birth)
-                    userSms.text = showSmsText(it.phone)
-                }
+            viewbinding.run {
+                userNickname.text = "관리자"
+                userName.text = it.name
+                userAgency.text = it.agency
+                userBirth.text = showBirthText(it.birth)
+                userSms.text = showSmsText(it.phone)
             }
         }
     }

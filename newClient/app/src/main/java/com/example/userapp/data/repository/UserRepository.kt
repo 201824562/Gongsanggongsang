@@ -105,6 +105,7 @@ class UserRepository(appDatabase: AppDatabase) {
     }
 
     fun saveUserInfo(userData : UserModel) : Completable{
+        Log.e("checking", "$userData")
         return userdataDao.insertUserData(userData.getUserEntity())
     }
 
@@ -231,7 +232,7 @@ class UserRepository(appDatabase: AppDatabase) {
         }
     }
 
-    fun checkingAllowedsignIn(userId : String, userPwd : String) : Single<ReceiverSignIn> {
+    fun checkingAllowedSignIn(userId : String, userPwd : String) : Single<ReceiverSignIn> {
         return Single.create{ emitter ->
             fireStore.collection(FIRESTORE_ALLOWED_USER_INFO).document(userId)
                 .get()

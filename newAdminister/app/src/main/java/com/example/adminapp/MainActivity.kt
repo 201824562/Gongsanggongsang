@@ -19,9 +19,8 @@ import androidx.viewbinding.ViewBinding
 import com.example.adminapp.base.BaseActivity
 import com.example.adminapp.base.BaseSessionFragment
 import com.example.adminapp.base.BaseSessionViewModel
-import com.example.adminapp.data.model.Admin
+import com.example.adminapp.data.model.AdminModel
 import com.example.adminapp.databinding.ActivityMainBinding
-import com.google.firebase.firestore.auth.User
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() {
     companion object{
@@ -35,7 +34,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController : NavController
-    private var adminData : Admin? = null
+    private var adminData : AdminModel? = null
 
     override fun initToolbar() {
         window.apply {
@@ -46,18 +45,21 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     override fun initViewbinding() {
         viewbinding =  ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewbinding.root)
-
-        viewmodel.getAdminInfo().observe(this, {
-            adminData = it
-            Log.e("checking", "$adminData")
-        })
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {}
 
-    override fun initDataBinding(savedInstanceState: Bundle?) {}
+    override fun initDataBinding(savedInstanceState: Bundle?) {
+        viewmodel.onSuccessGettingAdminInfo.observe(this, {
+            adminData = it
+        })
+        viewmodel.onSuccessGettingNullAdminInfo.observe(this, {
+            //restartActivity()
+        })
+    }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
+        viewmodel.getAdminInfo()
         setToolbarWithNavcontroller()
     }
 
@@ -117,8 +119,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     fun getPhoto() : ArrayList<String>{
         return selectedItems
     }
-    fun getAdminData() : Admin?{
-        return this.adminData
+    fun getAdminData() : AdminModel{
+        return this.adminData!!
     }
 
 }

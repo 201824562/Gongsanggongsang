@@ -4,7 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.adminapp.base.BaseSessionViewModel
-import com.example.adminapp.data.model.Admin
+import com.example.adminapp.data.model.AdminModel
 import com.example.adminapp.data.model.AdminStatus
 import com.example.adminapp.utils.RegularExpressionUtils
 import com.example.adminapp.utils.SingleLiveEvent
@@ -42,7 +42,7 @@ class SignInViewModel (application: Application) : BaseSessionViewModel(applicat
     var findInfoType : FindInfoType = FindInfoType.ID
     var findInfoUserName : String = ""
     var findInfoResultData : String = ""
-    private var adminData : Admin?= null
+    private var adminModelData : AdminModel?= null
 
     fun clearTypeData() {
         findInfoType = FindInfoType.ID
@@ -145,7 +145,7 @@ class SignInViewModel (application: Application) : BaseSessionViewModel(applicat
             Log.e("checking", "$receivedData")
             var status = AdminStatus.NOT_ADMIN
             if (receivedData.boolean) {
-                adminData = receivedData.adminData
+                adminModelData = receivedData.adminModelData
                 status = AdminStatus.ADMIN
                 _userStatusEvent.postValue(status)
             }
@@ -155,7 +155,7 @@ class SignInViewModel (application: Application) : BaseSessionViewModel(applicat
 
     fun saveUserInfo() {
         val context = getApplication<Application>().applicationContext
-        adminData?.let {
+        adminModelData?.let {
             apiCall(adminRepository.saveAdminInfo(it),{
                 _onSuccessSaveUserInfo.value = true
                 adminRepository.saveAgencyInfo(it.agency, context)

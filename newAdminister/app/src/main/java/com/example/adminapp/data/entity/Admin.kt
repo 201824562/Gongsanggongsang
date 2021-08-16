@@ -1,13 +1,10 @@
 package com.example.adminapp.data.entity
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.adminapp.data.model.Admin
-import com.google.firebase.firestore.auth.User
-import io.reactivex.Completable
+import com.example.adminapp.data.model.AdminModel
 
 @Entity(tableName = "admin")
-data class AdminEntity(
+data class Admin(
     @PrimaryKey @ColumnInfo(name = "id")
     var id: String = "",
     @ColumnInfo(name = "name")
@@ -19,5 +16,5 @@ data class AdminEntity(
     @ColumnInfo(name = "agency")
     var agency: String = ""
 ){
-    fun makeAdmin() : Admin? { return Admin(agency, id, name, birth,phone) }
+    fun getAdminModel() : AdminModel { return AdminModel(agency, id, name, birth,phone) }
 }

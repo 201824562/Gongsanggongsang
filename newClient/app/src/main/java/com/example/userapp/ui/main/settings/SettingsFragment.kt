@@ -2,6 +2,7 @@ package com.example.userapp.ui.main.settings
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,14 +48,12 @@ class SettingsFragment : BaseSessionFragment<FragmentSettingsBinding, SettingsVi
 
     private fun showProfile(){
         (activity as MainActivity).getUserData().let {
-            if (it!= null){
-                viewbinding.run {
-                    userNickname.text = it.nickname
-                    userName.text = it.name
-                    userAgency.text = it.agency
-                    userBirth.text = showBirthText(it.birth)
-                    userSms.text = showSmsText(it.phone) }
-            }
+            viewbinding.run {
+                userNickname.text = it.nickname
+                userName.text = it.name
+                userAgency.text = it.agency
+                userBirth.text = showBirthText(it.birth)
+                userSms.text = showSmsText(it.phone) }
         }
     }
     private fun showBirthText(birth : String): String {

@@ -6,9 +6,8 @@ import android.content.Context
 import android.util.Log
 import androidx.core.content.edit
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import com.example.adminapp.data.AppDatabase
-import com.example.adminapp.data.model.Admin
+import com.example.adminapp.data.model.AdminModel
 import com.example.adminapp.data.model.ReceiverAdmin
 import com.example.adminapp.data.model.User
 import com.example.adminapp.utils.SingleLiveEvent
@@ -93,12 +92,19 @@ class AdminRepository(appDatabase: AppDatabase) {
         sharedPreferences.edit { remove(SHARED_PREFERENCES_TOKEN ) }
     }
 
-    fun getAdminInfo() : LiveData<Admin?> {
-        return Transformations.map(adminDao.getAdminData()){ it?.makeAdmin() }
+    fun getAdminInfo() : Single<AdminModel> {
+        return Single.create<AdminModel> { emitter ->
+            val userEntityData = adminDao.getAdminData()
+            try {
+                if (userEntityData == null) emitter.onError(Throwable("Error of Getting UserInfo"))
+                else emitter.onSuccess(userEntityData.getAdminModel())
+            }catch (e : Exception){
+            }
+        }
     }
 
-    fun saveAdminInfo(adminData : Admin) : Completable {
-        return adminDao.insertAdminData(adminData.makeAdminEntity())
+    fun saveAdminInfo(adminModelData : AdminModel) : Completable {
+        return adminDao.insertAdminData(adminModelData.getAdminEntity())
     }
 
     fun deleteAdminInfo(adminId: String) : Completable {
@@ -140,7 +146,7 @@ class AdminRepository(appDatabase: AppDatabase) {
                     if (it.data != null && it.data!!["id"] == adminId && it.data!!["pwd"]==adminPwd){
                         Log.d(ContentValues.TAG, "SignIn Successed!!")
                         emitter.onSuccess(
-                            ReceiverAdmin(true, Admin(it.data!!["agency"].toString(), it.data!!["id"].toString(), it.data!!["name"].toString(),
+                            ReceiverAdmin(true, AdminModel(it.data!!["agency"].toString(), it.data!!["id"].toString(), it.data!!["name"].toString(),
                                 it.data!!["birthday"].toString(),it.data!!["smsInfo"].toString())
                             )
                         )
