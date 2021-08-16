@@ -22,7 +22,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:background="@drawable/ic_backarrow_basic"/>
+                android:background="@drawable/ic_arrow_back_basic"/>
             <TextView
                 android:id="@+id/toolbarText"
                 android:layout_width="wrap_content"

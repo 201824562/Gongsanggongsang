@@ -145,7 +145,7 @@ class SignInViewModel (application: Application) : BaseSessionViewModel(applicat
             Log.e("checking", "$receivedData")
             var status = AdminStatus.NOT_ADMIN
             if (receivedData.boolean) {
-                adminData = receivedData.userdata
+                adminData = receivedData.adminData
                 status = AdminStatus.ADMIN
                 _userStatusEvent.postValue(status)
             }

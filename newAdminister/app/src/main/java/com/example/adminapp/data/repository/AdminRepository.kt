@@ -9,7 +9,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.example.adminapp.data.AppDatabase
 import com.example.adminapp.data.model.Admin
-import com.example.adminapp.data.model.ReceiverSignIn
+import com.example.adminapp.data.model.ReceiverAdmin
 import com.example.adminapp.data.model.User
 import com.example.adminapp.utils.SingleLiveEvent
 import com.google.firebase.firestore.FirebaseFirestore
@@ -131,7 +131,7 @@ class AdminRepository(appDatabase: AppDatabase) {
     }
 
 
-    fun checkingAdminSignIn(adminId : String, adminPwd : String) : Single<ReceiverSignIn> {
+    fun checkingAdminSignIn(adminId : String, adminPwd : String) : Single<ReceiverAdmin> {
         return Single.create{ emitter ->
             fireStore.collection(FIRESTORE_ADMINISTER).document(adminId)
                 .get()
@@ -140,12 +140,12 @@ class AdminRepository(appDatabase: AppDatabase) {
                     if (it.data != null && it.data!!["id"] == adminId && it.data!!["pwd"]==adminPwd){
                         Log.d(ContentValues.TAG, "SignIn Successed!!")
                         emitter.onSuccess(
-                            ReceiverSignIn(true, Admin(it.data!!["agency"].toString(), it.data!!["id"].toString(), it.data!!["name"].toString(),
+                            ReceiverAdmin(true, Admin(it.data!!["agency"].toString(), it.data!!["id"].toString(), it.data!!["name"].toString(),
                                 it.data!!["birthday"].toString(),it.data!!["smsInfo"].toString())
                             )
                         )
                     }
-                    else emitter.onSuccess(ReceiverSignIn(false, null))
+                    else emitter.onSuccess(ReceiverAdmin(false, null))
                 }
                 .addOnFailureListener { exception ->
                     Log.w(ContentValues.TAG, "Error getting documents: ", exception)

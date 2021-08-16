@@ -24,6 +24,8 @@
         <action
             android:id="@+id/action_mainFragment_to_reservationDetailEquipmentFragment"
             app:destination="@id/reservationDetailEquipmentFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
             app:popEnterAnim="@anim/slide_pop_enter"
             app:popExitAnim="@anim/slide_pop_exit">
             <argument
@@ -281,6 +283,8 @@
             android:id="@+id/action_reservationDetailEquipmentFragment_pop"
             app:popUpTo="@id/reservationDetailEquipmentFragment"
             app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
             app:popEnterAnim="@anim/slide_pop_enter"
             app:popExitAnim="@anim/slide_pop_exit"/>
         <action

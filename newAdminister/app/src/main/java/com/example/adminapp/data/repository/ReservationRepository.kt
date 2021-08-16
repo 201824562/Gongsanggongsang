@@ -25,50 +25,27 @@ class ReservationRepository() {
 
         private val FIRESTORE_RESERVATION = "RESERVATION"
         private val FIRESTORE_RESERVATION_EQUIPMENT = "EQUIPMENT"
+        private val FIRESTORE_RESERVATION_EQUIPMENT_LOG = "EQUIPMENT_LOG"
         private val FIRESTORE_RESERVATION_EQUIPMENT_SETTINGS = "EQUIPMENT_SETTINGS"
         private val FIRESTORE_RESERVATION_FACILITY = "FACILITY"
+        private val FIRESTORE_RESERVATION_FACILITY_LOG = "FACILITY_LOG"
         private val FIRESTORE_RESERVATION_FACILITY_SETTINGS = "FACILITY_SETTINGS"
     }
 
     private val firestore = FirebaseFirestore.getInstance()
 
-    private val _onSuccessGetReservationEquipmentDataList = SingleLiveEvent<List<ReservationEquipmentData>>()
-    private val onSuccessGetReservationEquipmentDataList: LiveData<List<ReservationEquipmentData>> get() = _onSuccessGetReservationEquipmentDataList
-    private val _onSuccessGetReservationFacilityDataList = SingleLiveEvent<List<ReservationFacilityData>>()
-    private val onSuccessGetReservationFacilityDataList: LiveData<List<ReservationFacilityData>> get() = _onSuccessGetReservationFacilityDataList
     private val _onSuccessGetReservationEquipmentSettingDataList = SingleLiveEvent<List<ReservationEquipmentSettingData>>()
     private val onSuccessGetReservationEquipmentSettingDataList: LiveData<List<ReservationEquipmentSettingData>> get() = _onSuccessGetReservationEquipmentSettingDataList
+    private val _onSuccessGetReservationEquipmentLogData = SingleLiveEvent<List<ReservationEquipmentLog>>()
+    private val onSuccessGetReservationEquipmentLogData: LiveData<List<ReservationEquipmentLog>> get() = _onSuccessGetReservationEquipmentLogData
+    private val _onSuccessGetReservationEquipmentData = SingleLiveEvent<ReceiverEquipment>()
+    private val onSuccessGetReservationEquipmentData: LiveData<ReceiverEquipment> get() = _onSuccessGetReservationEquipmentData
+    private val _onSuccessGetReservationEquipmentDataList = SingleLiveEvent<List<ReservationEquipmentData>>()
+    private val onSuccessGetReservationEquipmentDataList: LiveData<List<ReservationEquipmentData>> get() = _onSuccessGetReservationEquipmentDataList
     private val _onSuccessGetReservationFacilitySettingDataList = SingleLiveEvent<List<ReservationFacilitySettingData>>()
     private val onSuccessGetReservationFacilitySettingDataList: LiveData<List<ReservationFacilitySettingData>> get() = _onSuccessGetReservationFacilitySettingDataList
-
-
-    fun getReservationEquipmentData(agency: String, itemName : String): Single<ReservationEquipmentData> {
-        return Single.create { emitter ->
-            firestore.collection(agency).document(FIRESTORE_RESERVATION)
-                .collection(FIRESTORE_RESERVATION_EQUIPMENT)
-                .document(itemName).get()
-                .addOnSuccessListener {
-                    if (it.data != null && it.get("name") == itemName) {
-                        emitter.onSuccess(
-                            ReservationEquipmentData(
-                                it.getLong("icon")!!.toInt(),
-                                it.get("name") as String,
-                                it.get("user") as String,
-                                it.get("startTime") as String,
-                                it.get("endTime") as String,
-                                it.getLong("intervalTime")!!,
-                                it.get("using") as Boolean,
-                                it.get("usable") as Boolean
-                            )
-                        )
-                    } else emitter.onError(Throwable("Error getting EQUIPMENT of $itemName"))
-                }
-                .addOnFailureListener { exception ->
-                    Log.w(TAG, "Error getting documents: ", exception)
-                    emitter.onError(Throwable("Error getting EQUIPMENT of $itemName"))
-                }
-        }
-    }
+    private val _onSuccessGetReservationFacilityDataList = SingleLiveEvent<List<ReservationFacilityData>>()
+    private val onSuccessGetReservationFacilityDataList: LiveData<List<ReservationFacilityData>> get() = _onSuccessGetReservationFacilityDataList
 
     fun getReservationEquipmentSettingData(agency: String, itemName : String): Single<ReservationEquipmentSettingData> {
         return Single.create { emitter ->
@@ -91,6 +68,101 @@ class ReservationRepository() {
                     emitter.onError(Throwable("Error getting EQUIPMENT_SETTINGS of $itemName"))
                 }
         }
+    }
+
+    fun getReservationEquipmentSettingDataList(agency: String): LiveData<List<ReservationEquipmentSettingData>> {
+        getReservationEquipmentSettingDataListFromFirebase(agency)
+        return onSuccessGetReservationEquipmentSettingDataList }
+
+    private fun getReservationEquipmentSettingDataListFromFirebase(agency: String) {
+        firestore.collection(agency).document(FIRESTORE_RESERVATION)
+            .collection(FIRESTORE_RESERVATION_EQUIPMENT_SETTINGS)
+            .addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e)
+                    return@addSnapshotListener }
+                if (snapshot == null) _onSuccessGetReservationEquipmentSettingDataList.postValue(emptyList())
+                else {
+                    val equipmentSettingList: MutableList<ReservationEquipmentSettingData> = mutableListOf()
+                    for (document in snapshot) {
+                        equipmentSettingList.add(
+                            ReservationEquipmentSettingData(
+                                document.getLong("icon")!!.toInt(),
+                                document.get("name") as String,
+                                document.get("maxTime") as Long)
+                        )
+                    }
+                    _onSuccessGetReservationEquipmentSettingDataList.postValue(equipmentSettingList)
+                }
+            }
+    }
+
+    fun getReservationEquipmentLogData(agency: String, itemType : String, itemName : String) :  LiveData<List<ReservationEquipmentLog>> {
+        getReservationEquipmentLogDataFromFirebase(agency, itemType, itemName)
+        return onSuccessGetReservationEquipmentLogData
+    }
+
+    private fun getReservationEquipmentLogDataFromFirebase(agency: String, itemType : String, itemName : String) {
+        firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_EQUIPMENT_LOG)
+            .whereEqualTo("name", itemName).whereEqualTo("reservationType", itemType)
+            .addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e)
+                    return@addSnapshotListener }
+                if (snapshot == null) _onSuccessGetReservationEquipmentLogData.postValue(emptyList())
+                else {
+                    val equipmentLogList: MutableList<ReservationEquipmentLog> = mutableListOf()
+                    Log.e("checking", "${snapshot.documents.size}")
+                    for (document in snapshot) {
+                        equipmentLogList.add(
+                            ReservationEquipmentLog(
+                                document.getLong("icon")!!.toInt(),
+                                document.get("name") as String,
+                                document.get("userId") as String,
+                                document.get("userName") as String,
+                                document.get("reservationState") as String,
+                                document.get("reservationType") as String,
+                                document.get("startTime") as String,
+                                document.get("endTime") as String))
+                    }
+                    _onSuccessGetReservationEquipmentLogData.postValue(equipmentLogList)
+                }
+            }
+    }
+
+    fun getReservationEquipmentData(agency: String, itemName : String): LiveData<ReceiverEquipment> {
+        getReservationEquipmentDataFromFirebase(agency, itemName)
+        return onSuccessGetReservationEquipmentData }
+
+    private fun getReservationEquipmentDataFromFirebase(agency: String, itemName : String) {
+        firestore.collection(agency).document(FIRESTORE_RESERVATION)
+            .collection(FIRESTORE_RESERVATION_EQUIPMENT).whereEqualTo("name", itemName)
+            .addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e)
+                    return@addSnapshotListener }
+                when {
+                    snapshot == null -> _onSuccessGetReservationEquipmentData.postValue(ReceiverEquipment(false, null))
+                    snapshot.isEmpty -> _onSuccessGetReservationEquipmentData.postValue(ReceiverEquipment(false, null))
+                    else -> { val it = snapshot.documents[0]
+                        _onSuccessGetReservationEquipmentData.postValue(
+                            ReceiverEquipment(
+                                true,
+                                ReservationEquipmentData(
+                                    it.getLong("icon")!!.toInt(),
+                                    it.get("name") as String,
+                                    it.get("user") as String,
+                                    it.get("startTime") as String,
+                                    it.get("endTime") as String,
+                                    it.getLong("intervalTime")!!,
+                                    it.get("using") as Boolean,
+                                    it.get("usable") as Boolean
+                                )
+                            )
+                        )
+                    }
+                }
+            }
     }
 
     fun getReservationEquipmentDataList(agency: String): LiveData<List<ReservationEquipmentData>> {
@@ -161,32 +233,7 @@ class ReservationRepository() {
             }
     }*/
 
-    fun getReservationEquipmentSettingDataList(agency: String): LiveData<List<ReservationEquipmentSettingData>> {
-        getReservationEquipmentSettingDataListFromFirebase(agency)
-        return onSuccessGetReservationEquipmentSettingDataList }
 
-    private fun getReservationEquipmentSettingDataListFromFirebase(agency: String) {
-        firestore.collection(agency).document(FIRESTORE_RESERVATION)
-            .collection(FIRESTORE_RESERVATION_EQUIPMENT_SETTINGS)
-            .addSnapshotListener { snapshot, e ->
-                if (e != null) {
-                    Log.w(TAG, "Listen failed.", e)
-                    return@addSnapshotListener }
-                if (snapshot == null) _onSuccessGetReservationEquipmentSettingDataList.postValue(emptyList())
-                else {
-                    val equipmentSettingList: MutableList<ReservationEquipmentSettingData> = mutableListOf()
-                    for (document in snapshot) {
-                        equipmentSettingList.add(
-                            ReservationEquipmentSettingData(
-                                document.getLong("icon")!!.toInt(),
-                                document.get("name") as String,
-                                document.get("maxTime") as Long)
-                        )
-                    }
-                    _onSuccessGetReservationEquipmentSettingDataList.postValue(equipmentSettingList)
-                }
-            }
-    }
 
     fun getReservationFacilitySettingDataList(agency: String): LiveData<List<ReservationFacilitySettingData>> {
         getReservationFacilitySettingDataListFromFirebase(agency)
@@ -227,6 +274,12 @@ class ReservationRepository() {
             ReservationTimeData(it["hour"] as Long, it["min"] as Long)
         }
         return ReservationUnableTimeItem(timeType, reservationTimeData, it["unable"] as Boolean)
+    }
+
+
+    fun finishReservationEquipment (agency: String, itemName: String)  {
+        firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_EQUIPMENT)
+            .document(itemName).update("using", false, "user", "", "startTime", "", "endTime", "", "intervalTime", 0)
     }
 
     fun startReservationEquipment(agency: String, itemName : String) : Completable{

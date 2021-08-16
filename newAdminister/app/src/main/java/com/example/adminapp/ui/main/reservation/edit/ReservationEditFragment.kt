@@ -23,7 +23,6 @@ class ReservationEditFragment : BaseSessionFragment<FragmentReservationEditBindi
 
     override lateinit var viewbinding: FragmentReservationEditBinding
     override val viewmodel: ReservationEditViewModel by viewModels()
-
     private lateinit var reservationEditViewPagerAdapter : ReservationEditViewPagerAdapter
 
     override fun initViewbinding(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -38,7 +37,13 @@ class ReservationEditFragment : BaseSessionFragment<FragmentReservationEditBindi
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
-
+        viewmodel.selectedTabPositionData.observe(viewLifecycleOwner){
+            when(it){
+                0 -> viewbinding.editViewpager.setCurrentItem(TAB_INDEX_EQUIPMENT, true)
+                1 -> viewbinding.editViewpager.setCurrentItem(TAB_INDEX_FACILITY, true)
+                else -> throw IllegalStateException("에러가 발생했습니다. 다시 시도해주세요.")
+            }
+        }
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
@@ -48,12 +53,13 @@ class ReservationEditFragment : BaseSessionFragment<FragmentReservationEditBindi
         viewbinding.run {
             reservationEditViewPagerAdapter = ReservationEditViewPagerAdapter(requireActivity())
             viewbinding.editViewpager.adapter = reservationEditViewPagerAdapter
+            if(viewmodel.selectedTabPosition!=null) viewbinding.editTab.getTabAt(viewmodel.selectedTabPosition!!)?.select()
             viewbinding.editTab.addOnTabSelectedListener(object :
                 TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     when(tab?.position) {
-                        TAB_INDEX_EQUIPMENT -> viewbinding.editViewpager.setCurrentItem(TAB_INDEX_EQUIPMENT, true)
-                        TAB_INDEX_FACILITY -> viewbinding.editViewpager.setCurrentItem(TAB_INDEX_FACILITY, true)
+                        TAB_INDEX_EQUIPMENT -> viewmodel.saveTabPosition(0)
+                        TAB_INDEX_FACILITY -> viewmodel.saveTabPosition(1)
                         else -> throw IllegalStateException("에러가 발생했습니다. 다시 시도해주세요.")
                     }
                 }

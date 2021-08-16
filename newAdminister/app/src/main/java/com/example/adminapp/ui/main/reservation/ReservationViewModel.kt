@@ -9,6 +9,7 @@ import com.example.adminapp.data.model.ReservationFacilitySettingData
 import com.example.adminapp.data.model.ReservationType
 import com.example.adminapp.data.repository.ReservationRepository
 import com.example.adminapp.utils.SingleLiveEvent
+import io.reactivex.Completable
 
 class ReservationViewModel(application: Application) : BaseSessionViewModel(application)  {
 
@@ -25,6 +26,10 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
         apiCall(reservationRepository.getReservationEquipmentSettingData(agencyInfo, itemName), {
             _onSuccessGettingReserveEquipmentSettingData.postValue(it)
         })
+    }
+
+    fun finishReservationEquipmentData(itemName : String)  {
+        reservationRepository.finishReservationEquipment(agencyInfo, itemName)
     }
 
 
