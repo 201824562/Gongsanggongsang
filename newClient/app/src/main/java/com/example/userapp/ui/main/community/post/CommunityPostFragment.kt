@@ -1,5 +1,6 @@
 package com.example.userapp.ui.main.community.post
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -28,10 +29,11 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
     private var postCommentsArray : ArrayList<PostCommentDataClass> = arrayListOf()
     override lateinit var viewbinding: FragmentCommunityPostBinding
     override val viewmodel: CommunityViewModel by viewModels()
-    private lateinit var adapter: CommunityCommentRecyclerAdapter
     private lateinit var getPhotoUri : ArrayList<String>
     private lateinit var currentPostId : String
     private lateinit var currentPostComment : ArrayList<String>
+    private lateinit var attachPostPhotoRecyclerAdapter: CommunityAttachPhotoRecyclerAdapter
+    private lateinit var commentRecyclerAdapter: CommunityCommentRecyclerAdapter
     private var localUserName = ""
     var agency = ""
     var test : ArrayList<String> = arrayListOf()
@@ -45,6 +47,7 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
         return viewbinding.root
     }
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun initViewStart(savedInstanceState: Bundle?) {
         val ac = activity as MainActivity
@@ -68,7 +71,6 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
             currentPostComment = it.post_comments
             if(it.post_name == localUserName){
                 viewbinding.postRemoveButton.visibility = View.VISIBLE
-                viewbinding.postModifyButton.visibility = View.VISIBLE
             }
             if(collectionName == "4_with" && localUserName == it.post_name && it.post_state == "모집 중"){
                 viewbinding.postWithComplete.visibility = View.VISIBLE
@@ -97,7 +99,6 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
             else{
                 viewbinding.communityPostTime.text = it.post_date.substring(5)
             }
-            viewbinding.communityPostCommentsNumber.text = it.post_comments.size.toString()
             viewbinding.postContents.text = it.post_contents
             viewbinding.postTitle.text = it.post_title
             getPhotoUri = it.post_photo_uri
@@ -107,9 +108,10 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
             }
         }
         viewmodel.getDocumentCommentData(agency, collectionName, documentName).observe(viewLifecycleOwner){
-            initCommentRecyclerView(it)
+            postCommentsArray = it
+            viewbinding.communityPostCommentsNumber.text = it.size.toString()
+            initCommentRecyclerView()
         }
-
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
@@ -123,7 +125,9 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
                 val postDateNow: String = LocalDate.now().toString()
                 val postTimeNow : String = LocalTime.now().toString()
                 var commentAnonymous = false
-                var commentAnonymousName = ""
+                if(commentAnonymousCheckBox.isChecked){
+                    commentAnonymous = true
+                }
                 val postComment = PostCommentDataClass(
                     localUserName,
                     commentContents = writeComment.text.toString(),
@@ -132,18 +136,32 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
                     commentAnonymous = commentAnonymous,
                     postDateNow + postTimeNow + localUserName,
                 )
-                viewmodel.insertPostCommentData(agency, collectionName, documentName, postComment)
+                viewmodel.insertPostCommentData(agency, collectionName, documentName, postComment).observe(viewLifecycleOwner){
+                    if(it){
+                        viewmodel.getDocumentCommentData(agency, collectionName, documentName).observe(viewLifecycleOwner){
+                            postCommentsArray = it
+                            initCommentRecyclerView()
+                            viewbinding.communityPostCommentsNumber.text = it.size.toString()
+                        }
+                    }
+                }
                 currentPostComment.add("1")
                 viewmodel.modifyPostPartData(agency, collectionName, documentName, "post_comments", currentPostComment)
-                postCommentsArray.add(postComment)
-                adapter = CommunityCommentRecyclerAdapter(postCommentsArray)
-                adapter.notifyDataSetChanged()
+
             }
             postRemoveButton.setOnClickListener{
                 viewmodel.deletePostData(agency, collectionName, documentName)
                 findNavController().navigate(R.id.action_communityPost_to_communityPreview, bundle)
             }
-            postModifyButton.setOnClickListener{
+            postWithCompleteButton.setOnClickListener {
+                viewmodel.modifyPostPartData(agency, collectionName, documentName, "post_state", "모집 완료").observe(viewLifecycleOwner){
+                    if(it){
+                        postWithComplete.visibility = View.GONE
+                        postCategory.text = "모집 완료"
+                    }
+                }
+            }
+            /*postModifyButton.setOnClickListener{
                 val bundleModify = bundleOf(
                     "modify" to "modify",
                     "postId" to documentName
@@ -155,15 +173,31 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
                     "4_with" -> findNavController().navigate(R.id.action_communityPost_to_communityWithWrite, bundleModify)
                     "5_market" -> findNavController().navigate(R.id.action_communityPost_to_communityMarketWrite, bundleModify)
                 }
-            }
+            }*/
         }
     }
-    private fun initCommentRecyclerView(post_comments: ArrayList<PostCommentDataClass>){
+    private fun initCommentRecyclerView(){
         viewbinding.postCommentRecyclerView.run {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
-            adapter = CommunityCommentRecyclerAdapter(post_comments)
+            adapter = CommunityCommentRecyclerAdapter(postCommentsArray)
         }
+        commentRecyclerAdapter = CommunityCommentRecyclerAdapter(postCommentsArray)
+        viewbinding.postCommentRecyclerView.adapter = commentRecyclerAdapter.apply {
+            object :
+            CommunityCommentRecyclerAdapter.OnCommunityCommentItemClickListener{
+                override fun onCommentItemClick(position: Int) {
+                    println(getItem(position).commentId)
+                    println("touch")
+                    viewmodel.deletePostCommentData(agency, collectionName, documentName, getItem(position)).observe(viewLifecycleOwner){
+                        if(it){
+                            println("delete success")
+                        }
+                    }
+                }
+            }
+        }
+        commentRecyclerAdapter.notifyDataSetChanged()
     }
 
     private fun initPhotoRecyclerView(photo_uri : ArrayList<String>){
@@ -172,7 +206,18 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
             layoutManager = LinearLayoutManager(context).also { it.orientation = LinearLayoutManager.HORIZONTAL }
             adapter = CommunityAttachPhotoRecyclerAdapter(photo_uri)
         }
+        attachPostPhotoRecyclerAdapter = CommunityAttachPhotoRecyclerAdapter(photo_uri)
+        viewbinding.postPhotoRecycler.adapter = attachPostPhotoRecyclerAdapter.apply {
+            listener =
+                object :
+                    CommunityAttachPhotoRecyclerAdapter.OnCommunityPhotoItemClickListener {
+                    override fun onPhotoItemClick(position: Int) {
+                        var bundle = bundleOf(
+                            "photo_uri" to photo_uri.toTypedArray(),
+                        )
+                        findNavController().navigate(R.id.action_communityPost_to_communityPhoto, bundle)
+                    }
+                }
+        }
     }
-
-
 }

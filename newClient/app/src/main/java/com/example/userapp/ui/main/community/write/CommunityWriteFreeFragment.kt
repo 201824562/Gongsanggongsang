@@ -23,6 +23,7 @@ import com.example.userapp.base.BaseFragment
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentCommunityWriteFreeBinding
 import com.example.userapp.ui.main.community.CommunityViewModel
+import com.example.userapp.utils.WrapedCommunityDialogBasicOneButton
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -34,6 +35,8 @@ class CommunityWriteFreeFragment : BaseFragment<FragmentCommunityWriteFreeBindin
     override val viewmodel: CommunityViewModel by viewModels()
     private var getLocalPhotoUri : ArrayList<String> = arrayListOf()
     private lateinit var freePostData : PostDataInfo
+    private lateinit var userName : String
+    private lateinit var userAgency : String
     val bitmap_array : ArrayList<Bitmap> = arrayListOf()
     val uri_array : ArrayList<Uri> = arrayListOf()
 
@@ -49,6 +52,8 @@ class CommunityWriteFreeFragment : BaseFragment<FragmentCommunityWriteFreeBindin
     @RequiresApi(Build.VERSION_CODES.P)
     override fun initViewStart(savedInstanceState: Bundle?) {
         val ac = activity as MainActivity
+        userAgency  = ac.getUserData()!!.agency
+        userName  = ac.getUserData()!!.nickname
         getLocalPhotoUri = ac.getPhoto()
         ac.selectedItems = arrayListOf()
         viewbinding.freeWritePhotoRecycler.visibility = View.VISIBLE
@@ -71,34 +76,39 @@ class CommunityWriteFreeFragment : BaseFragment<FragmentCommunityWriteFreeBindin
                 getPhotoPermission()
             }
             freeWriteRegisterButton.setOnClickListener {
-                val ac = activity as MainActivity
-                val userAgency : String = ac.getUserData()!!.agency
-                val userName : String = ac.getUserData()!!.nickname
-                val postDateNow: String = LocalDate.now().toString()
-                val postTimeNow : String = LocalTime.now().toString()
-                var postAnonymous : Boolean = false
-                if(freeWriteAnonymous.isChecked){
-                    postAnonymous = true
+                if(freeWriteTitle.text.toString() == "" && freeWriteContent.text.toString() == ""){
+
                 }
-                freePostData = PostDataInfo(
-                    collection_name,
-                    userName,
-                    post_title = freeWriteTitle.text.toString(),
-                    post_contents = freeWriteContent.text.toString(),
-                    post_date = postDateNow,
-                    post_time = postTimeNow,
-                    post_comments = arrayListOf(),
-                    post_id = postDateNow + postTimeNow + userName,
-                    post_photo_uri = getLocalPhotoUri,
-                    post_state = "none",
-                    post_anonymous = postAnonymous
-                )
-                bundle = bundleOf(
-                    "collection_name" to collection_name,
-                    "document_name" to freePostData.post_id
-                )
-                viewmodel.insertPostData(userAgency, freePostData)
-                findNavController().navigate(R.id.action_communityWriteFree_to_communityPost, bundle)
+                else{
+                    val postDateNow: String = LocalDate.now().toString()
+                    val postTimeNow : String = LocalTime.now().toString()
+                    var postAnonymous : Boolean = false
+                    if(freeWriteAnonymous.isChecked){
+                        postAnonymous = true
+                    }
+                    freePostData = PostDataInfo(
+                        collection_name,
+                        userName,
+                        post_title = freeWriteTitle.text.toString(),
+                        post_contents = freeWriteContent.text.toString(),
+                        post_date = postDateNow,
+                        post_time = postTimeNow,
+                        post_comments = arrayListOf(),
+                        post_id = postDateNow + postTimeNow + userName,
+                        post_photo_uri = getLocalPhotoUri,
+                        post_state = "none",
+                        post_anonymous = postAnonymous
+                    )
+                    bundle = bundleOf(
+                        "collection_name" to collection_name,
+                        "document_name" to freePostData.post_id
+                    )
+                    viewmodel.insertPostData(userAgency, freePostData).observe(viewLifecycleOwner){
+                        if(it){
+                            findNavController().navigate(R.id.action_communityWriteFree_to_communityPost, bundle)
+                        }
+                    }
+                }
             }
         }
     }
@@ -156,6 +166,16 @@ class CommunityWriteFreeFragment : BaseFragment<FragmentCommunityWriteFreeBindin
             )
             bitmap_array.add(bitmap)
         }
+    }
+    private fun makeDialog(msg : String){
+        val dialog = WrapedCommunityDialogBasicOneButton(requireContext(), msg).apply {
+            clickListener = object : WrapedCommunityDialogBasicOneButton.DialogButtonClickListener{
+                override fun dialogClickListener() {
+                    dismiss()
+                }
+            }
+        }
+        showDialog(dialog, viewLifecycleOwner)
     }
 
 }

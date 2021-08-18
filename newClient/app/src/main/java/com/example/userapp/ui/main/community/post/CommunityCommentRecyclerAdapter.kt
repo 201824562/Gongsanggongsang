@@ -7,19 +7,24 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.userapp.data.entity.PostCommentDataClass
 import com.example.userapp.databinding.FragmentCommunityCommentItemBinding
+import com.example.userapp.ui.main.community.CommunityViewModel
 import java.time.LocalDate
 import java.time.LocalTime
 
 
-class CommunityCommentRecyclerAdapter(val communityCommentItems:ArrayList<PostCommentDataClass>): RecyclerView.Adapter<CommunityCommentRecyclerAdapter.CommunityCommentViewHolder>() {
-
+class CommunityCommentRecyclerAdapter(private val communityCommentItems:ArrayList<PostCommentDataClass>): RecyclerView.Adapter<CommunityCommentRecyclerAdapter.CommunityCommentViewHolder>() {
+    val viewmodel : CommunityViewModel = CommunityViewModel()
+    interface OnCommunityCommentItemClickListener{
+        fun onCommentItemClick(position: Int)
+    }
+    var listener: OnCommunityCommentItemClickListener? = null
     override fun getItemCount(): Int {
         return communityCommentItems.size;
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommunityCommentViewHolder {
         val viewbinding = FragmentCommunityCommentItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return  CommunityCommentViewHolder(viewbinding, parent)
+        return  CommunityCommentViewHolder(viewbinding, parent, listener)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -31,12 +36,22 @@ class CommunityCommentRecyclerAdapter(val communityCommentItems:ArrayList<PostCo
         return communityCommentItems[position]
     }
 
-    class CommunityCommentViewHolder(viewbinding: FragmentCommunityCommentItemBinding, itemview: ViewGroup) : RecyclerView.ViewHolder(viewbinding.root) {
+    class CommunityCommentViewHolder(
+        viewbinding: FragmentCommunityCommentItemBinding,
+        itemview: ViewGroup,
+        listener: OnCommunityCommentItemClickListener?
+    ) : RecyclerView.ViewHolder(viewbinding.root) {
         val binding = viewbinding
-
+        val listener = listener
+        val viewModel : CommunityViewModel = CommunityViewModel()
         @RequiresApi(Build.VERSION_CODES.O)
         fun bind(it : PostCommentDataClass) {
-            binding.communityCommentName.text = it.commentName
+            if(it.commentAnonymous){
+                binding.communityCommentName.text = "익명"
+            }
+            else{
+                binding.communityCommentName.text = it.commentName
+            }
             binding.communityCommentPost.text = it.commentContents
             val postDateNow: String = LocalDate.now().toString()
             val postTimeNow: String = LocalTime.now().toString()
@@ -52,6 +67,12 @@ class CommunityCommentRecyclerAdapter(val communityCommentItems:ArrayList<PostCo
             }
             else{
                 binding.communityCommentDate.text = it.commentDate.substring(5)
+            }
+        }
+        init {
+            itemView.setOnClickListener{
+                listener?.onCommentItemClick(bindingAdapterPosition)
+                return@setOnClickListener
             }
         }
 

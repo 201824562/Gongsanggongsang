@@ -21,11 +21,14 @@ class CommunityViewModel() : BaseViewModel() {
     fun getDocumentPostData(agency: String, collection_name: String, document_name : String) : MutableLiveData<PostDataInfo>{
         return communityDataRepository.getDocumentPostData(agency, collection_name, document_name)
     }
-    fun insertPostData(agency : String, it: PostDataInfo) {
-        communityDataRepository.insertPostData(agency, it)
+    fun insertPostData(agency : String, it: PostDataInfo) : MutableLiveData<Boolean> {
+        return communityDataRepository.insertPostData(agency, it)
     }
-    fun insertPostCommentData(agency: String, collection_name: String, document_name: String, postComment : PostCommentDataClass){
-        communityDataRepository.insertPostCommentData(agency, collection_name, document_name, postComment)
+    fun insertPostCommentData(agency: String, collection_name: String, document_name: String, postComment : PostCommentDataClass) : MutableLiveData<Boolean> {
+        return communityDataRepository.insertPostCommentData(agency, collection_name, document_name, postComment)
+    }
+    fun deletePostCommentData(agency: String, collection_name: String, document_name: String, postComment : PostCommentDataClass) : MutableLiveData<Boolean> {
+        return communityDataRepository.deletePostCommentData(agency, collection_name, document_name, postComment)
     }
     fun deletePostData(agency: String, collection_name: String, document_name: String) {
         communityDataRepository.deleteDocumentPostData(agency, collection_name, document_name)
@@ -33,8 +36,8 @@ class CommunityViewModel() : BaseViewModel() {
     fun updatePostData(agency: String, collection_name: String, document_name: String, modifyTitle : String, modifyContent : String){
         communityDataRepository.modifyPostData(agency, collection_name, document_name, modifyTitle, modifyContent)
     }
-    fun modifyPostPartData(agency: String, collection_name: String, document_name: String, partKey: String, modifyContent: Any){
-        communityDataRepository.modifyPostPartData(agency, collection_name, document_name, partKey, modifyContent)
+    fun modifyPostPartData(agency: String, collection_name: String, document_name: String, partKey: String, modifyContent: Any) : MutableLiveData<Boolean>{
+        return communityDataRepository.modifyPostPartData(agency, collection_name, document_name, partKey, modifyContent)
     }
     fun getDocumentCommentData(agency: String, collection_name: String, document_name: String) : MutableLiveData<ArrayList<PostCommentDataClass>> {
         return communityDataRepository.getDocumentPostCommentData(agency, collection_name, document_name)
@@ -57,7 +60,12 @@ class CommunityViewModel() : BaseViewModel() {
     fun getNoticeCategoryPostData(agency: String, collectionName : String) : MutableLiveData<ArrayList<PostDataInfo>> {
         return communityDataRepository.getNoticeCategoryPostData(agency, collectionName)
     }
-
+    fun getNoticePostData(agency: String) : MutableLiveData<ArrayList<PostDataInfo>>{
+        return communityDataRepository.getNoticePostData(agency)
+    }
+    fun getSearchPostData(agency: String, collectionName: String, searchKeyword : String) : MutableLiveData<ArrayList<PostDataInfo>>{
+        return communityDataRepository.getSearchPostData(agency, collectionName, searchKeyword)
+    }
     fun selectPhoto(select_photo_uri : String) {
         if(select_photo_uri in selected_items){
             selected_items.remove(select_photo_uri)

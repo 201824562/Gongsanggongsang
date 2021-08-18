@@ -147,10 +147,10 @@ class SignInViewModel(application: Application) : BaseSessionViewModel(applicati
         val context = getApplication<Application>().applicationContext
         userData?.let {
             apiCall(userRepository.saveUserInfo(it),{
-                Log.e("체킹!!유저인포 저장됐는가", "$it")
+                _onSuccessSaveUserInfo.value = true
+                Log.e("c", "{$it}")
                 userRepository.saveAgencyInfo(it.agency, context)
-                userRepository.saveUserToken(it.id, context)
-                _onSuccessSaveUserInfo.value = true } )
+                userRepository.saveUserToken(it.id, context) } )
         }
     }
 
