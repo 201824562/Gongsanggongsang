@@ -47,14 +47,14 @@ class SettingsFragment : BaseSessionFragment<FragmentSettingsBinding, SettingsVi
     }
 
     private fun showProfile(){
-        /*(activity as MainActivity).getUserData().let {
+        (activity as MainActivity).getUserData().let {
             viewbinding.run {
                 userNickname.text = it.nickname
                 userName.text = it.name
                 userAgency.text = it.agency
                 userBirth.text = showBirthText(it.birth)
                 userSms.text = showSmsText(it.phone) }
-        }*/
+        }
     }
     private fun showBirthText(birth : String): String {
         var birthText : String = ""

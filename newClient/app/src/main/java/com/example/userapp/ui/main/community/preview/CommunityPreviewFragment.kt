@@ -1,6 +1,7 @@
 package com.example.userapp.ui.main.community.preview
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,7 +39,7 @@ class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, C
     override fun initViewStart(savedInstanceState: Bundle?) {
         collectionName= arguments?.getString("collection_name").toString()
         collectionNameBundle = bundleOf(
-            "colletion_name" to collectionName
+            "collection_name" to collectionName
         )
         var ac = activity as MainActivity
         agency = ac.getUserData()!!.agency
@@ -75,7 +76,10 @@ class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, C
                 }
             }
             previewSearchButton.setOnClickListener {
+                viewmodel.getSearchPostData(agency, collectionName, "w").observe(viewLifecycleOwner){
+                    Log.e("search", "{$it}")
 
+                }
             }
             previewBackButton.setOnClickListener {
 

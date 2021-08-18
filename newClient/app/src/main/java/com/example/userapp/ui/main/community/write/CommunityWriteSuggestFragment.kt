@@ -26,6 +26,7 @@ import com.example.userapp.base.BaseFragment
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentCommunityWriteSuggestBinding
 import com.example.userapp.ui.main.community.CommunityViewModel
+import com.example.userapp.utils.WrapedCommunityDialogBasicOneButton
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -43,7 +44,8 @@ class CommunityWriteSuggestFragment : BaseFragment<FragmentCommunityWriteSuggest
     private val categorySpinnerArray = arrayOf("", "소음", "예약", "냉장고", "세탁실", "수질", "와이파이", "전기", "기타")
     private lateinit var suggestWriteCategory : String
     private lateinit var suggestPostData : PostDataInfo
-
+    private lateinit var userName : String
+    private lateinit var userAgency : String
 
     override fun initViewbinding(
         inflater: LayoutInflater,
@@ -81,6 +83,8 @@ class CommunityWriteSuggestFragment : BaseFragment<FragmentCommunityWriteSuggest
             }
         }
         val ac = activity as MainActivity
+        userAgency = ac.getUserData()!!.agency
+        userName  = ac.getUserData()!!.nickname
         getLocalPhotoUri = ac.getPhoto()
         viewbinding.suggestWritePhotoRecycler.visibility = View.VISIBLE
         viewbinding.suggestWritePhotoRecycler.run {
@@ -101,34 +105,39 @@ class CommunityWriteSuggestFragment : BaseFragment<FragmentCommunityWriteSuggest
                 getPhotoPermission()
             }
             suggestWriteRegisterButton.setOnClickListener {
-                val ac = activity as MainActivity
-                val userAgency : String = ac.getUserData()!!.agency
-                val userName : String = ac.getUserData()!!.nickname
-                val postDateNow: String = LocalDate.now().toString()
-                val postTimeNow : String = LocalTime.now().toString()
-                var postAnonymous : Boolean = false
-                if(suggestWriteAnonymous.isChecked){
-                    postAnonymous = true
+                if(suggestWriteCategory == "none" || suggestWriteContent.text.toString() == "" || suggestWriteTitle.text.toString() == ""){
+
                 }
-                suggestPostData = PostDataInfo(
-                    collection_name,
-                    userName,
-                    post_title = suggestWriteTitle.text.toString(),
-                    post_contents = suggestWriteContent.text.toString(),
-                    post_date = postDateNow,
-                    post_time = postTimeNow,
-                    post_comments = arrayListOf(),
-                    post_id = postDateNow + postTimeNow + "juyong",
-                    post_photo_uri = getLocalPhotoUri,
-                    post_state = suggestWriteCategory,
-                    post_anonymous = postAnonymous
-                )
-                bundle = bundleOf(
-                    "collection_name" to collection_name,
-                    "document_name" to suggestPostData.post_id
-                )
-                viewmodel.insertPostData(userAgency, suggestPostData)
-                findNavController().navigate(R.id.action_communityWriteSuggest_to_communityPost, bundle)
+                else{
+                    val postDateNow: String = LocalDate.now().toString()
+                    val postTimeNow : String = LocalTime.now().toString()
+                    var postAnonymous : Boolean = false
+                    if(suggestWriteAnonymous.isChecked){
+                        postAnonymous = true
+                    }
+                    suggestPostData = PostDataInfo(
+                        collection_name,
+                        userName,
+                        post_title = suggestWriteTitle.text.toString(),
+                        post_contents = suggestWriteContent.text.toString(),
+                        post_date = postDateNow,
+                        post_time = postTimeNow,
+                        post_comments = arrayListOf(),
+                        post_id = postDateNow + postTimeNow + "juyong",
+                        post_photo_uri = getLocalPhotoUri,
+                        post_state = suggestWriteCategory,
+                        post_anonymous = postAnonymous
+                    )
+                    bundle = bundleOf(
+                        "collection_name" to collection_name,
+                        "document_name" to suggestPostData.post_id
+                    )
+                    viewmodel.insertPostData(userAgency, suggestPostData).observe(viewLifecycleOwner){
+                        if(it){
+                            findNavController().navigate(R.id.action_communityWriteSuggest_to_communityPost, bundle)
+                        }
+                    }
+                }
             }
         }
     }
@@ -186,6 +195,16 @@ class CommunityWriteSuggestFragment : BaseFragment<FragmentCommunityWriteSuggest
             )
             bitmapArray.add(bitmap)
         }
+    }
+    private fun makeDialog(msg : String){
+        val dialog = WrapedCommunityDialogBasicOneButton(requireContext(), msg).apply {
+            clickListener = object : WrapedCommunityDialogBasicOneButton.DialogButtonClickListener{
+                override fun dialogClickListener() {
+                    dismiss()
+                }
+            }
+        }
+        showDialog(dialog, viewLifecycleOwner)
     }
 
 }

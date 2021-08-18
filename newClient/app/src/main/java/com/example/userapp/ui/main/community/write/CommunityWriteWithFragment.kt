@@ -21,9 +21,11 @@ import com.example.userapp.MainActivity
 import com.example.userapp.MainActivityViewModel
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
+import com.example.userapp.data.model.Agency
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentCommunityWriteWithBinding
 import com.example.userapp.ui.main.community.CommunityViewModel
+import com.example.userapp.utils.WrapedCommunityDialogBasicOneButton
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -37,7 +39,8 @@ class CommunityWriteWithFragment : BaseFragment<FragmentCommunityWriteWithBindin
     private var getLocalPhotoUri : ArrayList<String> = arrayListOf()
     private val bitmapArray : ArrayList<Bitmap> = arrayListOf()
     private val uriArray : ArrayList<Uri> = arrayListOf()
-
+    private lateinit var userName : String
+    private lateinit var userAgency: String
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -50,6 +53,8 @@ class CommunityWriteWithFragment : BaseFragment<FragmentCommunityWriteWithBindin
     @RequiresApi(Build.VERSION_CODES.P)
     override fun initViewStart(savedInstanceState: Bundle?) {
         val ac = activity as MainActivity
+        userAgency = ac.getUserData()!!.agency
+        userName  = ac.getUserData()!!.nickname
         getLocalPhotoUri = ac.getPhoto()
         viewbinding.withWritePhotoRecycler.visibility = View.VISIBLE
         viewbinding.withWritePhotoRecycler.run {
@@ -70,34 +75,39 @@ class CommunityWriteWithFragment : BaseFragment<FragmentCommunityWriteWithBindin
                 getPhotoPermission()
             }
             withWriteRegisterButton.setOnClickListener {
-                val ac = activity as MainActivity
-                val userAgency : String = ac.getUserData()!!.agency
-                val userName : String = ac.getUserData()!!.nickname
-                val postDateNow: String = LocalDate.now().toString()
-                val postTimeNow : String = LocalTime.now().toString()
-                var postAnonymous : Boolean = false
-                if(withWriteAnonymous.isChecked){
-                    postAnonymous = true
+                if(withWriteTitle.text.toString() == "" || withWriteContent.text.toString() == ""){
+
                 }
-                withPostData = PostDataInfo(
-                    collection_name,
-                    userName,
-                    post_title = withWriteTitle.text.toString(),
-                    post_contents = withWriteContent.text.toString(),
-                    post_date = postDateNow,
-                    post_time = postTimeNow,
-                    post_comments = arrayListOf(),
-                    post_id = postDateNow + postTimeNow + userName,
-                    post_photo_uri = getLocalPhotoUri,
-                    post_state = "모집 중",
-                    post_anonymous = postAnonymous
-                )
-                bundle = bundleOf(
-                    "collection_name" to collection_name,
-                    "document_name" to withPostData.post_id
-                )
-                viewmodel.insertPostData(userAgency, withPostData)
-                findNavController().navigate(R.id.action_communityWriteWith_to_communityPost, bundle)
+                else{
+                    val postDateNow: String = LocalDate.now().toString()
+                    val postTimeNow : String = LocalTime.now().toString()
+                    var postAnonymous : Boolean = false
+                    if(withWriteAnonymous.isChecked){
+                        postAnonymous = true
+                    }
+                    withPostData = PostDataInfo(
+                        collection_name,
+                        userName,
+                        post_title = withWriteTitle.text.toString(),
+                        post_contents = withWriteContent.text.toString(),
+                        post_date = postDateNow,
+                        post_time = postTimeNow,
+                        post_comments = arrayListOf(),
+                        post_id = postDateNow + postTimeNow + userName,
+                        post_photo_uri = getLocalPhotoUri,
+                        post_state = "모집 중",
+                        post_anonymous = postAnonymous
+                    )
+                    bundle = bundleOf(
+                        "collection_name" to collection_name,
+                        "document_name" to withPostData.post_id
+                    )
+                    viewmodel.insertPostData(userAgency, withPostData).observe(viewLifecycleOwner){
+                        if(it){
+                            findNavController().navigate(R.id.action_communityWriteWith_to_communityPost, bundle)
+                        }
+                    }
+                }
             }
         }
     }
@@ -155,6 +165,16 @@ class CommunityWriteWithFragment : BaseFragment<FragmentCommunityWriteWithBindin
             )
             bitmapArray.add(bitmap)
         }
+    }
+    private fun makeDialog(msg : String){
+        val dialog = WrapedCommunityDialogBasicOneButton(requireContext(), msg).apply {
+            clickListener = object : WrapedCommunityDialogBasicOneButton.DialogButtonClickListener{
+                override fun dialogClickListener() {
+                    dismiss()
+                }
+            }
+        }
+        showDialog(dialog, viewLifecycleOwner)
     }
 
 }
