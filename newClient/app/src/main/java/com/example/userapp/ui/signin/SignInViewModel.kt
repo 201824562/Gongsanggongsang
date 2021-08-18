@@ -1,6 +1,7 @@
 package com.example.userapp.ui.signin
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.userapp.base.BaseSessionViewModel
 import com.example.userapp.data.dto.UserModel
@@ -146,9 +147,10 @@ class SignInViewModel(application: Application) : BaseSessionViewModel(applicati
         val context = getApplication<Application>().applicationContext
         userData?.let {
             apiCall(userRepository.saveUserInfo(it),{
-                _onSuccessSaveUserInfo.value = true
+                Log.e("체킹!!유저인포 저장됐는가", "$it")
                 userRepository.saveAgencyInfo(it.agency, context)
-                userRepository.saveUserToken(it.id, context) } )
+                userRepository.saveUserToken(it.id, context)
+                _onSuccessSaveUserInfo.value = true } )
         }
     }
 
