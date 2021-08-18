@@ -3,6 +3,7 @@ package com.example.userapp.ui.main.settings
 import android.app.Application
 import androidx.lifecycle.LiveData
 import com.example.userapp.base.BaseSessionViewModel
+import com.example.userapp.data.dto.UserModel
 import com.example.userapp.utils.RegularExpressionUtils
 import com.example.userapp.utils.SingleLiveEvent
 import io.reactivex.Single
@@ -178,4 +179,17 @@ class SettingsViewModel(application: Application) : BaseSessionViewModel(applica
         apiCall(userRepository.changeUserInfoPwd(authToken, userPwd), { _onSuccessChangeInfoEvent.call() })
     }
 
+
+    //----------------------------------------------------------------------------------------------------------------
+
+    private val _onSuccessGettingUserInfo = SingleLiveEvent<UserModel>()
+    val onSuccessGettingUserInfo : LiveData<UserModel> get() = _onSuccessGettingUserInfo
+    private val _onSuccessGettingNullUserInfo = SingleLiveEvent<UserModel>()
+    val onSuccessGettingNullUserInfo : LiveData<UserModel> get() = _onSuccessGettingNullUserInfo
+
+    fun getUserInfo()  {
+        apiCall(userRepository.getUserInfo(), {
+            _onSuccessGettingUserInfo.postValue(it) },
+            { _onSuccessGettingNullUserInfo.call() })
+    }
 }

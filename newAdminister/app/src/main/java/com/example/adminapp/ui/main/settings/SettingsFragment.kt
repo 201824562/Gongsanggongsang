@@ -10,7 +10,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.adminapp.MainActivity
 import com.example.adminapp.R
 import com.example.adminapp.base.BaseSessionFragment
+import com.example.adminapp.data.model.AdminModel
 import com.example.adminapp.databinding.FragmentSettingsBinding
+import com.example.adminapp.restartActivity
 import com.example.adminapp.utils.MatchedDialogAccentTwoButton
 import com.example.adminapp.utils.WrapedDialogBasicTwoButton
 import java.io.IOException
@@ -29,13 +31,16 @@ class SettingsFragment : BaseSessionFragment<FragmentSettingsBinding, SettingsVi
         return viewbinding.root
     }
 
-    override fun initViewStart(savedInstanceState: Bundle?) { showProfile() }
+    override fun initViewStart(savedInstanceState: Bundle?) { }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
+        viewmodel.onSuccessGettingAdminInfo.observe(this, { showProfile(it)  })
+        viewmodel.onSuccessGettingNullAdminInfo.observe(this, { restartActivity() })
         viewmodel.onSuccessDeleteUserInfo.observe(viewLifecycleOwner){  logout() }
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
+        viewmodel.getAdminInfo()
         viewbinding.run {
             changePwdBtn.setOnClickListener { findNavController().navigate(R.id.action_mainFragment_to_settingsChangePwdFragment) }
             allowUserBtn.setOnClickListener { findNavController().navigate(R.id.action_mainFragment_to_settingsAllowUserFragment) }
@@ -45,17 +50,15 @@ class SettingsFragment : BaseSessionFragment<FragmentSettingsBinding, SettingsVi
         }
     }
 
-    private fun showProfile(){
-        (activity as MainActivity).getAdminData().let {
-            viewbinding.run {
-                userNickname.text = "관리자"
-                userName.text = it.name
-                userAgency.text = it.agency
-                userBirth.text = showBirthText(it.birth)
-                userSms.text = showSmsText(it.phone)
-            }
-        }
+    private fun showProfile(adminInfo : AdminModel){
+        viewbinding.run {
+            userNickname.text = "관리자"
+            userName.text = adminInfo.name
+            userAgency.text = adminInfo.agency
+            userBirth.text = showBirthText(adminInfo.birth)
+            userSms.text = showSmsText(adminInfo.phone) }
     }
+
     private fun showBirthText(birth : String): String {
         var birthText : String = ""
         birthText += birth.subSequence(0 until 4)
