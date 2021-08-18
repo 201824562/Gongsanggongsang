@@ -29,5 +29,5 @@ fun getMonthDayString(stringTime : String) : String {
  fun calculateDuration(compareTime : String) : Duration {
     val currentLocalTime = LocalDateTime.now()
     val compareLocalTime = changeStringToLocalDateTime(compareTime)
-    return Duration.between(currentLocalTime, compareLocalTime).abs()
+    return Duration.between(currentLocalTime, compareLocalTime)
 }

@@ -54,7 +54,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.appcompat.widget.Toolbar>
     <View
-        android:id="@+id/view1"
+        android:id="@id/view1"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
@@ -71,43 +71,6 @@
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:orientation="vertical">
-            <!--<TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="카테고리 종류"
-                android:textSize="15sp"
-                android:textColor="@color/black_87"
-                android:fontFamily="@font/notosanskr_regular_hestia" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp">
-                <Button
-                    android:id="@+id/add_equipment_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="바로사용"
-                    android:textSize="12sp"
-                    android:textColor="@color/applemint"
-                    android:fontFamily="@font/notosanskr_bold_hestia"
-                    android:minWidth="5dp"
-                    android:minHeight="5dp"
-                    android:background="@drawable/button_20dp_event_stroke_rectangle_bluegreen"/>
-                <Button
-                    android:id="@+id/add_reservation_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="예약사용"
-                    android:textSize="12sp"
-                    android:textColor="@color/applemint"
-                    android:fontFamily="@font/notosanskr_bold_hestia"
-                    android:minWidth="5dp"
-                    android:minHeight="5dp"
-                    android:background="@drawable/button_20dp_event_stroke_rectangle_bluegreen"/>
-            </LinearLayout>-->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

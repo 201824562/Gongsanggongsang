@@ -3,6 +3,7 @@ package com.example.adminapp.ui.main.reservation
 import android.content.Context
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +17,7 @@ import coil.load
 import com.example.adminapp.R
 import com.example.adminapp.base.BaseSessionFragment
 import com.example.adminapp.data.model.*
-import com.example.adminapp.databinding.FragmentReservationChildBinding
+import com.example.adminapp.databinding.FragmentReservationChildTypesBinding
 import com.example.adminapp.databinding.ItemReservationBinding
 import com.example.adminapp.ui.main.MainFragmentDirections
 import java.time.Duration
@@ -24,19 +25,15 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
-class ReservationEquipmentFragment : BaseSessionFragment<FragmentReservationChildBinding, ReservationViewModel>() {
+class ReservationEquipmentFragment : BaseSessionFragment<FragmentReservationChildTypesBinding, ReservationViewModel>() {
 
-    override lateinit var viewbinding: FragmentReservationChildBinding
+    override lateinit var viewbinding: FragmentReservationChildTypesBinding
     override val viewmodel: ReservationViewModel by viewModels()
     private lateinit var reservationEquipmentRVAdapter: ReservationEquipmentRVAdapter
     private var equipmentDataBundle : ReservationEquipmentData? = null
 
-    override fun initViewbinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        viewbinding = FragmentReservationChildBinding.inflate(inflater, container, false)
+    override fun initViewbinding(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        viewbinding = FragmentReservationChildTypesBinding.inflate(inflater, container, false)
         return viewbinding.root
     }
 
@@ -52,7 +49,8 @@ class ReservationEquipmentFragment : BaseSessionFragment<FragmentReservationChil
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewmodel.getReservationEquipmentDataList().observe(viewLifecycleOwner){
-            reservationEquipmentRVAdapter.submitList(it)
+            if (it.isEmpty()){ showEmptyView() }
+            else showRV(it)
         }
     }
 
@@ -65,66 +63,20 @@ class ReservationEquipmentFragment : BaseSessionFragment<FragmentReservationChil
         })
         viewbinding.reservationRv.adapter = reservationEquipmentRVAdapter
     }
-}
 
-class ReservationEquipmentRVAdapter(private val context : Context, private val viewmodel : ReservationViewModel,
-                                    private val  listener : OnItemClickListener)
-    : ListAdapter<ReservationEquipmentData, ReservationEquipmentRVAdapter.ViewHolder>(AddressDiffCallback) {
-
-    companion object {
-        val AddressDiffCallback = object : DiffUtil.ItemCallback<ReservationEquipmentData>() {
-            override fun areItemsTheSame(oldItem: ReservationEquipmentData, newItem: ReservationEquipmentData): Boolean {
-                return (oldItem == newItem)
-            }
-            override fun areContentsTheSame(oldItem: ReservationEquipmentData, newItem: ReservationEquipmentData): Boolean {
-                return oldItem == newItem
-            }
+    private fun showEmptyView(){
+        viewbinding.apply {
+            reservationChildEmptyView.visibility = View.VISIBLE
+            reservationRv.visibility = View.GONE
         }
     }
-
-    interface OnItemClickListener { fun onItemClick(position: Int, equipmentData : ReservationEquipmentData) }
-
-    inner class ViewHolder(val binding: ItemReservationBinding): RecyclerView.ViewHolder(binding.root) { var timer : CountDownTimer? = null }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(ItemReservationBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        getItem(position)?.let { item ->
-            if (holder.timer != null) { holder.timer!!.cancel() }
-            holder.binding.reserveItemIcon.load(item.icon)
-            holder.binding.reserveEditItemName.text = item.name
-            if (!item.usable){
-                holder.binding.reservationState.setTextColor(ContextCompat.getColor(context, R.color.pinkish_orange))
-                holder.binding.reservationState.text = "강제종료모드"
-                holder.binding.reserveItemIconBackground.background = ContextCompat.getDrawable(context, R.drawable.view_oval_gray)
-                holder.binding.reservationUsingStateInfo.visibility = View.INVISIBLE
-            }else{
-                holder.binding.reservationState.setTextColor(ContextCompat.getColor(context, R.color.black_60))
-                if (!item.using){
-                    holder.binding.reserveItemIconBackground.background = ContextCompat.getDrawable(context, R.drawable.view_oval_gray)
-                    holder.binding.reservationState.text = "대기중"
-                    holder.binding.reservationUsingStateInfo.visibility = View.INVISIBLE  }
-                else{
-                    holder.binding.reserveItemIconBackground.background = ContextCompat.getDrawable(context, R.drawable.view_oval_light_orange)
-                    holder.binding.reservationState.text = "사용중"
-                    holder.binding.reservationUsingStateInfo.visibility = View.VISIBLE
-                    holder.binding.reservationEndTime.text = getHourMinuteString(item.endTime)
-                    holder.timer = object : CountDownTimer(calculateDuration(item.endTime).toMillis(), 1000) {
-                        override fun onTick(millisUntilFinished: Long) {
-                            val minute = (millisUntilFinished/60000)
-                            val second = (millisUntilFinished%60000)/1000
-                            holder.binding.reservationLeftTimeMinute.text = minute.toString()
-                            holder.binding.reservationLeftTimeSecond.text = if (second<10) "0${second}" else second.toString()
-                        }
-                        override fun onFinish() { viewmodel.finishReservationEquipmentData(item.name) } }.start()
-                }
-            }
-            holder.binding.itemEditSetting.setOnClickListener { listener.onItemClick(position, item) }
+    private fun showRV(list : List<ReservationEquipmentData>){
+        viewbinding.run{
+            reservationChildEmptyView.visibility  = View.GONE
+            reservationRv.visibility = View.VISIBLE
+            reservationEquipmentRVAdapter.submitList(list)
         }
     }
-
-
-
 }
+
+

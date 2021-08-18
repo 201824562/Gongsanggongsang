@@ -4,12 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.adminapp.R
-import com.example.adminapp.base.BaseFragment
 import com.example.adminapp.base.BaseSessionFragment
 import com.example.adminapp.databinding.FragmentMainReservationBinding
+import com.example.adminapp.ui.main.reservation.log.ReservationLogFragment
 import com.google.android.material.tabs.TabLayout
 
 class ReservationFragment : BaseSessionFragment<FragmentMainReservationBinding, ReservationViewModel>() {
@@ -56,15 +59,15 @@ class ReservationFragment : BaseSessionFragment<FragmentMainReservationBinding, 
     private fun initViewPager() {
         viewbinding.run {
             reservationViewPagerAdapter  = ReservationViewPagerAdapter(requireActivity())
-            viewbinding.reservationViewpager.adapter = reservationViewPagerAdapter
-            viewbinding.reservationTab.addOnTabSelectedListener(object :
+            reservationViewpager.adapter = reservationViewPagerAdapter
+            reservationTab.addOnTabSelectedListener(object :
                 TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     when(tab?.position) {
-                        TAB_INDEX_USING -> viewbinding.reservationViewpager.setCurrentItem(TAB_INDEX_USING, true)
-                        TAB_INDEX_EQUIPMENT -> viewbinding.reservationViewpager.setCurrentItem(TAB_INDEX_EQUIPMENT, true)
-                        TAB_INDEX_FACILITY -> viewbinding.reservationViewpager.setCurrentItem(TAB_INDEX_FACILITY, true)
-                        TAB_INDEX_LOG -> viewbinding.reservationViewpager.setCurrentItem(TAB_INDEX_LOG, true)
+                        TAB_INDEX_USING -> viewbinding.reservationViewpager.setCurrentItem(TAB_INDEX_USING)
+                        TAB_INDEX_EQUIPMENT -> viewbinding.reservationViewpager.setCurrentItem(TAB_INDEX_EQUIPMENT)
+                        TAB_INDEX_FACILITY -> viewbinding.reservationViewpager.setCurrentItem(TAB_INDEX_FACILITY)
+                        TAB_INDEX_LOG -> viewbinding.reservationViewpager.setCurrentItem(TAB_INDEX_LOG)
                         else -> throw IllegalStateException("에러가 발생했습니다. 다시 시도해주세요.")
                     }
                 }
@@ -76,4 +79,19 @@ class ReservationFragment : BaseSessionFragment<FragmentMainReservationBinding, 
         }
     }
 
+}
+
+class ReservationViewPagerAdapter (activity: FragmentActivity) : FragmentStateAdapter(activity) {
+
+    override fun getItemCount(): Int = 4
+
+    override fun createFragment(position: Int): Fragment {
+        return when (position) {
+            0 -> ReservationUsingFragment()
+            1 -> ReservationEquipmentFragment()
+            2 -> ReservationFacilityFragment()
+            3 -> ReservationLogFragment()
+            else -> error("no such position: $position")
+        }
+    }
 }
