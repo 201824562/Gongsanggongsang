@@ -3,6 +3,7 @@ package com.example.adminapp.ui.main.settings
 import android.app.Application
 import androidx.lifecycle.LiveData
 import com.example.adminapp.base.BaseSessionViewModel
+import com.example.adminapp.data.model.AdminModel
 import com.example.adminapp.data.model.User
 import com.example.adminapp.utils.RegularExpressionUtils
 import com.example.adminapp.utils.SingleLiveEvent
@@ -88,6 +89,19 @@ class SettingsViewModel(application: Application) : BaseSessionViewModel(applica
                 adminRepository.removeAdminToken(context)
                 _onSuccessDeleteAdminInfo.value = true },
             {showSnackbar("로그아웃에 실패했습니다. 잠시후에 시도해주세요.")})
+    }
+
+    //--------------------------------------------------------------------------------------------
+
+    private val _onSuccessGettingAdminInfo = SingleLiveEvent<AdminModel>()
+    val onSuccessGettingAdminInfo : LiveData<AdminModel> get() = _onSuccessGettingAdminInfo
+    private val _onSuccessGettingNullAdminInfo  = SingleLiveEvent<AdminModel>()
+    val onSuccessGettingNullAdminInfo : LiveData<AdminModel> get() = _onSuccessGettingNullAdminInfo
+
+    fun getAdminInfo() {
+        apiCall(adminRepository.getAdminInfo(), {
+            _onSuccessGettingAdminInfo.postValue(it) },
+            { _onSuccessGettingNullAdminInfo.call() })
     }
 
     

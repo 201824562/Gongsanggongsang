@@ -47,9 +47,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     override fun initViewStart(savedInstanceState: Bundle?) {}
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
-        viewmodel.onSuccessGettingUserInfo.observe(this, {
-            userData = it
-        })
+        viewmodel.onSuccessGettingUserInfo.observe(this, {  userData = it })
         viewmodel.onSuccessGettingNullUserInfo.observe(this, {
             //restartActivity()
         })
