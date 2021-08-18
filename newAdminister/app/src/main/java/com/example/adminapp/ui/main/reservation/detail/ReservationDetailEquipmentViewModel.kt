@@ -1,4 +1,4 @@
-package com.example.adminapp.ui.main.reservation
+package com.example.adminapp.ui.main.reservation.detail
 
 import android.app.Application
 import androidx.lifecycle.LiveData
@@ -10,7 +10,7 @@ import com.example.adminapp.data.model.ReservationEquipmentSettingData
 import com.example.adminapp.data.repository.ReservationRepository
 import com.example.adminapp.utils.SingleLiveEvent
 
-class ReservationDetailViewModel(application: Application) : BaseSessionViewModel(application) {
+class ReservationDetailEquipmentViewModel(application: Application) : BaseSessionViewModel(application) {
 
     private val reservationRepository: ReservationRepository = ReservationRepository.getInstance()
 
@@ -36,7 +36,7 @@ class ReservationDetailViewModel(application: Application) : BaseSessionViewMode
     }
 
     fun stopReservationEquipment(item : ReservationEquipmentData){
-        apiCall(reservationRepository.stopReservationEquipment(agencyInfo, ReservationEquipmentData(item.icon, item.name, usable = false) ))
+        apiCall(reservationRepository.stopReservationEquipment(agencyInfo, ReservationEquipmentData(item.icon, item.name, usable = false, maxTime = item.maxTime) ))
     }
 
 

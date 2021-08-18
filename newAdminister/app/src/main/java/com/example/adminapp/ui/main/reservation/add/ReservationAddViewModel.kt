@@ -45,7 +45,7 @@ class ReservationAddViewModel(application: Application) : BaseSessionViewModel(a
     fun saveReservationData(data : ReservationItem) {
         when (data.type){
             ReservationType.EQUIPMENT -> {apiCall(reservationRepository.saveEquipmentReservationData(agencyInfo, ReservationEquipmentItem
-                (ReservationEquipmentSettingData(data.data.icon, data.data.name, data.data.maxTime), ReservationEquipmentData(data.data.icon, data.data.name)) ), {
+                (ReservationEquipmentSettingData(data.data.icon, data.data.name, data.data.maxTime), ReservationEquipmentData(data.data.icon, data.data.name, maxTime = data.data.maxTime)) ), {
                 _onSuccessSaveReservationItem.call() }) }
             ReservationType.FACILITY ->apiCall(reservationRepository.saveFacilityReservationData(agencyInfo, ReservationFacilityItem
                 (ReservationFacilitySettingData(data.data.icon, data.data.name, data.data.intervalTime, data.data.maxTime, data.unableTimeList), data.unableTimeList )), {

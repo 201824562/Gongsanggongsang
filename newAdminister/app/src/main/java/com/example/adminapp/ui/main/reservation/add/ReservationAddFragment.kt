@@ -129,7 +129,7 @@ class ReservationAddFragment : BaseSessionFragment<FragmentReservationAddBinding
                         false -> selectedCategoryData = categoryData
                         true -> {
                             AlertDialog.Builder(requireContext(), R.style.MyAlertDialogStyle)
-                                .setTitle("삭제하시겠습니까?")
+                                .setTitle("해당 카테고리를 삭제하시겠습니까?")
                                 .setPositiveButton("확인") { _, _ ->
                                     viewmodel.deleteCategoryItem(categoryData!!) }
                                 .setNegativeButton("취소") { dialog, _ ->

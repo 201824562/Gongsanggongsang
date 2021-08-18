@@ -1,8 +1,7 @@
-package com.example.adminapp.ui.main.reservation
+package com.example.adminapp.ui.main.reservation.detail
 
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,36 +9,32 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.adminapp.R
 import com.example.adminapp.base.BaseSessionFragment
 import com.example.adminapp.data.model.*
 import com.example.adminapp.databinding.FragmentReservationDetailEquipmentBinding
-import com.example.adminapp.databinding.ItemReservationEditSettingBinding
+import com.example.adminapp.ui.main.reservation.calculateDuration
+import com.example.adminapp.ui.main.reservation.getHourMinuteString
 import com.example.adminapp.utils.WrapedDialogBasicTwoButton
-import java.time.Duration
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
-class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReservationDetailEquipmentBinding, ReservationDetailViewModel>() {
+class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReservationDetailEquipmentBinding, ReservationDetailEquipmentViewModel>() {
 
     companion object{
         const val USING_STATE : String = "사용중"
         const val NOT_USING_STATE : String = "사용대기"
-        const val CANT_USING_STATE : String = "사용불가능"
+        const val CAN_USE_STATE : String = "사용가능"
+        const val CANT_USING_STATE : String = "사용불가"
         const val NO_USING_STRING : String = "-"
         const val NO_USING_BLANK_STRING : String = ""
     }
 
     override lateinit var viewbinding : FragmentReservationDetailEquipmentBinding
-    override val viewmodel : ReservationDetailViewModel by viewModels()
+    override val viewmodel : ReservationDetailEquipmentViewModel by viewModels()
     private val args : ReservationDetailEquipmentFragmentArgs by navArgs()
     private lateinit var equipmentData : ReservationEquipmentData
     private lateinit var equipmentSettingData : ReservationEquipmentSettingData
-    private lateinit var reservationDetailEquipmentLogRVAdapter : ReservationDetailEquipmentLogRVAdapter
+    private lateinit var reservationDetailLogRVAdapter : ReservationDetailLogRVAdapter
     private var timer : CountDownTimer ?= null
 
     override fun initViewbinding(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -77,9 +72,8 @@ class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReserva
                 setItemSettingData(equipmentSettingData)
             }
 
-            getReservationEquipmentLogData(equipmentData.name, "바로 사용").observe(viewLifecycleOwner){
-                Log.e("checkingList", "$it")
-                reservationDetailEquipmentLogRVAdapter.submitList(it)
+            getReservationEquipmentLogData("바로 사용", equipmentData.name).observe(viewLifecycleOwner){
+                reservationDetailLogRVAdapter.submitList( it.map { logData ->  ReservationLogItem(ReservationType.EQUIPMENT, logData, null) })
             }
         }
     }
@@ -128,8 +122,8 @@ class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReserva
     }
 
     private fun setRecyclerView() {
-        reservationDetailEquipmentLogRVAdapter = ReservationDetailEquipmentLogRVAdapter()
-        viewbinding.reservationDetailRv.adapter = reservationDetailEquipmentLogRVAdapter
+        reservationDetailLogRVAdapter = ReservationDetailLogRVAdapter()
+        viewbinding.reservationDetailRv.adapter = reservationDetailLogRVAdapter
     }
 
     private fun setItemSettingData(item : ReservationEquipmentSettingData){ viewbinding.reserveDetailItemMaxTime.text = item.maxTime.toString() }
@@ -140,20 +134,23 @@ class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReserva
             toolbarText.text = item.name
             reserveDetailItemIcon.load(item.icon)
             reserveDetailItemName.text = item.name
+            reservationDetailRvBtn.isSelected = true
             reservationDetailRvBtn.setOnClickListener {
                 it.isSelected = !it.isSelected
                 when (it.isSelected){
                     true -> reservationDetailRv.visibility = View.VISIBLE
-                    false -> reservationDetailRv.visibility = View.INVISIBLE
+                    false -> reservationDetailRv.visibility = View.GONE
                 }
             }
             if (!item.usable){
-                reserveDetailItemUsableState.text = "사용불가능"
-                reserveDetailItemState.setTextColor(ContextCompat.getColor(requireContext(), R.color.pinkish_orange))
+                reserveDetailItemUsableState.text = CANT_USING_STATE
+                reserveDetailItemState.apply {
+                    text = CANT_USING_STATE
+                    setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.light_gray))
+                    setTextColor(ContextCompat.getColor(requireContext(), R.color.pinkish_orange)) }
                 reserveDetailItemStopBtn.text = "강제 종료 취소"
                 reserveDetailItemStopBtn.setTextColor(ContextCompat.getColor(requireContext(), R.color.applemint))
                 reserveDetailItemIconBackground.background = ContextCompat.getDrawable(requireContext(), R.drawable.view_oval_gray)
-                reserveDetailItemState.text = CANT_USING_STATE
                 reserveDetailItemUserName.text = NO_USING_STRING
                 reserveDetailItemUsedTime1.text = NO_USING_STRING
                 reserveDetailItemLeftTime2.text = NO_USING_STRING
@@ -161,7 +158,6 @@ class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReserva
             }
             else {
                 reserveDetailItemUsableState.text = "사용가능"
-                reserveDetailItemState.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_50))
                 reserveDetailItemStopBtn.text = "강제 사용 종료"
                 reserveDetailItemStopBtn.setTextColor(ContextCompat.getColor(requireContext(), R.color.pinkish_orange))
                 if (!item.using){
@@ -169,7 +165,10 @@ class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReserva
                     reserveDetailItemUsedTimeText1.visibility = View.INVISIBLE
                     reserveDetailItemLeftTimeText1.visibility = View.INVISIBLE
                     reserveDetailItemLeftTimeText2.visibility = View.INVISIBLE
-                    reserveDetailItemState.text = NOT_USING_STATE
+                    reserveDetailItemState.apply {
+                        text = NOT_USING_STATE
+                        setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.light_gray))
+                        setTextColor(ContextCompat.getColor(requireContext(), R.color.black_50)) }
                     reserveDetailItemUserName.text = NO_USING_STRING
                     reserveDetailItemUsedTime1.text = NO_USING_STRING
                     reserveDetailItemLeftTime1.text = NO_USING_STRING
@@ -180,13 +179,16 @@ class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReserva
                     reserveDetailItemUsedTimeText1.visibility = View.VISIBLE
                     reserveDetailItemLeftTimeText1.visibility = View.VISIBLE
                     reserveDetailItemLeftTimeText2.visibility = View.VISIBLE
-                    reserveDetailItemState.text = USING_STATE
+                    reserveDetailItemState.apply {
+                        text = USING_STATE
+                        setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.light_orange))
+                        setTextColor(ContextCompat.getColor(requireContext(), R.color.pinkish_orange)) }
                     reserveDetailItemUserName.text = item.user
                     timer = object : CountDownTimer(calculateDuration(item.endTime).toMillis(), 1000) {
                         override fun onTick(millisUntilFinished: Long) {
                             val minute = (millisUntilFinished/60000)
                             val second = (millisUntilFinished%60000)/1000
-                            reserveDetailItemUsedTime1.text = calculateDuration(item.startTime).toMinutes().toString()
+                            reserveDetailItemUsedTime1.text = calculateDuration(item.startTime).abs().toMinutes().toString()
                             reserveDetailItemLeftTime1.text = minute.toString()
                             reserveDetailItemLeftTime2.text = if (second<10) "0${second}" else second.toString()
                         }

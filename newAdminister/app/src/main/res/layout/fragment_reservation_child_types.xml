@@ -9,14 +9,28 @@
         android:id="@+id/reservation_child_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="사용하기"
+        android:text=" - "
         android:textColor="@color/black_87"
         android:fontFamily="@font/notosanskr_bold_hestia"
         android:textSize="16sp"
-        android:padding="16dp"
+        android:paddingStart="20dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
+    <TextView
+        android:id="@+id/reservation_child_empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/reservation_child_text"
+        android:paddingTop="50dp"
+        android:paddingBottom="50dp"
+        android:text="사용가능한 물품/시설이 없습니다."
+        android:textSize="14sp"
+        android:textColor="@color/black_87"
+        android:gravity="center"
+        android:visibility="gone" />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/reservation_rv"
         android:layout_width="match_parent"
@@ -27,5 +41,6 @@
         app:layout_constraintTop_toBottomOf="@id/reservation_child_text"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_reservation" />
+        tools:listitem="@layout/item_reservation"
+        android:visibility="visible"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
