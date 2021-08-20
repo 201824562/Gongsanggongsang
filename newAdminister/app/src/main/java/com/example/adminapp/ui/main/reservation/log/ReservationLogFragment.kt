@@ -37,6 +37,10 @@ class ReservationLogFragment : BaseSessionFragment<FragmentReservationChildLogBi
 
     override fun initViewFinal(savedInstanceState: Bundle?) { }
 
+    private fun makeDataListener(){
+
+    }
+
     private fun initViewPager() {
         viewbinding.run {
             reservationLogViewPagerAdapter  = ReservationLogViewPagerAdapter(requireActivity())

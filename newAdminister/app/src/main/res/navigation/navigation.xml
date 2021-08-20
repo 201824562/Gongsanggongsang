@@ -323,6 +323,14 @@
             app:argType="com.example.adminapp.data.model.ReservationFacilityBundle"
             app:nullable="true"
             android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_reservationDetailFacilityFragment_pop"
+            app:popUpTo="@id/reservationDetailFacilityFragment"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit" />
     </fragment>
     <fragment
         android:id="@+id/communityPostMarketFragment"

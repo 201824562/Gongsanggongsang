@@ -22,7 +22,6 @@ class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReserva
 
     companion object{
         const val USING_STATE : String = "사용중"
-        const val NOT_USING_STATE : String = "사용대기"
         const val CAN_USE_STATE : String = "사용가능"
         const val CANT_USING_STATE : String = "사용불가"
         const val NO_USING_STRING : String = "-"
@@ -50,8 +49,7 @@ class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReserva
         }
         when (args.equipmentSettingData){
             null -> makeErrorEvent()
-            else -> equipmentSettingData = args.equipmentSettingData!!
-        }
+            else -> equipmentSettingData = args.equipmentSettingData!! }
         setRecyclerView()
         setItemData(equipmentData)
         setItemSettingData(equipmentSettingData)
@@ -64,8 +62,7 @@ class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReserva
                 else{
                     equipmentData = it.equipmentData!!
                     setItemData(equipmentData)
-                    viewmodel.getReservationEquipmentSettingData(equipmentData.name)
-                }
+                    viewmodel.getReservationEquipmentSettingData(equipmentData.name) }
             }
             onSuccessGettingReserveEquipmentSettingData.observe(viewLifecycleOwner) {
                 equipmentSettingData = it
@@ -73,7 +70,8 @@ class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReserva
             }
 
             getReservationEquipmentLogData("바로 사용", equipmentData.name).observe(viewLifecycleOwner){
-                reservationDetailLogRVAdapter.submitList( it.map { logData ->  ReservationLogItem(ReservationType.EQUIPMENT, logData, null) })
+                if (it.isEmpty()) showEmptyView()
+                else showRV( it.map {logData ->  ReservationLogItem(ReservationType.EQUIPMENT, logData, null)})
             }
         }
     }
@@ -97,8 +95,7 @@ class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReserva
     override fun onDestroy() {
         super.onDestroy()
         try { timer?.cancel() }
-        catch (e: Exception) {
-        }
+        catch (e: Exception) { }
     }
 
     private fun makeErrorEvent(){
@@ -126,6 +123,20 @@ class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReserva
         viewbinding.reservationDetailRv.adapter = reservationDetailLogRVAdapter
     }
 
+    private fun showEmptyView(){
+        viewbinding.apply {
+            reservationDetailEmptyView.visibility = View.VISIBLE
+            reservationDetailRv.visibility = View.GONE
+        }
+    }
+    private fun showRV(list : List<ReservationLogItem>){
+        viewbinding.run{
+            reservationDetailEmptyView.visibility  = View.GONE
+            reservationDetailRv.visibility = View.VISIBLE
+            reservationDetailLogRVAdapter.submitList(list)
+        }
+    }
+
     private fun setItemSettingData(item : ReservationEquipmentSettingData){ viewbinding.reserveDetailItemMaxTime.text = item.maxTime.toString() }
 
     private fun setItemData(item : ReservationEquipmentData){
@@ -148,7 +159,7 @@ class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReserva
                     text = CANT_USING_STATE
                     setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.light_gray))
                     setTextColor(ContextCompat.getColor(requireContext(), R.color.pinkish_orange)) }
-                reserveDetailItemStopBtn.text = "강제 종료 취소"
+                reserveDetailItemStopBtn.text = "사용모드 켜기"
                 reserveDetailItemStopBtn.setTextColor(ContextCompat.getColor(requireContext(), R.color.applemint))
                 reserveDetailItemIconBackground.background = ContextCompat.getDrawable(requireContext(), R.drawable.view_oval_gray)
                 reserveDetailItemUserName.text = NO_USING_STRING
@@ -157,8 +168,8 @@ class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReserva
                 reserveDetailItemLeftTime2.text = NO_USING_BLANK_STRING
             }
             else {
-                reserveDetailItemUsableState.text = "사용가능"
-                reserveDetailItemStopBtn.text = "강제 사용 종료"
+                reserveDetailItemUsableState.text = CAN_USE_STATE
+                reserveDetailItemStopBtn.text = "사용모드 끄기"
                 reserveDetailItemStopBtn.setTextColor(ContextCompat.getColor(requireContext(), R.color.pinkish_orange))
                 if (!item.using){
                     reserveDetailItemIconBackground.background = ContextCompat.getDrawable(requireContext(), R.drawable.view_oval_gray)
@@ -166,7 +177,7 @@ class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReserva
                     reserveDetailItemLeftTimeText1.visibility = View.INVISIBLE
                     reserveDetailItemLeftTimeText2.visibility = View.INVISIBLE
                     reserveDetailItemState.apply {
-                        text = NOT_USING_STATE
+                        text = CAN_USE_STATE
                         setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.light_gray))
                         setTextColor(ContextCompat.getColor(requireContext(), R.color.black_50)) }
                     reserveDetailItemUserName.text = NO_USING_STRING
@@ -199,5 +210,7 @@ class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReserva
             }
         }
     }
+
+
 
 }

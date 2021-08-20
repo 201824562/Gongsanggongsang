@@ -19,6 +19,12 @@
     <style name="CheckboxStyle" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
         <item name="android:fontFamily">@font/notosan_font_family</item>
     </style>
+    <style name="TabCustomText14" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="TabCustomText16" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">16sp</item>
+    </style>
     <!-- TODO : tabIndicator 탭 인디케이터  안보임 -->
     <style name="TabCustomStyle" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">16sp</item>

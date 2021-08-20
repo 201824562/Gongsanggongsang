@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.example.adminapp.base.BaseSessionFragment
+import com.example.adminapp.data.model.ReservationLogItem
 import com.example.adminapp.databinding.FragmentReservationDetailFacilityLogBinding
 
 class ReservationDetailFacilityLogFragment : BaseSessionFragment<FragmentReservationDetailFacilityLogBinding, ReservationDetailFacilityViewModel>() {
@@ -26,4 +27,17 @@ class ReservationDetailFacilityLogFragment : BaseSessionFragment<FragmentReserva
     override fun initViewFinal(savedInstanceState: Bundle?) {
     }
 
+    /*private fun showEmptyView(){
+        viewbinding.apply {
+            reservationDetailEmptyView.visibility = View.VISIBLE
+            reservationDetailRv.visibility = View.GONE
+        }
+    }
+    private fun showRV(list : List<ReservationLogItem>){
+        viewbinding.run{
+            reservationDetailEmptyView.visibility  = View.GONE
+            reservationDetailRv.visibility = View.VISIBLE
+            reservationDetailLogRVAdapter.submitList(list)
+        }
+    }*/
 }

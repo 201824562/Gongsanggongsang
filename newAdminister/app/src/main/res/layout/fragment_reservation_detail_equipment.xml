@@ -55,9 +55,6 @@
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         android:background="@color/light_gray"/>
     <androidx.core.widget.NestedScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/view1">
@@ -292,7 +289,7 @@
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
                     android:background="@drawable/button_5dp_event_stroke_rectangle_black20"
-                    android:text="강제 사용종료"
+                    android:text="사용모드 끄기"
                     android:textSize="16sp"
                     android:textColor="@color/pale_orange"
                     android:fontFamily="@font/notosanskr_bold_hestia"/>
@@ -401,6 +398,18 @@
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/ic_event_arrow_updown" />
             </LinearLayout>
+            <TextView
+                android:id="@+id/reservation_detail_empty_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/view3"
+                android:paddingTop="50dp"
+                android:paddingBottom="50dp"
+                android:text="물품/시설의 이용내역이 없습니다."
+                android:textSize="14sp"
+                android:textColor="@color/black_87"
+                android:gravity="center"
+                android:visibility="gone" />
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/reservation_detail_rv"
                 android:layout_width="match_parent"

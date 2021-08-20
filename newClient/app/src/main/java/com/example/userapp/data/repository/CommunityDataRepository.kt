@@ -52,7 +52,7 @@ class CommunityDataRepository() {
             .addOnSuccessListener {success ->
                 isSuccess = true
                 postDataInsertSuccess.postValue(isSuccess)
-
+                Log.e("checkingSuccess", "${isSuccess}, ${postDataInsertSuccess.value}")
             }
             .addOnFailureListener { exception ->
                 Log.w(ContentValues.TAG, "Error", exception)

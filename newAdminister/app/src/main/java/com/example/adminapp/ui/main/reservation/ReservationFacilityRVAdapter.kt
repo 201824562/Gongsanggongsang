@@ -93,13 +93,13 @@ class ReservationFacilityRVAdapter(private val context : Context, private val vi
             holder.binding.reserveEditItemName.text = item.name
             if (item.using){
              item.logData?.let {
-                 holder.binding.reserveItemIcon.load(item.logData.icon)
+                 holder.binding.reserveItemIcon.load(item.logData!!.icon)
                  holder.binding.reservationState.setTextColor(ContextCompat.getColor(context, R.color.black_60))
                  holder.binding.reserveItemIconBackground.background = ContextCompat.getDrawable(context, R.drawable.view_oval_light_orange)
                  holder.binding.reservationState.text = "사용중"
                  holder.binding.reservationUsingStateInfo.visibility = View.VISIBLE
-                 holder.binding.reservationEndTime.text = getHourMinuteString(item.logData.endTime)
-                 holder.timer = object : CountDownTimer(calculateDuration(item.logData.endTime).toMillis(), 1000) {
+                 holder.binding.reservationEndTime.text = getHourMinuteString(item.logData!!.endTime)
+                 holder.timer = object : CountDownTimer(calculateDuration(item.logData!!.endTime).toMillis(), 1000) {
                      override fun onTick(millisUntilFinished: Long) {
                          val minute = (millisUntilFinished/60000)
                          val second = (millisUntilFinished%60000)/1000
@@ -108,8 +108,8 @@ class ReservationFacilityRVAdapter(private val context : Context, private val vi
                      override fun onFinish() { viewmodel.finishReservationEquipmentData(item.name) } }.start() }
             }else{
                 item.settingData?.let {
-                    holder.binding.reserveItemIcon.load(item.settingData.icon)
-                    if (!item.settingData.usable){
+                    holder.binding.reserveItemIcon.load(item.settingData!!.icon)
+                    if (!item.settingData!!.usable){
                         holder.binding.reservationState.setTextColor(ContextCompat.getColor(context, R.color.pinkish_orange))
                         holder.binding.reservationState.text = "예약불가"
                         holder.binding.reserveItemIconBackground.background = ContextCompat.getDrawable(context, R.drawable.view_oval_gray)
@@ -117,7 +117,7 @@ class ReservationFacilityRVAdapter(private val context : Context, private val vi
                     else {
                         holder.binding.reservationState.setTextColor(ContextCompat.getColor(context, R.color.black_60))
                         holder.binding.reserveItemIconBackground.background = ContextCompat.getDrawable(context, R.drawable.view_oval_gray)
-                        holder.binding.reservationState.text = "대기중"
+                        holder.binding.reservationState.text = "사용가능"
                         holder.binding.reservationUsingStateInfo.visibility = View.INVISIBLE }
                 }
             }

@@ -45,21 +45,13 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:tabIndicatorHeight="3dp"
-        android:background="@color/transparent"
         app:tabIndicatorColor="@color/applemint"
         app:tabPaddingStart="-1dp"
         app:tabPaddingEnd="-1dp"
         android:paddingTop="3dp"
         android:paddingBottom="3dp"
+        app:tabTextAppearance="@style/TabCustomText14"
         style="@style/TabCustomStyle">
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="바로 사용" />
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="예약 사용" />
     </com.google.android.material.tabs.TabLayout>
     <View
         android:id="@+id/view2"

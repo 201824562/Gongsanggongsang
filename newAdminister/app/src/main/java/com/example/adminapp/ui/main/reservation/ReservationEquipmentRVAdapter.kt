@@ -55,7 +55,7 @@ class ReservationEquipmentRVAdapter(private val context : Context, private val v
                 holder.binding.reservationState.setTextColor(ContextCompat.getColor(context, R.color.black_60))
                 if (!item.using){
                     holder.binding.reserveItemIconBackground.background = ContextCompat.getDrawable(context, R.drawable.view_oval_gray)
-                    holder.binding.reservationState.text = "대기중"
+                    holder.binding.reservationState.text = "사용가능"
                     holder.binding.reservationUsingStateInfo.visibility = View.INVISIBLE  }
                 else{
                     holder.binding.reserveItemIconBackground.background = ContextCompat.getDrawable(context, R.drawable.view_oval_light_orange)

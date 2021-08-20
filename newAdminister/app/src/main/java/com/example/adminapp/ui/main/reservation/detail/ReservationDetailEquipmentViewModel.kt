@@ -28,7 +28,7 @@ class ReservationDetailEquipmentViewModel(application: Application) : BaseSessio
     }
 
     fun getReservationEquipmentLogData(itemType : String, itemName : String): LiveData<List<ReservationEquipmentLog>> {
-        return reservationRepository.getReservationEquipmentLogData(agencyInfo, itemType, itemName)
+        return reservationRepository.getReservationEquipmentLogDataList(agencyInfo, itemType, itemName)
     }
 
     fun startReservationEquipment(itemName : String){
