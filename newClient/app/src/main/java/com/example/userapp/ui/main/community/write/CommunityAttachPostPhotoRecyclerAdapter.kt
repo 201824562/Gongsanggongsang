@@ -6,10 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.userapp.databinding.FragmentCommunityAttachImageItemBinding
+import com.example.userapp.databinding.FragmentCommunityAttachPostPhotoItemBinding
 
 
-
-class CommunityAttachPhotoRecyclerAdapter(val attachPhotoItems:ArrayList<String>): RecyclerView.Adapter<CommunityAttachPhotoRecyclerAdapter.CommunityAttachPhotoViewHolder>() {
+class CommunityAttachPostPhotoRecyclerAdapter(val attachPhotoItems:ArrayList<String>): RecyclerView.Adapter<CommunityAttachPostPhotoRecyclerAdapter.CommunityAttachPhotoViewHolder>() {
     interface OnCommunityPhotoItemClickListener{
         fun onPhotoItemClick(position: Int)
     }
@@ -25,7 +25,7 @@ class CommunityAttachPhotoRecyclerAdapter(val attachPhotoItems:ArrayList<String>
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommunityAttachPhotoViewHolder {
-        val viewbinding = FragmentCommunityAttachImageItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val viewbinding = FragmentCommunityAttachPostPhotoItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return  CommunityAttachPhotoViewHolder(viewbinding, parent, listener, deleteButtonListener)
     }
 
@@ -34,7 +34,7 @@ class CommunityAttachPhotoRecyclerAdapter(val attachPhotoItems:ArrayList<String>
     }
 
     class CommunityAttachPhotoViewHolder(
-        viewbinding: FragmentCommunityAttachImageItemBinding,
+        viewbinding: FragmentCommunityAttachPostPhotoItemBinding,
         itemview: ViewGroup,
         listener: OnCommunityPhotoItemClickListener?,
         deleteButtonListener: OnCommunityPhotoDeleteClickListener?
@@ -49,10 +49,6 @@ class CommunityAttachPhotoRecyclerAdapter(val attachPhotoItems:ArrayList<String>
         init {
             itemView.setOnClickListener(){
                 listener?.onPhotoItemClick(bindingAdapterPosition)
-                return@setOnClickListener
-            }
-            binding.attachImageDeleteButton.setOnClickListener {
-                deleteButtonListener?.onPhotoDeleteButtonClick(bindingAdapterPosition)
                 return@setOnClickListener
             }
         }

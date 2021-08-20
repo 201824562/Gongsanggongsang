@@ -131,7 +131,7 @@ class CommunityPostMarketFragment : BaseFragment<FragmentCommunityPostMarketBind
         viewbinding.postCommentRecyclerView.run {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
-            adapter = CommunityCommentRecyclerAdapter(postCommentsArray)
+            adapter = CommunityCommentRecyclerAdapter(postCommentsArray, localUserName)
         }
     }
 

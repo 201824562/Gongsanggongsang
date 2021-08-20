@@ -66,17 +66,11 @@ class CommunityGetPhotoFragment : BaseFragment<FragmentCommunityGetPhotoBinding,
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.selectPhotoButton.setOnClickListener{
             if(howManyPhoto <= 5){
-                var uriArray : ArrayList<String> = viewmodel.getPhoto()
                 var ac = activity as MainActivity
                 ac.selectedItems = this.localSelectedPhotoItem
-                when(collection_name){
-                    "1_free" -> findNavController().navigate(R.id.action_communityGetPhoto_to_communityWriteFree)
-                    "2_emergency" -> findNavController().navigate(R.id.action_communityGetPhoto_to_communityWriteEmergency)
-                    "3_suggest" -> findNavController().navigate(R.id.action_communityGetPhoto_to_communityWriteSuggest)
-                    "4_with" -> findNavController().navigate(R.id.action_communityGetPhoto_to_communityWriteWith)
-                    "5_market" -> findNavController().navigate(R.id.action_communityGetPhoto_to_communityWriteMarket)
-                }
+                findNavController().navigate(R.id.action_communityGetPhotoFragment_pop)
             }
+            //TODO: 커스텀 토스트로 바꾸기
             else{
                 Toast.makeText(context, "허용 가능한 사진 수를 초과하였습니다.", Toast.LENGTH_SHORT)
             }

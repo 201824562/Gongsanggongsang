@@ -18,10 +18,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.MainActivity
-import com.example.userapp.MainActivityViewModel
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
-import com.example.userapp.data.model.Agency
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentCommunityWriteWithBinding
 import com.example.userapp.ui.main.community.CommunityViewModel
@@ -92,7 +90,7 @@ class CommunityWriteWithFragment : BaseFragment<FragmentCommunityWriteWithBindin
                         post_contents = withWriteContent.text.toString(),
                         post_date = postDateNow,
                         post_time = postTimeNow,
-                        post_comments = arrayListOf(),
+                        post_comments = 0,
                         post_id = postDateNow + postTimeNow + userName,
                         post_photo_uri = getLocalPhotoUri,
                         post_state = "모집 중",

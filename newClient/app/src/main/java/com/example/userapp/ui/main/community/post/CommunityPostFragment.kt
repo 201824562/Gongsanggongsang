@@ -3,6 +3,7 @@ package com.example.userapp.ui.main.community.post
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import com.example.userapp.data.entity.PostCommentDataClass
 import com.example.userapp.databinding.FragmentCommunityPostBinding
 import com.example.userapp.ui.main.community.CommunityViewModel
 import com.example.userapp.ui.main.community.write.CommunityAttachPhotoRecyclerAdapter
+import com.example.userapp.ui.main.community.write.CommunityAttachPostPhotoRecyclerAdapter
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -31,8 +33,8 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
     override val viewmodel: CommunityViewModel by viewModels()
     private lateinit var getPhotoUri : ArrayList<String>
     private lateinit var currentPostId : String
-    private lateinit var currentPostComment : ArrayList<String>
-    private lateinit var attachPostPhotoRecyclerAdapter: CommunityAttachPhotoRecyclerAdapter
+    private var currentPostCommentNumber : Int = 0
+    private lateinit var attachPostPhotoRecyclerAdapter: CommunityAttachPostPhotoRecyclerAdapter
     private lateinit var commentRecyclerAdapter: CommunityCommentRecyclerAdapter
     private var localUserName = ""
     var agency = ""
@@ -68,7 +70,7 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
         }
         viewmodel.getDocumentPostData(agency, collectionName, documentName).observe(viewLifecycleOwner) { it
             currentPostId = it.post_id
-            currentPostComment = it.post_comments
+            currentPostCommentNumber = it.post_comments.toInt()
             if(it.post_name == localUserName){
                 viewbinding.postRemoveButton.visibility = View.VISIBLE
             }
@@ -142,12 +144,11 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
                             postCommentsArray = it
                             initCommentRecyclerView()
                             viewbinding.communityPostCommentsNumber.text = it.size.toString()
+                            viewmodel.modifyPostPartData(agency, collectionName, documentName, "post_comments", it.size)
+                            Log.e("mod", "{$currentPostCommentNumber}")
                         }
                     }
                 }
-                currentPostComment.add("1")
-                viewmodel.modifyPostPartData(agency, collectionName, documentName, "post_comments", currentPostComment)
-
             }
             postRemoveButton.setOnClickListener{
                 viewmodel.deletePostData(agency, collectionName, documentName)
@@ -180,18 +181,19 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
         viewbinding.postCommentRecyclerView.run {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
-            adapter = CommunityCommentRecyclerAdapter(postCommentsArray)
+            adapter = CommunityCommentRecyclerAdapter(postCommentsArray, localUserName)
         }
-        commentRecyclerAdapter = CommunityCommentRecyclerAdapter(postCommentsArray)
+        commentRecyclerAdapter = CommunityCommentRecyclerAdapter(postCommentsArray, localUserName)
         viewbinding.postCommentRecyclerView.adapter = commentRecyclerAdapter.apply {
-            object :
-            CommunityCommentRecyclerAdapter.OnCommunityCommentItemClickListener{
+            listener = object : CommunityCommentRecyclerAdapter.OnCommunityCommentItemClickListener{
                 override fun onCommentItemClick(position: Int) {
-                    println(getItem(position).commentId)
-                    println("touch")
                     viewmodel.deletePostCommentData(agency, collectionName, documentName, getItem(position)).observe(viewLifecycleOwner){
                         if(it){
-                            println("delete success")
+                            viewmodel.getDocumentCommentData(agency, collectionName, documentName).observe(viewLifecycleOwner){
+                                postCommentsArray = it
+                                viewmodel.modifyPostPartData(agency, collectionName, documentName, "post_comments", it.size)
+                                commentRecyclerAdapter.notifyDataSetChanged()
+                            }
                         }
                     }
                 }
@@ -204,13 +206,13 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
         viewbinding.postPhotoRecycler.run {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context).also { it.orientation = LinearLayoutManager.HORIZONTAL }
-            adapter = CommunityAttachPhotoRecyclerAdapter(photo_uri)
+            adapter = CommunityAttachPostPhotoRecyclerAdapter(photo_uri)
         }
-        attachPostPhotoRecyclerAdapter = CommunityAttachPhotoRecyclerAdapter(photo_uri)
+        attachPostPhotoRecyclerAdapter = CommunityAttachPostPhotoRecyclerAdapter(photo_uri)
         viewbinding.postPhotoRecycler.adapter = attachPostPhotoRecyclerAdapter.apply {
             listener =
                 object :
-                    CommunityAttachPhotoRecyclerAdapter.OnCommunityPhotoItemClickListener {
+                    CommunityAttachPostPhotoRecyclerAdapter.OnCommunityPhotoItemClickListener {
                     override fun onPhotoItemClick(position: Int) {
                         var bundle = bundleOf(
                             "photo_uri" to photo_uri.toTypedArray(),

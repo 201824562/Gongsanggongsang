@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.userapp.data.entity.PostCommentDataClass
 import com.example.userapp.data.model.PostDataInfo
@@ -30,6 +31,7 @@ class CommunityDataRepository() {
     private var postModifyPartDataSuccess : MutableLiveData<Boolean> = MutableLiveData()
     private var postDataInsertSuccess : MutableLiveData<Boolean> = MutableLiveData()
     private var postSearchPostDataList : MutableLiveData<ArrayList<PostDataInfo>> = MutableLiveData()
+    private var collectionPostDataListSuccess : MutableLiveData<Boolean> = MutableLiveData()
     companion object {
         private var sInstance: CommunityDataRepository? = null
         fun getInstance(): CommunityDataRepository {
@@ -41,24 +43,24 @@ class CommunityDataRepository() {
                 }
         }
     }
-
-    fun insertPostData(agency: String, it: PostDataInfo) : MutableLiveData<Boolean> {
-        var collectionName = it.post_category
-        var documentName = it.post_id
-        var isSuccess : Boolean = false
+    private fun insertPostDataToFirebase(agency: String, it: PostDataInfo){
         firestore.collection(agency).document("community").
-        collection(collectionName).document(documentName)
+        collection(it.post_category).document(it.post_id)
             .set(it)
             .addOnSuccessListener {success ->
-                isSuccess = true
-                postDataInsertSuccess.postValue(isSuccess)
+                postDataInsertSuccess.postValue(true)
 
             }
             .addOnFailureListener { exception ->
                 Log.w(ContentValues.TAG, "Error", exception)
+                postDataInsertSuccess.postValue(false)
             }
+    }
+    fun insertPostData(agency: String, it: PostDataInfo) : MutableLiveData<Boolean> {
+        insertPostDataToFirebase(agency, it)
         return postDataInsertSuccess
     }
+
     fun insertPostCommentData(agency: String, collection_name: String, document_name: String, postComment : PostCommentDataClass) : MutableLiveData<Boolean> {
         var postCommentUploadBool : Boolean = false
         firestore
@@ -108,18 +110,22 @@ class CommunityDataRepository() {
                         document["post_contents"] as String,
                         document["post_date"] as String,
                         document["post_time"] as String,
-                        document["post_comments"] as ArrayList<String>,
+                        document["post_comments"] as Long,
                         document["post_id"] as String,
                         document["post_photo_uri"] as ArrayList<String>,
                         document["post_state"] as String,
                         document["post_anonymous"] as Boolean)
+                    Log.e("doc", "{$item}")
                     postDataList.add(item)
                 }
                 collectionPostDataInfoList.value= postDataList
+                collectionPostDataListSuccess.postValue(true)
+            }
+            .addOnFailureListener {
+                collectionPostDataListSuccess.postValue(false)
             }
     }
-    fun getCollectionPostData(agency: String, collection_name: String) : MutableLiveData<ArrayList<PostDataInfo>>{
-        //collectionPostDataInfoList.postValue(arrayListOf())
+    fun getCollectionPostData(agency: String, collection_name: String) : LiveData<ArrayList<PostDataInfo>>{
         updateCollectionPostData(agency, collection_name)
         return collectionPostDataInfoList
     }
@@ -139,7 +145,7 @@ class CommunityDataRepository() {
                         document["post_contents"] as String,
                         document["post_date"] as String,
                         document["post_time"] as String,
-                        document["post_comments"] as ArrayList<String>,
+                        document["post_comments"] as Long,
                         document["post_id"] as String,
                         document["post_photo_uri"] as ArrayList<String>,
                         document["post_state"] as String,
@@ -197,7 +203,7 @@ class CommunityDataRepository() {
                     result["post_contents"].toString(),
                     result["post_date"].toString(),
                     result["post_time"].toString(),
-                    result["post_comments"] as ArrayList<String>,
+                    result["post_comments"].toString().toLong(),
                     result["post_id"].toString(),
                     if(result["post_photo_uri"] != null){
                        result["post_photo_uri"] as ArrayList<String>
@@ -327,7 +333,7 @@ class CommunityDataRepository() {
                         document["post_contents"] as String,
                         document["post_date"] as String,
                         document["post_time"] as String,
-                        document["post_comments"] as ArrayList<String>,
+                        document["post_comments"] as Long,
                         document["post_id"] as String,
                         document["post_photo_uri"] as ArrayList<String>,
                         document["post_state"] as String,
@@ -361,7 +367,7 @@ class CommunityDataRepository() {
                             document["post_contents"] as String,
                             document["post_date"] as String,
                             document["post_time"] as String,
-                            document["post_comments"] as ArrayList<String>,
+                            document["post_comments"] as Long,
                             document["post_id"] as String,
                             document["post_photo_uri"] as ArrayList<String>,
                             document["post_state"] as String,

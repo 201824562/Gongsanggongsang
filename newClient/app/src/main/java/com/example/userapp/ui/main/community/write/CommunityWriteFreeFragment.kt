@@ -37,8 +37,9 @@ class CommunityWriteFreeFragment : BaseFragment<FragmentCommunityWriteFreeBindin
     private lateinit var freePostData : PostDataInfo
     private lateinit var userName : String
     private lateinit var userAgency : String
-    val bitmap_array : ArrayList<Bitmap> = arrayListOf()
-    val uri_array : ArrayList<Uri> = arrayListOf()
+    private lateinit var attachPostPhotoRecyclerAdapter : CommunityAttachPhotoRecyclerAdapter
+    private val bitmapArray : ArrayList<Bitmap> = arrayListOf()
+    private val uriArray : ArrayList<Uri> = arrayListOf()
 
     override fun initViewbinding(
         inflater: LayoutInflater,
@@ -61,6 +62,16 @@ class CommunityWriteFreeFragment : BaseFragment<FragmentCommunityWriteFreeBindin
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context).also { it.orientation = LinearLayoutManager.HORIZONTAL }
             adapter = CommunityAttachPhotoRecyclerAdapter(getLocalPhotoUri)
+        }
+        attachPostPhotoRecyclerAdapter = CommunityAttachPhotoRecyclerAdapter(getLocalPhotoUri)
+        viewbinding.freeWritePhotoRecycler.adapter = attachPostPhotoRecyclerAdapter.apply {
+            deleteButtonListener =
+                object : CommunityAttachPhotoRecyclerAdapter.OnCommunityPhotoDeleteClickListener {
+                    override fun onPhotoDeleteButtonClick(position: Int) {
+                        getLocalPhotoUri.removeAt(position)
+                        attachPostPhotoRecyclerAdapter.notifyDataSetChanged()
+                    }
+                }
         }
         getBitmap()
 
@@ -93,7 +104,7 @@ class CommunityWriteFreeFragment : BaseFragment<FragmentCommunityWriteFreeBindin
                         post_contents = freeWriteContent.text.toString(),
                         post_date = postDateNow,
                         post_time = postTimeNow,
-                        post_comments = arrayListOf(),
+                        post_comments = 0,
                         post_id = postDateNow + postTimeNow + userName,
                         post_photo_uri = getLocalPhotoUri,
                         post_state = "none",
@@ -107,6 +118,7 @@ class CommunityWriteFreeFragment : BaseFragment<FragmentCommunityWriteFreeBindin
                         if(it){
                             findNavController().navigate(R.id.action_communityWriteFree_to_communityPost, bundle)
                         }
+                        else makeDialog("와이파이 연결이 안되어있어요.")
                     }
                 }
             }
@@ -157,14 +169,14 @@ class CommunityWriteFreeFragment : BaseFragment<FragmentCommunityWriteFreeBindin
         for(photo_uri in getLocalPhotoUri) {
             val photoUri = photo_uri.toUri()
             val photoUri2 = Uri.parse("file://" + photoUri)
-            uri_array.add(photoUri2)
+            uriArray.add(photoUri2)
             val bitmap = ImageDecoder.decodeBitmap(
                 ImageDecoder.createSource(
                     requireActivity().contentResolver,
                     photoUri2
                 )
             )
-            bitmap_array.add(bitmap)
+            bitmapArray.add(bitmap)
         }
     }
     private fun makeDialog(msg : String){

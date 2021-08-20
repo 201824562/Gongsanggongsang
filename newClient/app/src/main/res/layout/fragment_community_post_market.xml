@@ -80,7 +80,6 @@
                     android:id="@+id/market_post_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="title"
                     android:textStyle="bold"
                     android:textSize="20sp"
                     android:textColor="#de000000"
@@ -106,7 +105,6 @@
                     android:src="@drawable/ic_basic_profile_photo"
                     android:layout_gravity="center"/>
                 <TextView
-                    android:text="작성자"
                     android:id="@+id/community_post_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -116,7 +114,6 @@
                     android:letterSpacing="-0.03"
                     android:layout_marginLeft="4dp"/>
                 <TextView
-                    android:text="시간"
                     android:id="@+id/community_post_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -124,7 +121,6 @@
                     android:textSize="12sp"
                     android:textColor="#7f000000"
                     android:lineSpacingExtra="6sp"
-                    tools:text="5월 21일"
                     android:layout_marginLeft="6dp"/>
                 <View
                     android:layout_width="0dp"
@@ -144,11 +140,10 @@
                 android:id="@+id/market_post_contents"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="contents"
                 android:textStyle="normal"
                 android:textSize="14sp"
                 android:textColor="#cc000000"
-                android:lineSpacingExtra="16sp"/>
+                android:lineSpacingExtra="6sp"/>
         <LinearLayout
                 android:id="@+id/post_market_complete"
                 android:layout_width="match_parent"

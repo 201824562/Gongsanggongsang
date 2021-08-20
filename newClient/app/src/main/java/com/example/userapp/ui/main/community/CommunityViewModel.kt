@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.userapp.base.BaseViewModel
 import com.example.userapp.data.entity.PostCommentDataClass
@@ -15,7 +16,7 @@ class CommunityViewModel() : BaseViewModel() {
     var selected_items : ArrayList<String> = arrayListOf()
     private val communityDataRepository : CommunityDataRepository = CommunityDataRepository.getInstance()
 
-    fun getCollectionPostData(agency: String, collection_name: String) : MutableLiveData<ArrayList<PostDataInfo>>{
+    fun getCollectionPostData(agency: String, collection_name: String) : LiveData<ArrayList<PostDataInfo>> {
         return communityDataRepository.getCollectionPostData(agency, collection_name)
     }
     fun getDocumentPostData(agency: String, collection_name: String, document_name : String) : MutableLiveData<PostDataInfo>{

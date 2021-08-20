@@ -56,6 +56,11 @@ class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, C
             initMarketRecyclerView()
         }
         else{
+            viewbinding.communityPreviewRecyclerView.run {
+                setHasFixedSize(true)
+                layoutManager = LinearLayoutManager(context)
+                adapter = CommunityPreviewRecyclerAdapter(arrayListOf())
+            }
             initMarketElseRecyclerView()
         }
     }
@@ -88,13 +93,16 @@ class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, C
 
     }
     fun initMarketElseRecyclerView(){
+        var testList : ArrayList<PostDataInfo> = arrayListOf()
+        viewbinding.communityPreviewRecyclerView.run {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+            adapter = CommunityPreviewRecyclerAdapter(testList)
+        }
         viewmodel.getCollectionPostData(agency, collectionName).observe(viewLifecycleOwner){ it
-            viewbinding.communityPreviewRecyclerView.run {
-                setHasFixedSize(true)
-                layoutManager = LinearLayoutManager(context)
-                adapter = CommunityPreviewRecyclerAdapter(it)
-            }
-            communityPreviewRecyclerAdapter = CommunityPreviewRecyclerAdapter(it)
+            testList.clear()
+            testList.addAll(it)
+            communityPreviewRecyclerAdapter = CommunityPreviewRecyclerAdapter(testList)
             viewbinding.communityPreviewRecyclerView.adapter = communityPreviewRecyclerAdapter.apply {
                 listener =
                     object : CommunityPreviewRecyclerAdapter.OnCommunityMarketItemClickListener {

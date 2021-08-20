@@ -16,7 +16,6 @@
         android:textColor="@color/black"
         android:letterSpacing="-0.01"
         android:lineSpacingExtra="8sp"
-        android:text="안입는 옷 팝니다."
         android:layout_marginTop="6dp"/>
 
     <TextView
@@ -27,8 +26,7 @@
         android:textSize="16sp"
         android:textColor="#de000000"
         android:lineSpacingExtra="8sp"
-        android:layout_marginTop="10dp"
-        android:text="10,000원"/>
+        android:layout_marginTop="10dp" />
     <TextView
         android:id="@+id/community_market_preview_content"
         android:layout_width="wrap_content"
@@ -38,8 +36,7 @@
         android:textColor="@color/black"
         android:letterSpacing="-0.03"
         android:lineSpacingExtra="12sp"
-        android:layout_marginTop="7dp"
-        android:text="안입어서 저렴하게 정리합니다."/>
+        android:layout_marginTop="7dp" />
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -64,7 +61,6 @@
             android:textSize="12sp"
             android:textColor="@color/black"
             android:letterSpacing="-0.03"
-            android:text="닉네임"
             app:layout_constraintLeft_toRightOf="@+id/community_preview_self_image"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -75,7 +71,6 @@
             android:layout_marginRight="8dp"
             android:textStyle="normal"
             android:textSize="12sp"
-            android:text="방금 전"
             android:textColor="@color/black_50"
             android:layout_gravity="center"
             android:gravity="end"

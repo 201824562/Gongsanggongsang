@@ -122,7 +122,7 @@ class CommunityWriteSuggestFragment : BaseFragment<FragmentCommunityWriteSuggest
                         post_contents = suggestWriteContent.text.toString(),
                         post_date = postDateNow,
                         post_time = postTimeNow,
-                        post_comments = arrayListOf(),
+                        post_comments = 0,
                         post_id = postDateNow + postTimeNow + "juyong",
                         post_photo_uri = getLocalPhotoUri,
                         post_state = suggestWriteCategory,

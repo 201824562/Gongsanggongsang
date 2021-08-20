@@ -1,7 +1,5 @@
 package com.example.userapp.data.model
 
-import com.example.userapp.data.entity.PostCommentDataClass
-
 
 data class PostDataInfo(
     val post_category: String,
@@ -16,7 +14,7 @@ data class PostDataInfo(
 
     val post_time: String,
 
-    val post_comments : ArrayList<String>,
+    val post_comments: Long,
 
     val post_id: String,
 
