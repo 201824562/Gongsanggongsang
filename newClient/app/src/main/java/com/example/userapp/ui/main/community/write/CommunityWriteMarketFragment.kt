@@ -90,7 +90,7 @@ class CommunityWriteMarketFragment : BaseFragment<FragmentCommunityWriteMarketBi
             }
             marketWriteRegisterButton.setOnClickListener {
                 if(marketWriteTitle.text.toString() == "" && marketWriteContent.text.toString() == ""){
-
+                    showToast("빈 칸을 채워주세요.")
                 }
                 else{
                     val postDateNow: String = LocalDate.now().toString()

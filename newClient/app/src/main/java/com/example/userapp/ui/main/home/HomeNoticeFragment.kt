@@ -21,7 +21,9 @@ class HomeNoticeFragment : BaseFragment<FragmentMainhomeHomeNoticeBinding, Commu
     override val viewmodel: CommunityViewModel by viewModels()
     private lateinit var noticePreviewRecyclerAdapter: CommunityPreviewRecyclerAdapter
     private var noticePreviewItem : ArrayList<PostDataInfo> = arrayListOf()
-    var agency = ""
+    private lateinit var collectionNameBundle : Bundle
+    private var adminName = ""
+    private var adminAgency = ""
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,67 +34,84 @@ class HomeNoticeFragment : BaseFragment<FragmentMainhomeHomeNoticeBinding, Commu
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-        viewbinding.mainhomeNoticeRecyclerView.run {
-            noticePreviewRecyclerAdapter = CommunityPreviewRecyclerAdapter(noticePreviewItem)
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context)
-            adapter = noticePreviewRecyclerAdapter
-        }
+        val ac = activity as MainActivity
+        adminAgency = ac.getUserData().agency
+        adminName = ac.getUserData().name
+        collectionNameBundle = bundleOf(
+            "collection_name" to "notice"
+        )
+        initNoticeRecyclerView()
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
-        val ac = activity as MainActivity
-        agency = ac.getUserData()!!.agency
-        viewmodel.getCollectionPostData(agency, "notice").observe(viewLifecycleOwner){ it
+        viewmodel.getNoticePostData(adminAgency).observe(viewLifecycleOwner){ it
             noticePreviewItem = it
-            noticePreviewRecyclerAdapter.notifyDataSetChanged()
-            viewbinding.mainhomeNoticeRecyclerView.adapter = noticePreviewRecyclerAdapter.apply {
-                listener =
-                    object : CommunityPreviewRecyclerAdapter.OnCommunityMarketItemClickListener {
-                        override fun onPreviewItemClick(position: Int) {
-                            var collectionName = "notice"
-                            var documentName = getItem(position).post_id
-                            var bundle = bundleOf(
-                                "collection_name" to collectionName,
-                                "document_name" to documentName
-                            )
-                            findNavController().navigate(R.id.action_communityPreview_to_communityPost, bundle)
-                        }
-                    }
-            }
+            initNoticeRecyclerView()
             noticePreviewRecyclerAdapter.notifyDataSetChanged()
         }
         viewbinding.run {
+
+            previewSearchButton.setOnClickListener {
+                findNavController().
+                navigate(R.id.action_communityNotice_to_communitySearch, collectionNameBundle)
+            }
             mainhomeNoticeShowAllButton.setOnClickListener {
-                viewmodel.getCollectionPostData(agency, "notice").observe(viewLifecycleOwner){
+                viewmodel.getNoticePostData(adminAgency).observe(viewLifecycleOwner){
                     noticePreviewItem = it
+                    initNoticeRecyclerView()
                     noticePreviewRecyclerAdapter.notifyDataSetChanged()
                 }
             }
             mainhomeNoticeShowNoticeButton.setOnClickListener {
-                viewmodel.getNoticeCategoryPostData(agency,"공지").observe(viewLifecycleOwner){
+                viewmodel.getNoticeCategoryPostData(adminAgency,"공지").observe(viewLifecycleOwner){
                     noticePreviewItem = it
+                    initNoticeRecyclerView()
                     noticePreviewRecyclerAdapter.notifyDataSetChanged()
                 }
             }
             mainhomeNoticeShowEventButton.setOnClickListener {
-                viewmodel.getNoticeCategoryPostData(agency,"행사").observe(viewLifecycleOwner){
+                viewmodel.getNoticeCategoryPostData(adminAgency,"행사").observe(viewLifecycleOwner){
                     noticePreviewItem = it
+                    initNoticeRecyclerView()
                     noticePreviewRecyclerAdapter.notifyDataSetChanged()
                 }
 
             }
             mainhomeNoticeShowEtcButton.setOnClickListener {
-                viewmodel.getNoticeCategoryPostData(agency,"기타").observe(viewLifecycleOwner){
+                viewmodel.getNoticeCategoryPostData(adminAgency,"기타").observe(viewLifecycleOwner){
                     noticePreviewItem = it
+                    initNoticeRecyclerView()
                     noticePreviewRecyclerAdapter.notifyDataSetChanged()
                 }
 
             }
         }
 
+    }
+    fun initNoticeRecyclerView(){
+        viewbinding.mainhomeNoticeRecyclerView.run {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+            adapter = CommunityPreviewRecyclerAdapter(noticePreviewItem)
+        }
+        noticePreviewRecyclerAdapter = CommunityPreviewRecyclerAdapter(noticePreviewItem)
+        viewbinding.mainhomeNoticeRecyclerView.adapter = noticePreviewRecyclerAdapter.apply {
+            listener =
+                object : CommunityPreviewRecyclerAdapter.OnCommunityMarketItemClickListener {
+                    override fun onPreviewItemClick(position: Int) {
+                        var collectionName = "notice"
+                        var documentName = getItem(position).post_id
+                        var bundle = bundleOf(
+                            "collection_name" to collectionName,
+                            "document_name" to documentName
+                        )
+                        findNavController().navigate(R.id.action_mainhomeNoticeFragment_to_noticePostFragment, bundle)
+                    }
+                }
+        }
+        noticePreviewRecyclerAdapter.notifyDataSetChanged()
     }
 }
