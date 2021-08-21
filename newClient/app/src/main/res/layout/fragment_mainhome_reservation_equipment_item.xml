@@ -1,70 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:paddingTop="12dp"
     android:paddingBottom="12dp"
     android:layout_marginBottom="8dp">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <View
+            android:id="@+id/icon_background"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/view_oval_gray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@color/transparent"
+            app:layout_constraintBottom_toBottomOf="@id/icon_background"
+            app:layout_constraintLeft_toLeftOf="@id/icon_background"
+            app:layout_constraintRight_toRightOf="@id/icon_background"
+            app:layout_constraintTop_toTopOf="@id/icon_background" />
+
+        <TextView
+            android:id="@+id/document"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:layout_marginStart="20dp"
+            android:fontFamily="@font/notosanskr_regular_hestia"
+            android:text="document_name"
+            android:textColor="@color/black_87"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/using_status"
+            app:layout_constraintStart_toEndOf="@+id/icon_background"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/using_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:fontFamily="@font/notosanskr_regular_hestia"
+            android:text="using"
+            android:textColor="@color/black_50"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@id/document"
+            app:layout_constraintTop_toBottomOf="@+id/document" />
+
+        <Button
+            android:id="@+id/use_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_18dp_storke_rectangle_bluegreen"
+            android:fontFamily="@font/notosanskr_regular_hestia"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:paddingVertical="9dp"
+            android:paddingHorizontal="6dp"
+            android:text="사용하기"
+            android:textColor="@color/blue_green"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/endtime_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:layout_marginStart="20dp"
+            android:fontFamily="@font/notosanskr_bold_hestia"
+            android:text="00:00 종료"
+            android:textColor="@color/pinkish_orange"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/remain_time_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:fontFamily="@font/notosanskr_regular_hestia"
+            android:text="00분 남음"
+            android:textColor="@color/black_50"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/endtime_textview" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <View
-        android:id="@+id/icon_background"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@drawable/view_oval_gray"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/constraint_layout"/>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/ic_washer"
-        app:layout_constraintBottom_toBottomOf="@id/icon_background"
-        app:layout_constraintLeft_toLeftOf="@id/icon_background"
-        app:layout_constraintRight_toRightOf="@id/icon_background"
-        app:layout_constraintTop_toTopOf="@id/icon_background" />
-
-    <TextView
-        android:id="@+id/using_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="5dp"
-        android:fontFamily="@font/notosanskr_regular_hestia"
-        android:text="using?"
-        android:textColor="@color/black_87"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/document"
-        app:layout_constraintStart_toEndOf="@+id/icon_background"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/document"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:fontFamily="@font/notosanskr_regular_hestia"
-        android:text="document_name?"
-        android:textColor="@color/black_50"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@id/using_status"
-        app:layout_constraintTop_toBottomOf="@+id/using_status" />
-
-    <Button
-        android:id="@+id/use_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_18dp_storke_rectangle_bluegreen"
-        android:fontFamily="@font/notosanskr_regular_hestia"
-        android:minWidth="0dp"
-        android:minHeight="0dp"
-        android:text="사용하기"
-        android:textColor="@color/blue_green"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    
 </androidx.constraintlayout.widget.ConstraintLayout>

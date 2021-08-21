@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+<!-- 선택불가능상태 -->
+<item android:state_enabled="false" android:color="@color/white"/>
+<!-- 선택상태 -->
+<item android:state_selected="true" android:color="@color/blue_green"/>
+<!-- 선택해제상태 -->
+<item android:state_selected="false" android:color="@color/black_87"/>
+<!-- Default State -->
+<item android:color="@color/black_87" />
+</selector>

@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
 import com.example.userapp.base.BaseSessionFragment
@@ -74,6 +75,7 @@ class FacilityAdapter(
 
     override fun onBindViewHolder(viewHolder: FacilityViewHolder, position: Int) {
         val data = dataSet[position]
+//        viewHolder.viewbinding.icon.load(data.)
         viewHolder.viewbinding.documentNameTextview.text = data.document_name
 
         //사용하기 버튼

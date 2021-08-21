@@ -1,11 +1,13 @@
 package com.example.userapp.ui.main.reservation
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +22,7 @@ import com.example.userapp.databinding.FragmentMainhomeReservationCurrentUsingIt
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.*
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import kotlin.concurrent.timer
 
@@ -85,6 +88,8 @@ class EquipmentUsingAdapter(
         return EquipmentUsingViewHolder(FragmentMainhomeReservationCurrentUsingItemBinding.bind(view))
     }
 
+    @SuppressLint("SetTextI18n")
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(viewHolder: EquipmentUsingViewHolder, position: Int) {
         val data = dataSet[position]
 
@@ -95,6 +100,9 @@ class EquipmentUsingAdapter(
         println("remaintime : " + data.remain_time + "\n")
 
         viewHolder.viewbinding.document.text = data.document_name
+        viewHolder.viewbinding.endtimeTextview.text = LocalDateTime.parse(data.endTime).format(
+            DateTimeFormatter.ofPattern("HH:mm")) + " 종료"
+
         viewHolder.viewbinding.noUseBtn.setOnClickListener() {
             onClickNoUsingIcon.invoke(data)
         }

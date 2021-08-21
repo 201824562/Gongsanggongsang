@@ -35,10 +35,10 @@ class ReservationFragment :
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-
-        viewbinding.commonTab.addTab(viewbinding.commonTab.newTab().setText("사용/예약중"))
-        viewbinding.commonTab.addTab(viewbinding.commonTab.newTab().setText("바로 사용"))
-        viewbinding.commonTab.addTab(viewbinding.commonTab.newTab().setText("예약 사용"))
+//
+//        viewbinding.commonTab.addTab(viewbinding.commonTab.newTab().setText("사용/예약중"))
+//        viewbinding.commonTab.addTab(viewbinding.commonTab.newTab().setText("바로 사용"))
+//        viewbinding.commonTab.addTab(viewbinding.commonTab.newTab().setText("예약 사용"))
 
         initViewPager()
 
