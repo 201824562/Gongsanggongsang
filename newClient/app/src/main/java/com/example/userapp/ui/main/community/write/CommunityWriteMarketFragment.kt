@@ -41,6 +41,7 @@ class CommunityWriteMarketFragment : BaseFragment<FragmentCommunityWriteMarketBi
     private val uriArray : ArrayList<Uri> = arrayListOf()
     private lateinit var userName : String
     private lateinit var userAgency : String
+    private lateinit var attachPostPhotoRecyclerAdapter : CommunityAttachPhotoRecyclerAdapter
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -62,6 +63,19 @@ class CommunityWriteMarketFragment : BaseFragment<FragmentCommunityWriteMarketBi
             layoutManager = LinearLayoutManager(context).also { it.orientation = LinearLayoutManager.HORIZONTAL }
             adapter = CommunityAttachPhotoRecyclerAdapter(getLocalPhotoUri)
         }
+        attachPostPhotoRecyclerAdapter = CommunityAttachPhotoRecyclerAdapter(getLocalPhotoUri)
+        viewbinding.marketWritePhotoRecycler.adapter = attachPostPhotoRecyclerAdapter.apply {
+            listener =
+                object :
+                    CommunityAttachPhotoRecyclerAdapter.OnCommunityPhotoItemClickListener {
+                    override fun onPhotoItemClick(position: Int) {
+                        var bundle = bundleOf(
+                            "photo_uri" to getLocalPhotoUri.toTypedArray(),
+                        )
+                        findNavController().navigate(R.id.action_communityWriteMarket_to_communityPhoto, bundle)
+                    }
+                }
+        }
         getBitmap()
     }
 
@@ -76,7 +90,7 @@ class CommunityWriteMarketFragment : BaseFragment<FragmentCommunityWriteMarketBi
             }
             marketWriteRegisterButton.setOnClickListener {
                 if(marketWriteTitle.text.toString() == "" && marketWriteContent.text.toString() == ""){
-
+                    showToast("빈 칸을 채워주세요.")
                 }
                 else{
                     val postDateNow: String = LocalDate.now().toString()
@@ -89,7 +103,7 @@ class CommunityWriteMarketFragment : BaseFragment<FragmentCommunityWriteMarketBi
                         post_contents = marketWriteContent.text.toString(),
                         post_date = postDateNow,
                         post_time = postTimeNow,
-                        post_comments = arrayListOf(),
+                        post_comments = 0,
                         post_id = postDateNow + postTimeNow + userName,
                         post_photo_uri = getLocalPhotoUri,
                         post_state = marketWritePrice.text.toString(),

@@ -1,23 +1,37 @@
 package com.example.adminapp.ui.main.community.post
 
+import android.os.Build
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
-import com.example.adminapp.data.repository.PostCommentDataClass
+import com.example.adminapp.data.model.PostCommentDataClass
 import com.example.adminapp.databinding.FragmentCommunityCommentItemBinding
+import com.example.adminapp.ui.main.community.CommunityViewModel
+import java.time.LocalDate
+import java.time.LocalTime
 
 
-class CommunityCommentRecyclerAdapter(val communityCommentItems:ArrayList<PostCommentDataClass>): RecyclerView.Adapter<CommunityCommentRecyclerAdapter.CommunityCommentViewHolder>() {
-
+class CommunityCommentRecyclerAdapter(
+    private val communityCommentItems:ArrayList<PostCommentDataClass>,
+    private val localUserName : String
+): RecyclerView.Adapter<CommunityCommentRecyclerAdapter.CommunityCommentViewHolder>() {
+    val viewmodel : CommunityViewModel = CommunityViewModel()
+    interface OnCommunityCommentItemClickListener{
+        fun onCommentItemClick(position: Int)
+    }
+    var listener: OnCommunityCommentItemClickListener? = null
     override fun getItemCount(): Int {
         return communityCommentItems.size;
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommunityCommentViewHolder {
         val viewbinding = FragmentCommunityCommentItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return  CommunityCommentViewHolder(viewbinding, parent)
+        return  CommunityCommentViewHolder(viewbinding, parent, listener, localUserName)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: CommunityCommentViewHolder, position: Int) {
         holder.bind(communityCommentItems[position])
     }
@@ -26,16 +40,50 @@ class CommunityCommentRecyclerAdapter(val communityCommentItems:ArrayList<PostCo
         return communityCommentItems[position]
     }
 
-    class CommunityCommentViewHolder(viewbinding: FragmentCommunityCommentItemBinding, itemview: ViewGroup) : RecyclerView.ViewHolder(viewbinding.root) {
+    class CommunityCommentViewHolder(
+        viewbinding: FragmentCommunityCommentItemBinding,
+        itemview: ViewGroup,
+        listener: OnCommunityCommentItemClickListener?,
+        localUserName: String
+    ) : RecyclerView.ViewHolder(viewbinding.root) {
         val binding = viewbinding
-
+        val listener = listener
+        val viewModel : CommunityViewModel = CommunityViewModel()
+        val localUserName = localUserName
+        @RequiresApi(Build.VERSION_CODES.O)
         fun bind(it : PostCommentDataClass) {
-            binding.communityCommentName.text = it.name
-            binding.communityCommentDate.text = it.date
-            binding.communityCommentPost.text = it.contents
-
+            print(localUserName)
+            if(it.commentAnonymous){
+                binding.communityCommentName.text = "익명"
+            }
+            else{
+                binding.communityCommentName.text = it.commentName
+            }
+            binding.communityCommentPost.text = it.commentContents
+            val postDateNow: String = LocalDate.now().toString()
+            val postTimeNow: String = LocalTime.now().toString()
+            if(it.commentDate == postDateNow){
+                val hour = postTimeNow.substring(0,2).toInt() - it.commentTime.substring(0,2).toInt()
+                val minute = postTimeNow.substring(3,5).toInt() - it.commentTime.substring(3,5).toInt()
+                if(hour == 0){
+                    binding.communityCommentDate.text = "${minute}분 전"
+                }
+                else{
+                    binding.communityCommentDate.text = "${hour}시간 전"
+                }
+            }
+            if(it.commentName == localUserName){
+                binding.commentDeleteButton.visibility = View.VISIBLE
+            }
+            else{
+                binding.communityCommentDate.text = it.commentDate.substring(5)
+            }
         }
-
+        init {
+            binding.commentDeleteButton.setOnClickListener{
+                listener?.onCommentItemClick(bindingAdapterPosition)
+                return@setOnClickListener
+            }
+        }
     }
-
 }

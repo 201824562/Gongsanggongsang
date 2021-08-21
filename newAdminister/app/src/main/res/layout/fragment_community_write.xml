@@ -1,94 +1,191 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#0c000000">
+        <ImageButton
+            android:id="@+id/write_back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_community_back_icon"
+            android:layout_marginLeft="16dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@color/transparent"/>
+
+        <TextView
+            android:id="@+id/preview_toolbar_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="normal"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:lineSpacingExtra="8sp"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center"
+            android:text="긴급글쓰기"
+            android:background="@color/transparent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        <Button
+            android:id="@+id/write_register_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:textSize="16sp"
+            android:textColor="#ff9966"
+            android:lineSpacingExtra="8sp"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="완료"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="제목"
+        android:textStyle="normal"
+        android:textSize="14sp"
+        android:textColor="#de000000"
+        android:lineSpacingExtra="6sp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"/>
     <EditText
         android:id="@+id/write_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="제목"
-        android:textColor="@color/black"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/black"
-        app:layout_constraintBottom_toTopOf="@id/attach"/>
+        android:hint="제목을 입력해주세요"
+        android:textStyle="normal"
+        android:textSize="14sp"
+        android:textColorHint="#7f000000"
+        android:lineSpacingExtra="8sp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginTop="16dp"
+        android:paddingBottom="20dp"
+        android:backgroundTint="#33000000"/>
     <LinearLayout
-        android:id="@+id/attach"
+        android:id="@+id/write_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/write_title">
-        <Button
-            android:id="@+id/attach_image_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/write_title"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:text="사진"
-            android:background="@color/transparent"/>
-        <Button
-            android:id="@+id/attach_file_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/write_title"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:text="파일"
-            android:background="@color/transparent"/>
-        <Button
-            android:id="@+id/attach_vote_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/write_title"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:text="투표"
-            android:background="@color/transparent"/>
-        <CheckBox
-            android:id="@+id/write_no_name_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/black"
-            android:layout_marginLeft="50dp"/>
+        android:visibility="gone"
+        android:orientation="vertical">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="익명"
+            android:text="분류 선택"
+            android:textStyle="normal"
+            android:textSize="14sp"
+            android:textColor="#de000000"
+            android:lineSpacingExtra="6sp"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="16dp"/>
+
+        <Spinner
+            android:id="@+id/write_category_select"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="건의 분류를 선택해주세요."
+            android:textStyle="normal"
             android:textSize="12sp"
-            android:background="@color/transparent"/>
+            android:textColor="#7f000000"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:layout_marginTop="16dp"
+            android:lineSpacingExtra="8sp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#33000000"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="18dp"
+            android:layout_marginTop="10dp"/>
     </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/attach"/>
 
-    <EditText
-        android:id="@+id/write_contents"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="내용을 입력해주세요..."
-        android:textColor="@color/black"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/attach"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/attach_image_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/write_register_button"
-        android:background="#0c000000"
-        android:visibility="invisible"/>
-    <Button
-        android:id="@+id/write_register_button"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="완료"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@color/transparent"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:text="내용"
+        android:textStyle="normal"
+        android:textSize="14sp"
+        android:textColor="#de000000"
+        android:lineSpacingExtra="6sp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp" />
+
+    <EditText
+        android:id="@+id/write_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="normal"
+        android:textSize="14sp"
+        android:textColorHint="#7f000000"
+        android:lineSpacingExtra="8sp"
+        android:hint="내용을 입력해주세요."
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginTop="16dp"
+        android:paddingBottom="20dp"
+        android:backgroundTint="#33000000" />
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/write_photo_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#0c000000"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <ImageButton
+                android:id="@+id/write_attach_photo_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_community_write_photo_icon"
+                android:background="@color/transparent"
+                android:layout_marginLeft="26dp"
+                android:layout_marginTop="6dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="normal"
+                android:textSize="8sp"
+                android:textColor="#191919"
+                android:lineSpacingExtra="12sp"
+                android:text="사진"
+                android:layout_marginLeft="31dp"/>
+        </LinearLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+        <CheckBox
+            android:id="@+id/emergency_write_anonymous"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="익명"
+            android:textColor="@color/black"
+            android:layout_marginRight="18dp"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+</LinearLayout>

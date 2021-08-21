@@ -32,7 +32,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="제목"
             android:layout_marginLeft="6dp"
             android:textSize="16sp"
             android:textColor="@color/black" />
@@ -67,7 +66,7 @@
             android:id="@+id/community_preview_self_image"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_basic_profile_photo"
+            android:src="@drawable/ic_no_profile"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -82,7 +81,6 @@
             android:textSize="12sp"
             android:textColor="@color/black"
             android:letterSpacing="-0.03"
-            android:text="닉네임"
             app:layout_constraintLeft_toRightOf="@+id/community_preview_self_image"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>

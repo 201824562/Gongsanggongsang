@@ -12,35 +12,32 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
 import com.example.userapp.data.model.PostDataInfo
-import com.example.userapp.databinding.FragmentCommunityWriteEmergencyBinding
+import com.example.userapp.databinding.FragmentCommunityWriteBinding
 import com.example.userapp.ui.main.community.CommunityViewModel
-import com.example.userapp.utils.WrapedCommunityDialogBasicOneButton
 import java.time.LocalDate
 import java.time.LocalTime
 
 
-class CommunityWriteEmergencyFragment : BaseFragment<FragmentCommunityWriteEmergencyBinding, CommunityViewModel>() {
-    private var collectionName = "2_emergency"
+class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding, CommunityViewModel>() {
+    private lateinit var collectionName : String
     private lateinit var documentName : String
-    private lateinit var modify : String
     private lateinit var bundle: Bundle
-    override lateinit var viewbinding: FragmentCommunityWriteEmergencyBinding
+    override lateinit var viewbinding: FragmentCommunityWriteBinding
     override val viewmodel: CommunityViewModel by viewModels()
     private val categorySpinnerArray = arrayOf("", "소음", "예약", "냉장고", "세탁실", "수질", "와이파이", "전기", "기타")
-    private lateinit var emergencyWriteCategory : String
-    private lateinit var emergencyPostData : PostDataInfo
+    private var writePostCategoryData = "none"
+    private lateinit var postData : PostDataInfo
+    private lateinit var attachPostPhotoRecyclerAdapter : CommunityAttachPhotoRecyclerAdapter
     private var getLocalPhotoUri : ArrayList<String> = arrayListOf()
     private val bitmapArray : ArrayList<Bitmap> = arrayListOf()
     private val uriArray : ArrayList<Uri> = arrayListOf()
@@ -53,7 +50,7 @@ class CommunityWriteEmergencyFragment : BaseFragment<FragmentCommunityWriteEmerg
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewbinding = FragmentCommunityWriteEmergencyBinding.inflate(inflater, container, false)
+        viewbinding = FragmentCommunityWriteBinding.inflate(inflater, container, false)
         return viewbinding.root
     }
 
@@ -62,43 +59,29 @@ class CommunityWriteEmergencyFragment : BaseFragment<FragmentCommunityWriteEmerg
         val ac : MainActivity = activity as MainActivity
         userAgency = ac.getUserData()!!.agency
         userName = ac.getUserData()!!.nickname
+        collectionName = arguments?.getString("collection_name").toString()
         documentName = arguments?.getString("postId").toString()
         bundle = bundleOf(
             "collection_name" to collectionName
         )
-        viewbinding.emergencyWriteCategorySelect.adapter = ArrayAdapter(requireContext(), R.layout.fragment_community_write_category_item, categorySpinnerArray)
-        viewbinding.emergencyWriteCategorySelect.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {
 
+        getLocalPhotoUri = ac.getPhoto()
+        getBitmap()
+        when(collectionName){
+            "1_free" -> viewbinding.previewToolbarName.text = "자유게시판"
+            "2_emergency" -> viewbinding.previewToolbarName.text = "긴급게시판"
+            "3_suggest" -> viewbinding.previewToolbarName.text = "건의게시판"
+            "4_with" -> viewbinding.previewToolbarName.text = "함께게시판"
+            "5_market" -> viewbinding.previewToolbarName.text = "장터게시판"
+        }
+        viewbinding.run {
+            if(collectionName == "2_emergency" || collectionName == "3_suggest"){
+                initWriteCategorySelect()
             }
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                when(position){
-                    0 -> emergencyWriteCategory = "none"
-                    1 -> emergencyWriteCategory = categorySpinnerArray[1]
-                    2 -> emergencyWriteCategory = categorySpinnerArray[2]
-                    3 -> emergencyWriteCategory = categorySpinnerArray[3]
-                    4 -> emergencyWriteCategory = categorySpinnerArray[4]
-                    5 -> emergencyWriteCategory = categorySpinnerArray[5]
-                    6 -> emergencyWriteCategory = categorySpinnerArray[6]
-                    7 -> emergencyWriteCategory = categorySpinnerArray[7]
-                    8 -> emergencyWriteCategory = categorySpinnerArray[8]
-                }
-            }
+            initAttachPhotoRecycler()
         }
         //TODO: mainActivity clear 처리
         getLocalPhotoUri = ac.getPhoto()
-
-        viewbinding.emergencyWritePhotoRecycler.visibility = View.VISIBLE
-        viewbinding.emergencyWritePhotoRecycler.run {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context).also { it.orientation = LinearLayoutManager.HORIZONTAL }
-            adapter = CommunityAttachPhotoRecyclerAdapter(getLocalPhotoUri)
-        }
         getBitmap()
     }
 
@@ -109,40 +92,39 @@ class CommunityWriteEmergencyFragment : BaseFragment<FragmentCommunityWriteEmerg
     override fun initViewFinal(savedInstanceState: Bundle?) {
 
         viewbinding.run {
-            emergencyWritePhoto.setOnClickListener{
+            writeAttachPhotoButton.setOnClickListener{
                 getPhotoPermission()
             }
-            emergencyWriteRegisterButton.setOnClickListener {
-                if(emergencyWriteCategory == "none" || emergencyWriteTitle.text.toString() == "" || emergencyWriteTitle.text.toString() == ""){
-                    makeDialog( "빈 칸을 채워주세요.")
+            writeRegisterButton.setOnClickListener {
+                if(writeTitle.text.toString() == "" || writeContent.text.toString() == ""){
+                    showToast("빈 칸을 채워주세요.")
+                }
+                else if((collectionName == "2_emergency" || collectionName == "3_suggest") && writePostCategoryData == "none"){
+                    showToast("분류를 선택해주세요.")
                 }
                 else{
                     val postDateNow: String = LocalDate.now().toString()
                     val postTimeNow : String = LocalTime.now().toString()
-                    var postAnonymous : Boolean = false
-                    if(emergencyWriteAnonymous.isChecked){
-                        postAnonymous = true
-                    }
-                    emergencyPostData = PostDataInfo(
+                    postData = PostDataInfo(
                         collectionName,
                         post_name = userName,
-                        post_title = emergencyWriteTitle.text.toString(),
-                        post_contents = emergencyWriteContent.text.toString(),
+                        post_title = writeTitle.text.toString(),
+                        post_contents = writeContent.text.toString(),
                         post_date = postDateNow,
                         post_time = postTimeNow,
-                        post_comments = arrayListOf(),
+                        post_comments = 0,
                         post_id = postDateNow + postTimeNow + userName,
                         post_photo_uri = getLocalPhotoUri,
-                        post_state = emergencyWriteCategory,
-                        post_anonymous = postAnonymous
+                        post_state = writePostCategoryData,
+                        post_anonymous = false
                     )
                     bundle = bundleOf(
                         "collection_name" to collectionName,
-                        "document_name" to emergencyPostData.post_id
+                        "document_name" to postData.post_id
                     )
-                    viewmodel.insertPostData(userAgency, emergencyPostData).observe(viewLifecycleOwner){
+                    viewmodel.insertPostData(userAgency, postData).observe(viewLifecycleOwner){
                         if(it){
-                            findNavController().navigate(R.id.action_communityWriteEmergency_to_communityPost, bundle)
+                            findNavController().navigate(R.id.action_communityWrite_to_communityPost, bundle)
                         }
                     }
                 }
@@ -184,7 +166,7 @@ class CommunityWriteEmergencyFragment : BaseFragment<FragmentCommunityWriteEmerg
             "collection_name" to collectionName,
             "photoUriArray" to uriArr
         )
-        findNavController().navigate(R.id.action_communityWriteEmergency_to_communityGetPhoto, bundle)
+        findNavController().navigate(R.id.action_communityWrite_to_communityGetPhoto, bundle)
 
     }
     @RequiresApi(Build.VERSION_CODES.P)
@@ -192,7 +174,7 @@ class CommunityWriteEmergencyFragment : BaseFragment<FragmentCommunityWriteEmerg
         val bitmap : Bitmap
         for(photo_uri in getLocalPhotoUri) {
             val photoUri = photo_uri.toUri()
-            val photoUri2 = Uri.parse("file://" + photoUri)
+            val photoUri2 = Uri.parse("file://$photoUri")
             uriArray.add(photoUri2)
             val bitmap = ImageDecoder.decodeBitmap(
                 ImageDecoder.createSource(
@@ -203,14 +185,47 @@ class CommunityWriteEmergencyFragment : BaseFragment<FragmentCommunityWriteEmerg
             bitmapArray.add(bitmap)
         }
     }
-    private fun makeDialog(msg : String){
-        val dialog = WrapedCommunityDialogBasicOneButton(requireContext(), msg).apply {
-            clickListener = object : WrapedCommunityDialogBasicOneButton.DialogButtonClickListener{
-                override fun dialogClickListener() {
-                    dismiss()
+
+    private fun initAttachPhotoRecycler() {
+        attachPostPhotoRecyclerAdapter = CommunityAttachPhotoRecyclerAdapter(getLocalPhotoUri)
+        viewbinding.writePhotoRecycler.adapter = attachPostPhotoRecyclerAdapter.apply {
+            deleteButtonListener =
+                object : CommunityAttachPhotoRecyclerAdapter.OnCommunityPhotoDeleteClickListener {
+                    override fun onPhotoDeleteButtonClick(position: Int) {
+                        getLocalPhotoUri.removeAt(position)
+                        attachPostPhotoRecyclerAdapter.notifyDataSetChanged()
+                    }
+
+                }
+        }
+    }
+    private fun initWriteCategorySelect(){
+        viewbinding.run {
+            writeCategory.visibility = View.VISIBLE
+            writeCategorySelect.adapter = ArrayAdapter(requireContext(), R.layout.fragment_community_write_category_item, categorySpinnerArray)
+            writeCategorySelect.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                }
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    when(position){
+                        0 -> writePostCategoryData = "none"
+                        1 -> writePostCategoryData = categorySpinnerArray[1]
+                        2 -> writePostCategoryData = categorySpinnerArray[2]
+                        3 -> writePostCategoryData = categorySpinnerArray[3]
+                        4 -> writePostCategoryData = categorySpinnerArray[4]
+                        5 -> writePostCategoryData= categorySpinnerArray[5]
+                        6 -> writePostCategoryData = categorySpinnerArray[6]
+                        7 -> writePostCategoryData = categorySpinnerArray[7]
+                        8 -> writePostCategoryData = categorySpinnerArray[8]
+                    }
                 }
             }
         }
-        showDialog(dialog, viewLifecycleOwner)
     }
 }

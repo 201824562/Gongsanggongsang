@@ -48,7 +48,7 @@ class CommunityPreviewMarketRecyclerAdapter(var postDataList : ArrayList<PostDat
             binding.communityMarketPreviewTitle.text = postDataInfo.post_title
             binding.communityMarketPreviewPrice.text = postDataInfo.post_state
             binding.communityMarketPreviewContent.text = postDataInfo.post_contents
-            binding.communityMarketPreviewCommentNumber.text = postDataInfo.post_comments.size.toString()
+            binding.communityMarketPreviewCommentNumber.text = postDataInfo.post_comments.toString()
             binding.communityMarketPreviewName.text = postDataInfo.post_name.toString()
             binding.communityPreviewPhotoNumber.text = postDataInfo.post_photo_uri.size.toString()
             val postDateNow: String = LocalDate.now().toString()
