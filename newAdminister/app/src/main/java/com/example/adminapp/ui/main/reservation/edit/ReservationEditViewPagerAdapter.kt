@@ -4,7 +4,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
-//TODO : 탭 레이아웃 상태 유지가 안됨.
 class ReservationEditViewPagerAdapter (activity: FragmentActivity) : FragmentStateAdapter(activity) {
 
     override fun getItemCount(): Int = 2

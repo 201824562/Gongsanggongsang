@@ -7,12 +7,11 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.example.userapp.R
-import com.example.userapp.base.BaseFragment
+import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.databinding.FragmentSignupFirstBinding
 import com.example.userapp.utils.hideKeyboard
 
-//TODO : 1.2 frag -> button state
-class SignUpFirstFragment : BaseFragment<FragmentSignupFirstBinding, SignUpViewModel>() {
+class SignUpFirstFragment : BaseSessionFragment<FragmentSignupFirstBinding, SignUpViewModel>() {
     override lateinit var viewbinding: FragmentSignupFirstBinding
     override val viewmodel: SignUpViewModel by navGraphViewModels(R.id.signUpGraph)
 
@@ -34,12 +33,12 @@ class SignUpFirstFragment : BaseFragment<FragmentSignupFirstBinding, SignUpViewM
         viewmodel.run {
             invalidUserNameEventLiveData.observe(viewLifecycleOwner) { setNameErrorMessage(it) }
             validUserNameEventLiveData.observe(viewLifecycleOwner){ setNameEmptyMessage() }
-            invalidBirthInfoEventLiveData.observe(viewLifecycleOwner) { setBirthInfoErrorMessage(it) }
-            validBirthInfoEventLiveData.observe(viewLifecycleOwner) { setBirthInfoEmptyMessage() }
-            invalidSmsInfoEventLiveData.observe(viewLifecycleOwner) { setSmsInfoErrorMessage(it) }
-            validSmsInfoEventLiveData.observe(viewLifecycleOwner) { setSmsInfoEmptyMessage() }
+            invalidUserBirthEventLiveData.observe(viewLifecycleOwner) { setBirthInfoErrorMessage(it) }
+            validUserBirthEventLiveData.observe(viewLifecycleOwner) { setBirthInfoEmptyMessage() }
+            invalidUserSmsEventLiveData.observe(viewLifecycleOwner) { setSmsInfoErrorMessage(it) }
+            validUserSmsEventLiveData.observe(viewLifecycleOwner) { setSmsInfoEmptyMessage() }
             saveSignUpInfoEventLiveData.observe(viewLifecycleOwner){
-                viewmodel.saveSignUpInfo(getUsersName(), getUsersBirthday(), getUsersSmsInfo())
+                viewmodel.saveSignUpInfo(getUserName(), getUserBirthday(), getUserSmsInfo())
                 findNavController().navigate(R.id.action_signUpFirstFragment_to_signUpSecondFragment)
             }
         }
@@ -49,33 +48,33 @@ class SignUpFirstFragment : BaseFragment<FragmentSignupFirstBinding, SignUpViewM
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run { 
             editTextName.setOnFocusChangeListener { v, hasFocus ->
-                if (hasFocus && (getUsersName().isEmpty()|| getUsersName().isBlank())) {
+                if (hasFocus && (getUserName().isEmpty()|| getUserName().isBlank())) {
                     setNameErrorMessage("이름을 입력해주세요.")
                     setBirthInfoEmptyMessage()
                     setSmsInfoEmptyMessage()
                 }
             }
             editTextBirthInfo.setOnFocusChangeListener { v, hasFocus ->
-                if (hasFocus && (getUsersBirthday().isEmpty()|| getUsersBirthday().isBlank())) {
+                if (hasFocus && (getUserBirthday().isEmpty()|| getUserBirthday().isBlank())) {
                     setBirthInfoErrorMessage("8자리 숫자를 입력해주세요.(ex.20000101)")
                     setNameEmptyMessage()
                     setSmsInfoEmptyMessage()
                 }
             }
             editTextSmsInfo.setOnFocusChangeListener { v, hasFocus ->
-                if (hasFocus && (getUsersSmsInfo().isEmpty()|| getUsersSmsInfo().isBlank())) {
+                if (hasFocus && (getUserSmsInfo().isEmpty()|| getUserSmsInfo().isBlank())) {
                     setSmsInfoErrorMessage("'-'없이 휴대폰번호 11자리를 입력해주세요.")
                     setNameEmptyMessage()
                     setBirthInfoEmptyMessage()
                 }
             }
-            signupNextbtn.setOnClickListener { viewmodel.checkForSaveSignUpInfo(getUsersName(), getUsersBirthday(), getUsersSmsInfo()) }
+            signupNextbtn.setOnClickListener { viewmodel.checkForSaveSignUpInfo(getUserName(), getUserBirthday(), getUserSmsInfo()) }
         }
     }
 
-    private fun getUsersName() = viewbinding.editTextName.text.toString()
-    private fun getUsersBirthday() = viewbinding.editTextBirthInfo.text.toString().trim()
-    private fun getUsersSmsInfo() = viewbinding.editTextSmsInfo.text.toString().trim()
+    private fun getUserName() = viewbinding.editTextName.text.toString().trim()
+    private fun getUserBirthday() = viewbinding.editTextBirthInfo.text.toString().trim()
+    private fun getUserSmsInfo() = viewbinding.editTextSmsInfo.text.toString().trim()
 
 
     private fun setNameErrorMessage(message: String) {

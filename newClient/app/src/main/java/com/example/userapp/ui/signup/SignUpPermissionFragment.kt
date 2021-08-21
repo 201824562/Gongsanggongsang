@@ -8,10 +8,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
+import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.databinding.FragmentSignupPermissionBinding
 import com.example.userapp.utils.MatchedFullDialogBasicOneButton
 
-class SignUpPermissionFragment : BaseFragment<FragmentSignupPermissionBinding, SignUpViewModel>() {
+class SignUpPermissionFragment : BaseSessionFragment<FragmentSignupPermissionBinding, SignUpViewModel>() {
     override lateinit var viewbinding: FragmentSignupPermissionBinding
     override val viewmodel: SignUpViewModel by navGraphViewModels(R.id.signUpGraph)
 

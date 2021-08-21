@@ -1,13 +1,5 @@
 package com.example.adminapp.data.model
 
-import com.google.firebase.firestore.auth.User
-import kotlinx.android.parcel.RawValue
-
-
-class FirebaseReservationUnableTimeItem{
-    constructor(unableTimeList : List<ReservationUnableTimeItem> ) {}
-}
-
 
 data class ReservationTimeData (val hour : Long, val min: Long){
     fun makeTimeDataToString() : String {

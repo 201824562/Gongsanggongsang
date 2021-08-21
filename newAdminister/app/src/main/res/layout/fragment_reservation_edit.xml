@@ -22,7 +22,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:background="@drawable/ic_backarrow"/>
+                android:background="@drawable/ic_arrow_back"/>
             <TextView
                 android:id="@+id/toolbarText"
                 android:layout_width="wrap_content"
@@ -55,8 +55,7 @@
         app:tabIndicatorHeight="3dp"
         app:tabMode="fixed"
         app:tabSelectedTextColor="@color/applemint"
-        app:tabTextAppearance="@style/TabCustomStyle"
-        tools:layout_editor_absoluteX="0dp">
+        app:tabTextAppearance="@style/TabCustomStyle">
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

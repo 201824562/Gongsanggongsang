@@ -3,6 +3,7 @@ package com.example.adminapp
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
@@ -18,6 +19,7 @@ import androidx.viewbinding.ViewBinding
 import com.example.adminapp.base.BaseActivity
 import com.example.adminapp.base.BaseSessionFragment
 import com.example.adminapp.base.BaseSessionViewModel
+import com.example.adminapp.data.model.AdminModel
 import com.example.adminapp.databinding.ActivityMainBinding
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() {
@@ -32,6 +34,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController : NavController
+    private var adminData : AdminModel? = null
 
     override fun initToolbar() {
         window.apply {
@@ -46,9 +49,17 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
 
     override fun initViewStart(savedInstanceState: Bundle?) {}
 
-    override fun initDataBinding(savedInstanceState: Bundle?) {}
+    override fun initDataBinding(savedInstanceState: Bundle?) {
+        viewmodel.onSuccessGettingAdminInfo.observe(this, {
+            adminData = it
+        })
+        viewmodel.onSuccessGettingNullAdminInfo.observe(this, {
+            //restartActivity()
+        })
+    }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
+        viewmodel.getAdminInfo()
         setToolbarWithNavcontroller()
     }
 
@@ -69,11 +80,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
             viewbinding.toolbar.setNavigationOnClickListener{ findNavController(R.id.nav_host).navigateUp() }   //이거 필요한가?
             when (destination.id){
-                R.id.splashFragment, R.id.introFragment, R.id.mainFragment -> hideToolbar()
-                R.id.reservationDetailEquipmentFragment,
-                R.id.reservationEditFragment, R.id.reservationEditDetailFragment,
-                R.id.reservationSelectAddFragment,R.id.reservationAddFragment -> hideToolbar()
-                else -> showToolbarTitle("각자프래그에 맞는 이름으로 추가해주기.")
+                R.id.signInFindInfoFragment, R.id.settingsChangePwdFragment -> showToolbarTitle("")
+                else -> hideToolbar()
             }
         }
     }
@@ -110,6 +118,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     }
     fun getPhoto() : ArrayList<String>{
         return selectedItems
+    }
+    fun getAdminData() : AdminModel{
+        return this.adminData!!
     }
 
 }

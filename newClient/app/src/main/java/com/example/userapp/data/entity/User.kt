@@ -21,5 +21,5 @@ data class User(
     @ColumnInfo(name = "agency")
     var agency: String = ""
 ){
-    fun getUserModel() : UserModel { return UserModel(id, name, nickname, birth, phone, agency)}
+    fun getUserModel() : UserModel { return UserModel(agency, id, name, nickname, birth, phone)}
 }

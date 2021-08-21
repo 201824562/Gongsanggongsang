@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_waiting_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="false"
+    android:focusable="false"
+    android:background="@drawable/edittext_underline_black20"
+    android:padding="20dp"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/item_waiting_userName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:text="이지윤"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/notosanskr_regular_hestia" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="25dp"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="닉네임"
+                android:textSize="12sp"
+                android:textColor="@color/black_50"
+                android:fontFamily="@font/notosanskr_regular_hestia" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="생년월일"
+                android:textSize="12sp"
+                android:textColor="@color/black_50"
+                android:fontFamily="@font/notosanskr_regular_hestia" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="휴대폰번호"
+                android:textSize="12sp"
+                android:textColor="@color/black_50"
+                android:fontFamily="@font/notosanskr_regular_hestia" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/item_waiting_userNickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="닉네임"
+                android:textSize="12sp"
+                android:textColor="@color/black_87"
+                android:fontFamily="@font/notosanskr_regular_hestia" />
+            <TextView
+                android:id="@+id/item_waiting_userBirthday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="생년월일"
+                android:textSize="12sp"
+                android:textColor="@color/black_87"
+                android:fontFamily="@font/notosanskr_regular_hestia" />
+            <TextView
+                android:id="@+id/item_waiting_userSmsInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="휴대폰번호"
+                android:textSize="12sp"
+                android:textColor="@color/black_87"
+                android:fontFamily="@font/notosanskr_regular_hestia" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/deny_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="15dp"
+            android:text="가입 거부"
+            android:textColor="@color/pinkish_orange"
+            android:fontFamily="@font/notosanskr_regular_hestia"
+            android:textSize="14sp"
+            android:background="@drawable/button_15dp_event_stroke_rectangle_black20"/>
+        <Button
+            android:id="@+id/allow_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="가입 승인"
+            android:textColor="@color/applemint"
+            android:fontFamily="@font/notosanskr_regular_hestia"
+            android:textSize="14sp"
+            android:background="@drawable/button_15dp_event_stroke_rectangle_black20"/>
+    </LinearLayout>
+</LinearLayout>
