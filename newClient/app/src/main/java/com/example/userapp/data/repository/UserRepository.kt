@@ -241,8 +241,8 @@ class UserRepository(appDatabase: AppDatabase) {
                     if (it.data != null && it.data!!["id"] == userId && it.data!!["pwd"]==userPwd){
                         Log.d(ContentValues.TAG, "SignIn Successed!!")
                         emitter.onSuccess(
-                            ReceiverSignIn(true, UserModel(it.data!!["agency"].toString(), it.data!!["id"].toString(), it.data!!["name"].toString(), it.data!!["nickname"].toString(),
-                                it.data!!["birthday"].toString(), it.data!!["smsInfo"].toString()))
+                            ReceiverSignIn(true, UserModel(it.data!!["id"].toString(), it.data!!["name"].toString(), it.data!!["nickname"].toString(),
+                                it.data!!["birthday"].toString(), it.data!!["smsInfo"].toString(), it.data!!["agency"].toString()))
                         )
                     }
                     else emitter.onSuccess(ReceiverSignIn(false, null))

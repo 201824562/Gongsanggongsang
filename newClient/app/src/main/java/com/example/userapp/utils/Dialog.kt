@@ -15,7 +15,6 @@ import com.example.userapp.databinding.DialogBasicOneButtonBinding
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContentProviderCompat.requireContext
-import com.example.userapp.R
 import com.example.userapp.data.model.ReservationEquipment
 import com.example.userapp.data.model.ReservationFacility
 import com.example.userapp.databinding.*
@@ -273,7 +272,8 @@ class InputUsingTimeDialog(context: Context, var reservationEquipment: Reservati
 }
 
 
-class ConfirmUsingDialog(context: Context, usingTime: Int) : Dialog(context) { // 도큐먼트 이름도 받아와야 함
+@RequiresApi(Build.VERSION_CODES.O)
+class ConfirmUsingDialog(context: Context, usingTime: Int, reservationEquipment: ReservationEquipment) : Dialog(context) { // 도큐먼트 이름도 받아와야 함
 
     var clickListener: DialogButtonClickListener? = null
 
