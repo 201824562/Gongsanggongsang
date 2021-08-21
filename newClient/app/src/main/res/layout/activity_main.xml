@@ -19,9 +19,9 @@
             android:layout_height="wrap_content"
             android:text=""
             android:gravity="center"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textColor="@color/black_87"
+            android:fontFamily="@font/notosanskr_regular_hestia"
             android:background="@color/transparent" />
     </androidx.appcompat.widget.Toolbar>
     <androidx.fragment.app.FragmentContainerView

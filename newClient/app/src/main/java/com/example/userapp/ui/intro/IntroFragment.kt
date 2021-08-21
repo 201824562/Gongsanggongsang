@@ -38,7 +38,7 @@ class IntroFragment : BaseFragment<FragmentIntroBinding, IntroViewModel>(){
                 findNavController().navigate(R.id.action_introFragment_to_signUpGraph) }
 
             loginBtn.setOnClickListener {
-                findNavController().navigate(R.id.action_introFragment_to_signInFragment) }
+                findNavController().navigate(R.id.action_introFragment_to_signInGraph) }
         }
     }
 

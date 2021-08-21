@@ -6,52 +6,132 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.InsetDrawable
+import android.os.Build
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.Window
-import com.example.userapp.databinding.DialogBasicOneButtonBinding
+import android.view.WindowManager
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContentProviderCompat.requireContext
-import com.example.userapp.databinding.DialogBasicTwobuttonBinding
-import com.example.userapp.databinding.DialogSigninOneButtonBinding
-import com.example.userapp.databinding.DialogConfirmUsingBinding
-import com.example.userapp.databinding.DialogFinishUsingBinding
-import com.example.userapp.databinding.DialogInputUsingTimeBinding
+import com.example.userapp.R
+import com.example.userapp.data.model.ReservationEquipment
+import com.example.userapp.data.model.ReservationFacility
+import com.example.userapp.databinding.*
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 import kotlin.system.exitProcess
 
 
-class WrapedDialogBasicTwoButton (context: Context, title: String, content: String, btnText: String) : Dialog(context){
+class WrapedDialogBasicTwoButton (context: Context, content: String, closeBtnText: String, customBtnText: String) : Dialog(context){
 
-    var clickListener: DialogButtonClickListener? = null
-
+    var clickListener : DialogButtonClickListener ? = null
     interface DialogButtonClickListener {
         fun dialogCloseClickListener()
-        fun dialogDeleteClickListener()
+        fun dialogCustomClickListener()
     }
+
     init {
         //setCanceledOnTouchOutside(false)
         val binding : DialogBasicTwobuttonBinding = DialogBasicTwobuttonBinding.inflate(layoutInflater)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
         window?.run {
-            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            attributes.width = ViewGroup.LayoutParams.WRAP_CONTENT
+            setBackgroundDrawable(InsetDrawable(ColorDrawable(Color.TRANSPARENT), 30))
+            attributes.width = ViewGroup.LayoutParams.MATCH_PARENT
             attributes.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        } ?: exitProcess(0)
+
+        binding.run {
+            dialogContent.text = content
+            dialogCloseBtn.text = closeBtnText
+            dialogCustomBtn.text = customBtnText
+            dialogCloseBtn.setOnClickListener { clickListener?.dialogCloseClickListener()}
+            dialogCustomBtn.setOnClickListener { clickListener?.dialogCustomClickListener() }
+        }
+    }
+}
+
+class MatchedDialogAccentTwoButton (context: Context, content: String, closeBtnText: String, customBtnText: String) : Dialog(context){
+
+    var clickListener : DialogButtonClickListener ? = null
+    interface DialogButtonClickListener {
+        fun dialogCloseClickListener()
+        fun dialogCustomClickListener()
+    }
+
+    init {
+        //setCanceledOnTouchOutside(false)
+        val binding : DialogAccentTwobuttonBinding = DialogAccentTwobuttonBinding.inflate(layoutInflater)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        setContentView(binding.root)
+        window?.run {
+            setBackgroundDrawable(InsetDrawable(ColorDrawable(Color.TRANSPARENT), 30))
+            attributes.width = ViewGroup.LayoutParams.MATCH_PARENT
+            attributes.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        } ?: exitProcess(0)
+
+        binding.run {
+            dialogContent.text = content
+            dialogCloseBtn.text = closeBtnText
+            dialogCustomBtn.text = customBtnText
+            dialogCloseBtn.setOnClickListener { clickListener?.dialogCloseClickListener()}
+            dialogCustomBtn.setOnClickListener { clickListener?.dialogCustomClickListener() }
+        }
+    }
+}
+
+
+class MatchedFullDialogBasicOneButton (context: Context, title: String, content: String) : Dialog(context){
+    var clickListener : DialogButtonClickListener ? = null
+    interface DialogButtonClickListener {
+        fun dialogCloseClickListener()
+        fun dialogClickListener()
+    }
+    init {
+        val binding : DialogFullBasicOneButtonBinding = DialogFullBasicOneButtonBinding.inflate(layoutInflater)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        setContentView(binding.root)
+        window?.run {
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            attributes.width = ViewGroup.LayoutParams.MATCH_PARENT
+            attributes.height = ViewGroup.LayoutParams.MATCH_PARENT
         } ?: exitProcess(0)
 
         binding.dialogTitle.text = title
         binding.dialogContent.text = content
-        binding.dialogDeleteBtn.text = btnText
-        binding.dialogCloseBtn.setOnClickListener { clickListener?.dialogCloseClickListener() }
-        binding.dialogDeleteBtn.setOnClickListener { clickListener?.dialogDeleteClickListener() }
+        binding.dialogCloseBtn.setOnClickListener { clickListener?.dialogCloseClickListener()}
+        binding.dialogBtn.setOnClickListener { clickListener?.dialogClickListener() }
+    }
+}
+
+class WrapedDialogBasicOneButton (context: Context, content: String) : Dialog(context){
+    var clickListener : DialogButtonClickListener ? = null
+    interface DialogButtonClickListener {
+        fun dialogClickListener()
+    }
+    init {
+        val binding : DialogBasicOneButtonBinding = DialogBasicOneButtonBinding.inflate(layoutInflater)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        setContentView(binding.root)
+        window?.run {
+            setBackgroundDrawable(InsetDrawable(ColorDrawable(Color.TRANSPARENT), 30))
+            attributes.width = ViewGroup.LayoutParams.MATCH_PARENT
+            attributes.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        } ?: exitProcess(0)
+
+        binding.dialogContent.text = content
+        binding.dialogBtn.setOnClickListener { clickListener?.dialogClickListener() }
     }
 }
 
 // 바로사용 시간 설정 dialog
-class InputUsingTimeDialog(context: Context) : Dialog(context) { //도큐먼트 이름도 받아와야함
+class InputUsingTimeDialog(context: Context, var reservationEquipment: ReservationEquipment) : Dialog(context, R.style.DialogCustomTheme) { //도큐먼트 이름도 받아와야함
     var clickListener: DialogButtonClickListener? = null
     var usingTime = 0
-    val maxTime: Int = 50
+    var maxTime : Int = Math.toIntExact(reservationEquipment.maxTime)
 
     interface DialogButtonClickListener {
         fun dialogCloseClickListener()
@@ -75,7 +155,9 @@ class InputUsingTimeDialog(context: Context) : Dialog(context) { //도큐먼트 
         binding.useBtn.setOnClickListener {
             clickListener?.usingClickListener(usingTime)
         }
-        // + 버튼 처
+        // 뷰 + 버튼 처리
+        binding.documentNameTextview.text = reservationEquipment.document_name
+        binding.useableTime.text = maxTime.toString()
         binding.plus5miniteBtn.setOnClickListener {
             usingTime += 5
             usingTime = excessMax(usingTime)
@@ -168,21 +250,6 @@ class InputUsingTimeDialog(context: Context) : Dialog(context) { //도큐먼트 
     }
 }
 
-class MatchedFullDialogBasicOneButton (context: Context, title: String, content: String) : Dialog(context){
-    var clickListener : DialogButtonClickListener ? = null
-    interface DialogButtonClickListener {
-        fun dialogCloseClickListener()
-        fun dialogClickListener()
-    }
-    init {
-        val binding : DialogBasicOneButtonBinding = DialogBasicOneButtonBinding.inflate(layoutInflater)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        setContentView(binding.root)
-        window?.run {
-            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            attributes.width = ViewGroup.LayoutParams.MATCH_PARENT
-            attributes.height = ViewGroup.LayoutParams.MATCH_PARENT
-        } ?: exitProcess(0)
 
         binding.dialogTitle.text = title
         binding.dialogContent.text = content
@@ -211,7 +278,8 @@ class MatchedDialogSignInOneButton (context: Context, content: String) : Dialog(
     }
 }
 
-class ConfirmUsingDialog(context: Context, usingTime: Int) : Dialog(context) { // 도큐먼트 이름도 받아와야 함
+@RequiresApi(Build.VERSION_CODES.O)
+class ConfirmUsingDialog(context: Context, usingTime: Int, reservationEquipment: ReservationEquipment) : Dialog(context, R.style.DialogCustomTheme) { // 도큐먼트 이름도 받아와야 함
 
     var clickListener: DialogButtonClickListener? = null
 
@@ -231,11 +299,15 @@ class ConfirmUsingDialog(context: Context, usingTime: Int) : Dialog(context) { /
             attributes.width = ViewGroup.LayoutParams.MATCH_PARENT
             attributes.height = ViewGroup.LayoutParams.WRAP_CONTENT
         } ?: exitProcess(0)
+
+        binding.documentNameTextview.text = reservationEquipment.document_name
+        binding.usingTimeTextview.text = usingTime.toString() + "분"
+        binding.endUsingTimeTextview.text = LocalDateTime.now().plusMinutes(usingTime.toLong()).format(DateTimeFormatter.ofPattern("HH:mm"))
         binding.againInputTimeBtn.setOnClickListener { clickListener?.dialogAgainClickListener() }
         binding.startUsingBtn.setOnClickListener {
             clickListener?.dialogUsingClickListener()
 
-            val finishUsingDialog = FinishUsingDialog(context).apply {
+            val finishUsingDialog = FinishUsingDialog(context, reservationEquipment).apply {
                 clickListener = object : FinishUsingDialog.DialogButtonClickListener {
                     override fun dialogConfirmClickListener() {
                         dismiss()
@@ -247,7 +319,56 @@ class ConfirmUsingDialog(context: Context, usingTime: Int) : Dialog(context) { /
     }
 }
 
-class FinishUsingDialog(context: Context) : Dialog(context) {
+class ConfirmReserveDialog(context: Context, reservationFacility: ReservationFacility, startCal: Calendar, endCal: Calendar) : Dialog(context, R.style.DialogCustomTheme) { // 도큐먼트 이름도 받아와야 함
+
+    var clickListener: DialogButtonClickListener? = null
+    val dateFmt : SimpleDateFormat = SimpleDateFormat("MM월 dd일")
+    val timeFmt : SimpleDateFormat = SimpleDateFormat("HH:mm")
+
+    interface DialogButtonClickListener {
+        fun dialogAgainClickListener()
+        fun dialogReserveClickListener()
+    }
+
+    init {
+        val binding = DialogConfirmUsingBinding.inflate(layoutInflater)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        setCancelable(false)    // 다이얼로그외에 다른 화면을 눌렀을 때 나가는 것을 방지
+        setContentView(binding.root)
+        window?.run {
+            setGravity(Gravity.BOTTOM)
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            attributes.width = ViewGroup.LayoutParams.MATCH_PARENT
+            attributes.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        } ?: exitProcess(0)
+
+        binding.titleTextview.text = "예약확인"
+        binding.targetTextview.text = "예약 대상"
+        binding.documentNameTextview.text = reservationFacility.document_name
+        binding.timeTextview.text = "예약 날짜"
+        binding.usingTimeTextview.text = dateFmt.format(startCal.time)
+        binding.endtimeTextview.text = "예약 시간"
+        binding.endUsingTimeTextview.text = timeFmt.format(startCal.time) + "~" + timeFmt.format(endCal.time)
+        binding.messageTextview.text = "이대로 예약하시겠어요?"
+        binding.againInputTimeBtn.text = "다시 선택"
+        binding.startUsingBtn.text = "예약"
+        binding.againInputTimeBtn.setOnClickListener { clickListener?.dialogAgainClickListener() }
+        binding.startUsingBtn.setOnClickListener {
+            clickListener?.dialogReserveClickListener()
+
+            val finishReserveDialog = FinishReserveDialog(context).apply {
+                clickListener = object : FinishReserveDialog.DialogButtonClickListener {
+                    override fun dialogConfirmClickListener() {
+                        dismiss()
+                    }
+                }
+            }
+            finishReserveDialog.show()
+        }
+    }
+}
+
+class FinishUsingDialog(context: Context, reservationEquipment: ReservationEquipment) : Dialog(context) {
 
     var clickListener: DialogButtonClickListener? = null
 
@@ -266,6 +387,56 @@ class FinishUsingDialog(context: Context) : Dialog(context) {
             attributes.width = ViewGroup.LayoutParams.MATCH_PARENT
             attributes.height = ViewGroup.LayoutParams.WRAP_CONTENT
         } ?: exitProcess(0)
+        binding.message1Textview.text = reservationEquipment.document_name + " 사용이 시작됐어요"
+        binding.confirmBtn.setOnClickListener { clickListener?.dialogConfirmClickListener() }
+    }
+}
+
+
+class FinishReserveDialog(context: Context) : Dialog(context) {
+
+    var clickListener: DialogButtonClickListener? = null
+
+    interface DialogButtonClickListener {
+        fun dialogConfirmClickListener()
+    }
+
+    init {
+        val binding = DialogFinishUsingBinding.inflate(layoutInflater)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        setCancelable(false)    // 다이얼로그외에 다른 화면을 눌렀을 때 나가는 것을 방지
+        setContentView(binding.root)
+        window?.run {
+            setGravity(Gravity.BOTTOM)
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            attributes.width = ViewGroup.LayoutParams.MATCH_PARENT
+            attributes.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        } ?: exitProcess(0)
+        binding.message1Textview.text = "예약이 완료됐어요"
+        binding.message2Textview.text = "시작 5분전에 알람으로 알려드릴게요:)"
+        binding.confirmBtn.setOnClickListener { clickListener?.dialogConfirmClickListener() }
+    }
+}
+
+class CautionMessageDialog(context: Context, message: String) : Dialog(context) {
+
+    var clickListener: DialogButtonClickListener? = null
+
+    interface DialogButtonClickListener {
+        fun dialogConfirmClickListener()
+    }
+
+    init {
+        val binding = DialogCautionMessageBinding.inflate(layoutInflater)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        setCancelable(false)    // 다이얼로그외에 다른 화면을 눌렀을 때 나가는 것을 방지
+        setContentView(binding.root)
+        window?.run {
+            setGravity(Gravity.CENTER)
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            attributes.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        } ?: exitProcess(0)
+        binding.messageTextview.text = message
         binding.confirmBtn.setOnClickListener { clickListener?.dialogConfirmClickListener() }
     }
 }

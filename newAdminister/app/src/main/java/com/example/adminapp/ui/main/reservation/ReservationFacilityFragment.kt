@@ -18,13 +18,12 @@ import com.example.adminapp.data.model.ReservationType
 import com.example.adminapp.databinding.FragmentReservationChildBinding
 import com.example.adminapp.databinding.ItemReservationEditSettingBinding
 import com.example.adminapp.ui.main.reservation.edit.ReservationEditFragmentDirections
-import com.example.adminapp.ui.main.reservation.edit.ReservationEditViewModel
 
 //TODO : 후후후순위.
-class ReservationFacilityFragment : BaseSessionFragment<FragmentReservationChildBinding, ReservationEditViewModel>() {
+class ReservationFacilityFragment : BaseSessionFragment<FragmentReservationChildBinding, ReservationViewModel>() {
 
     override lateinit var viewbinding: FragmentReservationChildBinding
-    override val viewmodel: ReservationEditViewModel by viewModels()
+    override val viewmodel: ReservationViewModel by viewModels()
     private lateinit var reservationFacilitySettingRVAdapter: ReservationFacilitySettingRVAdapter
 
     override fun initViewbinding(

@@ -1,25 +1,33 @@
 package com.example.userapp.ui.main.reservation
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
 import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.data.dto.UserModel
 import com.example.userapp.data.entity.DayTimeSlot
 import com.example.userapp.data.entity.ReservationTimeData
 import com.example.userapp.data.model.ReservationFacilityDayInfo
 import com.example.userapp.data.model.ReservationFacilityTimeSlot
 import com.example.userapp.databinding.FragmentMainhomeReservationFacilitySelectBinding
 import com.example.userapp.databinding.FragmentMainhomeReservationFacilitySelectItemBinding
+import com.example.userapp.utils.CautionMessageDialog
+import com.example.userapp.utils.ConfirmReserveDialog
+import com.example.userapp.utils.ConfirmUsingDialog
+import com.example.userapp.utils.InputUsingTimeDialog
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -31,6 +39,8 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
     override val viewmodel: ReservationViewModel by viewModels()
     val database = FirebaseFirestore.getInstance()
     val args: ReservationFacilitySelectArgs by navArgs()
+    private var ac: MainActivity? = null
+    private lateinit var userInfo : UserModel
 
     override fun initViewbinding(
         inflater: LayoutInflater,
@@ -52,7 +62,13 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
                     if(viewmodel.delete_select_time_slot(it)){
                         it.buttonSelected = false
                     }else{
-                        Toast.makeText(context, "붙어있는 시간만 선택할 수 있습니다.\n따라서, 취소가 불가능합니다.", Toast.LENGTH_SHORT).show()
+                        val cautionMessageDialog1 = CautionMessageDialog(requireContext(), "붙어있는 시간만 선택할 수 있어요.")
+                        cautionMessageDialog1.clickListener = object : CautionMessageDialog.DialogButtonClickListener {
+                            override fun dialogConfirmClickListener() {
+                                cautionMessageDialog1.dismiss()
+                            }
+                        }
+                        showDialog(cautionMessageDialog1, viewLifecycleOwner)
                     }
                 }
                 else{
@@ -60,14 +76,25 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
                         it.buttonSelected = true
                     }else{
                         if(viewmodel.getDayTimeSlotListSize() == args.myArg.max_time/args.myArg.interval_time){
-                            Toast.makeText(context, "최대 예약가능한 시간을 초과하였습니다.", Toast.LENGTH_SHORT).show()
+                            val cautionMessageDialog2 = CautionMessageDialog(requireContext(), "최대 예약가능한 시간을 초과했어요.")
+                            cautionMessageDialog2.clickListener = object : CautionMessageDialog.DialogButtonClickListener {
+                                override fun dialogConfirmClickListener() {
+                                    cautionMessageDialog2.dismiss()
+                                }
+                            }
+                            showDialog(cautionMessageDialog2, viewLifecycleOwner)
                         }else{
-                            Toast.makeText(context, "붙어있는 시간만 선택할 수 있습니다.\n따라서, 선택이 불가능합니다.", Toast.LENGTH_SHORT).show()
+                            val cautionMessageDialog3 = CautionMessageDialog(requireContext(), "붙어있는 시간만 선택할 수 있어요.")
+                            cautionMessageDialog3.clickListener = object : CautionMessageDialog.DialogButtonClickListener {
+                                override fun dialogConfirmClickListener() {
+                                    cautionMessageDialog3.dismiss()
+                                }
+                            }
+                            showDialog(cautionMessageDialog3, viewLifecycleOwner)
                         }
                     }
                 }
                 viewbinding.nextBtn.isEnabled = viewmodel.getDayTimeSlotListSize() != 0L
-                viewmodel
             }
         )
     }
@@ -78,7 +105,10 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
         })
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun initViewFinal(savedInstanceState: Bundle?) {
+        ac = activity as MainActivity
+        ac?.let { userInfo = it.getUserData() }
         viewbinding.documentNameTextview.text = args.myArg.document_name + " 예약"
         viewbinding.message2Textview.text = "최대 예약 가능한 시간:" + args.myArg.max_time.toString()+"분"
 
@@ -100,59 +130,70 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
         cal.set(Calendar.DAY_OF_WEEK,Calendar.SATURDAY)
         viewbinding.daySatTextview.text = dateFmt.format(cal.time)
 
-
         viewbinding.monView.setOnClickListener(View.OnClickListener {
-            viewmodel.getFacilityTimeSlotData(args.myArg.document_name,"monday")
+            viewmodel.getFacilityTimeSlotData(args.myArg.document_name,"monday",args.myArg.category_icon,args.myArg.interval_time)
             viewbinding.dayInfo.visibility = View.VISIBLE
             button_not_selected()
             viewbinding.monView.isSelected = true
             viewmodel.clear_select_time_slot()
         })
         viewbinding.tueView.setOnClickListener(View.OnClickListener {
-            viewmodel.getFacilityTimeSlotData(args.myArg.document_name,"tuesday")
+            viewmodel.getFacilityTimeSlotData(args.myArg.document_name,"tuesday",args.myArg.category_icon,args.myArg.interval_time)
             viewbinding.dayInfo.visibility = View.VISIBLE
             button_not_selected()
             viewbinding.tueView.isSelected = true
             viewmodel.clear_select_time_slot()
         })
         viewbinding.wedView.setOnClickListener(View.OnClickListener {
-            viewmodel.getFacilityTimeSlotData(args.myArg.document_name,"wednesday")
+            viewmodel.getFacilityTimeSlotData(args.myArg.document_name,"wednesday",args.myArg.category_icon,args.myArg.interval_time)
             viewbinding.dayInfo.visibility = View.VISIBLE
             button_not_selected()
             viewbinding.wedView.isSelected = true
             viewmodel.clear_select_time_slot()
         })
         viewbinding.thuView.setOnClickListener(View.OnClickListener {
-            viewmodel.getFacilityTimeSlotData(args.myArg.document_name,"thursday")
+            viewmodel.getFacilityTimeSlotData(args.myArg.document_name,"thursday",args.myArg.category_icon,args.myArg.interval_time)
             viewbinding.dayInfo.visibility = View.VISIBLE
             button_not_selected()
             viewbinding.thuView.isSelected = true
             viewmodel.clear_select_time_slot()
         })
         viewbinding.friView.setOnClickListener(View.OnClickListener {
-            viewmodel.getFacilityTimeSlotData(args.myArg.document_name,"friday")
+            viewmodel.getFacilityTimeSlotData(args.myArg.document_name,"friday",args.myArg.category_icon,args.myArg.interval_time)
             viewbinding.dayInfo.visibility = View.VISIBLE
             button_not_selected()
             viewbinding.friView.isSelected = true
             viewmodel.clear_select_time_slot()
         })
         viewbinding.satView.setOnClickListener(View.OnClickListener {
-            viewmodel.getFacilityTimeSlotData(args.myArg.document_name,"saturday")
+            viewmodel.getFacilityTimeSlotData(args.myArg.document_name,"saturday",args.myArg.category_icon,args.myArg.interval_time)
             viewbinding.dayInfo.visibility = View.VISIBLE
             button_not_selected()
             viewbinding.satView.isSelected = true
             viewmodel.clear_select_time_slot()
         })
         viewbinding.sunView.setOnClickListener(View.OnClickListener {
-            viewmodel.getFacilityTimeSlotData(args.myArg.document_name,"sunday")
+            viewmodel.getFacilityTimeSlotData(args.myArg.document_name,"sunday",args.myArg.category_icon,args.myArg.interval_time)
             viewbinding.dayInfo.visibility = View.VISIBLE
             button_not_selected()
             viewbinding.sunView.isSelected = true
             viewmodel.clear_select_time_slot()
         })
         viewbinding.nextBtn.setOnClickListener {
-            viewmodel.add_reserve()
-            Toast.makeText(context, "예약이 완료되었습니다!!", Toast.LENGTH_SHORT).show()
+
+
+            val confirmUsingDialog = ConfirmReserveDialog(requireContext(), args.myArg, viewmodel.getReserveFacilityStartTime(), viewmodel.getReserveFacilityEndTime()) //사용하는
+            confirmUsingDialog.clickListener = object : ConfirmReserveDialog.DialogButtonClickListener {
+                override fun dialogAgainClickListener() {
+                    confirmUsingDialog.dismiss()
+                }
+
+                override fun dialogReserveClickListener() {
+                    viewmodel.add_reserve(userInfo, args.myArg)
+                    confirmUsingDialog.dismiss()
+                }
+            }
+            showDialog(confirmUsingDialog, viewLifecycleOwner)
             button_not_selected()
         }
     }
@@ -190,7 +231,7 @@ class FacilitySelectAdapter(
         val data = dataSet[position]
         Log.e("data", data.data.toString())
         Log.e("data position", position.toString())
-        viewHolder.viewbinding.timeSlotBtn.text = data.data?.hour.toString() + ":" + data.data?.min.toString()
+        viewHolder.viewbinding.timeSlotBtn.text = String.format("%02d", data.data?.hour) + ":" + String.format("%02d", data.data?.min)
 
         Log.e("data", dataSet[position].toString())
     //버튼 상태 그리기

@@ -1,10 +1,17 @@
 package com.example.userapp.ui.main.reservation
 
+import android.annotation.SuppressLint
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseSessionFragment
@@ -15,6 +22,9 @@ import com.example.userapp.databinding.FragmentMainhomeReservationEquipmentItemB
 import com.example.userapp.utils.ConfirmUsingDialog
 import com.example.userapp.utils.InputUsingTimeDialog
 import com.google.firebase.firestore.FirebaseFirestore
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 
 class ReservationEquipmentFragment :
@@ -41,15 +51,15 @@ class ReservationEquipmentFragment :
         viewbinding.equipmentRecyclerView.adapter = EquipmentAdapter(
             emptyList(),
             onClickUsingIcon = {
-
-                val inputUsingTimeDialog = InputUsingTimeDialog(requireContext()).apply {
+                val inputUsingTimeDialog = InputUsingTimeDialog(requireContext(),it).apply {
                     clickListener = object : InputUsingTimeDialog.DialogButtonClickListener {
                         override fun dialogCloseClickListener() {
                             dismiss()
                         }
 
+                        @RequiresApi(Build.VERSION_CODES.O)
                         override fun usingClickListener(usingtime :Int) {
-                            val confirmUsingDialog = ConfirmUsingDialog(requireContext(), usingtime) //사용하는
+                            val confirmUsingDialog = ConfirmUsingDialog(requireContext(), usingtime, it) //사용하는
                             confirmUsingDialog.clickListener = object : ConfirmUsingDialog.DialogButtonClickListener {
                                 override fun dialogAgainClickListener() {
                                     confirmUsingDialog.dismiss()
@@ -57,7 +67,6 @@ class ReservationEquipmentFragment :
 
                                 override fun dialogUsingClickListener() {
                                     if (usingtime > 0) { //사용시간이 0보다 큰 경우만 사용
-
                                         viewmodel.add_use(userInfo,it,usingtime)
                                     }
                                     confirmUsingDialog.dismiss()
@@ -99,17 +108,31 @@ class EquipmentAdapter(
         return EquipmentViewHolder(FragmentMainhomeReservationEquipmentItemBinding.bind(view))
     }
 
+    @SuppressLint("SetTextI18n")
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(viewHolder: EquipmentViewHolder, position: Int) {
         val data = dataSet[position]
+        Log.e("icon : ", data.icon.toString())
+        viewHolder.viewbinding.icon.load(data.icon)
         viewHolder.viewbinding.document.text = data.document_name
         viewHolder.viewbinding.usingStatus.text = data.using
         //사용중일때 사용하기 버튼 없애기
         if (data.using != "no_using") {
-            viewHolder.viewbinding.usingStatus.text = "using"
+            viewHolder.viewbinding.usingStatus.text = "사용중"
             viewHolder.viewbinding.useBtn.visibility = View.GONE
+            viewHolder.viewbinding.endtimeTextview.text = LocalDateTime.parse(data.endTime).format(DateTimeFormatter.ofPattern("HH:mm")) + " 종료"
+            viewHolder.viewbinding.remainTimeTextview.text = ChronoUnit.MINUTES.between(
+                LocalDateTime.now(),
+                LocalDateTime.parse(data.endTime)
+            ).toString() + "분 남음"
+            viewHolder.viewbinding.endtimeTextview.visibility = View.VISIBLE
+            viewHolder.viewbinding.remainTimeTextview.visibility = View.VISIBLE
+
         } else {
-            viewHolder.viewbinding.usingStatus.text = "no_using"
+            viewHolder.viewbinding.usingStatus.text = "사용가능"
             viewHolder.viewbinding.useBtn.visibility = View.VISIBLE
+            viewHolder.viewbinding.endtimeTextview.visibility = View.GONE
+            viewHolder.viewbinding.remainTimeTextview.visibility = View.GONE
         }
         //사용하기 버튼
         viewHolder.viewbinding.useBtn.setOnClickListener() {

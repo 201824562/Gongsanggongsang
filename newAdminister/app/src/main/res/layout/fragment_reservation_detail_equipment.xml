@@ -25,7 +25,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    android:background="@drawable/ic_backarrow"/>
+                    android:background="@drawable/ic_arrow_back"/>
                 <TextView
                     android:id="@+id/toolbarText"
                     android:layout_width="wrap_content"
@@ -184,7 +184,7 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
                                 <TextView
-                                    android:id="@+id/reserve_detail_item_usedTime"
+                                    android:id="@+id/reserve_detail_item_usedTime1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="6dp"
@@ -193,11 +193,12 @@
                                     android:textColor="@color/black_87"
                                     android:textSize="12sp" />
                                 <TextView
+                                    android:id="@+id/reserve_detail_item_usedTime_text1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="6dp"
                                     android:fontFamily="@font/notosanskr_regular_hestia"
-                                    android:text="분"
+                                    android:text="분 "
                                     android:textColor="@color/black_87"
                                     android:textSize="12sp" />
                             </LinearLayout>
@@ -206,7 +207,7 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
                                 <TextView
-                                    android:id="@+id/reserve_detail_item_leftTime"
+                                    android:id="@+id/reserve_detail_item_leftTime1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="6dp"
@@ -215,11 +216,30 @@
                                     android:textColor="@color/black_87"
                                     android:textSize="12sp" />
                                 <TextView
+                                    android:id="@+id/reserve_detail_item_leftTime_text1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="6dp"
                                     android:fontFamily="@font/notosanskr_regular_hestia"
-                                    android:text="분"
+                                    android:text="분 "
+                                    android:textColor="@color/black_87"
+                                    android:textSize="12sp" />
+                                <TextView
+                                    android:id="@+id/reserve_detail_item_leftTime2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="6dp"
+                                    android:fontFamily="@font/notosanskr_regular_hestia"
+                                    android:text="25"
+                                    android:textColor="@color/black_87"
+                                    android:textSize="12sp" />
+                                <TextView
+                                    android:id="@+id/reserve_detail_item_leftTime_text2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="6dp"
+                                    android:fontFamily="@font/notosanskr_regular_hestia"
+                                    android:text="초"
                                     android:textColor="@color/black_87"
                                     android:textSize="12sp" />
                             </LinearLayout>
@@ -343,20 +363,37 @@
             android:layout_height="7dp"
             app:layout_constraintTop_toBottomOf="@id/reservation_detail_itemInfo"
             android:background="@color/light_gray"/>
-        <TextView
+        <LinearLayout
             android:id="@+id/view3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="사용기록"
-            android:textColor="@color/black_87"
-            android:fontFamily="@font/notosanskr_regular_hestia"
-            android:textSize="16sp"
-            android:paddingLeft="25dp"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view2"/>
+            app:layout_constraintTop_toBottomOf="@id/view2"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="사용기록"
+                android:textColor="@color/black_87"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:textSize="16sp" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+            <ImageButton
+                android:id="@+id/reservation_detail_rv_btn"
+                android:layout_width="20sp"
+                android:layout_height="12sp"
+                android:layout_margin="5dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/ic_event_arrow_updown" />
+        </LinearLayout>
         <View
             android:id="@+id/view4"
             android:layout_width="match_parent"
@@ -364,12 +401,14 @@
             app:layout_constraintTop_toBottomOf="@id/view3"
             android:background="@color/light_gray"/>
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/reservation_detail_rv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/view3"
+            app:layout_constraintTop_toBottomOf="@id/view4"
             app:layout_constraintBottom_toBottomOf="parent"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_reservation_detail"  />
+            tools:listitem="@layout/item_reservation_detail"
+            android:visibility="gone"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

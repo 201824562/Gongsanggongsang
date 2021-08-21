@@ -3,6 +3,7 @@ package com.example.userapp
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
@@ -76,11 +77,12 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
             viewbinding.toolbar.setNavigationOnClickListener{ findNavController(R.id.nav_host).navigateUp() }   //이거 필요한가?
             when (destination.id){
-                R.id.introFragment, R.id.signUpWaitFragment -> hideToolbar()
-                R.id.signInFragment, R.id.signUpPermissionFragment, R.id.signUpAgencyFragment,
-                R.id.signUpFirstFragment, R.id.signUpSecondFragment, R.id.reservationFacilitySelectFragment-> showToolbarTitle("")
-                R.id.splashFragment, R.id.mainFragment -> hideToolbar()
-                else -> showToolbarTitle("각자프래그에 맞는 이름으로 추가해주기.")
+                R.id.signInFragment, R.id.signInFindInfoFragment,
+                R.id.signUpPermissionFragment, R.id.signUpAgencyFragment, R.id.signUpFirstFragment, R.id.signUpSecondFragment,
+                R.id.reservationFacilitySelectFragment,
+                R.id.settingsChangePwdFragment, R.id.settingsChangeInfoDetailFragment -> showToolbarTitle("")
+                R.id.settingsChangeInfoFragment -> showToolbarTitle("계정 정보 관리")
+                else -> hideToolbar()
             }
         }
     }

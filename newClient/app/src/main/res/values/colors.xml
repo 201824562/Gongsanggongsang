@@ -12,6 +12,7 @@
     <color name="black_50">#80000000</color>
     <color name="black_20">#33000000</color>
     <color name="black_10">#19000000</color>
+    <color name="black_5">#0c000000</color>
     <color name="black_gray">#444444</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray"> #E5E5E5</color>
@@ -24,5 +25,7 @@
     <color name="blue_green">#116761</color>
     <color name="dark_brown">#220000</color>
     <color name="pale_orange">#ff9966</color>
+    <color name="light_pale_orange">#ffede4</color>
     <color name="pale_gray">#e1f2ef</color>
+    <color name="light_gray">#ededed</color>
 </resources>
