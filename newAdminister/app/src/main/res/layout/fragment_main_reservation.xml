@@ -60,23 +60,8 @@
             app:tabIndicatorColor="@color/applemint"
             android:paddingTop="3dp"
             android:paddingBottom="3dp"
+            app:tabTextAppearance="@style/TabCustomText16"
             style="@style/TabCustomStyle" >
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="사용중" />
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="바로 사용" />
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="예약 사용" />
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="사용 기록" />
         </com.google.android.material.tabs.TabLayout>
         <View
             android:id="@+id/view2"

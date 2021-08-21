@@ -1,6 +1,7 @@
 package com.example.adminapp.ui.main.reservation.detail
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,18 +40,19 @@ class ReservationDetailFacilityFragment() : BaseSessionFragment<FragmentReservat
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-        viewbinding.backBtn.setOnClickListener {  findNavController().navigate(R.id.action_reservationDetailEquipmentFragment_pop)  }
+        viewbinding.backBtn.setOnClickListener {  findNavController().navigate(R.id.action_reservationDetailFacilityFragment_pop)  }
         when(args.facilityBundle){
             null -> makeErrorEvent()
             else -> facilityBundleData = args.facilityBundle!! }
         initViewPager()
     }
 
-    override fun initDataBinding(savedInstanceState: Bundle?) { }
+    override fun initDataBinding(savedInstanceState: Bundle?) { viewbinding.toolbarText.text = facilityBundleData.name }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run {
             reservationDetailSettingBtn.setOnClickListener {
+                // TODO
                 /*findNavController().navigate(ReservationDetailEquipmentFragmentDirections
                     .actionReservationDetailEquipmentFragmentToReservationEditDetailFragment(
                         ReservationItem(
@@ -68,8 +70,10 @@ class ReservationDetailFacilityFragment() : BaseSessionFragment<FragmentReservat
 
     private fun initViewPager() {
         viewbinding.run {
-            reservationDetailFacilityViewPagerAdapter = ReservationDetailFacilityViewPagerAdapter(requireActivity())
-            reservationLogViewpager.adapter = reservationDetailFacilityViewPagerAdapter
+            reservationDetailFacilityViewPagerAdapter = ReservationDetailFacilityViewPagerAdapter(requireActivity(), facilityBundleData)
+            reservationLogViewpager.apply {
+                adapter = reservationDetailFacilityViewPagerAdapter
+                isUserInputEnabled = false }
             reservationDetailBasicBtn.isSelected = true
             reservationDetailBasicBtn.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_87))
             reservationDetailBasicBtn.setOnClickListener {
@@ -77,12 +81,14 @@ class ReservationDetailFacilityFragment() : BaseSessionFragment<FragmentReservat
                 it.isSelected = true
                 reservationDetailBasicBtn.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_87))
                 reservationLogViewpager.setCurrentItem(TAB_INDEX_BASIC, false)
+                reservationDetailBasicView.visibility = View.VISIBLE
             }
             reservationDetailLogBtn.setOnClickListener {
                 makeButtonsUnselected()
                 it.isSelected = true
                 reservationDetailLogBtn.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_87))
                 reservationLogViewpager.setCurrentItem(TAB_INDEX_LOG, false)
+                reservationDetailLogView.visibility = View.VISIBLE
             }
         }
     }
@@ -92,22 +98,31 @@ class ReservationDetailFacilityFragment() : BaseSessionFragment<FragmentReservat
             reservationDetailBasicBtn.apply {
                 isSelected = false
                 setTextColor(ContextCompat.getColor(context, R.color.black_20)) }
+            reservationDetailBasicView.visibility = View.INVISIBLE
             reservationDetailLogBtn.apply {
                 isSelected = false
                 setTextColor(ContextCompat.getColor(context, R.color.black_20)) }
+            reservationDetailLogView.visibility = View.INVISIBLE
         }
     }
 
 }
 
-class ReservationDetailFacilityViewPagerAdapter (activity: FragmentActivity) : FragmentStateAdapter(activity) {
+class ReservationDetailFacilityViewPagerAdapter (activity: FragmentActivity, private val facilityInfo : ReservationFacilityBundle) : FragmentStateAdapter(activity) {
 
     override fun getItemCount(): Int = 2
 
     override fun createFragment(position: Int): Fragment {
+        val bundle = Bundle()
+        bundle.putParcelable("facilityItemInfo", facilityInfo)
         return when (position) {
-            0 -> ReservationDetailFacilityBasicFragment()
-            1 -> ReservationDetailFacilityLogFragment()
+            0 -> { val fragment = ReservationDetailFacilityBasicFragment()
+                fragment.arguments = bundle
+                fragment }
+            1 -> {
+                val fragment = ReservationDetailFacilityLogFragment()
+                fragment.arguments = bundle
+                fragment }
             else -> error("no such position: $position")
         }
     }

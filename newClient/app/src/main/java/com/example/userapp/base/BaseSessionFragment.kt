@@ -73,8 +73,9 @@ abstract class BaseSessionFragment<VB : ViewBinding, VM : BaseSessionViewModel> 
                 return@observeSnackbarMessageString
             //Snackbar.make(getFragmentBinding().root.rootView.findViewById(android.R.id.content), it, Snackbar.LENGTH_LONG).show()
             activity?.let { activity ->
-                Snackbar.make(activity.findViewById(android.R.id.content), str, Snackbar.LENGTH_LONG).show()
-            }
+                val snackbar : Snackbar = Snackbar.make(activity.findViewById(android.R.id.content), str, Snackbar.LENGTH_SHORT)
+                snackbar.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.black_20))
+                snackbar.show() }
             //(snackbar.view.findViewById(R.id.snackbar_text) as TextView).maxLines = 5
         }
     }

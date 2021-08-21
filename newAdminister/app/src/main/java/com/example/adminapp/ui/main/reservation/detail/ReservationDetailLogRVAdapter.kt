@@ -16,10 +16,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-//TODO : 수정
 class ReservationDetailLogRVAdapter() : ListAdapter<ReservationLogItem, ReservationDetailLogRVAdapter.ViewHolder>(
-    AddressDiffCallback
-) {
+    AddressDiffCallback) {
     companion object {
         val AddressDiffCallback = object : DiffUtil.ItemCallback<ReservationLogItem>() {
             override fun areItemsTheSame(oldItem: ReservationLogItem, newItem: ReservationLogItem): Boolean {
@@ -67,5 +65,4 @@ class ReservationDetailLogRVAdapter() : ListAdapter<ReservationLogItem, Reservat
             }
         }
     }
-
 }

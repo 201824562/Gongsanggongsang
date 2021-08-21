@@ -55,14 +55,14 @@ class ReservationEquipmentRVAdapter(private val context : Context, private val v
                 holder.binding.reservationState.setTextColor(ContextCompat.getColor(context, R.color.black_60))
                 if (!item.using){
                     holder.binding.reserveItemIconBackground.background = ContextCompat.getDrawable(context, R.drawable.view_oval_gray)
-                    holder.binding.reservationState.text = "대기중"
+                    holder.binding.reservationState.text = "사용가능"
                     holder.binding.reservationUsingStateInfo.visibility = View.INVISIBLE  }
                 else{
                     holder.binding.reserveItemIconBackground.background = ContextCompat.getDrawable(context, R.drawable.view_oval_light_orange)
                     holder.binding.reservationState.text = "사용중"
                     holder.binding.reservationUsingStateInfo.visibility = View.VISIBLE
                     holder.binding.reservationEndTime.text = getHourMinuteString(item.endTime)
-                    holder.timer = object : CountDownTimer(calculateDuration(item.endTime).toMillis(), 1000) {
+                    holder.timer = object : CountDownTimer(calculateDurationWithCurrent(item.endTime).toMillis(), 1000) {
                         override fun onTick(millisUntilFinished: Long) {
                             val minute = (millisUntilFinished/60000)
                             val second = (millisUntilFinished%60000)/1000

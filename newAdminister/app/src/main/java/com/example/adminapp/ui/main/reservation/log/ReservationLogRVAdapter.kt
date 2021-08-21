@@ -2,9 +2,11 @@ package com.example.adminapp.ui.main.reservation.log
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.adminapp.R
 import com.example.adminapp.data.model.ReservationEquipmentLog
 import com.example.adminapp.data.model.ReservationLogItem
 import com.example.adminapp.data.model.ReservationType
@@ -17,7 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ReservationLogRVAdapter : ListAdapter<ReservationLogItem, ReservationLogRVAdapter.ViewHolder>(AddressDiffCallback) {
+class ReservationLogRVAdapter() : ListAdapter<ReservationLogItem, ReservationLogRVAdapter.ViewHolder>(AddressDiffCallback) {
 
     companion object {
         val AddressDiffCallback = object : DiffUtil.ItemCallback<ReservationLogItem>() {
@@ -51,7 +53,20 @@ class ReservationLogRVAdapter : ListAdapter<ReservationLogItem, ReservationLogRV
                             holder.binding.itemReservationLogStartTime.text = withContext(Dispatchers.IO) { getHourMinuteString(item.equipmentLog.startTime) }
                             holder.binding.itemReservationLogEndTime.text = withContext(Dispatchers.IO) { getHourMinuteString(item.equipmentLog.endTime) }
                             holder.binding.itemReservationLogUserName.text = item.equipmentLog.userName
-                            holder.binding.itemReservationLogState.text = item.equipmentLog.reservationState
+                            when (item.equipmentLog.reservationState) {
+                                "사용중" -> holder.binding.itemReservationLogState.apply {
+                                    text = item.equipmentLog.reservationState
+                                    setTextColor(ContextCompat.getColor(context, R.color.pinkish_orange))
+                                    setBackgroundResource(R.drawable.view_5dp_stroke_rectangle_pinkish_orange) }
+                                "예약중" -> holder.binding.itemReservationLogState.apply {
+                                    text = item.equipmentLog.reservationState
+                                    setTextColor(ContextCompat.getColor(context, R.color.applemint))
+                                    setBackgroundResource(R.drawable.view_5dp_stroke_rectangle_applemint) }
+                                else -> holder.binding.itemReservationLogState.apply {
+                                    text = item.equipmentLog.reservationState
+                                    setTextColor(ContextCompat.getColor(context, R.color.black_60))
+                                    setBackgroundResource(R.drawable.view_5dp_stroke_rectangle_black20) }
+                            }
                         }
                     }
                     ReservationType.FACILITY -> {
@@ -63,7 +78,20 @@ class ReservationLogRVAdapter : ListAdapter<ReservationLogItem, ReservationLogRV
                             holder.binding.itemReservationLogStartTime.text = withContext(Dispatchers.IO) { getHourMinuteString(item.facilityLog.startTime) }
                             holder.binding.itemReservationLogEndTime.text = withContext(Dispatchers.IO) { getHourMinuteString(item.facilityLog.endTime) }
                             holder.binding.itemReservationLogUserName.text = item.facilityLog.userName
-                            holder.binding.itemReservationLogState.text = item.facilityLog.reservationState
+                            when (item.facilityLog.reservationState) {
+                                "사용중" -> holder.binding.itemReservationLogState.apply {
+                                    text = item.facilityLog.reservationState
+                                    setTextColor(ContextCompat.getColor(context, R.color.pinkish_orange))
+                                    setBackgroundResource(R.drawable.view_5dp_stroke_rectangle_pinkish_orange) }
+                                "예약중" -> holder.binding.itemReservationLogState.apply {
+                                    text = item.facilityLog.reservationState
+                                    setTextColor(ContextCompat.getColor(context, R.color.applemint))
+                                    setBackgroundResource(R.drawable.view_5dp_stroke_rectangle_applemint) }
+                                else -> holder.binding.itemReservationLogState.apply {
+                                    text = item.facilityLog.reservationState
+                                    setTextColor(ContextCompat.getColor(context, R.color.black_60))
+                                    setBackgroundResource(R.drawable.view_5dp_stroke_rectangle_black20) }
+                            }
                         }
                     }
                 }

@@ -18,7 +18,6 @@ import com.example.adminapp.R
 import com.example.adminapp.base.BaseSessionFragment
 import com.example.adminapp.data.model.*
 import com.example.adminapp.databinding.DialogReservationAddCategoryBinding
-import com.example.adminapp.databinding.DialogReservationEditCategoryBinding
 import com.example.adminapp.databinding.FragmentReservationAddBinding
 import com.example.adminapp.utils.WrapedDialogBasicTwoButton
 import com.example.adminapp.utils.hideKeyboard
@@ -349,11 +348,11 @@ class ReservationAddFragment : BaseSessionFragment<FragmentReservationAddBinding
                 override fun dialogCloseClickListener() { dismiss() }
                 override fun dialogCustomClickListener() {
                     when (viewbinding.unableReserveTimeButton.isSelected){
-                        true -> viewmodel.saveReservationData(ReservationItem(reservationType, ReservationData(selectedCategoryData!!.drawableID,
+                        true -> viewmodel.saveReservationData(ReservationItem(reservationType, ReservationData(selectedCategoryData!!.iconID,
                             getEditItemName(), getSpinnerUsingTime(), getMaxTime()), getUnableSelectedTimeList()))
                         false -> {
                             makeNewUnableTimeList()
-                            viewmodel.saveReservationData(ReservationItem(reservationType, ReservationData(selectedCategoryData!!.drawableID,
+                            viewmodel.saveReservationData(ReservationItem(reservationType, ReservationData(selectedCategoryData!!.iconID,
                                 getEditItemName(), getSpinnerUsingTime(), getMaxTime()), getUnableSelectedTimeList()))
                         }
                     }
@@ -399,7 +398,7 @@ class BottomDialogReservationAddCategory(private val itemClick :(CategoryItem) -
             if (selectedIconDrawableID == null) setCategoryWarningMessage("아이콘을 선택해주세요.")
             else if (getCategoryName().isBlank() || getCategoryName().isEmpty()) setCategoryWarningMessage("카테고리 이름을 입력해주세요.")
             else {
-                itemClick(CategoryItem(RecyclerDataType.DATA, CategoryData(selectedIconDrawableID!!, getCategoryName())))
+                itemClick(CategoryItem(RecyclerDataType.DATA, CategoryData( selectedIconDrawableID!!, getCategoryName())))
                 dismiss()
             }
         }

@@ -61,32 +61,65 @@
         app:layout_constraintTop_toBottomOf="@id/view1"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
+        android:paddingLeft="30dp"
         android:orientation="horizontal">
-        <Button
-            android:id="@+id/reservation_detail_basic_btn"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="13dp"
-            android:text="기본"
-            android:textSize="16sp"
-            android:textColor="@color/black_20"
-            android:fontFamily="@font/notosanskr_bold_hestia"
-            android:minWidth="40dp"
-            android:minHeight="5dp"
-            android:background="@color/transparent"/>
-        <Button
-            android:id="@+id/reservation_detail_log_btn"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/reservation_detail_basic_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginRight="13dp"
+                android:text="기본"
+                android:textSize="16sp"
+                android:textColor="@color/black_20"
+                android:fontFamily="@font/notosanskr_bold_hestia"
+                android:minWidth="0dp"
+                android:minHeight="5dp"
+                android:background="@color/transparent"/>
+            <View
+                android:id="@+id/reservation_detail_basic_view"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="5dp"
+                app:layout_constraintTop_toBottomOf="@id/reservation_detail_basic_btn"
+                app:layout_constraintLeft_toLeftOf="@id/reservation_detail_basic_btn"
+                app:layout_constraintRight_toRightOf="@id/reservation_detail_basic_btn"
+                android:background="@color/black"
+                android:visibility="gone"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="예약내역"
-            android:textSize="16sp"
-            android:textColor="@color/black_20"
-            android:fontFamily="@font/notosanskr_bold_hestia"
-            android:minWidth="5dp"
-            android:minHeight="5dp"
-            android:background="@color/transparent"/>
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/reservation_detail_log_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:text="예약내역"
+                android:textSize="16sp"
+                android:textColor="@color/black_20"
+                android:fontFamily="@font/notosanskr_bold_hestia"
+                android:minWidth="0dp"
+                android:minHeight="5dp"
+                android:background="@color/transparent"/>
+            <View
+                android:id="@+id/reservation_detail_log_view"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="5dp"
+                app:layout_constraintTop_toBottomOf="@id/reservation_detail_log_btn"
+                app:layout_constraintLeft_toLeftOf="@id/reservation_detail_log_btn"
+                app:layout_constraintRight_toRightOf="@id/reservation_detail_log_btn"
+                android:background="@color/black"
+                android:visibility="gone" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/reservation_log_viewpager"

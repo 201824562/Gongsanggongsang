@@ -40,7 +40,8 @@ class ReservationFacilityFragment : BaseSessionFragment<FragmentReservationChild
         }
         viewmodel.getReservationFacilityLogList().observe(viewLifecycleOwner){
             facilityLogList = it
-            facilityLogList.forEach { logData -> facilityDataBundleList = facilityDataBundleList.map { bundleData -> checkUsingFacilityData(logData, bundleData) } }
+            if (facilityLogList.isEmpty()) { facilityDataBundleList = facilityDataBundleList.map { bundleData -> checkUsingFacilityData(null, bundleData) } }
+            else { facilityLogList.forEach { logData -> facilityDataBundleList = facilityDataBundleList.map { bundleData -> checkUsingFacilityData(logData, bundleData) } } }
             showRVView(facilityDataBundleList)
         }
     }
@@ -77,13 +78,19 @@ class ReservationFacilityFragment : BaseSessionFragment<FragmentReservationChild
         return ReservationFacilityBundle(false, settingData.name, null, settingData)
     }
 
-    private fun checkFacilitySettingData(logData : ReservationFacilityLog, settingData : ReservationFacilitySettingData) : ReservationFacilityBundle{
-        return if (logData.name == settingData.name) ReservationFacilityBundle(true, logData.name, logData, null)
-        else ReservationFacilityBundle(false, settingData.name, null, settingData)
+    private fun checkFacilitySettingData(logData : ReservationFacilityLog?, settingData : ReservationFacilitySettingData) : ReservationFacilityBundle{
+        return when {
+            logData == null -> ReservationFacilityBundle(false, settingData.name, null, settingData)
+            logData.name == settingData.name -> ReservationFacilityBundle(true, logData.name, logData, settingData)
+            else -> ReservationFacilityBundle(false, settingData.name, null, settingData)
+        }
     }
 
-    private fun checkUsingFacilityData(logData : ReservationFacilityLog, bundleData : ReservationFacilityBundle) : ReservationFacilityBundle{
-        return if (logData.name == bundleData.name) ReservationFacilityBundle(true, logData.name, logData, null)
-        else bundleData
+    private fun checkUsingFacilityData(logData : ReservationFacilityLog?, bundleData : ReservationFacilityBundle) : ReservationFacilityBundle{
+        return when {
+            logData == null -> ReservationFacilityBundle(false, bundleData.name, null,  bundleData.settingData)
+            logData.name == bundleData.name -> ReservationFacilityBundle(true, logData.name, logData, bundleData.settingData)
+            else -> ReservationFacilityBundle(false, bundleData.name, null, bundleData.settingData)
+        }
     }
 }
