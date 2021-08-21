@@ -11,5 +11,6 @@ data class ReservationFacility(
     val category_icon: Long,
     var max_time: Long,
     var interval_time: Long,
+    var usable: Boolean,
     val unableTimeList: List<UnableTimeList>
 ) : Parcelable

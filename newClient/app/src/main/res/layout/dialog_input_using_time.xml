@@ -3,23 +3,31 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:background="@drawable/view_12dp_white"
+    style="@style/Widget.AppCompat.Button.Borderless">
 
     <TextView
         android:id="@+id/title_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="사용시간입력"
-        android:textSize="30sp"
+        android:textSize="16sp"
+        android:textColor="@color/black_87"
+        android:fontFamily="@font/notosanskr_bold_hestia"
+        android:layout_marginTop="28dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <Button
         android:id="@+id/back_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="X"
+        android:background="@drawable/btn_close_warmgray"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:padding="3dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginStart="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -27,76 +35,128 @@
         android:id="@+id/document_name_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="18dp"
         android:text="document_name"
-        android:textSize="20sp"
+        android:textSize="14sp"
+        android:textColor="@color/black_87"
+        android:fontFamily="@font/notosanskr_regular_hestia"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title_textview"/>
 
-    <TextView
-        android:id="@+id/using_time_textview"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/using_info_view"
+        android:background="@drawable/button_10dp_rectangle_black5"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="사용시간 입력"
-        android:textSize="18sp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:paddingStart="24dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/document_name_textview"/>
+        app:layout_constraintTop_toBottomOf="@id/document_name_textview">
 
-    <TextView
-        android:id="@+id/using_time_edittext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:hint="0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/using_time_textview" />
+        <TextView
+            android:id="@+id/using_time_textview"
+            android:background="@color/transparent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:text="사용시간 입력"
+            android:textSize="12sp"
+            android:textColor="@color/black_87"
+            android:fontFamily="@font/notosanskr_regular_hestia"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-    <!--android:hint="시간"-->
+        <TextView
+            android:id="@+id/using_time_edittext"
+            android:background="@color/transparent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@color/blue_green"
+            android:hint="0"
+            android:textColorHint="@color/blue_green"
+            android:fontFamily="@font/notosanskr_regular_hestia"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/using_time_textview" />
 
+        <TextView
+            android:id="@+id/bun_textview"
+            android:background="@color/transparent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="분"
+            android:textSize="20sp"
+            android:textColor="@color/blue_green"
+            android:fontFamily="@font/notosanskr_regular_hestia"
+            app:layout_constraintStart_toEndOf="@id/using_time_edittext"
+            app:layout_constraintTop_toBottomOf="@id/using_time_textview" />
 
-    <TextView
-        android:id="@+id/bun_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="분"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toTopOf="@+id/plus_5minite_btn"
-        app:layout_constraintStart_toEndOf="@id/using_time_edittext"
-        app:layout_constraintTop_toBottomOf="@id/using_time_textview" />
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/plus_5minite_btn"
+        android:background="@drawable/button_6dp_stroke_rectangle_white_black20"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:padding="6dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="18dp"
         android:text="+5분"
+        android:textSize="12dp"
+        android:textColor="@color/black_87"
+        android:fontFamily="@font/notosanskr_regular_hestia"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/using_time_edittext"
+        app:layout_constraintTop_toBottomOf="@id/using_info_view"
         app:layout_constraintEnd_toStartOf="@id/plus_10minite_btn"/>
 
     <Button
         android:id="@+id/plus_10minite_btn"
+        android:background="@drawable/button_6dp_stroke_rectangle_white_black20"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:padding="6dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
         android:text="+10분"
+        android:textSize="12dp"
+        android:textColor="@color/black_87"
+        android:fontFamily="@font/notosanskr_regular_hestia"
         app:layout_constraintStart_toEndOf="@+id/plus_5minite_btn"
-        app:layout_constraintTop_toBottomOf="@id/using_time_edittext"
+        app:layout_constraintTop_toBottomOf="@id/using_info_view"
         app:layout_constraintEnd_toStartOf="@id/plus_15minite_btn"/>
 
     <Button
         android:id="@+id/plus_15minite_btn"
+        android:background="@drawable/button_6dp_stroke_rectangle_white_black20"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:padding="6dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="18dp"
         android:text="+15분"
+        android:textSize="12dp"
+        android:textColor="@color/black_87"
+        android:fontFamily="@font/notosanskr_regular_hestia"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/plus_10minite_btn"
-        app:layout_constraintTop_toBottomOf="@id/using_time_edittext" />
+        app:layout_constraintTop_toBottomOf="@id/using_info_view" />
 
     <TextView
         android:id="@+id/useable_time_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="최대이용가능시간 : "
-        android:textSize="18sp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="18dp"
+        android:text="최대 이용 가능 시간 : "
+        android:textSize="12sp"
+        android:textColor="@color/black_87"
+        android:fontFamily="@font/notosanskr_regular_hestia"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/plus_5minite_btn"/>
 
@@ -104,23 +164,35 @@
         android:id="@+id/useable_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="default 50"
-        android:textSize="18sp"
+        android:textSize="12sp"
+        android:textColor="@color/black_87"
+        android:fontFamily="@font/notosanskr_regular_hestia"
         app:layout_constraintStart_toEndOf="@id/useable_time_textview"
         app:layout_constraintTop_toBottomOf="@id/plus_5minite_btn"/>
 
     <Button
         android:id="@+id/use_btn"
+        android:background="@drawable/button_10dp_rectangle_bluegreen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="18dp"
         android:text="사용하기"
-        android:textSize="30sp"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/notosanskr_bold_hestia"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/useable_time_textview" />
 
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="220dp"
+        android:layout_marginTop="12dp"
+        android:padding="0.5dp"
+        android:background="@drawable/button_stroke_rectangle_white_black5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/use_btn"
         android:stretchColumns="*">
@@ -130,68 +202,116 @@
                 android:id="@+id/one_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="55dp"
-                android:text="1"/>
+                android:text="1"
+                android:textSize="18dp"
+                android:textColor="@color/black_87"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:background="@drawable/button_stroke_rectangle_white_black5"/>
             <Button
                 android:id="@+id/two_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="55dp"
-                android:text="2"/>
+                android:text="2"
+                android:textSize="18dp"
+                android:textColor="@color/black_87"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:background="@drawable/button_stroke_rectangle_white_black5"/>
             <Button
                 android:id="@+id/three_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="55dp"
-                android:text="3"/>
+                android:text="3"
+                android:textSize="18dp"
+                android:textColor="@color/black_87"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:background="@drawable/button_stroke_rectangle_white_black5"/>
         </TableRow>
         <TableRow>
             <Button
                 android:id="@+id/four_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="55dp"
-                android:text="4"/>
+                android:text="4"
+                android:textSize="18dp"
+                android:textColor="@color/black_87"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:background="@drawable/button_stroke_rectangle_white_black5"/>
             <Button
                 android:id="@+id/five_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="55dp"
-                android:text="5"/>
+                android:text="5"
+                android:textSize="18dp"
+                android:textColor="@color/black_87"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:background="@drawable/button_stroke_rectangle_white_black5"/>
             <Button
                 android:id="@+id/six_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="55dp"
-                android:text="6"/>
+                android:text="6"
+                android:textSize="18dp"
+                android:textColor="@color/black_87"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:background="@drawable/button_stroke_rectangle_white_black5"/>
         </TableRow>
         <TableRow>
             <Button
                 android:id="@+id/seven_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="55dp"
-                android:text="7"/>
+                android:text="7"
+                android:textSize="18dp"
+                android:textColor="@color/black_87"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:background="@drawable/button_stroke_rectangle_white_black5"/>
             <Button
                 android:id="@+id/eight_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="55dp"
-                android:text="8"/>
+                android:text="8"
+                android:textSize="18dp"
+                android:textColor="@color/black_87"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:background="@drawable/button_stroke_rectangle_white_black5"/>
             <Button
                 android:id="@+id/nine_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="55dp"
-                android:text="9"/>
+                android:text="9"
+                android:textSize="18dp"
+                android:textColor="@color/black_87"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:background="@drawable/button_stroke_rectangle_white_black5"/>
         </TableRow>
         <TableRow>
             <Button
                 android:id="@+id/max_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="55dp"
-                android:text="최대"/>
+                android:text="최대"
+                android:textSize="18dp"
+                android:textColor="@color/black_87"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:background="@drawable/button_stroke_rectangle_white_black5"/>
             <Button
                 android:id="@+id/zero_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="55dp"
-                android:text="0"/>
+                android:text="0"
+                android:textSize="18dp"
+                android:textColor="@color/black_87"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:background="@drawable/button_stroke_rectangle_white_black5"/>
             <Button
                 android:id="@+id/delete_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="55dp"
-                android:text="삭제"/>
+                android:text="삭제"
+                android:textSize="18dp"
+                android:textColor="@color/black_87"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:background="@drawable/button_stroke_rectangle_white_black5"/>
         </TableRow>
     </TableLayout>
 
