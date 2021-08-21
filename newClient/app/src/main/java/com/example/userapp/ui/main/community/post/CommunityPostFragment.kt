@@ -1,5 +1,6 @@
 package com.example.userapp.ui.main.community.post
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,25 +17,28 @@ import com.example.userapp.base.BaseFragment
 import com.example.userapp.data.entity.PostCommentDataClass
 import com.example.userapp.databinding.FragmentCommunityPostBinding
 import com.example.userapp.ui.main.community.CommunityViewModel
-import com.example.userapp.ui.main.community.write.CommunityAttachPhotoRecyclerAdapter
+import com.example.userapp.ui.main.community.write.CommunityAttachPostPhotoRecyclerAdapter
+import com.example.userapp.utils.WrapedDialogBasicTwoButton
 import java.time.LocalDate
 import java.time.LocalTime
 
 
 class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, CommunityViewModel>(){
+    override lateinit var viewbinding: FragmentCommunityPostBinding
+    override val viewmodel: CommunityViewModel by viewModels()
+
     private lateinit var collectionName : String
     private lateinit var documentName : String
     private lateinit var bundle: Bundle
+
+    private lateinit var attachPostPhotoRecyclerAdapter: CommunityAttachPostPhotoRecyclerAdapter
+    private var remoteGetPhotoUri : ArrayList<String> = arrayListOf()
+
+    private lateinit var commentRecyclerAdapter: CommunityCommentRecyclerAdapter
     private var postCommentsArray : ArrayList<PostCommentDataClass> = arrayListOf()
-    override lateinit var viewbinding: FragmentCommunityPostBinding
-    override val viewmodel: CommunityViewModel by viewModels()
-    private lateinit var adapter: CommunityCommentRecyclerAdapter
-    private lateinit var getPhotoUri : ArrayList<String>
-    private lateinit var currentPostId : String
-    private lateinit var currentPostComment : ArrayList<String>
+
     private var localUserName = ""
-    var agency = ""
-    var test : ArrayList<String> = arrayListOf()
+    private var agency = ""
 
     override fun initViewbinding(
         inflater: LayoutInflater,
@@ -45,71 +49,71 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
         return viewbinding.root
     }
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun initViewStart(savedInstanceState: Bundle?) {
         val ac = activity as MainActivity
         agency = ac.getUserData()!!.agency
         localUserName = ac.getUserData()!!.nickname
+
         collectionName= arguments?.getString("collection_name").toString()
         documentName = arguments?.getString("document_name").toString()
         bundle = bundleOf(
             "collection_name" to collectionName,
             "document_name" to documentName
         )
-        when(collectionName){
-            "1_free" -> viewbinding.postToolbarName.text = "자유게시판"
-            "2_emergency" -> viewbinding.postToolbarName.text = "긴급게시판"
-            "3_suggest" -> viewbinding.postToolbarName.text = "건의게시판"
-            "4_with" -> viewbinding.postToolbarName.text = "함께게시판"
-            "5_market" -> viewbinding.postToolbarName.text = "장터게시판"
-        }
-        viewmodel.getDocumentPostData(agency, collectionName, documentName).observe(viewLifecycleOwner) { it
-            currentPostId = it.post_id
-            currentPostComment = it.post_comments
-            if(it.post_name == localUserName){
-                viewbinding.postRemoveButton.visibility = View.VISIBLE
-                viewbinding.postModifyButton.visibility = View.VISIBLE
+        initCommentRecyclerView()
+        initPhotoRecyclerView()
+        viewbinding.run {
+            when(collectionName){
+                "1_free" -> postToolbarName.text = "자유게시판"
+                "2_emergency" -> postToolbarName.text = "긴급게시판"
+                "3_suggest" -> postToolbarName.text = "건의게시판"
+                "4_with" -> postToolbarName.text = "함께게시판"
+                "5_market" -> postToolbarName.text = "장터게시판"
             }
-            if(collectionName == "4_with" && localUserName == it.post_name && it.post_state == "모집 중"){
-                viewbinding.postWithComplete.visibility = View.VISIBLE
-            }
-            if(it.post_state != "none"){
-                viewbinding.postCategory.text = it.post_state
-            }
-            if(it.post_anonymous){
-                viewbinding.communityPostName.text = "익명"
-            }
-            else{
-                viewbinding.communityPostName.text = it.post_name
-            }
-            val postDateNow: String = LocalDate.now().toString()
-            val postTimeNow: String = LocalTime.now().toString()
-            if(it.post_date == postDateNow){
-                val hour = postTimeNow.substring(0,2).toInt() - it.post_time.substring(0,2).toInt()
-                val minute = postTimeNow.substring(3,5).toInt() - it.post_time.substring(3,5).toInt()
-                if(hour == 0){
-                    viewbinding.communityPostTime.text = "${minute}분 전"
+            viewmodel.getPostData(agency, collectionName, documentName).observe(viewLifecycleOwner) {
+                if(it.post_name == localUserName){
+                    postRemoveButton.visibility = View.VISIBLE
+                }
+                if(collectionName == "4_with" && localUserName == it.post_name && it.post_state == "모집 중"){
+                    postWithComplete.visibility = View.VISIBLE
+                }
+                if(it.post_state != "none"){
+                    postCategory.text = it.post_state
+                }
+                val postDateNow: String = LocalDate.now().toString()
+                val postTimeNow: String = LocalTime.now().toString()
+                if(it.post_date == postDateNow){
+                    val hour = postTimeNow.substring(0,2).toInt() - it.post_time.substring(0,2).toInt()
+                    val minute = postTimeNow.substring(3,5).toInt() - it.post_time.substring(3,5).toInt()
+                    if(hour == 0){
+                        communityPostTime.text = "${minute}분 전"
+                    }
+                    else{
+                        communityPostTime.text = "${hour}시간 전"
+                    }
                 }
                 else{
-                    viewbinding.communityPostTime.text = "${hour}시간 전"
+                    communityPostTime.text = it.post_date.substring(5)
+                }
+
+                communityPostName.text = it.post_name
+                postContents.text = it.post_contents
+                postTitle.text = it.post_title
+
+                viewmodel.getPostPhotoData(it.post_photo_uri).observe(viewLifecycleOwner){ it
+                    remoteGetPhotoUri = it
+                    initPhotoRecyclerView()
+                    attachPostPhotoRecyclerAdapter.notifyDataSetChanged()
                 }
             }
-            else{
-                viewbinding.communityPostTime.text = it.post_date.substring(5)
-            }
-            viewbinding.communityPostCommentsNumber.text = it.post_comments.size.toString()
-            viewbinding.postContents.text = it.post_contents
-            viewbinding.postTitle.text = it.post_title
-            getPhotoUri = it.post_photo_uri
-            viewmodel.getPostPhotoData(it.post_photo_uri).observe(viewLifecycleOwner){ it
-                initPhotoRecyclerView(it)
-                getPhotoUri.clear()
+            viewmodel.getPostCommentData(agency, collectionName, documentName).observe(viewLifecycleOwner){
+                postCommentsArray = it
+                initCommentRecyclerView()
+                commentRecyclerAdapter.notifyDataSetChanged()
             }
         }
-        viewmodel.getDocumentCommentData(agency, collectionName, documentName).observe(viewLifecycleOwner){
-            initCommentRecyclerView(it)
-        }
-
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
@@ -122,57 +126,104 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
             commentsRegister.setOnClickListener{
                 val postDateNow: String = LocalDate.now().toString()
                 val postTimeNow : String = LocalTime.now().toString()
-                var commentAnonymous = false
-                var commentAnonymousName = ""
                 val postComment = PostCommentDataClass(
                     localUserName,
                     commentContents = writeComment.text.toString(),
                     commentDate = postDateNow,
                     commentTime = postTimeNow,
-                    commentAnonymous = commentAnonymous,
-                    postDateNow + postTimeNow + localUserName,
+                    commentAnonymous = false,
+                    commentId = postDateNow + postTimeNow + localUserName,
                 )
-                viewmodel.insertPostCommentData(agency, collectionName, documentName, postComment)
-                currentPostComment.add("1")
-                viewmodel.modifyPostPartData(agency, collectionName, documentName, "post_comments", currentPostComment)
-                postCommentsArray.add(postComment)
-                adapter = CommunityCommentRecyclerAdapter(postCommentsArray)
-                adapter.notifyDataSetChanged()
+                viewmodel.insertPostCommentData(agency, collectionName, documentName, postComment).observe(viewLifecycleOwner){
+                    if(it){
+                        viewmodel.getPostCommentData(agency, collectionName, documentName).observe(viewLifecycleOwner){
+                            postCommentsArray = it
+                            commentRecyclerAdapter.notifyDataSetChanged()
+                            initCommentRecyclerView()
+                            communityPostCommentsNumber.text = it.size.toString()
+                            viewmodel.modifyPostPartData(agency, collectionName, documentName, "post_comments", it.size)
+                        }
+                    }
+                }
             }
             postRemoveButton.setOnClickListener{
-                viewmodel.deletePostData(agency, collectionName, documentName)
-                findNavController().navigate(R.id.action_communityPost_to_communityPreview, bundle)
+                makeDialog("정말로 글을 삭제할까요?", "isPost", PostCommentDataClass())
             }
-            postModifyButton.setOnClickListener{
-                val bundleModify = bundleOf(
-                    "modify" to "modify",
-                    "postId" to documentName
-                )
-                when(collectionName){
-                    "1_free" -> findNavController().navigate(R.id.action_communityPost_to_communityFreeWrite, bundleModify)
-                    "2_emergency" -> findNavController().navigate(R.id.action_communityPost_to_communityEmergencyWrite, bundleModify)
-                    "3_suggest" -> findNavController().navigate(R.id.action_communityPost_to_communitySuggestWrite, bundleModify)
-                    "4_with" -> findNavController().navigate(R.id.action_communityPost_to_communityWithWrite, bundleModify)
-                    "5_market" -> findNavController().navigate(R.id.action_communityPost_to_communityMarketWrite, bundleModify)
+            postWithCompleteButton.setOnClickListener {
+                viewmodel.modifyPostPartData(agency, collectionName, documentName, "post_state", "모집 완료").observe(viewLifecycleOwner){
+                    if(it){
+                        postWithComplete.visibility = View.GONE
+                        postCategory.text = "모집 완료"
+                    }
                 }
             }
         }
     }
-    private fun initCommentRecyclerView(post_comments: ArrayList<PostCommentDataClass>){
+    private fun initCommentRecyclerView(){
         viewbinding.postCommentRecyclerView.run {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
-            adapter = CommunityCommentRecyclerAdapter(post_comments)
+            adapter = CommunityCommentRecyclerAdapter(postCommentsArray, localUserName)
         }
+        commentRecyclerAdapter = CommunityCommentRecyclerAdapter(postCommentsArray, localUserName)
+        viewbinding.postCommentRecyclerView.adapter = commentRecyclerAdapter.apply {
+            listener = object : CommunityCommentRecyclerAdapter.OnCommunityCommentItemClickListener{
+                override fun onCommentItemClick(position: Int) {
+                    makeDialog("정말로 댓글을 삭제할까요?", "isComment", getItem(position))
+                }
+            }
+        }
+        commentRecyclerAdapter.notifyDataSetChanged()
     }
 
-    private fun initPhotoRecyclerView(photo_uri : ArrayList<String>){
+    private fun initPhotoRecyclerView(){
         viewbinding.postPhotoRecycler.run {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context).also { it.orientation = LinearLayoutManager.HORIZONTAL }
-            adapter = CommunityAttachPhotoRecyclerAdapter(photo_uri)
+            adapter = CommunityAttachPostPhotoRecyclerAdapter(remoteGetPhotoUri)
+        }
+        attachPostPhotoRecyclerAdapter = CommunityAttachPostPhotoRecyclerAdapter(remoteGetPhotoUri)
+        viewbinding.postPhotoRecycler.adapter = attachPostPhotoRecyclerAdapter.apply {
+            listener = object :
+                    CommunityAttachPostPhotoRecyclerAdapter.OnCommunityPhotoItemClickListener {
+                    override fun onPhotoItemClick(position: Int) {
+                        var bundle = bundleOf(
+                            "photo_uri" to remoteGetPhotoUri.toTypedArray(),
+                        )
+                        findNavController().navigate(R.id.action_communityPost_to_communityPhoto, bundle)
+                    }
+                }
         }
     }
+    private fun makeDialog(msg : String, isPostOrComment : String, commentData : PostCommentDataClass){
 
+        val dialog = WrapedDialogBasicTwoButton(requireContext(), msg, "취소", "확인").apply {
+            clickListener = object : WrapedDialogBasicTwoButton.DialogButtonClickListener{
+                override fun dialogCloseClickListener() {
+                    dismiss()
+                }
+                override fun dialogCustomClickListener() {
+                    when(isPostOrComment){
+                        "isPost" -> viewmodel.deletePostData(agency, collectionName, documentName).observe(viewLifecycleOwner){
+                            if(it){
+                                findNavController().navigate(R.id.action_community_post_pop, bundle)
+                            }
+                        }
+                        "isComment" -> viewmodel.deletePostCommentData(agency, collectionName, documentName, commentData).observe(viewLifecycleOwner){
+                            if(it){
+                                viewmodel.getPostCommentData(agency, collectionName, documentName).observe(viewLifecycleOwner){
+                                    postCommentsArray = it
+                                    viewmodel.modifyPostPartData(agency, collectionName, documentName, "post_comments", it.size)
+                                    commentRecyclerAdapter.notifyDataSetChanged()
+                                }
+                                dismiss()
+                            }
+                        }
+                    }
 
+                }
+            }
+        }
+        showDialog(dialog, viewLifecycleOwner)
+    }
 }

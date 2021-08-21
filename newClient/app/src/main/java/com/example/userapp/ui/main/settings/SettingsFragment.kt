@@ -2,6 +2,7 @@ package com.example.userapp.ui.main.settings
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.UserManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +12,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.data.dto.UserModel
 import com.example.userapp.databinding.FragmentSettingsBinding
+import com.example.userapp.restartActivity
 import com.example.userapp.utils.MatchedDialogAccentTwoButton
 import com.example.userapp.utils.WrapedDialogBasicTwoButton
 import java.io.IOException
@@ -30,14 +33,17 @@ class SettingsFragment : BaseSessionFragment<FragmentSettingsBinding, SettingsVi
         return viewbinding.root
     }
 
-    override fun initViewStart(savedInstanceState: Bundle?) { showProfile() }
+    override fun initViewStart(savedInstanceState: Bundle?) {  }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
+        viewmodel.onSuccessGettingUserInfo.observe(this, { showProfile(it)  })
+        viewmodel.onSuccessGettingNullUserInfo.observe(this, { restartActivity() })
         viewmodel.onSuccessDeleteUserInfoFromServer.observe(viewLifecycleOwner){ viewmodel.deleteUserInfoFromAppDatabase() }
         viewmodel.onSuccessDeleteUserInfoFromApp.observe(viewLifecycleOwner){ logout() }
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
+        viewmodel.getUserInfo()
         viewbinding.run {
             // changeInfoBtn.setOnClickListener { findNavController().navigate(R.id.action_mainFragment_to_settingsChangeInfoFragment) }
             changePwdBtn.setOnClickListener { findNavController().navigate(R.id.action_mainFragment_to_settingsChangePwdFragment) }
@@ -46,16 +52,15 @@ class SettingsFragment : BaseSessionFragment<FragmentSettingsBinding, SettingsVi
         }
     }
 
-    private fun showProfile(){
-        (activity as MainActivity).getUserData().let {
-            viewbinding.run {
-                userNickname.text = it.nickname
-                userName.text = it.name
-                userAgency.text = it.agency
-                userBirth.text = showBirthText(it.birth)
-                userSms.text = showSmsText(it.phone) }
-        }
+    private fun showProfile(userInfo : UserModel){
+        viewbinding.run {
+            userNickname.text = userInfo.nickname
+            userName.text = userInfo.name
+            userAgency.text = userInfo.agency
+            userBirth.text = showBirthText(userInfo.birth)
+            userSms.text = showSmsText(userInfo.phone) }
     }
+
     private fun showBirthText(birth : String): String {
         var birthText : String = ""
         birthText += birth.subSequence(0 until 4)

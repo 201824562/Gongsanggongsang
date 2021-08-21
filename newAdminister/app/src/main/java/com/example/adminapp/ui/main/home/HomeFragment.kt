@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.adminapp.MainActivity
 import com.example.adminapp.R
 import com.example.adminapp.base.BaseFragment
 import com.example.adminapp.databinding.FragmentMainhomeHomeBinding
@@ -14,7 +15,7 @@ import com.example.adminapp.ui.main.community.CommunityViewModel
 class HomeFragment : BaseFragment<FragmentMainhomeHomeBinding, CommunityViewModel>(){
     override lateinit var viewbinding: FragmentMainhomeHomeBinding
     override val viewmodel: CommunityViewModel by viewModels()
-
+    var agency = ""
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -25,7 +26,10 @@ class HomeFragment : BaseFragment<FragmentMainhomeHomeBinding, CommunityViewMode
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-
+        val ac = activity as MainActivity
+        ac.getAdminData()?.let {
+            agency = it.agency
+        }
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
@@ -36,24 +40,27 @@ class HomeFragment : BaseFragment<FragmentMainhomeHomeBinding, CommunityViewMode
             mainHomeNoticeAllButton.setOnClickListener {
                 findNavController().navigate(R.id.action_mainFragment_to_mainhomeNoticeFragment)
             }
-            viewmodel.getCollectionPostData("notice").observe(viewLifecycleOwner){
-                if(it.size >= 3){
-                    mainHomeNotice1Title.setText(it[0].post_title)
-                    mainHomeNotice1Date.setText(it[0].post_date)
-                    mainHomeNotice2Title.setText(it[1].post_title)
-                    mainHomeNotice2Date.setText(it[1].post_date)
-                    mainHomeNotice3Title.setText(it[2].post_title)
-                    mainHomeNotice3Date.setText(it[2].post_date)
-                }
-                else if(it.size == 2){
-                    mainHomeNotice1Title.setText(it[0].post_title)
-                    mainHomeNotice1Date.setText(it[0].post_date)
-                    mainHomeNotice2Title.setText(it[1].post_title)
-                    mainHomeNotice2Date.setText(it[1].post_date)
-                }
-                else if(it.size == 1){
-                    mainHomeNotice1Title.setText(it[0].post_title)
-                    mainHomeNotice1Date.setText(it[0].post_date)
+
+            viewmodel.getNoticePostData(agency).observe(viewLifecycleOwner){
+                when {
+                    it.size >= 3 -> {
+                        mainHomeNotice1Title.text = it[0].post_title
+                        mainHomeNotice1Date.text = it[0].post_date
+                        mainHomeNotice2Title.text = it[1].post_title
+                        mainHomeNotice2Date.text = it[1].post_date
+                        mainHomeNotice3Title.text = it[2].post_title
+                        mainHomeNotice3Date.text = it[2].post_date
+                    }
+                    it.size == 2 -> {
+                        mainHomeNotice1Title.text = it[0].post_title
+                        mainHomeNotice1Date.text = it[0].post_date
+                        mainHomeNotice2Title.text = it[1].post_title
+                        mainHomeNotice2Date.text = it[1].post_date
+                    }
+                    it.size == 1 -> {
+                        mainHomeNotice1Title.text = it[0].post_title
+                        mainHomeNotice1Date.text = it[0].post_date
+                    }
                 }
             }
         }

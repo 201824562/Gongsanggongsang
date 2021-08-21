@@ -16,7 +16,7 @@ import java.time.LocalTime
 
 
 class CommunityPreviewRecyclerAdapter(var postDataList : ArrayList<PostDataInfo>): RecyclerView.Adapter<CommunityPreviewRecyclerAdapter.CommunityPreviewViewHolder>() {
-    val viewmodel : CommunityViewModel = CommunityViewModel()
+
     interface OnCommunityMarketItemClickListener{
         fun onPreviewItemClick(position: Int)
     }
@@ -54,7 +54,7 @@ class CommunityPreviewRecyclerAdapter(var postDataList : ArrayList<PostDataInfo>
             else{
                 binding.communityPreviewName.text = postDataInfo.post_name
             }
-            binding.communityPreviewCommentsNumber.text = postDataInfo.post_comments.size.toString()
+            binding.communityPreviewCommentsNumber.text = postDataInfo.post_comments.toString()
             binding.communityPreviewTitle.text = postDataInfo.post_title
             binding.communityPreviewContents.text = postDataInfo.post_contents
             binding.communityPreviewPhotoNumber.text = postDataInfo.post_photo_uri.size.toString()

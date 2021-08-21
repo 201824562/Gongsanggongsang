@@ -13,7 +13,6 @@ class ReservationUnableTimeRVAdapter (val  listener : OnItemClickListener): List
     AddressDiffCallback
 ) {
 
-
     companion object {
         val AddressDiffCallback = object : DiffUtil.ItemCallback<ReservationUnableTimeItem>() {
             override fun areItemsTheSame(oldData: ReservationUnableTimeItem, newData: ReservationUnableTimeItem): Boolean {

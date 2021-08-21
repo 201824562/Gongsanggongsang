@@ -18,8 +18,7 @@ class ReservationEditFragment : BaseSessionFragment<FragmentReservationEditBindi
 
     companion object{
         const val TAB_INDEX_EQUIPMENT: Int = 0
-        const val TAB_INDEX_FACILITY: Int = 1
-    }
+        const val TAB_INDEX_FACILITY: Int = 1 }
 
     override lateinit var viewbinding: FragmentReservationEditBinding
     override val viewmodel: ReservationEditViewModel by viewModels()
@@ -31,42 +30,38 @@ class ReservationEditFragment : BaseSessionFragment<FragmentReservationEditBindi
         return viewbinding.root
     }
 
-    override fun initViewStart(savedInstanceState: Bundle?) {
-        viewbinding.backBtn.setOnClickListener { findNavController().navigate(R.id.action_reservationEditFragment_pop) }
-        initViewPager()
-    }
+    override fun initViewStart(savedInstanceState: Bundle?) {   initViewPager()
+        viewbinding.backBtn.setOnClickListener { findNavController().navigate(R.id.action_reservationEditFragment_pop) } }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
-        viewmodel.selectedTabPositionData.observe(viewLifecycleOwner){
+/*        viewmodel.selectedTabPositionData.observe(viewLifecycleOwner){
             when(it){
                 0 -> viewbinding.editViewpager.setCurrentItem(TAB_INDEX_EQUIPMENT, true)
                 1 -> viewbinding.editViewpager.setCurrentItem(TAB_INDEX_FACILITY, true)
                 else -> throw IllegalStateException("에러가 발생했습니다. 다시 시도해주세요.")
             }
-        }
+        }*/
     }
 
-    override fun initViewFinal(savedInstanceState: Bundle?) {
+    override fun initViewFinal(savedInstanceState: Bundle?) { }
 
-    }
     private fun initViewPager() {
         viewbinding.run {
             reservationEditViewPagerAdapter = ReservationEditViewPagerAdapter(requireActivity())
             viewbinding.editViewpager.adapter = reservationEditViewPagerAdapter
-            if(viewmodel.selectedTabPosition!=null) viewbinding.editTab.getTabAt(viewmodel.selectedTabPosition!!)?.select()
-            viewbinding.editTab.addOnTabSelectedListener(object :
-                TabLayout.OnTabSelectedListener {
+            //if(viewmodel.selectedTabPosition!=null) viewbinding.editTab.getTabAt(viewmodel.selectedTabPosition!!)?.select()
+            TabLayoutMediator(editTab, editViewpager){ tab, position ->
+                val tabTextList = arrayListOf("사용중", "바로 사용", "예약 사용", "사용 기록")
+                tab.text = tabTextList[position] }.attach()
+
+            /*editTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     when(tab?.position) {
-                        TAB_INDEX_EQUIPMENT -> viewmodel.saveTabPosition(0)
-                        TAB_INDEX_FACILITY -> viewmodel.saveTabPosition(1)
-                        else -> throw IllegalStateException("에러가 발생했습니다. 다시 시도해주세요.")
-                    }
-                }
+                        TAB_INDEX_EQUIPMENT -> viewbinding.editViewpager.currentItem = TAB_INDEX_EQUIPMENT
+                        TAB_INDEX_FACILITY -> viewbinding.editViewpager.currentItem = TAB_INDEX_FACILITY
+                        else -> throw IllegalStateException("에러가 발생했습니다. 다시 시도해주세요.") } }
                 override fun onTabUnselected(tab: TabLayout.Tab?) {}
-
-                override fun onTabReselected(tab: TabLayout.Tab?) {}
-            })
+                override fun onTabReselected(tab: TabLayout.Tab?) {} })*/
 
         }
     }

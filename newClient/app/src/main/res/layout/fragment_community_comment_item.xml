@@ -3,31 +3,29 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <ImageView
         android:id="@+id/comment_self_image"
         android:layout_width="44dp"
         android:layout_height="44dp"
-        android:src="@drawable/ic_basic_profile_photo"
+        android:src="@drawable/ic_icon_basic_profile_photo"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/comment_self_image"
+        app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="6dp"
         android:orientation="vertical">
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
-                android:text="name"
                 android:id="@+id/community_comment_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -35,20 +33,41 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 android:layout_marginLeft="12dp"
                 android:textColor="@color/black"
+                android:gravity="center"
+                android:layout_gravity="center"
                 android:textSize="14sp"
                 android:textStyle="normal"
                 android:letterSpacing="-0.01"/>
             <TextView
-                android:text="date"
                 android:id="@+id/community_comment_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
+                android:gravity="center"
+                android:layout_gravity="center"
                 android:textStyle="normal"
                 android:textSize="12sp"
                 android:textColor="#7f000000"
                 android:letterSpacing="-0.03"
                 android:lineSpacingExtra="12sp"/>
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
+            <Button
+                android:id="@+id/commentDeleteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:text="삭제"
+                android:layout_gravity="end"
+                android:minHeight="0dp"
+                android:paddingVertical="3dp"
+                android:gravity="right|center"
+                android:textStyle="normal"
+                android:textSize="12sp"
+                android:textColor="#7f000000"
+                android:lineSpacingExtra="6sp"/>
         </LinearLayout>
         <TextView
             android:id="@+id/community_comment_post"
@@ -63,6 +82,7 @@
             android:layout_marginLeft="12dp"
             android:layout_marginBottom="10dp"/>
     </LinearLayout>
+
     <View
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="match_parent"

@@ -27,7 +27,7 @@ class ReservationEditDetailViewModel(application: Application) : BaseSessionView
         when (data.type){
             ReservationType.EQUIPMENT -> {
                 apiCall(reservationRepository.updateEquipmentReservationData(agencyInfo, ReservationEquipmentItem
-                (ReservationEquipmentSettingData(data.data.icon, data.data.name, data.data.maxTime), ReservationEquipmentData(data.data.icon, data.data.name)),
+                (ReservationEquipmentSettingData(data.data.icon, data.data.name, data.data.maxTime), ReservationEquipmentData(data.data.icon, data.data.name, maxTime = data.data.maxTime)),
                 nameChanged, oldName), { _onSuccessUpdateReservationItem.call() }) }
             ReservationType.FACILITY ->{
                 apiCall(reservationRepository.updateFacilityReservationData(timeSetChanged, agencyInfo, ReservationFacilityItem

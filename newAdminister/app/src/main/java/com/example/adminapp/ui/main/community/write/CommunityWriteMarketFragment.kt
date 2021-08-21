@@ -38,7 +38,9 @@ class CommunityWriteMarketFragment : BaseFragment<FragmentCommunityWriteMarketBi
     private var getLocalPhotoUri : ArrayList<String> = arrayListOf()
     private val bitmapArray : ArrayList<Bitmap> = arrayListOf()
     private val uriArray : ArrayList<Uri> = arrayListOf()
-
+    private lateinit var userName : String
+    private lateinit var userAgency : String
+    private lateinit var attachPostPhotoRecyclerAdapter : CommunityAttachPhotoRecyclerAdapter
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -52,11 +54,26 @@ class CommunityWriteMarketFragment : BaseFragment<FragmentCommunityWriteMarketBi
     override fun initViewStart(savedInstanceState: Bundle?) {
         val ac = activity as MainActivity
         getLocalPhotoUri = ac.getPhoto()
+        userAgency  = ac.getAdminData()!!.agency
+        userName  = ac.getAdminData()!!.name
         viewbinding.marketWritePhotoRecycler.visibility = View.VISIBLE
         viewbinding.marketWritePhotoRecycler.run {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context).also { it.orientation = LinearLayoutManager.HORIZONTAL }
             adapter = CommunityAttachPhotoRecyclerAdapter(getLocalPhotoUri)
+        }
+        attachPostPhotoRecyclerAdapter = CommunityAttachPhotoRecyclerAdapter(getLocalPhotoUri)
+        viewbinding.marketWritePhotoRecycler.adapter = attachPostPhotoRecyclerAdapter.apply {
+            listener =
+                object :
+                    CommunityAttachPhotoRecyclerAdapter.OnCommunityPhotoItemClickListener {
+                    override fun onPhotoItemClick(position: Int) {
+                        var bundle = bundleOf(
+                            "photo_uri" to getLocalPhotoUri.toTypedArray(),
+                        )
+                        findNavController().navigate(R.id.action_communityWriteMarket_to_communityPhoto, bundle)
+                    }
+                }
         }
         getBitmap()
     }
@@ -71,23 +88,36 @@ class CommunityWriteMarketFragment : BaseFragment<FragmentCommunityWriteMarketBi
                 getPhotoPermission()
             }
             marketWriteRegisterButton.setOnClickListener {
-                val postDateNow: String = LocalDate.now().toString()
-                val postTimeNow : String = LocalTime.now().toString()
-                marketPostData = PostDataInfo(
-                    collection_name,
-                    "juyong",
-                    post_title = marketWriteTitle.text.toString(),
-                    post_contents = marketWriteContent.text.toString(),
-                    post_date = postDateNow,
-                    post_time = postTimeNow,
-                    post_comments = arrayListOf(),
-                    post_id = postDateNow + postTimeNow + "juyong",
-                    post_photo_uri = getLocalPhotoUri,
-                    post_state = marketWritePrice.text.toString(),
-                    post_anonymous = false
-                )
-                viewmodel.insertPostData(marketPostData)
-                findNavController().navigate(R.id.action_communityWriteMarket_to_communityPreview)
+                if(marketWriteTitle.text.toString() == "" && marketWriteContent.text.toString() == ""){
+                    showToast("빈 칸을 채워주세요.")
+                }
+                else{
+                    val postDateNow: String = LocalDate.now().toString()
+                    val postTimeNow : String = LocalTime.now().toString()
+                    var postAnonymous : Boolean = false
+                    marketPostData = PostDataInfo(
+                        collection_name,
+                        userName,
+                        post_title = marketWriteTitle.text.toString(),
+                        post_contents = marketWriteContent.text.toString(),
+                        post_date = postDateNow,
+                        post_time = postTimeNow,
+                        post_comments = 0,
+                        post_id = postDateNow + postTimeNow + userName,
+                        post_photo_uri = getLocalPhotoUri,
+                        post_state = marketWritePrice.text.toString(),
+                        post_anonymous = false
+                    )
+                    bundle = bundleOf(
+                        "collection_name" to collection_name,
+                        "document_name" to marketPostData.post_id
+                    )
+                    viewmodel.insertPostData(userAgency, marketPostData).observe(viewLifecycleOwner){
+                        if(it){
+                            findNavController().navigate(R.id.action_communityWriteMarket_to_communityPostMarket, bundle)
+                        }
+                    }
+                }
             }
         }
     }

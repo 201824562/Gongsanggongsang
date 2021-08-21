@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.InsetDrawable
 import android.os.Build
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
@@ -104,6 +105,24 @@ class MatchedFullDialogBasicOneButton (context: Context, title: String, content:
         binding.dialogContent.text = content
         binding.dialogCloseBtn.setOnClickListener { clickListener?.dialogCloseClickListener()}
         binding.dialogBtn.setOnClickListener { clickListener?.dialogClickListener() }
+    }
+}
+//
+class WrapedCommunityDialogBasicOneButton (context: Context, content: String) : Dialog(context){
+    var clickListener : DialogButtonClickListener ? = null
+    interface DialogButtonClickListener {
+        fun dialogClickListener()
+    }
+    init {
+        val binding: DialogCommunityBasicOneButtonBinding =
+            DialogCommunityBasicOneButtonBinding.inflate(layoutInflater)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        setContentView(binding.root)
+        window?.run {
+            setBackgroundDrawable(InsetDrawable(ColorDrawable(Color.TRANSPARENT), 30))
+            attributes.width = ViewGroup.LayoutParams.MATCH_PARENT
+            attributes.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        } ?: exitProcess(0)
     }
 }
 

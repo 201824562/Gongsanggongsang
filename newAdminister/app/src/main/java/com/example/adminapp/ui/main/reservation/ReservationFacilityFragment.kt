@@ -1,99 +1,96 @@
 package com.example.adminapp.ui.main.reservation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import com.example.adminapp.base.BaseSessionFragment
-import com.example.adminapp.data.model.ReservationData
-import com.example.adminapp.data.model.ReservationFacilitySettingData
-import com.example.adminapp.data.model.ReservationItem
-import com.example.adminapp.data.model.ReservationType
-import com.example.adminapp.databinding.FragmentReservationChildBinding
-import com.example.adminapp.databinding.ItemReservationEditSettingBinding
-import com.example.adminapp.ui.main.reservation.edit.ReservationEditFragmentDirections
+import com.example.adminapp.data.model.*
+import com.example.adminapp.databinding.FragmentReservationChildTypesBinding
+import com.example.adminapp.ui.main.MainFragmentDirections
 
-//TODO : 후후후순위.
-class ReservationFacilityFragment : BaseSessionFragment<FragmentReservationChildBinding, ReservationViewModel>() {
+class ReservationFacilityFragment : BaseSessionFragment<FragmentReservationChildTypesBinding, ReservationViewModel>() {
 
-    override lateinit var viewbinding: FragmentReservationChildBinding
+    override lateinit var viewbinding: FragmentReservationChildTypesBinding
     override val viewmodel: ReservationViewModel by viewModels()
-    private lateinit var reservationFacilitySettingRVAdapter: ReservationFacilitySettingRVAdapter
+    private lateinit var reservationFacilityRVAdapter: ReservationFacilityRVAdapter
+    private var facilityLogList : List<ReservationFacilityLog> = listOf()
+    private var facilityDataBundleList : List<ReservationFacilityBundle> = listOf()
+    private var facilityDataBundle: ReservationFacilityBundle? = null
 
-    override fun initViewbinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        viewbinding = FragmentReservationChildBinding.inflate(inflater, container, false)
+    override fun initViewbinding(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        viewbinding = FragmentReservationChildTypesBinding.inflate(inflater, container, false)
         return viewbinding.root
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
         viewbinding.reservationChildText.text = "예약하기"
-    /*setRecyclerView()*/ }
+        setRecyclerView() }
 
     override fun initDataBinding(savedInstanceState: Bundle?) { }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
-        /*viewmodel.getReservationFacilitySettingDataList().observe(viewLifecycleOwner){
-            reservationFacilitySettingRVAdapter.submitList(it)
-        }*/
+        viewmodel.getReservationFacilitySettingDataList().observe(viewLifecycleOwner){ it ->
+            if (facilityLogList.isNotEmpty()) facilityLogList.forEach { logData -> facilityDataBundleList = it.map { settingData -> checkFacilitySettingData(logData, settingData) }  }
+            else facilityDataBundleList = it.map { settingData ->  makeFacilitySettingDataToBundleData(settingData) }
+            showRVView(facilityDataBundleList)
+        }
+        viewmodel.getReservationFacilityLogList().observe(viewLifecycleOwner){
+            facilityLogList = it
+            if (facilityLogList.isEmpty()) { facilityDataBundleList = facilityDataBundleList.map { bundleData -> checkUsingFacilityData(null, bundleData) } }
+            else { facilityLogList.forEach { logData -> facilityDataBundleList = facilityDataBundleList.map { bundleData -> checkUsingFacilityData(logData, bundleData) } } }
+            showRVView(facilityDataBundleList)
+        }
     }
 
-/*    private fun setRecyclerView() {
-        reservationFacilitySettingRVAdapter = ReservationFacilitySettingRVAdapter(object : ReservationFacilitySettingRVAdapter.OnItemClickListener {
-            override fun onItemClick(position: Int, facilitySettingData: ReservationFacilitySettingData) {
-                val reservationItem = ReservationItem(
-                    ReservationType.FACILITY, ReservationData(facilitySettingData.icon, facilitySettingData.name,
-                    facilitySettingData.intervalTime, facilitySettingData.maxTime), facilitySettingData.unableTimeList)
-                findNavController().navigate(
-                    ReservationEditFragmentDirections
-                        .actionReservationEditFragmentToReservationEditDetailFragment(reservationItem))
+    private fun setRecyclerView() {
+        reservationFacilityRVAdapter = ReservationFacilityRVAdapter(requireContext(), viewmodel, object : ReservationFacilityRVAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int, facilityData: ReservationFacilityBundle) {
+                facilityDataBundle = facilityData
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToReservationDetailFacilityFragment(facilityBundle = facilityDataBundle))
             }
         })
-        viewbinding.reservationEditRv.adapter = reservationFacilitySettingRVAdapter
-    }*/
-}
+        viewbinding.reservationRv.adapter = reservationFacilityRVAdapter
+    }
 
-class ReservationFacilitySettingRVAdapter(private val  listener : OnItemClickListener)
-    : ListAdapter<ReservationFacilitySettingData, ReservationFacilitySettingRVAdapter.ViewHolder>(AddressDiffCallback) {
-
-    companion object {
-        val AddressDiffCallback = object : DiffUtil.ItemCallback<ReservationFacilitySettingData>() {
-            override fun areItemsTheSame(oldItem: ReservationFacilitySettingData, newItem: ReservationFacilitySettingData): Boolean {
-                return (oldItem.name== newItem.name)
-            }
-            override fun areContentsTheSame(oldItem: ReservationFacilitySettingData, newItem: ReservationFacilitySettingData): Boolean {
-                return oldItem == newItem
-            }
+    private fun showRVView(list : List<ReservationFacilityBundle>){
+        if (list.isEmpty()){ showEmptyView() }
+        else showRV(list)
+    }
+    private fun showEmptyView(){
+        viewbinding.apply {
+            reservationChildEmptyView.visibility = View.VISIBLE
+            reservationRv.visibility = View.GONE
+        }
+    }
+    private fun showRV(list : List<ReservationFacilityBundle>){
+        viewbinding.run{
+            reservationChildEmptyView.visibility  = View.GONE
+            reservationRv.visibility = View.VISIBLE
+            reservationFacilityRVAdapter.submitList(list)
         }
     }
 
-    interface OnItemClickListener { fun onItemClick(position: Int, facilitySettingData : ReservationFacilitySettingData) }
-
-    inner class ViewHolder(val binding: ItemReservationEditSettingBinding): RecyclerView.ViewHolder(binding.root)
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(ItemReservationEditSettingBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+    private fun makeFacilitySettingDataToBundleData(settingData : ReservationFacilitySettingData) : ReservationFacilityBundle {
+        return ReservationFacilityBundle(false, settingData.name, null, settingData)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        getItem(position)?.let { item ->
-            holder.binding.reserveEditItemIcon.load(item.icon)
-            holder.binding.reserveEditItemName.text = item.name
-            holder.binding.reserveEditItemIntervalTime.text = item.getIntervalTimeView()
-            holder.binding.reserveEditItemMaxTime.text = item.getMaxTimeView()
-            holder.binding.itemEditSetting.setOnClickListener { listener.onItemClick(position, item) }
-
+    private fun checkFacilitySettingData(logData : ReservationFacilityLog?, settingData : ReservationFacilitySettingData) : ReservationFacilityBundle{
+        return when {
+            logData == null -> ReservationFacilityBundle(false, settingData.name, null, settingData)
+            logData.name == settingData.name -> ReservationFacilityBundle(true, logData.name, logData, settingData)
+            else -> ReservationFacilityBundle(false, settingData.name, null, settingData)
         }
-
     }
 
+    private fun checkUsingFacilityData(logData : ReservationFacilityLog?, bundleData : ReservationFacilityBundle) : ReservationFacilityBundle{
+        return when {
+            logData == null -> ReservationFacilityBundle(false, bundleData.name, null,  bundleData.settingData)
+            logData.name == bundleData.name -> ReservationFacilityBundle(true, logData.name, logData, bundleData.settingData)
+            else -> ReservationFacilityBundle(false, bundleData.name, null, bundleData.settingData)
+        }
+    }
 }

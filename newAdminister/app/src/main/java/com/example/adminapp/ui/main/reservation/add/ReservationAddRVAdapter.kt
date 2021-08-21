@@ -21,7 +21,7 @@ class ReservationAddRVAdapter (val  listener : OnItemClickListener): ListAdapter
     companion object {
         val AddressDiffCallback = object : DiffUtil.ItemCallback<CategoryItem>() {
             override fun areItemsTheSame(oldItem: CategoryItem, newItem: CategoryItem): Boolean {
-                return (oldItem.data?.drawableID== newItem.data?.drawableID) && (oldItem.data?.name == newItem.data?.name)
+                return (oldItem.data?.iconID== newItem.data?.iconID) && (oldItem.data?.name == newItem.data?.name)
             }
             override fun areContentsTheSame(oldItem: CategoryItem, newItem: CategoryItem): Boolean {
                 return oldItem == newItem
@@ -52,7 +52,7 @@ class ReservationAddRVAdapter (val  listener : OnItemClickListener): ListAdapter
                 holder.binding.itemAddView.setOnClickListener { listener.onItemClick(position, null, false) }
             }
             else {
-                Log.e("checking", "${item.data!!.drawableID}")
+                Log.e("checking", "${item.data!!.iconID}")
                 setDataView(holder.binding, item.data!!)
                 holder.binding.itemAddView.setOnClickListener {
                     when (item.data.clicked){
@@ -91,7 +91,7 @@ class ReservationAddRVAdapter (val  listener : OnItemClickListener): ListAdapter
 
     private fun setDataView(binding: ItemReservationAddCategoryBinding, data : CategoryData) {
         binding.run {
-            itemAddImage.load(data.drawableID)
+            itemAddImage.load(data.iconID)
             itemAddName.text = data.name
         }
     }

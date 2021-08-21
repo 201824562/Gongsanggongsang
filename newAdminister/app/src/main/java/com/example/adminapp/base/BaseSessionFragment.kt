@@ -8,11 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
+import com.example.adminapp.R
 import com.example.adminapp.restartActivity
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.disposables.CompositeDisposable
@@ -67,8 +69,9 @@ abstract class BaseSessionFragment<VB : ViewBinding, VM : BaseSessionViewModel> 
                 return@observeSnackbarMessageString
             //Snackbar.make(getFragmentBinding().root.rootView.findViewById(android.R.id.content), it, Snackbar.LENGTH_LONG).show()
             activity?.let { activity ->
-                Snackbar.make(activity.findViewById(android.R.id.content), str, Snackbar.LENGTH_LONG).show()
-            }
+                val snackbar : Snackbar = Snackbar.make(activity.findViewById(android.R.id.content), str, Snackbar.LENGTH_SHORT)
+                snackbar.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.black_20))
+                snackbar.show() }
             //(snackbar.view.findViewById(R.id.snackbar_text) as TextView).maxLines = 5
         }
     }
@@ -77,7 +80,9 @@ abstract class BaseSessionFragment<VB : ViewBinding, VM : BaseSessionViewModel> 
     override fun showSnackbar(message: String) {
         if (isDetached) return
         activity?.let { activity ->
-            Snackbar.make(activity.findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT).show() } }
+            val snackbar : Snackbar = Snackbar.make(activity.findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT)
+            snackbar.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.black_20))
+            snackbar.show() } }
 
 
     override fun showToast(message: String) { Toast.makeText(activity, message, Toast.LENGTH_SHORT).show() }
