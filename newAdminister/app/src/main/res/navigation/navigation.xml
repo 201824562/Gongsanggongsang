@@ -89,6 +89,9 @@
         <action
             android:id="@+id/action_mainhomeNoticeFragment_to_noticePostFragment"
             app:destination="@+id/communityPostFragment"/>
+        <action
+            android:id="@+id/action_communityNotice_to_communitySearch"
+            app:destination="@id/communitySearchFragment"/>
     </fragment>
     <fragment
         android:id="@+id/mainhomeNoticeWriteFragment"
@@ -324,77 +327,50 @@
             app:nullable="true"
             android:defaultValue="@null" />
     </fragment>
+    <!--    community-->
     <fragment
-        android:id="@+id/communityPostMarketFragment"
-        android:name="com.example.adminapp.ui.main.community.post.CommunityPostMarketFragment"/>
-    <fragment
-        android:id="@+id/communityPreviewFragment"
-        android:name="com.example.adminapp.ui.main.community.preview.CommunityPreviewFragment">
+        android:id="@+id/communityWriteFragment"
+        android:name="com.example.adminapp.ui.main.community.write.CommunityWriteFragment">
         <action
+            android:id="@+id/action_communityWrite_to_communityGetPhoto"
+            app:destination="@+id/communityGetPhotoFragment"/>
+        <action
+            android:id="@+id/action_communityWrite_to_communityPost"
             app:destination="@+id/communityPostFragment"
-            android:id="@+id/action_communityPreview_to_communityPost"/>
-        <action
-            app:destination="@+id/communityWriteEmergencyFragment"
-            android:id="@+id/action_communityPreview_to_communityWriteEmergency"/>
-        <action
-            app:destination="@+id/communityWriteFreeFragment"
-            android:id="@+id/action_communityPreview_to_communityWriteFree"/>
-        <action
-            app:destination="@+id/communityWriteSuggestFragment"
-            android:id="@+id/action_communityPreview_to_communityWriteSuggest"/>
-        <action
-            app:destination="@+id/communityWriteWithFragment"
-            android:id="@+id/action_communityPreview_to_communityWriteWith"/>
-        <action
-            app:destination="@+id/communityWriteMarketFragment"
-            android:id="@+id/action_communityPreview_to_communityWriteMarket"/>
-        <action
-            app:destination="@+id/communityPostMarketFragment"
-            android:id="@+id/action_communityPreview_to_communityPostMarket"/>
+            app:popUpTo="@id/communityPreviewFragment"/>
         <argument
             app:argType="string"
             android:name="collection_name"
             android:defaultValue="0"/>
+
     </fragment>
     <fragment
-        android:id="@id/communityWriteFreeFragment"
-        android:name="com.example.adminapp.ui.main.community.write.CommunityWriteFreeFragment">
+        android:id="@+id/communityPreviewFragment"
+        android:name="com.example.adminapp.ui.main.community.preview.CommunityPreviewFragment">
         <action
-            android:id="@+id/action_communityWriteFree_to_communityGetPhoto"
-            app:destination="@+id/communityGetPhotoFragment"/>
+            app:destination="@+id/communityWriteFragment"
+            android:id="@+id/action_communityPreview_to_communityWrite"/>
         <action
-            android:id="@+id/action_communityWriteFree_to_communityPreview"
-            app:destination="@+id/communityPreviewFragment"/>
-    </fragment>
-    <fragment
-        android:id="@id/communityWriteEmergencyFragment"
-        android:name="com.example.adminapp.ui.main.community.write.CommunityWriteEmergencyFragment">
+            app:destination="@+id/communityWriteMarketFragment"
+            android:id="@+id/action_communityPreview_to_communityWriteMarket"/>
+
         <action
-            android:id="@+id/action_communityWriteEmergency_to_communityGetPhoto"
-            app:destination="@+id/communityGetPhotoFragment"/>
+            app:destination="@+id/communityPostMarketFragment"
+            android:id="@+id/action_communityPreview_to_communityPostMarket"/>
         <action
-            android:id="@+id/action_communityWriteEmergency_to_communityPreview"
-            app:destination="@+id/communityPreviewFragment"/>
-    </fragment>
-    <fragment
-        android:id="@id/communityWriteSuggestFragment"
-        android:name="com.example.adminapp.ui.main.community.write.CommunityWriteSuggestFragment">
+            app:destination="@+id/communityPostFragment"
+            android:id="@+id/action_communityPreview_to_communityPost"/>
+
+        <argument
+            app:argType="string"
+            android:name="collection_name"
+            android:defaultValue="0"/>
         <action
-            android:id="@+id/action_communityWriteSuggest_to_communityGetPhoto"
-            app:destination="@+id/communityGetPhotoFragment"/>
+            android:id="@+id/action_communityPreviewFragment_self"
+            app:popUpTo="@id/communityPreviewFragment" />
         <action
-            android:id="@+id/action_communityWriteSuggest_to_communityPreview"
-            app:destination="@+id/communityPreviewFragment"/>
-    </fragment>
-    <fragment
-        android:id="@id/communityWriteWithFragment"
-        android:name="com.example.adminapp.ui.main.community.write.CommunityWriteWithFragment">
-        <action
-            android:id="@+id/action_communityWriteWith_to_communityGetPhoto"
-            app:destination="@+id/communityGetPhotoFragment"/>
-        <action
-            android:id="@+id/action_communityWriteWith_to_communityPreview"
-            app:destination="@+id/communityPreviewFragment"/>
+            android:id="@+id/action_communityPreview_communitySearch"
+            app:destination="@id/communitySearchFragment" />
     </fragment>
     <fragment
         android:id="@id/communityWriteMarketFragment"
@@ -403,22 +379,24 @@
             android:id="@+id/action_communityWriteMarket_to_communityGetPhoto"
             app:destination="@+id/communityGetPhotoFragment"/>
         <action
-            android:id="@+id/action_communityWriteMarket_to_communityPreview"
-            app:destination="@+id/communityPreviewFragment"/>
+            android:id="@+id/action_communityWriteMarket_to_communityPostMarket"
+            app:destination="@+id/communityPostMarketFragment"
+            app:popUpTo="@id/communityPreviewFragment"/>
+        <action
+            android:id="@+id/action_communityWriteMarket_to_communityPhoto"
+            app:destination="@+id/communityPhotoFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/communityModifyFragment"
-        android:name="com.example.adminapp.ui.main.community.write.CommunityModifyFragment"/>
+
     <fragment
         android:id="@+id/communityPostFragment"
         android:name="com.example.adminapp.ui.main.community.post.CommunityPostFragment">
         <action
-            android:id="@+id/action_communityPost_to_communityPreview"
-            app:destination="@+id/communityPreviewFragment"
-            app:popUpTo="@id/communityPostFragment"/>
+            android:id="@+id/action_communityPost_to_communityPhoto"
+            app:destination="@+id/communityPhotoFragment"/>
         <action
-            android:id="@+id/action_communityPost_to_communityModify"
-            app:destination="@+id/communityModifyFragment"/>
+            android:id="@+id/action_community_post_pop"
+            app:popUpTo="@id/communityPostFragment"
+            app:popUpToInclusive="true" />
         <argument
             app:argType="string"
             android:name="collection_name"
@@ -428,30 +406,59 @@
             android:name="document_name"
             android:defaultValue="0"/>
     </fragment>
+
+    <fragment
+        android:id="@+id/communityPostMarketFragment"
+        android:name="com.example.adminapp.ui.main.community.post.CommunityPostMarketFragment">
+        <action
+            android:id="@+id/action_communityPostMarketFragment_pop"
+            app:popUpTo="@id/communityPostMarketFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_communityPostMarket_to_communityPhoto"
+            app:destination="@+id/communityPhotoFragment"/>
+    </fragment>
+
     <fragment
         android:id="@id/communityGetPhotoFragment"
         android:name="com.example.adminapp.ui.main.community.write.CommunityGetPhotoFragment">
-        <argument
-            app:argType="string"
-            android:name="collection_name"
-            android:defaultValue="0"/>
         <action
-            android:id="@+id/action_communityGetPhoto_to_communityWriteFree"
-            app:destination="@id/communityWriteFreeFragment"
-            app:popUpTo="@id/communityGetPhotoFragment"/>
-        <action
-            android:id="@+id/action_communityGetPhoto_to_communityWriteEmergency"
-            app:destination="@id/communityWriteEmergencyFragment"/>
-        <action
-            android:id="@+id/action_communityGetPhoto_to_communityWriteSuggest"
-            app:destination="@id/communityWriteSuggestFragment"/>
-        <action
-            android:id="@+id/action_communityGetPhoto_to_communityWriteWith"
-            app:destination="@id/communityWriteWithFragment"/>
-        <action
-            android:id="@+id/action_communityGetPhoto_to_communityWriteMarket"
-            app:destination="@id/communityWriteMarketFragment"/>
+            android:id="@+id/action_communityGetPhotoFragment_pop"
+            app:popUpTo="@id/communityGetPhotoFragment"
+            app:popUpToInclusive="true" />
     </fragment>
+
+    <fragment
+        android:id="@+id/communityPhotoFragment"
+        android:name="com.example.adminapp.ui.main.community.post.CommunityPhotoFragment">
+        <argument
+            android:name="photo_uri"
+            app:argType="string[]"/>
+        <action
+            android:id="@+id/action_communityPhotoFragment_pop"
+            app:popUpTo="@id/communityPhotoFragment"
+            app:popUpToInclusive="true" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/communitySearchFragment"
+        android:name="com.example.adminapp.ui.main.community.preview.CommunitySearchFragment"
+        android:label="CommunitySearchFragment">
+        <action
+            android:id="@+id/action_communitySearch_to_communityPost"
+            app:destination="@id/communityPostFragment"/>
+        <action
+            android:id="@+id/action_communitySearch_to_communityPostMarket"
+            app:destination="@id/communityPostMarketFragment"/>
+
+        <argument
+            android:name="collection_name"
+            app:argType="string"
+            android:defaultValue="0"/>
+    </fragment>
+
+
     <fragment
         android:id="@+id/settingsChangePwdFragment"
         android:name="com.example.adminapp.ui.main.settings.SettingsChangePwdFragment"

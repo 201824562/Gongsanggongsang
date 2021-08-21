@@ -23,7 +23,6 @@ import com.example.adminapp.MainActivity
 import com.example.adminapp.R
 import com.example.adminapp.base.BaseFragment
 import com.example.adminapp.data.model.PostDataInfo
-import com.example.adminapp.databinding.FragmentCommunityWriteEmergencyBinding
 import com.example.adminapp.databinding.FragmentMainhomeHomeNoticeWriteBinding
 import com.example.adminapp.ui.main.community.CommunityViewModel
 import java.time.LocalDate
@@ -43,6 +42,8 @@ class HomeNoticeWriteFragment : BaseFragment<FragmentMainhomeHomeNoticeWriteBind
     private val bitmapArray : ArrayList<Bitmap> = arrayListOf()
     private val uriArray : ArrayList<Uri> = arrayListOf()
 
+    private var adminName = ""
+    private var adminAgency = ""
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -54,6 +55,11 @@ class HomeNoticeWriteFragment : BaseFragment<FragmentMainhomeHomeNoticeWriteBind
 
     @RequiresApi(Build.VERSION_CODES.P)
     override fun initViewStart(savedInstanceState: Bundle?) {
+
+        val ac = activity as MainActivity
+
+        adminAgency = ac.getAdminData().agency
+        adminName = ac.getAdminData().name
         viewbinding.emergencyWriteCategorySelect.adapter = ArrayAdapter(requireContext(), R.layout.fragment_community_write_category_item, categorySpinnerArray)
         viewbinding.emergencyWriteCategorySelect.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -75,7 +81,6 @@ class HomeNoticeWriteFragment : BaseFragment<FragmentMainhomeHomeNoticeWriteBind
             }
         }
         //TODO: mainActivity clear 처리
-        val ac = activity as MainActivity
         getLocalPhotoUri = ac.getPhoto()
 
         viewbinding.emergencyWritePhotoRecycler.visibility = View.VISIBLE
@@ -102,24 +107,27 @@ class HomeNoticeWriteFragment : BaseFragment<FragmentMainhomeHomeNoticeWriteBind
                 val postTimeNow : String = LocalTime.now().toString()
                 emergencyPostData = PostDataInfo(
                     collection_name,
-                    "juyong",
+                    adminName,
                     post_title = emergencyWriteTitle.text.toString(),
                     post_contents = emergencyWriteContent.text.toString(),
                     post_date = postDateNow,
                     post_time = postTimeNow,
-                    post_comments = arrayListOf(),
-                    post_id = postDateNow + postTimeNow + "juyong",
+                    post_comments = 0,
+                    post_id = postDateNow + postTimeNow + adminName,
                     post_photo_uri = getLocalPhotoUri,
                     post_state = emergencyWriteCategory,
                     false
                 )
-                viewmodel.insertPostData(emergencyPostData)
-                document_name = emergencyPostData.post_id
-                bundle = bundleOf(
-                    "collection_name" to collection_name,
-                    "document_name" to document_name
-                )
-                findNavController().navigate(R.id.action_noticeWrite_to_noticePost, bundle)
+                viewmodel.insertPostData(adminAgency, emergencyPostData).observe(viewLifecycleOwner){
+                    if(it){
+                        document_name = emergencyPostData.post_id
+                        bundle = bundleOf(
+                            "collection_name" to collection_name,
+                            "document_name" to document_name
+                        )
+                        findNavController().navigate(R.id.action_noticeWrite_to_noticePost, bundle)
+                    }
+                }
             }
         }
     }
@@ -159,7 +167,7 @@ class HomeNoticeWriteFragment : BaseFragment<FragmentMainhomeHomeNoticeWriteBind
             "collection_name" to collection_name,
             "photoUriArray" to uriArr
         )
-        findNavController().navigate(R.id.action_communityWriteEmergency_to_communityGetPhoto, bundle)
+        findNavController().navigate(R.id.action_communityWrite_to_communityGetPhoto, bundle)
 
     }
     @RequiresApi(Build.VERSION_CODES.P)

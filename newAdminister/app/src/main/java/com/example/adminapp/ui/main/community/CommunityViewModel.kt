@@ -1,87 +1,64 @@
 package com.example.adminapp.ui.main.community
 
-import android.graphics.Bitmap
-import android.net.Uri
-import android.os.Build
-import android.util.Log
-import androidx.annotation.RequiresApi
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.adminapp.base.BaseViewModel
+import com.example.adminapp.data.model.PostCommentDataClass
 import com.example.adminapp.data.model.PostDataInfo
 import com.example.adminapp.data.repository.CommunityDataRepository
-import com.example.adminapp.data.repository.PostCommentDataClass
 
-class CommunityViewModel : BaseViewModel() {
-    var selected_items : ArrayList<String> = arrayListOf()
+class CommunityViewModel() : BaseViewModel() {
+    var selectedItems : ArrayList<String> = arrayListOf()
     private val communityDataRepository : CommunityDataRepository = CommunityDataRepository.getInstance()
 
-    fun getCommunityMainItem() {
-        return communityDataRepository.getCommunityMainItem()
+    fun getCategoryAllPostData(agency: String, collection_name: String) : LiveData<ArrayList<PostDataInfo>> {
+        return communityDataRepository.getCategoryAllPostData(agency, collection_name)
     }
-
-    fun getCollectionPostData(collection_name: String) : MutableLiveData<ArrayList<PostDataInfo>>{
-        return communityDataRepository.getCollectionPostData(collection_name)
+    fun getPostData(agency: String, collection_name: String, document_name : String) : MutableLiveData<PostDataInfo>{
+        return communityDataRepository.getPostData(agency, collection_name, document_name)
     }
-    fun getDocumentPostData(collection_name: String, document_name : String) : MutableLiveData<PostDataInfo>{
-        return communityDataRepository.getDocumentPostData(collection_name, document_name)
+    fun insertPostData(agency : String, it: PostDataInfo) : MutableLiveData<Boolean> {
+        return communityDataRepository.insertPostData(agency, it)
     }
-    fun insertPostData(it: PostDataInfo) {
-        communityDataRepository.insertPostData(it)
+    fun insertPostCommentData(agency: String, collection_name: String, document_name: String, postComment : PostCommentDataClass) : MutableLiveData<Boolean> {
+        return communityDataRepository.insertPostCommentData(agency, collection_name, document_name, postComment)
     }
-    fun insertPostCommentData(collection_name: String, document_name: String, post_comments_array : ArrayList<PostCommentDataClass>){
-        communityDataRepository.insertPostCommentData(collection_name, document_name, post_comments_array)
+    fun deletePostCommentData(agency: String, collection_name: String, document_name: String, postComment : PostCommentDataClass) : MutableLiveData<Boolean> {
+        return communityDataRepository.deletePostCommentData(agency, collection_name, document_name, postComment)
     }
-    fun deletePostData(collection_name: String, document_name: String) {
-        communityDataRepository.deleteDocumentPostData(collection_name, document_name)
+    fun deletePostData(agency: String, collection_name: String, document_name: String) : MutableLiveData<Boolean> {
+        return communityDataRepository.deletePostDataSuccess(agency, collection_name, document_name)
     }
-    fun updatePostData(collection_name: String, document_name: String, modifyTitle : String, modifyContent : String){
-        communityDataRepository.modifyPostData(collection_name, document_name, modifyTitle, modifyContent)
+    fun modifyPostPartData(agency: String, collection_name: String, document_name: String, partKey: String, modifyContent: Any) : MutableLiveData<Boolean>{
+        return communityDataRepository.modifyPostPartData(agency, collection_name, document_name, partKey, modifyContent)
     }
-    fun getDocumentCommentData(it: PostDataInfo) : ArrayList<PostCommentDataClass>{
-        val post_comments_array : ArrayList<PostCommentDataClass> = arrayListOf()
-        if(it.post_comments.toString() != "[]") {
-            var server_comments = it.post_comments.toString().replace("[", "").replace("]", "")
-                .replace("{", "").replace("}", "").split(",")
-            Log.v("i", server_comments.toString())
-            for (i in 0 until server_comments.size step 3) {
-                var comments_element = PostCommentDataClass(
-                    server_comments[i + 2].split("=")[1],
-                    server_comments[i + 1].split("=")[1],
-                    server_comments[i].split("=")[1]
-                )
-                post_comments_array.add(comments_element)
-            }
-        }
-        else{
-            return arrayListOf()
-        }
-        return post_comments_array
-    }
-
-    @RequiresApi(Build.VERSION_CODES.P)
-    fun uploadPhoto(bitmap_array : ArrayList<Bitmap>, uri_array : ArrayList<Uri>){
-        communityDataRepository.uploadPhoto(bitmap_array, uri_array)
+    fun getPostCommentData(agency: String, collection_name: String, document_name: String) : MutableLiveData<ArrayList<PostCommentDataClass>> {
+        return communityDataRepository.getPostCommentData(agency, collection_name, document_name)
     }
 
     fun getPostPhotoData(photoUri : ArrayList<String>) : MutableLiveData<ArrayList<String>> {
-        return communityDataRepository.getPhoto(photoUri)
+        return communityDataRepository.getDataPhoto(photoUri)
+    }
+    fun deletePostPhoto(){
+        communityDataRepository.deletePhotoData()
     }
 
-    fun getNoticeCategoryPostData(collectionName : String) : MutableLiveData<ArrayList<PostDataInfo>> {
-        return communityDataRepository.getNoticeCategoryPostData(collectionName)
+    fun getNoticeCategoryPostData(agency: String, collectionName : String) : MutableLiveData<ArrayList<PostDataInfo>> {
+        return communityDataRepository.getNoticeCategoryPostData(agency, collectionName)
     }
-
-    fun selectPhoto(select_photo_uri : String) {
-        if(select_photo_uri in selected_items){
-            selected_items.remove(select_photo_uri)
+    fun getNoticePostData(agency: String) : MutableLiveData<ArrayList<PostDataInfo>>{
+        return communityDataRepository.getNoticePostData(agency)
+    }
+    fun getSearchPostData(agency: String, collectionName: String, searchKeyword : String) : MutableLiveData<ArrayList<PostDataInfo>>{
+        return communityDataRepository.getSearchPostData(agency, collectionName, searchKeyword)
+    }
+    fun selectPhoto(selectPhotoUri : String) {
+        if(selectPhotoUri in selectedItems){
+            selectedItems.remove(selectPhotoUri)
         }
         else{
-            selected_items.add(select_photo_uri)
+            selectedItems.add(selectPhotoUri)
         }
-        System.out.println(select_photo_uri)
-    }
-    fun getPhoto() : ArrayList<String>{
-        return selected_items
     }
 
 }

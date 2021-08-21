@@ -22,11 +22,14 @@ class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, C
     override val viewmodel : CommunityViewModel by viewModels()
 
     private lateinit var communityPreviewRecyclerAdapter: CommunityPreviewRecyclerAdapter
+    private var communityPreviewItem = arrayListOf<PostDataInfo>()
     private lateinit var communityPreviewMarketRecyclerAdapter: CommunityPreviewMarketRecyclerAdapter
+    private var communityPreviewMarketItem = arrayListOf<PostDataInfo>()
 
     private lateinit var collectionName : String
     private lateinit var collectionNameBundle : Bundle
-    var agency = ""
+    private var userAgency = ""
+
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,10 +44,13 @@ class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, C
         collectionNameBundle = bundleOf(
             "collection_name" to collectionName
         )
+
         var ac = activity as MainActivity
-        agency = ac.getUserData()!!.agency
+        userAgency = ac.getUserData()!!.agency
+
         ac.selectedItems.clear()
         viewmodel.deletePostPhoto()
+
         when(collectionName){
             "1_free" -> viewbinding.previewToolbarName.text = "자유게시판"
             "2_emergency" -> viewbinding.previewToolbarName.text = "긴급게시판"
@@ -52,16 +58,26 @@ class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, C
             "4_with" -> viewbinding.previewToolbarName.text = "함께게시판"
             "5_market" -> viewbinding.previewToolbarName.text = "장터게시판"
         }
-        if(collectionName == "5_market"){
-            initMarketRecyclerView()
+
+        //TODO: notifyset 안 먹어서 리사이클러뷰 계속 초기화 됨.
+        when(collectionName){
+            "5_market" -> initMarketRecyclerView()
+            else -> initMarketElseRecyclerView()
         }
-        else{
-            viewbinding.communityPreviewRecyclerView.run {
-                setHasFixedSize(true)
-                layoutManager = LinearLayoutManager(context)
-                adapter = CommunityPreviewRecyclerAdapter(arrayListOf())
+        viewmodel.getCategoryAllPostData(userAgency, collectionName).observe(viewLifecycleOwner){
+            when(collectionName){
+                "5_market" -> {
+                    communityPreviewMarketItem = it
+                    initMarketRecyclerView()
+                    communityPreviewMarketRecyclerAdapter.notifyDataSetChanged()
+                }
+                else -> {
+                    communityPreviewItem = it
+                    initMarketElseRecyclerView()
+                    communityPreviewRecyclerAdapter.notifyDataSetChanged()
+                }
             }
-            initMarketElseRecyclerView()
+
         }
     }
 
@@ -73,78 +89,61 @@ class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, C
         viewbinding.run{
             previewWriteRegisterButton.setOnClickListener{
                 when(collectionName){
-                    "1_free" -> findNavController().navigate(R.id.action_communityPreview_to_communityWriteFree, collectionNameBundle)
-                    "2_emergency" -> findNavController().navigate(R.id.action_communityPreview_to_communityWriteEmergency, collectionNameBundle)
-                    "3_suggest" -> findNavController().navigate(R.id.action_communityPreview_to_communityWriteSuggest, collectionNameBundle)
-                    "4_with" -> findNavController().navigate(R.id.action_communityPreview_to_communityWriteWith, collectionNameBundle)
                     "5_market" -> findNavController().navigate(R.id.action_communityPreview_to_communityWriteMarket, collectionNameBundle)
+                    else -> findNavController().navigate(R.id.action_communityPreview_to_communityWrite, collectionNameBundle)
                 }
             }
             previewSearchButton.setOnClickListener {
-                viewmodel.getSearchPostData(agency, collectionName, "w").observe(viewLifecycleOwner){
-                    Log.e("search", "{$it}")
-
-                }
+                findNavController().navigate(R.id.action_communityPreview_communitySearch, collectionNameBundle)
             }
             previewBackButton.setOnClickListener {
-
+                findNavController().navigate(R.id.action_communityPreviewFragment_self)
             }
         }
 
     }
-    fun initMarketElseRecyclerView(){
-        var testList : ArrayList<PostDataInfo> = arrayListOf()
+
+    private fun initMarketElseRecyclerView(){
         viewbinding.communityPreviewRecyclerView.run {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
-            adapter = CommunityPreviewRecyclerAdapter(testList)
+            adapter = CommunityPreviewRecyclerAdapter(communityPreviewItem)
         }
-        viewmodel.getCollectionPostData(agency, collectionName).observe(viewLifecycleOwner){ it
-            testList.clear()
-            testList.addAll(it)
-            communityPreviewRecyclerAdapter = CommunityPreviewRecyclerAdapter(testList)
-            viewbinding.communityPreviewRecyclerView.adapter = communityPreviewRecyclerAdapter.apply {
-                listener =
-                    object : CommunityPreviewRecyclerAdapter.OnCommunityMarketItemClickListener {
-                        override fun onPreviewItemClick(position: Int) {
-                            var documentName = getItem(position).post_id
-                            var bundle = bundleOf(
-                                "collection_name" to collectionName,
-                                "document_name" to documentName
-                            )
-                            findNavController().navigate(R.id.action_communityPreview_to_communityPost, bundle)
-                        }
+        communityPreviewRecyclerAdapter = CommunityPreviewRecyclerAdapter(communityPreviewItem)
+        viewbinding.communityPreviewRecyclerView.adapter = communityPreviewRecyclerAdapter.apply {
+            listener =
+                object : CommunityPreviewRecyclerAdapter.OnCommunityMarketItemClickListener {
+                    override fun onPreviewItemClick(position: Int) {
+                        var documentName = getItem(position).post_id
+                        var bundle = bundleOf(
+                            "collection_name" to collectionName,
+                            "document_name" to documentName
+                        )
+                        findNavController().navigate(R.id.action_communityPreview_to_communityPost, bundle)
                     }
-            }
-            communityPreviewRecyclerAdapter.notifyDataSetChanged()
+                }
         }
+        communityPreviewRecyclerAdapter.notifyDataSetChanged()
     }
-    fun initMarketRecyclerView(){
-        var list : ArrayList<PostDataInfo> = ArrayList()
+
+    private fun initMarketRecyclerView(){
         viewbinding.communityPreviewRecyclerView.run {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
-            adapter = CommunityPreviewMarketRecyclerAdapter(list)
+            adapter = CommunityPreviewMarketRecyclerAdapter(communityPreviewMarketItem)
         }
-        viewmodel.getCollectionPostData(agency, collectionName).observe(viewLifecycleOwner){ it
-            list.clear()
-            list.addAll(it)
-            communityPreviewMarketRecyclerAdapter = CommunityPreviewMarketRecyclerAdapter(it)
-            viewbinding.communityPreviewRecyclerView.adapter = communityPreviewMarketRecyclerAdapter.apply {
-                listener =
-                    object :
-                        CommunityPreviewMarketRecyclerAdapter.OnCommunityMarketItemClickListener {
-                        override fun onPreviewItemClick(position: Int) {
-                            var documentName = getItem(position).post_id
-                            var bundle = bundleOf(
-                                "collection_name" to collectionName,
-                                "document_name" to documentName
-                            )
-                            findNavController().navigate(R.id.action_communityPreview_to_communityPostMarket, bundle)
-                        }
+        communityPreviewMarketRecyclerAdapter = CommunityPreviewMarketRecyclerAdapter(communityPreviewMarketItem)
+        viewbinding.communityPreviewRecyclerView.adapter = communityPreviewMarketRecyclerAdapter.apply {
+            listener = object : CommunityPreviewMarketRecyclerAdapter.OnCommunityMarketItemClickListener {
+                    override fun onPreviewItemClick(position: Int) {
+                        var documentName = getItem(position).post_id
+                        var bundle = bundleOf(
+                            "collection_name" to collectionName,
+                            "document_name" to documentName
+                        )
+                        findNavController().navigate(R.id.action_communityPreview_to_communityPostMarket, bundle)
                     }
-            }
-            communityPreviewMarketRecyclerAdapter.notifyDataSetChanged()
+                }
         }
     }
 
