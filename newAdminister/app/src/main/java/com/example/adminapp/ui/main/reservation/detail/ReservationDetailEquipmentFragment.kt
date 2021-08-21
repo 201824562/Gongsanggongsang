@@ -14,7 +14,7 @@ import com.example.adminapp.R
 import com.example.adminapp.base.BaseSessionFragment
 import com.example.adminapp.data.model.*
 import com.example.adminapp.databinding.FragmentReservationDetailEquipmentBinding
-import com.example.adminapp.ui.main.reservation.calculateDuration
+import com.example.adminapp.ui.main.reservation.calculateDurationWithCurrent
 import com.example.adminapp.ui.main.reservation.getHourMinuteString
 import com.example.adminapp.utils.WrapedDialogBasicTwoButton
 
@@ -195,11 +195,11 @@ class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReserva
                         setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.light_orange))
                         setTextColor(ContextCompat.getColor(requireContext(), R.color.pinkish_orange)) }
                     reserveDetailItemUserName.text = item.user
-                    timer = object : CountDownTimer(calculateDuration(item.endTime).toMillis(), 1000) {
+                    timer = object : CountDownTimer(calculateDurationWithCurrent(item.endTime).toMillis(), 1000) {
                         override fun onTick(millisUntilFinished: Long) {
                             val minute = (millisUntilFinished/60000)
                             val second = (millisUntilFinished%60000)/1000
-                            reserveDetailItemUsedTime1.text = calculateDuration(item.startTime).abs().toMinutes().toString()
+                            reserveDetailItemUsedTime1.text = calculateDurationWithCurrent(item.startTime).abs().toMinutes().toString()
                             reserveDetailItemLeftTime1.text = minute.toString()
                             reserveDetailItemLeftTime2.text = if (second<10) "0${second}" else second.toString()
                         }

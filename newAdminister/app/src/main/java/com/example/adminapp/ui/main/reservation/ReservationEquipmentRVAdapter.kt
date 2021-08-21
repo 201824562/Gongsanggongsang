@@ -62,7 +62,7 @@ class ReservationEquipmentRVAdapter(private val context : Context, private val v
                     holder.binding.reservationState.text = "사용중"
                     holder.binding.reservationUsingStateInfo.visibility = View.VISIBLE
                     holder.binding.reservationEndTime.text = getHourMinuteString(item.endTime)
-                    holder.timer = object : CountDownTimer(calculateDuration(item.endTime).toMillis(), 1000) {
+                    holder.timer = object : CountDownTimer(calculateDurationWithCurrent(item.endTime).toMillis(), 1000) {
                         override fun onTick(millisUntilFinished: Long) {
                             val minute = (millisUntilFinished/60000)
                             val second = (millisUntilFinished%60000)/1000

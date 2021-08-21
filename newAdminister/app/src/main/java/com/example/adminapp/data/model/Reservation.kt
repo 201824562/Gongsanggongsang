@@ -12,10 +12,10 @@ data class ReservationLogItem(val type : ReservationType, val equipmentLog : Res
 
 data class ReservationEquipmentLog(val icon : Int, val name : String, val userId : String="", val userName : String="",
                                    val reservationState : String = "", val reservationType : String = "", val startTime: String = "", val endTime: String = "")
-
+@Parcelize
 data class ReservationFacilityLog(val icon : Int, val name : String, val userId : String="", val userName : String="",
                                     val reservationState : String = "", val reservationType : String = "",val startTime: String = "", val endTime: String = "",
-                                    val documentId : String, val maxTime: Long, val usable: Boolean)
+                                    val documentId : String, val maxTime: Long, val usable: Boolean) : Parcelable
 
 data class ReservationEquipmentItem(val data : ReservationEquipmentSettingData, val equipmentData : ReservationEquipmentData)
 

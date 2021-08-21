@@ -57,10 +57,13 @@ class ReservationRepository() {
     private val onSuccessGetReservationLogFacilityList : LiveData<List<ReservationLogItem>> get() = _onSuccessGetReservationLogFacilityList
     private val _onSuccessGetReservationFacilitySettingData = SingleLiveEvent<ReceiverFacilitySettingData>()
     private val onSuccessGetReservationFacilitySettingData: LiveData<ReceiverFacilitySettingData> get() = _onSuccessGetReservationFacilitySettingData
-    private val _onSuccessGetReservationFacilitySettingDataList = SingleLiveEvent<List<ReservationFacilitySettingData>>()
-    private val onSuccessGetReservationFacilitySettingDataList: LiveData<List<ReservationFacilitySettingData>> get() = _onSuccessGetReservationFacilitySettingDataList
     private val _onSuccessGetReservationFacilityDataList = SingleLiveEvent<List<ReservationFacilityLog>>()
     private val onSuccessGetReservationFacilityDataList : LiveData<List<ReservationFacilityLog>> get() = _onSuccessGetReservationFacilityDataList
+    private val _onSuccessGetReservationFacilityNotDoneDataList = SingleLiveEvent<List<ReservationFacilityLog>>()
+    private val onSuccessGetReservationFacilityNotDoneDataList : LiveData<List<ReservationFacilityLog>> get() = _onSuccessGetReservationFacilityNotDoneDataList
+    private val _onSuccessGetReservationFacilitySettingDataList = SingleLiveEvent<List<ReservationFacilitySettingData>>()
+    private val onSuccessGetReservationFacilitySettingDataList: LiveData<List<ReservationFacilitySettingData>> get() = _onSuccessGetReservationFacilitySettingDataList
+
 
     fun getReservationEquipmentSettingData(agency: String, itemName : String): Single<ReservationEquipmentSettingData> {
         return Single.create { emitter ->
@@ -357,7 +360,7 @@ class ReservationRepository() {
         when (index){
             0 -> {
                 firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_LOG)
-                .orderBy("startTime", Query.Direction.DESCENDING)
+                .orderBy("endTime", Query.Direction.DESCENDING)
                     .addSnapshotListener { snapshot, e ->
                         if (e != null) {
                             Log.w(TAG, "Listen failed.", e)
@@ -472,7 +475,8 @@ class ReservationRepository() {
     private fun getReservationFacilityLogDataFromFirebase(agency: String, itemName : String) {
         firestore.collection(agency).document(FIRESTORE_RESERVATION)
             .collection(FIRESTORE_RESERVATION_LOG)
-            .whereEqualTo("reservationType", "예약 사용").whereEqualTo("name", itemName)
+            .whereEqualTo("reservationType", "예약 사용").whereEqualTo("reservationState", "사용중")
+            .whereEqualTo("name", itemName)
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     Log.w(TAG, "Listen failed.", e)
@@ -546,6 +550,41 @@ class ReservationRepository() {
             }
     }
 
+    fun getReservationFacilityNotDoneLogDataList(agency: String, itemType : String, itemName : String): LiveData<List<ReservationFacilityLog>> {
+        getReservationFacilityNotDoneLogDataListFromFirebase(agency, itemType, itemName)
+        return onSuccessGetReservationFacilityNotDoneDataList }
+
+    private fun getReservationFacilityNotDoneLogDataListFromFirebase(agency: String, itemType : String, itemName : String) {
+        firestore.collection(agency).document(FIRESTORE_RESERVATION)
+            .collection(FIRESTORE_RESERVATION_LOG)
+            .whereEqualTo("reservationType", itemType).whereEqualTo("name", itemName).whereIn("reservationState", listOf("사용중", "예약중"))
+            .addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e)
+                    return@addSnapshotListener }
+                if (snapshot == null) _onSuccessGetReservationFacilityNotDoneDataList.postValue(emptyList())
+                else {
+                    val facilityLogList: MutableList<ReservationFacilityLog> = mutableListOf()
+                    for (document in snapshot) {
+                        facilityLogList.add(
+                            ReservationFacilityLog(
+                                document.getLong("icon")!!.toInt(),
+                                document.get("name") as String,
+                                document.get("userId") as String,
+                                document.get("userName") as String,
+                                document.get("reservationState") as String,
+                                document.get("reservationType") as String,
+                                document.get("startTime") as String,
+                                document.get("endTime") as String,
+                                document.get("documentId") as String,
+                                document.getLong("maxTime")!!,
+                                document.get("usable") as Boolean))
+                    }
+                    _onSuccessGetReservationFacilityNotDoneDataList.postValue(facilityLogList)
+                }
+            }
+    }
+
     fun getReservationFacilitySettingDataList(agency: String): LiveData<List<ReservationFacilitySettingData>> {
         getReservationFacilitySettingDataListFromFirebase(agency)
         return onSuccessGetReservationFacilitySettingDataList }
@@ -597,6 +636,14 @@ class ReservationRepository() {
     fun finishReservationFacility (agency: String, documentId: String){
         firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_LOG)
             .document(documentId).update("reservationState", "사용완료")
+            .addOnSuccessListener {  Log.e("checking", "Succeed updating RESERVATION_LOG OF FACILITY") }
+            .addOnFailureListener { Log.e("checking", "Error updating RESERVATION_LOG OF FACILITY") }
+    }
+    fun cancelReservationFacility (agency: String, documentId: String){
+        firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_LOG)
+            .document(documentId).update("reservationState", "강제취소")
+            .addOnSuccessListener {  Log.e("checking", "Succeed updating RESERVATION_LOG OF FACILITY") }
+            .addOnFailureListener { Log.e("checking", "Error updating RESERVATION_LOG OF FACILITY") }
     }
 
     fun startReservationEquipment(agency: String, itemName : String) : Completable{

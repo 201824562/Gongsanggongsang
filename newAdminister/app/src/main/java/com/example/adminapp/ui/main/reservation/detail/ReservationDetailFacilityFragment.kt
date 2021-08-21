@@ -40,7 +40,7 @@ class ReservationDetailFacilityFragment() : BaseSessionFragment<FragmentReservat
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-        viewbinding.backBtn.setOnClickListener {  findNavController().navigate(R.id.action_reservationDetailEquipmentFragment_pop)  }
+        viewbinding.backBtn.setOnClickListener {  findNavController().navigate(R.id.action_reservationDetailFacilityFragment_pop)  }
         when(args.facilityBundle){
             null -> makeErrorEvent()
             else -> facilityBundleData = args.facilityBundle!! }
@@ -52,6 +52,7 @@ class ReservationDetailFacilityFragment() : BaseSessionFragment<FragmentReservat
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run {
             reservationDetailSettingBtn.setOnClickListener {
+                // TODO
                 /*findNavController().navigate(ReservationDetailEquipmentFragmentDirections
                     .actionReservationDetailEquipmentFragmentToReservationEditDetailFragment(
                         ReservationItem(
@@ -70,7 +71,9 @@ class ReservationDetailFacilityFragment() : BaseSessionFragment<FragmentReservat
     private fun initViewPager() {
         viewbinding.run {
             reservationDetailFacilityViewPagerAdapter = ReservationDetailFacilityViewPagerAdapter(requireActivity(), facilityBundleData)
-            reservationLogViewpager.adapter = reservationDetailFacilityViewPagerAdapter
+            reservationLogViewpager.apply {
+                adapter = reservationDetailFacilityViewPagerAdapter
+                isUserInputEnabled = false }
             reservationDetailBasicBtn.isSelected = true
             reservationDetailBasicBtn.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_87))
             reservationDetailBasicBtn.setOnClickListener {

@@ -22,6 +22,17 @@ class ReservationDetailFacilityViewModel (application: Application) : BaseSessio
     fun getReservationFacilityLogDataList (itemType : String, itemName : String): LiveData<List<ReservationFacilityLog>> {
         return reservationRepository.getReservationFacilityLogDataList(agencyInfo, itemType, itemName)
     }
+    fun getReservationFacilityNotDoneLogDataList(itemType : String, itemName : String): LiveData<List<ReservationFacilityLog>> {
+        return reservationRepository.getReservationFacilityNotDoneLogDataList(agencyInfo, itemType, itemName)
+    }
+
+    fun finishReservationFacilityLogData(logDocumentId : String){
+        reservationRepository.finishReservationFacility(agencyInfo, logDocumentId)
+    }
+
+    fun cancelReservationFacilityLogData(logDocumentId : String){
+        reservationRepository.cancelReservationFacility(agencyInfo, logDocumentId)
+    }
 
     fun startReservationFacility(itemName : String){
         apiCall(reservationRepository.startReservationFacility(agencyInfo, itemName))

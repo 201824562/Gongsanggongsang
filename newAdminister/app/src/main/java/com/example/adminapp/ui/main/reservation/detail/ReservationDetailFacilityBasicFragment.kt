@@ -2,7 +2,6 @@ package com.example.adminapp.ui.main.reservation.detail
 
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,7 @@ import com.example.adminapp.R
 import com.example.adminapp.base.BaseSessionFragment
 import com.example.adminapp.data.model.*
 import com.example.adminapp.databinding.FragmentReservationDetailFacilityBasicBinding
-import com.example.adminapp.ui.main.reservation.calculateDuration
+import com.example.adminapp.ui.main.reservation.calculateDurationWithCurrent
 import com.example.adminapp.ui.main.reservation.getHourMinuteString
 import com.example.adminapp.utils.WrapedDialogBasicTwoButton
 
@@ -54,7 +53,7 @@ class ReservationDetailFacilityBasicFragment : BaseSessionFragment<FragmentReser
     override fun initDataBinding(savedInstanceState: Bundle?) {
         viewmodel.run {
             getReservationFacilitySettingData(facilityBundleData.name).observe(viewLifecycleOwner) {
-                if (!it.boolean){ findNavController().navigate(R.id.action_reservationDetailFacilityFragment_pop) } //TODO : 얘는 따른쪽에도 필요함. (pop하는 것만)
+                if (!it.boolean){ findNavController().navigate(R.id.action_reservationDetailFacilityFragment_pop) } //TODO : 얘는 다른쪽에도 필요함. (pop하는 것만)
                 else{ facilityBundleData.settingData = it.facilitySettingData
                     setItemSettingData(facilityBundleData) }
             }
@@ -66,6 +65,7 @@ class ReservationDetailFacilityBasicFragment : BaseSessionFragment<FragmentReser
                 else{
                     facilityBundleData.logData = it.facilityLogData
                     setItemData(facilityBundleData) }
+                getReservationFacilitySettingData(facilityBundleData.name)
             }
             getReservationFacilityLogDataList("예약 사용", facilityBundleData.name).observe(viewLifecycleOwner){
                 if (it.isEmpty()) showEmptyView()
@@ -81,7 +81,7 @@ class ReservationDetailFacilityBasicFragment : BaseSessionFragment<FragmentReser
                     if (facilityBundleData.settingData!!.usable) viewmodel.stopReservationFacility(facilityBundleData.name)
                     else viewmodel.startReservationFacility(facilityBundleData.name)
                 }else {
-                    if (facilityBundleData.settingData!!.usable) viewmodel.stopReservationFacility(facilityBundleData.name)
+                    if (facilityBundleData.logData!!.usable) viewmodel.stopReservationFacility(facilityBundleData.name)
                     else viewmodel.startReservationFacility(facilityBundleData.name)
                 }
             }
@@ -194,15 +194,15 @@ class ReservationDetailFacilityBasicFragment : BaseSessionFragment<FragmentReser
                     reserveDetailItemLeftTimeText1.visibility = View.VISIBLE
                     reserveDetailItemLeftTimeText2.visibility = View.VISIBLE
                     reserveDetailItemUserName.text = item.userName
-                    timer = object : CountDownTimer(calculateDuration(item.endTime).toMillis(), 1000) {
+                    timer = object : CountDownTimer(calculateDurationWithCurrent(item.endTime).toMillis(), 1000) {
                         override fun onTick(millisUntilFinished: Long) {
                             val minute = (millisUntilFinished/60000)
                             val second = (millisUntilFinished%60000)/1000
-                            reserveDetailItemUsedTime1.text = calculateDuration(item.startTime).abs().toMinutes().toString()
+                            reserveDetailItemUsedTime1.text = calculateDurationWithCurrent(item.startTime).abs().toMinutes().toString()
                             reserveDetailItemLeftTime1.text = minute.toString()
                             reserveDetailItemLeftTime2.text = if (second<10) "0${second}" else second.toString()
                         }
-                        override fun onFinish() { } }.start()
+                        override fun onFinish() { viewmodel.finishReservationFacilityLogData(item.documentId) } }.start()
                     reserveDetailItemStartTime.text = getHourMinuteString(item.startTime)
                     reserveDetailItemEndTime.text = getHourMinuteString(item.endTime) }
             }else{
