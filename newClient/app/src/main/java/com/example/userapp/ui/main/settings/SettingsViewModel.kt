@@ -182,14 +182,5 @@ class SettingsViewModel(application: Application) : BaseSessionViewModel(applica
 
     //----------------------------------------------------------------------------------------------------------------
 
-    private val _onSuccessGettingUserInfo = SingleLiveEvent<UserModel>()
-    val onSuccessGettingUserInfo : LiveData<UserModel> get() = _onSuccessGettingUserInfo
-    private val _onSuccessGettingNullUserInfo = SingleLiveEvent<UserModel>()
-    val onSuccessGettingNullUserInfo : LiveData<UserModel> get() = _onSuccessGettingNullUserInfo
 
-    fun getUserInfo()  {
-        apiCall(userRepository.getUserInfo(), {
-            _onSuccessGettingUserInfo.postValue(it) },
-            { _onSuccessGettingNullUserInfo.call() })
-    }
 }

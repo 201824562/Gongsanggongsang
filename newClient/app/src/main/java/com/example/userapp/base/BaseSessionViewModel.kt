@@ -3,6 +3,7 @@ package com.example.userapp.base
 import android.app.Application
 import androidx.lifecycle.*
 import com.example.userapp.data.AppDatabase
+import com.example.userapp.data.dto.UserModel
 import com.example.userapp.data.repository.UserRepository
 import com.example.userapp.utils.SingleLiveEvent
 import com.example.userapp.utils.SnackbarMessageString
@@ -53,6 +54,17 @@ abstract class BaseSessionViewModel(application: Application)  : AndroidViewMode
     init {
         _agencyInfo = userRepository.getAgencyInfo(application)
         _authToken = userRepository.getUserToken(application)
+    }
+
+    private val _onSuccessGettingUserInfo = SingleLiveEvent<UserModel>()
+    val onSuccessGettingUserInfo : LiveData<UserModel> get() = _onSuccessGettingUserInfo
+    private val _onSuccessGettingNullUserInfo = SingleLiveEvent<UserModel>()
+    val onSuccessGettingNullUserInfo : LiveData<UserModel> get() = _onSuccessGettingNullUserInfo
+
+    fun getUserInfo()  {
+        apiCall(userRepository.getUserInfo(), {
+            _onSuccessGettingUserInfo.postValue(it) },
+            { _onSuccessGettingNullUserInfo.call() })
     }
 
     private val _apiCallErrorEvent:SingleLiveEvent<String> = SingleLiveEvent()
