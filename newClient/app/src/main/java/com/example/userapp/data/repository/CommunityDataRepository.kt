@@ -302,7 +302,7 @@ class CommunityDataRepository() {
     private fun updateNoticeCategoryPostData(agency: String, noticeCategory : String) {
         var noticeDataList: ArrayList<PostDataInfo> = arrayListOf()
         firestore.collection(agency).document("community").collection("notice")
-            .whereEqualTo("post_category", noticeCategory)
+            .whereEqualTo("post_state", noticeCategory)
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {

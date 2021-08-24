@@ -76,7 +76,7 @@ class CommunityPostMarketFragment : BaseFragment<FragmentCommunityPostBinding, C
                 if(it.post_name == localUserName){
                     postRemoveButton.visibility = View.VISIBLE
                 }
-                if(collectionName == "4_with" && localUserName == it.post_name && it.post_state == "모집 중"){
+                if(localUserName == it.post_name && it.post_state == "판매 중"){
                     postWithComplete.visibility = View.VISIBLE
                 }
                 if(it.post_state != "none"){
@@ -123,6 +123,9 @@ class CommunityPostMarketFragment : BaseFragment<FragmentCommunityPostBinding, C
     @RequiresApi(Build.VERSION_CODES.O)
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run{
+            marketWriteBackButton.setOnClickListener {
+                findNavController().navigate(R.id.action_communityPostMarketFragment_pop)
+            }
             commentsRegister.setOnClickListener{
                 val postDateNow: String = LocalDate.now().toString()
                 val postTimeNow : String = LocalTime.now().toString()
@@ -170,6 +173,12 @@ class CommunityPostMarketFragment : BaseFragment<FragmentCommunityPostBinding, C
             listener = object : CommunityCommentRecyclerAdapter.OnCommunityCommentItemClickListener{
                 override fun onCommentItemClick(position: Int) {
                     makeDialog("정말로 댓글을 삭제할까요?", "isComment", getItem(position))
+                }
+            }
+            tagListener = object  : CommunityCommentRecyclerAdapter.OnCommunityCommentItemTagClickListener{
+                override fun onCommentItemTagClick(position: Int) {
+                    val tagName = "@" + getItem(position).commentName
+                    viewbinding.writeComment.setText(tagName)
                 }
             }
         }

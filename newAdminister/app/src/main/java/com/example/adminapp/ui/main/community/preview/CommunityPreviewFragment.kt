@@ -86,6 +86,9 @@ class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, C
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run{
+            previewBackButton.setOnClickListener {
+                findNavController().navigate(R.id.action_communityPreviewFragment_pop)
+            }
             previewWriteRegisterButton.setOnClickListener{
                 when(collectionName){
                     "5_market" -> findNavController().navigate(R.id.action_communityPreview_to_communityWriteMarket, collectionNameBundle)
@@ -94,9 +97,6 @@ class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, C
             }
             previewSearchButton.setOnClickListener {
                 findNavController().navigate(R.id.action_communityPreview_communitySearch, collectionNameBundle)
-            }
-            previewBackButton.setOnClickListener {
-                findNavController().navigate(R.id.action_communityPreviewFragment_self)
             }
         }
 

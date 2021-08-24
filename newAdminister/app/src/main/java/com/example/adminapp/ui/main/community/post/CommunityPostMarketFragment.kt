@@ -123,6 +123,9 @@ class CommunityPostMarketFragment : BaseFragment<FragmentCommunityPostBinding, C
     @RequiresApi(Build.VERSION_CODES.O)
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run{
+            marketWriteBackButton.setOnClickListener {
+                findNavController().navigate(R.id.action_communityPostMarketFragment_pop)
+            }
             commentsRegister.setOnClickListener{
                 val postDateNow: String = LocalDate.now().toString()
                 val postTimeNow : String = LocalTime.now().toString()
@@ -172,6 +175,12 @@ class CommunityPostMarketFragment : BaseFragment<FragmentCommunityPostBinding, C
                     makeDialog("정말로 댓글을 삭제할까요?", "isComment", getItem(position))
                 }
             }
+            tagListener = object  : CommunityCommentRecyclerAdapter.OnCommunityCommentItemTagClickListener{
+                override fun onCommentItemTagClick(position: Int) {
+                    val tagName = "@" + getItem(position).commentName
+                    viewbinding.writeComment.setText(tagName)
+                }
+            }
         }
         commentRecyclerAdapter.notifyDataSetChanged()
     }
@@ -184,8 +193,7 @@ class CommunityPostMarketFragment : BaseFragment<FragmentCommunityPostBinding, C
         }
         attachPostPhotoRecyclerAdapter = CommunityAttachPostPhotoRecyclerAdapter(remoteGetPhotoUri)
         viewbinding.postPhotoRecycler.adapter = attachPostPhotoRecyclerAdapter.apply {
-            listener = object :
-                CommunityAttachPostPhotoRecyclerAdapter.OnCommunityPhotoItemClickListener {
+            listener = object : CommunityAttachPostPhotoRecyclerAdapter.OnCommunityPhotoItemClickListener {
                 override fun onPhotoItemClick(position: Int) {
                     var bundle = bundleOf(
                         "photo_uri" to remoteGetPhotoUri.toTypedArray(),

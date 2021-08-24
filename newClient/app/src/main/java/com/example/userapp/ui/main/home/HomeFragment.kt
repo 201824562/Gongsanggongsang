@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.userapp.MainActivity
@@ -38,6 +39,27 @@ class HomeFragment : BaseFragment<FragmentMainhomeHomeBinding, CommunityViewMode
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run {
+            mainHomeToSuggestCommunity.setOnClickListener {
+                var collection_name = "3_suggest"
+                var collection_name_bundle = bundleOf(
+                    "collection_name" to collection_name
+                )
+                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, collection_name_bundle)
+            }
+            mainHomeToWithCommunity.setOnClickListener {
+                var collection_name = "4_with"
+                var collection_name_bundle = bundleOf(
+                    "collection_name" to collection_name
+                )
+                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, collection_name_bundle)
+            }
+            mainHomeToMarketCommunity.setOnClickListener {
+                var collection_name = "5_market"
+                var collection_name_bundle = bundleOf(
+                    "collection_name" to collection_name
+                )
+                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, collection_name_bundle)
+            }
             mainHomeNoticeAllButton.setOnClickListener {
                 findNavController().navigate(R.id.action_mainFragment_to_mainhomeNoticeFragment)
             }

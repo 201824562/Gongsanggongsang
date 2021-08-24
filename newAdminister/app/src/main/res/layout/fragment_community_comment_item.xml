@@ -8,6 +8,7 @@
         android:id="@+id/comment_self_image"
         android:layout_width="44dp"
         android:layout_height="44dp"
+        android:src="@drawable/ic_no_profile"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -53,20 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="1dp"
                 android:layout_weight="1"/>
-            <Button
-                android:id="@+id/commentDeleteButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/transparent"
-                android:text="삭제"
-                android:layout_gravity="end"
-                android:minHeight="0dp"
-                android:paddingVertical="3dp"
-                android:gravity="right|center"
-                android:textStyle="normal"
-                android:textSize="12sp"
-                android:textColor="#7f000000"
-                android:lineSpacingExtra="6sp"/>
+
         </LinearLayout>
         <TextView
             android:id="@+id/community_comment_post"
@@ -80,7 +68,42 @@
             android:layout_marginTop="8dp"
             android:layout_marginLeft="12dp"
             android:layout_marginBottom="10dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/commentTagButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:background="@color/transparent"
+                android:lineSpacingExtra="6sp"
+                android:minHeight="0dp"
+                android:paddingVertical="3dp"
+                android:text="답글 달기"
+                android:gravity="left"
+                android:textColor="#7f000000"
+                android:textSize="12sp"
+                android:textStyle="normal" />
+            <Button
+                android:id="@+id/commentDeleteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:text="삭제"
+                android:gravity="left"
+                android:layout_gravity="end"
+                android:minHeight="0dp"
+                android:paddingVertical="3dp"
+                android:textStyle="normal"
+                android:textSize="12sp"
+                android:textColor="#7f000000"
+                android:lineSpacingExtra="6sp"/>
+        </LinearLayout>
+
     </LinearLayout>
+
 
     <View
         app:layout_constraintBottom_toBottomOf="parent"

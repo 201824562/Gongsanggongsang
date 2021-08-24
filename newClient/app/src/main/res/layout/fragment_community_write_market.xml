@@ -115,7 +115,7 @@
         android:id="@+id/market_write_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="가을 입력해주세요"
+        android:hint="가격을 입력해주세요"
         android:textStyle="normal"
         android:textSize="12sp"
         android:textColorHint="#7f000000"
@@ -124,7 +124,8 @@
         android:layout_marginRight="18dp"
         android:layout_marginTop="16dp"
         android:paddingBottom="20dp"
-        android:backgroundTint="#33000000"/>
+        android:backgroundTint="#33000000"
+        android:inputType="number"/>
 
     <TextView
         android:layout_width="wrap_content"

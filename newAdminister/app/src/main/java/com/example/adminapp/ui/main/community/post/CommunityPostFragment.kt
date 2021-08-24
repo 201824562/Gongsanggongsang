@@ -123,6 +123,9 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
     @RequiresApi(Build.VERSION_CODES.O)
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run{
+            marketWriteBackButton.setOnClickListener {
+                findNavController().navigate(R.id.action_community_post_pop)
+            }
             commentsRegister.setOnClickListener{
                 val postDateNow: String = LocalDate.now().toString()
                 val postTimeNow : String = LocalTime.now().toString()
@@ -170,6 +173,12 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
             listener = object : CommunityCommentRecyclerAdapter.OnCommunityCommentItemClickListener{
                 override fun onCommentItemClick(position: Int) {
                     makeDialog("정말로 댓글을 삭제할까요?", "isComment", getItem(position))
+                }
+            }
+            tagListener = object  : CommunityCommentRecyclerAdapter.OnCommunityCommentItemTagClickListener{
+                override fun onCommentItemTagClick(position: Int) {
+                    val tagName = "@" + getItem(position).commentName
+                    viewbinding.writeComment.setText(tagName)
                 }
             }
         }

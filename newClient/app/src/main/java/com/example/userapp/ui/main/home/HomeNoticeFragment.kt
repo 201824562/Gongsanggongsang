@@ -53,10 +53,11 @@ class HomeNoticeFragment : BaseFragment<FragmentMainhomeHomeNoticeBinding, Commu
             noticePreviewRecyclerAdapter.notifyDataSetChanged()
         }
         viewbinding.run {
-
+            previewBackButton.setOnClickListener {
+                findNavController().navigate(R.id.action_mainNotice_pop)
+            }
             previewSearchButton.setOnClickListener {
-                findNavController().
-                navigate(R.id.action_communityNotice_to_communitySearch, collectionNameBundle)
+                findNavController().navigate(R.id.action_communityNotice_to_communitySearch, collectionNameBundle)
             }
             mainhomeNoticeShowAllButton.setOnClickListener {
                 viewmodel.getNoticePostData(adminAgency).observe(viewLifecycleOwner){

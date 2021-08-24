@@ -92,13 +92,22 @@
         <action
             android:id="@+id/action_communityNotice_to_communitySearch"
             app:destination="@id/communitySearchFragment"/>
+        <action
+            android:id="@+id/action_mainNotice_pop"
+            app:popUpTo="@id/mainhomeNoticeFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/mainhomeNoticeWriteFragment"
         android:name="com.example.adminapp.ui.main.community.write.HomeNoticeWriteFragment">
         <action
             android:id="@+id/action_noticeWrite_to_noticePost"
-            app:destination="@+id/communityPostFragment"/>
+            app:destination="@+id/communityPostFragment"
+            app:popUpTo="@id/mainhomeNoticeWriteFragment"/>
+        <action
+            android:id="@+id/action_mainNoticeWrite_pop"
+            app:popUpTo="@id/mainhomeNoticeWriteFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
@@ -350,6 +359,10 @@
             app:argType="string"
             android:name="collection_name"
             android:defaultValue="0"/>
+        <action
+            android:id="@+id/action_communityWrite_pop"
+            app:popUpTo="@id/communityWriteFragment"
+            app:popUpToInclusive="true" />
 
     </fragment>
     <fragment
@@ -374,8 +387,9 @@
             android:name="collection_name"
             android:defaultValue="0"/>
         <action
-            android:id="@+id/action_communityPreviewFragment_self"
-            app:popUpTo="@id/communityPreviewFragment" />
+            android:id="@+id/action_communityPreviewFragment_pop"
+            app:popUpTo="@id/communityPreviewFragment"
+            app:popUpToInclusive="true"/>
         <action
             android:id="@+id/action_communityPreview_communitySearch"
             app:destination="@id/communitySearchFragment" />
@@ -393,6 +407,10 @@
         <action
             android:id="@+id/action_communityWriteMarket_to_communityPhoto"
             app:destination="@+id/communityPhotoFragment" />
+        <action
+            android:id="@+id/action_communityMarketWrite_pop"
+            app:popUpTo="@id/communityWriteMarketFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -464,6 +482,10 @@
             android:name="collection_name"
             app:argType="string"
             android:defaultValue="0"/>
+        <action
+            android:id="@+id/action_communitySearch_pop"
+            app:popUpTo="@id/communitySearchFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
 

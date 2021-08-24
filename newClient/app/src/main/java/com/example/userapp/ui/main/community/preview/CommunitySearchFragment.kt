@@ -50,6 +50,9 @@ class CommunitySearchFragment : BaseFragment<FragmentCommunitySearchBinding, Com
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run{
+            searchBackButton.setOnClickListener {
+                findNavController().navigate(R.id.action_communitySearch_pop)
+            }
             searchCompleteButton.setOnClickListener {
                 viewmodel.getSearchPostData(userAgency, collectionName, searchKeyword.text.toString()).observe(viewLifecycleOwner){
                     when(collectionName){

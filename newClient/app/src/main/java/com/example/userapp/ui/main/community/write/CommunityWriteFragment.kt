@@ -81,8 +81,6 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding, Commu
             initAttachPhotoRecycler()
         }
         //TODO: mainActivity clear 처리
-        getLocalPhotoUri = ac.getPhoto()
-        getBitmap()
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?){
@@ -92,6 +90,9 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding, Commu
     override fun initViewFinal(savedInstanceState: Bundle?) {
 
         viewbinding.run {
+            writeBackButton.setOnClickListener {
+                findNavController().navigate(R.id.action_communityWrite_pop)
+            }
             writeAttachPhotoButton.setOnClickListener{
                 getPhotoPermission()
             }
@@ -101,6 +102,9 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding, Commu
                 }
                 else if((collectionName == "2_emergency" || collectionName == "3_suggest") && writePostCategoryData == "none"){
                     showToast("분류를 선택해주세요.")
+                }
+                else if(collectionName == "4_with"){
+                    writePostCategoryData = "모집 중"
                 }
                 else{
                     val postDateNow: String = LocalDate.now().toString()
@@ -135,7 +139,9 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding, Commu
     private val requestLocationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()){ result : Boolean ->
         if (result) getAllPhoto()
-        else showSnackbar("권한이 거부되었습니다.")
+        else {
+            showSnackbar("권한이 거부되었습니다.")
+        }
     }
 
     private fun getPhotoPermission(){
