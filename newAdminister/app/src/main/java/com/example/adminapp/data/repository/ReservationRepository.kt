@@ -74,7 +74,7 @@ class ReservationRepository() {
                     if (it.data != null && it.get("name") == itemName) {
                         emitter.onSuccess(
                             ReservationEquipmentSettingData(
-                                it.getLong("icon")!!.toInt(),
+                                CategoryResources.makeIconStringToDrawableID((it.get("icon") as String)),
                                 it.get("name") as String,
                                 it.get("maxTime") as Long
                             )
@@ -105,7 +105,7 @@ class ReservationRepository() {
                     for (document in snapshot) {
                         equipmentSettingList.add(
                             ReservationEquipmentSettingData(
-                                document.getLong("icon")!!.toInt(),
+                                CategoryResources.makeIconStringToDrawableID((document.get("icon") as String)),
                                 document.get("name") as String,
                                 document.get("maxTime") as Long)
                         )
@@ -134,7 +134,7 @@ class ReservationRepository() {
                     for (document in snapshot) {
                         equipmentLogList.add(
                             ReservationEquipmentLog(
-                                document.getLong("icon")!!.toInt(),
+                                CategoryResources.makeIconStringToDrawableID((document.get("icon") as String)),
                                 document.get("name") as String,
                                 document.get("userId") as String,
                                 document.get("userName") as String,
@@ -168,7 +168,7 @@ class ReservationRepository() {
                             ReceiverEquipment(
                                 true,
                                 ReservationEquipmentData(
-                                    it.getLong("icon")!!.toInt(),
+                                    CategoryResources.makeIconStringToDrawableID((it.get("icon") as String)),
                                     it.get("name") as String,
                                     it.get("user") as String,
                                     it.get("startTime") as String,
@@ -206,7 +206,7 @@ class ReservationRepository() {
                         if (document.get("endTime") != null) endTime = (document.get("endTime") as String)
                         equipmentList.add(
                             ReservationEquipmentData(
-                                document.getLong("icon")!!.toInt(),
+                                CategoryResources.makeIconStringToDrawableID((document.get("icon") as String)),
                                 document.get("name") as String,
                                 document.get("user") as String,
                                 startTime,
@@ -244,7 +244,7 @@ class ReservationRepository() {
                         if (document.get("endTime") != null) endTime = (document.get("endTime") as String)
                         equipmentList.add(
                             ReservationEquipmentData(
-                                document.getLong("icon")!!.toInt(),
+                                CategoryResources.makeIconStringToDrawableID((document.get("icon") as String)),
                                 document.get("name") as String,
                                 document.get("user") as String,
                                 startTime,
@@ -282,7 +282,7 @@ class ReservationRepository() {
                             ReceiverFacilitySettingData(
                                 true,
                                 ReservationFacilitySettingData(
-                                    it.getLong("icon")!!.toInt(),
+                                    CategoryResources.makeIconStringToDrawableID((it.get("icon") as String)),
                                     it.get("name") as String,
                                     it.get("intervalTime") as Long,
                                     it.get("maxTime") as Long,
@@ -324,7 +324,7 @@ class ReservationRepository() {
                     for (document in snapshot) {
                         facilityLogList.add(
                             ReservationFacilityLog(
-                                document.getLong("icon")!!.toInt(),
+                                CategoryResources.makeIconStringToDrawableID((document.get("icon") as String)),
                                 document.get("name") as String,
                                 document.get("userId") as String,
                                 document.get("userName") as String,
@@ -374,7 +374,7 @@ class ReservationRepository() {
                                         ReservationLogItem(
                                             ReservationType.EQUIPMENT,
                                             ReservationEquipmentLog(
-                                                document.getLong("icon")!!.toInt(),
+                                                CategoryResources.makeIconStringToDrawableID((document.get("icon") as String)),
                                                 document.get("name") as String,
                                                 document.get("userId") as String,
                                                 document.get("userName") as String,
@@ -389,7 +389,7 @@ class ReservationRepository() {
                                             ReservationType.FACILITY,
                                             null,
                                             ReservationFacilityLog(
-                                                document.getLong("icon")!!.toInt(),
+                                                CategoryResources.makeIconStringToDrawableID((document.get("icon") as String)),
                                                 document.get("name") as String,
                                                 document.get("userId") as String,
                                                 document.get("userName") as String,
@@ -420,7 +420,7 @@ class ReservationRepository() {
                                     ReservationLogItem(
                                         ReservationType.EQUIPMENT,
                                         ReservationEquipmentLog(
-                                            document.getLong("icon")!!.toInt(),
+                                            CategoryResources.makeIconStringToDrawableID((document.get("icon") as String)),
                                             document.get("name") as String,
                                             document.get("userId") as String,
                                             document.get("userName") as String,
@@ -449,7 +449,7 @@ class ReservationRepository() {
                                     ReservationType.FACILITY,
                                     null,
                                     ReservationFacilityLog(
-                                        document.getLong("icon")!!.toInt(),
+                                        CategoryResources.makeIconStringToDrawableID((document.get("icon") as String)),
                                         document.get("name") as String,
                                         document.get("userId") as String,
                                         document.get("userName") as String,
@@ -495,7 +495,7 @@ class ReservationRepository() {
                             ReceiverFacilityLog(
                                 true,
                                 ReservationFacilityLog(
-                                    it.getLong("icon")!!.toInt(),
+                                    CategoryResources.makeIconStringToDrawableID((it.get("icon") as String)),
                                     it.get("name") as String,
                                     it.get("userId") as String,
                                     it.get("userName") as String,
@@ -533,7 +533,7 @@ class ReservationRepository() {
                     for (document in snapshot) {
                         facilityList.add(
                             ReservationFacilityLog(
-                                document.getLong("icon")!!.toInt(),
+                                CategoryResources.makeIconStringToDrawableID((document.get("icon") as String)),
                                 document.get("name") as String,
                                 document.get("userId") as String,
                                 document.get("userName") as String,
@@ -568,7 +568,7 @@ class ReservationRepository() {
                     for (document in snapshot) {
                         facilityLogList.add(
                             ReservationFacilityLog(
-                                document.getLong("icon")!!.toInt(),
+                                CategoryResources.makeIconStringToDrawableID((document.get("icon") as String)),
                                 document.get("name") as String,
                                 document.get("userId") as String,
                                 document.get("userName") as String,
@@ -605,7 +605,7 @@ class ReservationRepository() {
                         }
                         facilitySettingList.add(
                             ReservationFacilitySettingData(
-                                document.getLong("icon")!!.toInt(),
+                                CategoryResources.makeIconStringToDrawableID((document.get("icon") as String)),
                                 document.get("name") as String,
                                 document.get("intervalTime") as Long,
                                 document.get("maxTime") as Long,
@@ -723,11 +723,12 @@ class ReservationRepository() {
                     .addOnFailureListener { emitter.onError(Throwable("Error saving RESERVATION_INFO OF EQUIPMENT")) }
             }
             firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_EQUIPMENT)
-                .document(data.data.name).update("icon", data.equipmentData.icon, "name", data.equipmentData.name)
+                .document(data.data.name).update("icon", CategoryResources.makeDrawableIDToString(data.equipmentData.icon),
+                    "name", data.equipmentData.name)
                 .addOnSuccessListener { Log.e("checking", "부분 수정되었습니다!") }
                 .addOnFailureListener { emitter.onError(Throwable("Error saving RESERVATION_INFO OF EQUIPMENT")) }
             firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_EQUIPMENT_SETTINGS)
-                .document(data.data.name).set(data.data)
+                .document(data.data.name).set(data.data.getNewThis())
                 .addOnSuccessListener { emitter.onComplete() }
                 .addOnFailureListener { emitter.onError(Throwable("Error saving RESERVATION_SETTING OF EQUIPMENT")) }
         }
@@ -773,10 +774,10 @@ class ReservationRepository() {
         return Completable.create { emitter ->
             firestore.collection(agency).document(FIRESTORE_RESERVATION)
             firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_EQUIPMENT_SETTINGS)
-                .document(data.data.name).set(data.data)
+                .document(data.data.name).set(data.data.getNewThis())
                 .addOnFailureListener { emitter.onError(Throwable("Error saving RESERVATION_SETTING OF EQUIPMENT")) }
             firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_EQUIPMENT)
-                .document(data.data.name).set(data.equipmentData)
+                .document(data.data.name).set(data.equipmentData.getNewThis())
                 .addOnSuccessListener { emitter.onComplete() }
                 .addOnFailureListener { emitter.onError(Throwable("Error saving RESERVATION_INFO OF EQUIPMENT")) }
         }
@@ -786,7 +787,7 @@ class ReservationRepository() {
         return Completable.create { emitter ->
             firestore.collection(agency).document(FIRESTORE_RESERVATION)
             firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_FACILITY_SETTINGS)
-                .document(data.data.name).set(data.data)
+                .document(data.data.name).set(data.data.getNewThis())
                 .addOnFailureListener { emitter.onError(Throwable("Error saving RESERVATION_SETTING OF FACILITY")) }
             val facilityListData = ReservationFacilityItem(data.data, data.unableTimeList).makeReservationFacilityListData()
             firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_FACILITY)
