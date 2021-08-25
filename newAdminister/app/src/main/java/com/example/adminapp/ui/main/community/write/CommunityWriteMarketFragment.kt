@@ -21,6 +21,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.adminapp.MainActivity
 import com.example.adminapp.R
 import com.example.adminapp.base.BaseFragment
+import com.example.adminapp.base.BaseSessionFragment
 import com.example.adminapp.data.model.PostDataInfo
 import com.example.adminapp.databinding.FragmentCommunityWriteBinding
 import com.example.adminapp.databinding.FragmentCommunityWriteMarketBinding
@@ -29,7 +30,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 
-class CommunityWriteMarketFragment : BaseFragment<FragmentCommunityWriteMarketBinding, CommunityViewModel>() {
+class CommunityWriteMarketFragment : BaseSessionFragment<FragmentCommunityWriteMarketBinding, CommunityViewModel>() {
     private lateinit var collectionName : String
     private lateinit var documentName : String
     private lateinit var bundle: Bundle

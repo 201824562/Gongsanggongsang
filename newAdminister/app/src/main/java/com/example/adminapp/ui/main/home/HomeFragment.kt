@@ -9,10 +9,11 @@ import androidx.navigation.fragment.findNavController
 import com.example.adminapp.MainActivity
 import com.example.adminapp.R
 import com.example.adminapp.base.BaseFragment
+import com.example.adminapp.base.BaseSessionFragment
 import com.example.adminapp.databinding.FragmentMainhomeHomeBinding
 import com.example.adminapp.ui.main.community.CommunityViewModel
 
-class HomeFragment : BaseFragment<FragmentMainhomeHomeBinding, CommunityViewModel>(){
+class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityViewModel>(){
     override lateinit var viewbinding: FragmentMainhomeHomeBinding
     override val viewmodel: CommunityViewModel by viewModels()
     var agency = ""

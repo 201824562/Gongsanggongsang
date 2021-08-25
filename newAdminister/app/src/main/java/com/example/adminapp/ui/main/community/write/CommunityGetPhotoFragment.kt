@@ -10,10 +10,11 @@ import androidx.navigation.fragment.findNavController
 import com.example.adminapp.MainActivity
 import com.example.adminapp.R
 import com.example.adminapp.base.BaseFragment
+import com.example.adminapp.base.BaseSessionFragment
 import com.example.adminapp.databinding.FragmentCommunityGetPhotoBinding
 import com.example.adminapp.ui.main.community.CommunityViewModel
 
-class CommunityGetPhotoFragment : BaseFragment<FragmentCommunityGetPhotoBinding, CommunityViewModel>() {
+class CommunityGetPhotoFragment : BaseSessionFragment<FragmentCommunityGetPhotoBinding, CommunityViewModel>() {
     override lateinit var viewbinding: FragmentCommunityGetPhotoBinding
     override val viewmodel : CommunityViewModel by viewModels()
     private var localSelectedPhotoItem : ArrayList<String> = arrayListOf()

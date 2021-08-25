@@ -11,11 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.adminapp.MainActivity
 import com.example.adminapp.R
 import com.example.adminapp.base.BaseFragment
+import com.example.adminapp.base.BaseSessionFragment
 import com.example.adminapp.data.model.PostDataInfo
 import com.example.adminapp.databinding.FragmentCommunityPreviewBinding
 import com.example.adminapp.ui.main.community.CommunityViewModel
 
-class CommunityPreviewFragment : BaseFragment<FragmentCommunityPreviewBinding, CommunityViewModel>() {
+class CommunityPreviewFragment : BaseSessionFragment<FragmentCommunityPreviewBinding, CommunityViewModel>() {
     override lateinit var viewbinding: FragmentCommunityPreviewBinding
 
     override val viewmodel : CommunityViewModel by viewModels()

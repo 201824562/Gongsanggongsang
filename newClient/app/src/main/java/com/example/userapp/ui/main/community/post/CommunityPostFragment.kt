@@ -1,8 +1,10 @@
 package com.example.userapp.ui.main.community.post
 
 import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,16 +16,24 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
+import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.data.entity.NotificationData
 import com.example.userapp.data.entity.PostCommentDataClass
+import com.example.userapp.data.entity.PushNotification
 import com.example.userapp.databinding.FragmentCommunityPostBinding
+import com.example.userapp.ui.main.alarm.RetrofitInstance
 import com.example.userapp.ui.main.community.CommunityViewModel
 import com.example.userapp.ui.main.community.write.CommunityAttachPostPhotoRecyclerAdapter
 import com.example.userapp.utils.WrapedDialogBasicTwoButton
+import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
 
 
-class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, CommunityViewModel>(){
+class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, CommunityViewModel>(){
     override lateinit var viewbinding: FragmentCommunityPostBinding
     override val viewmodel: CommunityViewModel by viewModels()
 
@@ -39,7 +49,7 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
 
     private var localUserName = ""
     private var agency = ""
-
+    private var token = ""
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -55,7 +65,7 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
         val ac = activity as MainActivity
         agency = ac.getUserData()!!.agency
         localUserName = ac.getUserData()!!.nickname
-
+        token = ac.token
         collectionName= arguments?.getString("collection_name").toString()
         documentName = arguments?.getString("document_name").toString()
         bundle = bundleOf(
@@ -73,6 +83,7 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
                 "5_market" -> postToolbarName.text = "장터게시판"
             }
             viewmodel.getPostData(agency, collectionName, documentName).observe(viewLifecycleOwner) {
+                Log.e("check222", "{$it}")
                 if(it.post_name == localUserName){
                     postRemoveButton.visibility = View.VISIBLE
                 }
@@ -101,9 +112,10 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
                 communityPostName.text = it.post_name
                 postContents.text = it.post_contents
                 postTitle.text = it.post_title
-
-                viewmodel.getPostPhotoData(it.post_photo_uri).observe(viewLifecycleOwner){ it
+                viewmodel.getPostPhotoData(it.post_photo_uri)
+                viewmodel.getPostPhotoSuccess().observe(viewLifecycleOwner){
                     remoteGetPhotoUri = it
+                    Log.e("teg", "{$it}")
                     initPhotoRecyclerView()
                     attachPostPhotoRecyclerAdapter.notifyDataSetChanged()
                 }
@@ -119,7 +131,7 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
     override fun initDataBinding(savedInstanceState: Bundle?) {
 
     }
-
+    
     @RequiresApi(Build.VERSION_CODES.O)
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run{
@@ -148,6 +160,11 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
                         }
                     }
                 }
+                val PushNotification = PushNotification(
+                    NotificationData("StreetCat", "내가 쓴 게시글에 댓글이 달렸어요!"),
+                    token
+                )
+                sendNotification(PushNotification)
             }
             postRemoveButton.setOnClickListener{
                 makeDialog("정말로 글을 삭제할까요?", "isPost", PostCommentDataClass())
@@ -234,5 +251,17 @@ class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, Communi
             }
         }
         showDialog(dialog, viewLifecycleOwner)
+    }
+    private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
+        try {
+            val response = RetrofitInstance.api.postNotification(notification)
+            if(response.isSuccessful) {
+                Log.d(TAG, "Response: ${Gson().toJson(response)}")
+            } else {
+                Log.e(TAG, response.errorBody().toString())
+            }
+        } catch(e: Exception) {
+           Log.e(TAG, e.toString())
+        }
     }
 }

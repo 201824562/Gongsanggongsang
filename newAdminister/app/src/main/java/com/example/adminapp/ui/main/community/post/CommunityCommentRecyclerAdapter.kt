@@ -17,7 +17,6 @@ class CommunityCommentRecyclerAdapter(
     private val communityCommentItems:ArrayList<PostCommentDataClass>,
     private val localUserName : String
 ): RecyclerView.Adapter<CommunityCommentRecyclerAdapter.CommunityCommentViewHolder>() {
-    val viewmodel : CommunityViewModel = CommunityViewModel()
 
     interface OnCommunityCommentItemClickListener{
         fun onCommentItemClick(position: Int)
@@ -55,7 +54,6 @@ class CommunityCommentRecyclerAdapter(
     ) : RecyclerView.ViewHolder(viewbinding.root) {
         val binding = viewbinding
         val listener = listener
-        val viewModel : CommunityViewModel = CommunityViewModel()
         val localUserName = localUserName
         @RequiresApi(Build.VERSION_CODES.O)
         fun bind(it : PostCommentDataClass) {

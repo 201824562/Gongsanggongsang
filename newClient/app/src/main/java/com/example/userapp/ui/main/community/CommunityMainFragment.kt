@@ -12,7 +12,7 @@ import com.example.userapp.base.BaseFragment
 import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.databinding.FragmentMainhomeCommunityBinding
 
-class CommunityMainFragment : BaseFragment<FragmentMainhomeCommunityBinding, CommunityViewModel>(){
+class CommunityMainFragment : BaseSessionFragment<FragmentMainhomeCommunityBinding, CommunityViewModel>(){
     override lateinit var viewbinding: FragmentMainhomeCommunityBinding
 
     override val viewmodel: CommunityViewModel by viewModels()

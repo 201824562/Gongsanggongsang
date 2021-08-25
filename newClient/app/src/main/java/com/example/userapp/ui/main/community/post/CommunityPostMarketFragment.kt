@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
+import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.data.entity.PostCommentDataClass
 import com.example.userapp.databinding.FragmentCommunityPostBinding
 import com.example.userapp.ui.main.community.CommunityViewModel
@@ -23,7 +24,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 
-class CommunityPostMarketFragment : BaseFragment<FragmentCommunityPostBinding, CommunityViewModel>(){
+class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostBinding, CommunityViewModel>(){
     override lateinit var viewbinding: FragmentCommunityPostBinding
     override val viewmodel: CommunityViewModel by viewModels()
 
@@ -102,7 +103,8 @@ class CommunityPostMarketFragment : BaseFragment<FragmentCommunityPostBinding, C
                 postContents.text = it.post_contents
                 postTitle.text = it.post_title
 
-                viewmodel.getPostPhotoData(it.post_photo_uri).observe(viewLifecycleOwner){ it
+                viewmodel.getPostPhotoData(it.post_photo_uri)
+                viewmodel.getPostPhotoSuccess().observe(viewLifecycleOwner){
                     remoteGetPhotoUri = it
                     initPhotoRecyclerView()
                     attachPostPhotoRecyclerAdapter.notifyDataSetChanged()

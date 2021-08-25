@@ -11,13 +11,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
+import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentCommunityPhotoBinding
 import com.example.userapp.databinding.FragmentCommunitySearchBinding
 import com.example.userapp.ui.main.community.CommunityViewModel
 import com.example.userapp.ui.main.community.write.CommunityPhotoRecyclerAdapter
 
-class CommunitySearchFragment : BaseFragment<FragmentCommunitySearchBinding, CommunityViewModel>(){
+class CommunitySearchFragment : BaseSessionFragment<FragmentCommunitySearchBinding, CommunityViewModel>(){
     override lateinit var viewbinding: FragmentCommunitySearchBinding
 
     override val viewmodel: CommunityViewModel by viewModels()

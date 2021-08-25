@@ -1,12 +1,14 @@
 package com.example.userapp.ui.main.community.write
 
 import android.Manifest
+import android.content.ContentValues
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,17 +20,25 @@ import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
+import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.data.entity.PushNotification
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentCommunityWriteBinding
+import com.example.userapp.ui.main.alarm.RetrofitInstance
 import com.example.userapp.ui.main.community.CommunityViewModel
+import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
 
 
-class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding, CommunityViewModel>() {
+class CommunityWriteFragment : BaseSessionFragment<FragmentCommunityWriteBinding, CommunityViewModel>() {
     private lateinit var collectionName : String
     private lateinit var documentName : String
     private lateinit var bundle: Bundle
@@ -66,6 +76,7 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding, Commu
         )
 
         getLocalPhotoUri = ac.getPhoto()
+        Log.e("tt", "{$getLocalPhotoUri}")
         getBitmap()
         when(collectionName){
             "1_free" -> viewbinding.previewToolbarName.text = "자유게시판"
@@ -126,9 +137,14 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding, Commu
                         "collection_name" to collectionName,
                         "document_name" to postData.post_id
                     )
-                    viewmodel.insertPostData(userAgency, postData).observe(viewLifecycleOwner){
+                    viewmodel.uploadPhoto(bitmapArray, uriArray)
+                    viewmodel.getUploadPhoto().observe(viewLifecycleOwner){
                         if(it){
-                            findNavController().navigate(R.id.action_communityWrite_to_communityPost, bundle)
+                            viewmodel.insertPostData(userAgency, postData).observe(viewLifecycleOwner){
+                                if(it){
+                                    findNavController().navigate(R.id.action_communityWrite_to_communityPost, bundle)
+                                }
+                            }
                         }
                     }
                 }
@@ -141,6 +157,7 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding, Commu
         if (result) getAllPhoto()
         else {
             showSnackbar("권한이 거부되었습니다.")
+            showPermissionRationale("")
         }
     }
 
@@ -193,6 +210,11 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding, Commu
     }
 
     private fun initAttachPhotoRecycler() {
+        viewbinding.writePhotoRecycler.run {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context).also { it.orientation = LinearLayoutManager.HORIZONTAL }
+            adapter = CommunityAttachPostPhotoRecyclerAdapter(getLocalPhotoUri)
+        }
         attachPostPhotoRecyclerAdapter = CommunityAttachPhotoRecyclerAdapter(getLocalPhotoUri)
         viewbinding.writePhotoRecycler.adapter = attachPostPhotoRecyclerAdapter.apply {
             deleteButtonListener =
@@ -201,9 +223,9 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding, Commu
                         getLocalPhotoUri.removeAt(position)
                         attachPostPhotoRecyclerAdapter.notifyDataSetChanged()
                     }
-
                 }
         }
+        attachPostPhotoRecyclerAdapter.notifyDataSetChanged()
     }
     private fun initWriteCategorySelect(){
         viewbinding.run {
@@ -234,4 +256,5 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding, Commu
             }
         }
     }
+
 }

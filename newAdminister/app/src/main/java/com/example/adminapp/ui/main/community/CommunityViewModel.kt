@@ -1,13 +1,15 @@
 package com.example.adminapp.ui.main.community
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.adminapp.base.BaseSessionViewModel
 import com.example.adminapp.base.BaseViewModel
 import com.example.adminapp.data.model.PostCommentDataClass
 import com.example.adminapp.data.model.PostDataInfo
 import com.example.adminapp.data.repository.CommunityDataRepository
 
-class CommunityViewModel() : BaseViewModel() {
+class CommunityViewModel(application: Application) : BaseSessionViewModel(application) {
     var selectedItems : ArrayList<String> = arrayListOf()
     private val communityDataRepository : CommunityDataRepository = CommunityDataRepository.getInstance()
 

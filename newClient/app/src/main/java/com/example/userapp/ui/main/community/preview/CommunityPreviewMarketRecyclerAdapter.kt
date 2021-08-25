@@ -15,7 +15,6 @@ import java.time.LocalTime
 
 
 class CommunityPreviewMarketRecyclerAdapter(var postDataList : ArrayList<PostDataInfo>): RecyclerView.Adapter<CommunityPreviewMarketRecyclerAdapter.CommunityPreviewMarketViewHolder>() {
-    val viewmodel : CommunityViewModel = CommunityViewModel()
     interface OnCommunityMarketItemClickListener{
         fun onPreviewItemClick(position: Int)
     }

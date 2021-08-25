@@ -21,6 +21,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.adminapp.MainActivity
 import com.example.adminapp.R
 import com.example.adminapp.base.BaseFragment
+import com.example.adminapp.base.BaseSessionFragment
 import com.example.adminapp.data.model.PostDataInfo
 import com.example.adminapp.databinding.FragmentCommunityWriteBinding
 import com.example.adminapp.ui.main.community.CommunityViewModel
@@ -28,7 +29,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 
-class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding, CommunityViewModel>() {
+class CommunityWriteFragment : BaseSessionFragment<FragmentCommunityWriteBinding, CommunityViewModel>() {
     private lateinit var collectionName : String
     private lateinit var documentName : String
     private lateinit var bundle: Bundle
@@ -138,7 +139,8 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding, Commu
         ActivityResultContracts.RequestPermission()){ result : Boolean ->
         if (result) getAllPhoto()
         else {
-            showSnackbar("권한이 거부되었습니다.")
+            showSnackbar("거부되었습니다.")
+            showPermissionRationale("")
         }
     }
 

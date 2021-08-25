@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.adminapp.MainActivity
 import com.example.adminapp.R
 import com.example.adminapp.base.BaseFragment
+import com.example.adminapp.base.BaseSessionFragment
 import com.example.adminapp.data.model.PostCommentDataClass
 import com.example.adminapp.databinding.FragmentCommunityPostBinding
 import com.example.adminapp.ui.main.community.CommunityViewModel
@@ -23,7 +24,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 
-class CommunityPostFragment : BaseFragment<FragmentCommunityPostBinding, CommunityViewModel>(){
+class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, CommunityViewModel>(){
     override lateinit var viewbinding: FragmentCommunityPostBinding
     override val viewmodel: CommunityViewModel by viewModels()
 

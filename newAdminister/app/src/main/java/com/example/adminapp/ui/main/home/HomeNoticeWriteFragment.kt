@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.adminapp.MainActivity
 import com.example.adminapp.R
 import com.example.adminapp.base.BaseFragment
+import com.example.adminapp.base.BaseSessionFragment
 import com.example.adminapp.data.model.PostDataInfo
 import com.example.adminapp.databinding.FragmentMainhomeHomeNoticeWriteBinding
 import com.example.adminapp.ui.main.community.CommunityViewModel
@@ -29,7 +30,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 
-class HomeNoticeWriteFragment : BaseFragment<FragmentMainhomeHomeNoticeWriteBinding, CommunityViewModel>() {
+class HomeNoticeWriteFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeWriteBinding, CommunityViewModel>() {
     private var collection_name = "notice"
     private lateinit var document_name : String
     private lateinit var bundle: Bundle

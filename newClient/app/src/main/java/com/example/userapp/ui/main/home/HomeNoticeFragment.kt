@@ -12,11 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
+import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.ui.main.community.CommunityViewModel
 import com.example.userapp.ui.main.community.preview.CommunityPreviewRecyclerAdapter
 
-class HomeNoticeFragment : BaseFragment<FragmentMainhomeHomeNoticeBinding, CommunityViewModel>(){
+class HomeNoticeFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeBinding, CommunityViewModel>(){
     override lateinit var viewbinding: FragmentMainhomeHomeNoticeBinding
     override val viewmodel: CommunityViewModel by viewModels()
     private lateinit var noticePreviewRecyclerAdapter: CommunityPreviewRecyclerAdapter
