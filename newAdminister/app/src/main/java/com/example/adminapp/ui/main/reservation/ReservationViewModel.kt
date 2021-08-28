@@ -37,7 +37,7 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
         return reservationRepository.getReservationLogDataList(agencyInfo, index)
     }
     fun finishReservationEquipmentData(itemName : String)  {
-        reservationRepository.stopReservationEquipment(agencyInfo, itemName)
+        reservationRepository.stopReservationEquipment(true, agencyInfo, itemName)
     }
     fun finishReservationFacilityLogData(logDocumentId : String){
         reservationRepository.makeReservationLogFinished(agencyInfo, logDocumentId)
