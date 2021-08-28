@@ -2,6 +2,7 @@ package com.example.adminapp.ui.main.reservation.detail
 
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,6 +59,8 @@ class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReserva
     override fun initDataBinding(savedInstanceState: Bundle?) {
         viewmodel.run {
             getReservationEquipmentData(equipmentData.name).observe(viewLifecycleOwner){
+                Log.e("checking444", equipmentData.name)
+                Log.e("checking444", "$it")
                 if (!it.boolean){ findNavController().navigate(R.id.action_reservationDetailEquipmentFragment_pop) }
                 else{
                     equipmentData = it.equipmentData!!
@@ -88,13 +91,15 @@ class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReserva
             reserveDetailItemStopBtn.setOnClickListener {
                 if (!equipmentData.usable) viewmodel.startReservationEquipment(equipmentData.name)
                 else if (equipmentData.using) showStopWarningDialog()
-                else viewmodel.stopReservationEquipment(equipmentData)
+                else viewmodel.stopReservationEquipment(equipmentData.name)
             }
         }
     }
     override fun onDestroy() {
         super.onDestroy()
-        try { timer?.cancel() }
+        try { timer?.cancel()
+            //viewmodel.initDetailEquipmentLiveData()
+        }
         catch (e: Exception) { }
     }
 
@@ -110,7 +115,8 @@ class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReserva
             clickListener = object : WrapedDialogBasicTwoButton.DialogButtonClickListener{
                 override fun dialogCloseClickListener() { dismiss() }
                 override fun dialogCustomClickListener() {
-                    viewmodel.stopReservationEquipment(equipmentData)
+                    viewmodel.stopReservationEquipment(equipmentData.name)
+                    viewmodel.cancelReservationEquipment(equipmentData.documentId)
                     dismiss()
                 }
             }
@@ -119,7 +125,7 @@ class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReserva
     }
 
     private fun setRecyclerView() {
-        reservationDetailLogRVAdapter = ReservationDetailLogRVAdapter()
+        reservationDetailLogRVAdapter = ReservationDetailLogRVAdapter(viewmodel, null)
         viewbinding.reservationDetailRv.adapter = reservationDetailLogRVAdapter
     }
 
@@ -162,10 +168,15 @@ class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReserva
                 reserveDetailItemStopBtn.text = "사용모드 켜기"
                 reserveDetailItemStopBtn.setTextColor(ContextCompat.getColor(requireContext(), R.color.applemint))
                 reserveDetailItemIconBackground.background = ContextCompat.getDrawable(requireContext(), R.drawable.view_oval_gray)
+                reserveDetailItemUsedTimeText1.visibility = View.INVISIBLE
+                reserveDetailItemLeftTimeText1.visibility = View.INVISIBLE
+                reserveDetailItemLeftTimeText2.visibility = View.INVISIBLE
                 reserveDetailItemUserName.text = NO_USING_STRING
                 reserveDetailItemUsedTime1.text = NO_USING_STRING
-                reserveDetailItemLeftTime2.text = NO_USING_STRING
+                reserveDetailItemLeftTime1.text = NO_USING_STRING
                 reserveDetailItemLeftTime2.text = NO_USING_BLANK_STRING
+                reserveDetailItemStartTime.text = NO_USING_BLANK_STRING
+                reserveDetailItemEndTime.text = NO_USING_BLANK_STRING
             }
             else {
                 reserveDetailItemUsableState.text = CAN_USE_STATE
@@ -184,6 +195,8 @@ class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReserva
                     reserveDetailItemUsedTime1.text = NO_USING_STRING
                     reserveDetailItemLeftTime1.text = NO_USING_STRING
                     reserveDetailItemLeftTime2.text = NO_USING_BLANK_STRING
+                    reserveDetailItemStartTime.text = NO_USING_BLANK_STRING
+                    reserveDetailItemEndTime.text = NO_USING_BLANK_STRING
                 }
                 else{
                     reserveDetailItemIconBackground.background = ContextCompat.getDrawable(requireContext(), R.drawable.view_oval_light_orange)

@@ -11,13 +11,15 @@ data class ReservationFacilityBundle(var using : Boolean, val name : String, var
 data class ReservationLogItem(val type : ReservationType, val equipmentLog : ReservationEquipmentLog?, val facilityLog: ReservationFacilityLog? )
 
 data class ReservationEquipmentLog(val icon : Int, val name : String, val userId : String="", val userName : String="",
-                                   val reservationState : String = "", val reservationType : String = "", val startTime: String = "", val endTime: String = "")
+                                   val reservationState : String = "", val reservationType : String = "", val startTime: String = "", val endTime: String = "",
+                                   val documentId : String)
 @Parcelize
 data class ReservationFacilityLog(val icon : Int, val name : String, val userId : String="", val userName : String="",
                                     val reservationState : String = "", val reservationType : String = "",val startTime: String = "", val endTime: String = "",
                                     val documentId : String, val maxTime: Long, val usable: Boolean) : Parcelable
 
 data class ReservationEquipmentItem(val data : ReservationEquipmentSettingData, val equipmentData : ReservationEquipmentData)
+
 
 data class ReservationFacilityItem(val data : ReservationFacilitySettingData, val unableTimeList : List<ReservationUnableTimeItem>){
     fun makeReservationFacilityListData() : ReservationFacilityListData {
@@ -31,8 +33,14 @@ data class ReservationFacilityItem(val data : ReservationFacilitySettingData, va
 }
 
 @Parcelize
-data class ReservationEquipmentData(val icon : Int, val name : String, val user : String="", val startTime: String = "", val endTime: String = "", val intervalTime: Long=0L, val using: Boolean = false, val usable : Boolean = true , val maxTime : Long) :
-    Parcelable
+data class ReservationEquipmentData(val icon : Int, val name : String, val user : String="", val startTime: String = "", val endTime: String = "", val intervalTime: Long=0L, val using: Boolean = false, val usable : Boolean = true , val maxTime : Long, val documentId : String = "") :
+    Parcelable{
+    fun getNewThis() : ReservationEquipmentData2 {
+        val newIcon = CategoryResources.makeDrawableIDToString(icon)
+        return ReservationEquipmentData2(newIcon, name, user, startTime, endTime, intervalTime, using, usable, maxTime) }
+    }
+
+data class ReservationEquipmentData2(val icon : String, val name : String, val user : String="", val startTime: String = "", val endTime: String = "", val intervalTime: Long=0L, val using: Boolean = false, val usable : Boolean = true , val maxTime : Long, val documentId : String = "")
 
 data class ReservationFacilityData(val index : Int, val user: String, val data : ReservationTimeData, var buttonSelected : Boolean = false)
 
@@ -43,12 +51,24 @@ data class ReservationFacilityListData(/*val name : String, val type : Reservati
 data class ReservationEquipmentSettingData(val icon : Int, val name : String, val maxTime : Long) :
     Parcelable {
     fun getMaxTimeView() : String = maxTime.toString() + "분"
+    fun getNewThis() : ReservationEquipmentSettingData2 {
+        val newIcon = CategoryResources.makeDrawableIDToString(icon)
+        return ReservationEquipmentSettingData2(newIcon, name, maxTime)
+    }
 }
+
+data class  ReservationEquipmentSettingData2(val icon : String, val name : String, val maxTime : Long)
 
 data class ReservationFacilitySettingData(val icon : Int, val name : String, val intervalTime: Long, val maxTime : Long, val unableTimeList : List<ReservationUnableTimeItem>, val usable : Boolean = true){
     fun getIntervalTimeView() : String = intervalTime.toString() + "분"
     fun getMaxTimeView() : String = maxTime.toString() + "분"
+    fun getNewThis() : ReservationFacilitySettingData2 {
+        val newIcon = CategoryResources.makeDrawableIDToString(icon)
+        return ReservationFacilitySettingData2(newIcon, name, intervalTime, maxTime, unableTimeList, usable)
+    }
 }
+
+data class ReservationFacilitySettingData2(val icon : String, val name : String, val intervalTime: Long, val maxTime : Long, val unableTimeList : List<ReservationUnableTimeItem>, val usable : Boolean = true)
 
 @Parcelize
 data class ReservationItem(val type: ReservationType, val data : @RawValue ReservationData, var unableTimeList : @RawValue List<ReservationUnableTimeItem>) : Parcelable

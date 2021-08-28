@@ -24,9 +24,6 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
         apiCall(reservationRepository.getReservationEquipmentSettingData(agencyInfo, itemName), {
             _onSuccessGettingReserveEquipmentSettingData.postValue(it) })
     }
-    fun finishReservationEquipmentData(itemName : String)  {
-        reservationRepository.finishReservationEquipment(agencyInfo, itemName)
-    }
     fun getReservationUsingFacilityLogList() : LiveData<List<ReservationFacilityLog>>{
         return reservationRepository.getReservationUsingFacilityLogList(agencyInfo, 0)
     }
@@ -36,12 +33,17 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
     fun getReservationFacilityLogList() : LiveData<List<ReservationFacilityLog>>{
         return reservationRepository.getReservationUsingFacilityLogList(agencyInfo, 1)
     }
-    fun finishReservationFacilityLogData(logDocumentId : String){
-        reservationRepository.finishReservationFacility(agencyInfo, logDocumentId)
-    }
-
     fun getReservationLogDataList(index: Int) : LiveData<List<ReservationLogItem>> {
         return reservationRepository.getReservationLogDataList(agencyInfo, index)
+    }
+    fun finishReservationEquipmentData(itemName : String)  {
+        reservationRepository.stopReservationEquipment(agencyInfo, itemName)
+    }
+    fun finishReservationFacilityLogData(logDocumentId : String){
+        reservationRepository.makeReservationLogFinished(agencyInfo, logDocumentId)
+    }
+    fun makeReservationLogFinished (documentId: String){
+        reservationRepository.makeReservationLogFinished(agencyInfo, documentId)
     }
 
 

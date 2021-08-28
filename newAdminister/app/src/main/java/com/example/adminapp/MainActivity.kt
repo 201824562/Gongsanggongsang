@@ -95,11 +95,14 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
         return super.onOptionsItemSelected(item)
     }
 
+    //TODO : 최신방식으로 고치기.
     private fun hideKeyboard() {
         val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         val currentFocusedView = this.currentFocus   // Check if no view has focus
         currentFocusedView?.let {
-            inputMethodManager.hideSoftInputFromWindow(currentFocusedView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS) } }
+            inputMethodManager.hideSoftInputFromWindow(currentFocusedView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+        }
+    }
 
     private fun showToolbarTitle(title : String){
         viewbinding.toolbar.visibility = View.VISIBLE

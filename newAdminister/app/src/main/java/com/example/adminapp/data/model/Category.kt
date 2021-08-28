@@ -20,14 +20,28 @@ enum class CategoryResources(val drawableID: Int){
         private val categoryResourcesIdList : List<Int> = listOf(MENTORING_ROOM.drawableID, COMPUTER.drawableID, OFFICE.drawableID,
         MEETING_ROOM.drawableID, CAFETERIA.drawableID, ROUNGE.drawableID, SHOWER_ROOM.drawableID, WASHER.drawableID,
         DRYER.drawableID, INDUCTION.drawableID)
-
-        fun makeDrawableIDToEnumData(drawableID: Int) : Enum<CategoryResources>{
-            return values().first { it.drawableID == drawableID} }
         fun makeListToClass() : List<CategoryResourceItem> {
             val rvList : MutableList<CategoryResourceItem> = mutableListOf()
             categoryResourcesIdList.forEach { rvList.add(CategoryResourceItem(it, false)) }
             return rvList }
-        fun makeIconStringToEnumClass(iconString : String) : Enum<CategoryResources> {
+        fun makeDrawableIDToEnumData(drawableID: Int) : Enum<CategoryResources>{
+            return values().first { it.drawableID == drawableID} }
+        fun makeDrawableIDToString(drawableID: Int) : String {
+            return when (values().first { it.drawableID == drawableID}){
+                MENTORING_ROOM -> "MENTORING_ROOM"
+                COMPUTER -> "COMPUTER"
+                OFFICE -> "OFFICE"
+                MEETING_ROOM -> "MEETING_ROOM"
+                CAFETERIA -> "CAFETERIA"
+                ROUNGE -> "ROUNGE"
+                SHOWER_ROOM -> "SHOWER_ROOM"
+                WASHER -> "WASHER"
+                DRYER-> "DRYER"
+                INDUCTION -> "INDUCTION"
+                else -> "MENTORING_ROOM"
+            }
+        }
+        fun makeIconStringToEnumClass(iconString : String) : CategoryResources {
             return when (iconString){
                 "MENTORING_ROOM" -> MENTORING_ROOM
                 "COMPUTER" -> COMPUTER
@@ -41,6 +55,9 @@ enum class CategoryResources(val drawableID: Int){
                 "INDUCTION" -> INDUCTION
                 else -> MENTORING_ROOM
             }
+        }
+        fun makeIconStringToDrawableID(iconString: String) : Int {
+            return makeIconStringToEnumClass(iconString).drawableID
         }
     }
 }

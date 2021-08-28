@@ -357,7 +357,7 @@
             android:textSize="14sp"
             android:textColor="@color/black_87"
             android:gravity="center"
-            android:visibility="gone" />
+            android:visibility="visible" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/reservation_detail_rv"
             android:layout_width="match_parent"
@@ -368,6 +368,6 @@
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_reservation_detail"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

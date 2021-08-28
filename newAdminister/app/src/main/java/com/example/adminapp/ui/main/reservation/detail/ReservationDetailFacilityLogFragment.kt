@@ -2,21 +2,20 @@ package com.example.adminapp.ui.main.reservation.detail
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.adminapp.R
 import com.example.adminapp.base.BaseSessionFragment
-import com.example.adminapp.data.model.ReservationFacilityBundle
-import com.example.adminapp.data.model.ReservationFacilityLog
-import com.example.adminapp.data.model.ReservationLogItem
-import com.example.adminapp.data.model.ReservationType
+import com.example.adminapp.data.model.*
 import com.example.adminapp.databinding.FragmentReservationDetailFacilityLogBinding
 import com.example.adminapp.databinding.ItemReservationDetail2Binding
 import com.example.adminapp.databinding.ItemReservationDetailBinding
@@ -31,6 +30,7 @@ class ReservationDetailFacilityLogFragment : BaseSessionFragment<FragmentReserva
     override lateinit var viewbinding: FragmentReservationDetailFacilityLogBinding
     override val viewmodel: ReservationDetailFacilityViewModel by viewModels()
     private lateinit var reservationDetailFacilityLogRVAdapter : ReservationDetailFacilityLogRVAdapter
+    private var observer : Observer<List<ReservationFacilityLog>>?= null
     private lateinit var facilityBundleData : ReservationFacilityBundle
 
     override fun initViewbinding(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -49,10 +49,10 @@ class ReservationDetailFacilityLogFragment : BaseSessionFragment<FragmentReserva
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
         viewmodel.run {
-            getReservationFacilityNotDoneLogDataList("예약 사용", facilityBundleData.name).observe(viewLifecycleOwner){
-                if (it.isEmpty()) showEmptyView()
-                else showRV(it)
-            }
+            observer = Observer {
+                Log.e("checking", "$it")
+                if (it.isEmpty()) showEmptyView() else showRV(it) }
+            observer?.let {observer -> getReservationFacilityNotDoneLogDataList("예약 사용", facilityBundleData.name).observeForever(observer) }
         }
     }
 
@@ -98,6 +98,12 @@ class ReservationDetailFacilityLogFragment : BaseSessionFragment<FragmentReserva
             }
         }
         showDialog(dialog, viewLifecycleOwner)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        observer?.let {observer ->
+            viewmodel.getReservationFacilityNotDoneLogDataList("예약 사용", facilityBundleData.name).removeObserver(observer) }
     }
 }
 

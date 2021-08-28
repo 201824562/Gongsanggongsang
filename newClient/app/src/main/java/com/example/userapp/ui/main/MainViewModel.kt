@@ -16,7 +16,7 @@ class MainViewModel : BaseViewModel(){
         if (mBackPressedAt + TimeUnit.SECONDS.toMillis(2) > System.currentTimeMillis()) {
             _onBackPressedEventLiveData.call()
         } else {
-            showSnackbar("\'뒤로\'버튼을 한번 더 누르시면 종료됩니다.")
+            showSnackbar("\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.")
             mBackPressedAt = System.currentTimeMillis()
         }
     }

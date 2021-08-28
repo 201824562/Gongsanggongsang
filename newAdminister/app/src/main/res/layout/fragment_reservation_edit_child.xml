@@ -5,6 +5,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/reservation_edit_child_empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingTop="100dp"
+        android:paddingBottom="50dp"
+        android:text="사용가능한 물품/시설이 없습니다."
+        android:textSize="14sp"
+        android:textColor="@color/black_87"
+        android:gravity="center"
+        android:visibility="gone" />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/reservation_edit_rv"
         android:layout_width="match_parent"
@@ -14,6 +26,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:orientation="vertical"
+        android:visibility="visible"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_reservation_edit_setting" />
 </androidx.constraintlayout.widget.ConstraintLayout>

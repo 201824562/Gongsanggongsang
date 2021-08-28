@@ -130,7 +130,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="전화번호 : "
-                            android:textSize="12sp"
+                            android:textSize="11sp"
                             android:textColor="@color/black_60"
                             android:fontFamily="@font/notosanskr_regular_hestia" />
                         <TextView
@@ -138,7 +138,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=" - "
-                            android:textSize="12sp"
+                            android:textSize="11sp"
                             android:textColor="@color/black_87"
                             android:fontFamily="@font/notosanskr_regular_hestia" />
                     </LinearLayout>

@@ -19,6 +19,8 @@ import com.example.adminapp.data.model.ReservationFacilityBundle
 import com.example.adminapp.data.model.ReservationItem
 import com.example.adminapp.data.model.ReservationType
 import com.example.adminapp.databinding.FragmentReservationDetailFacilityBinding
+import com.example.adminapp.ui.main.reservation.edit.ReservationEditEquipmentFragment
+import com.example.adminapp.ui.main.reservation.edit.ReservationEditFacilityFragment
 
 
 class ReservationDetailFacilityFragment() : BaseSessionFragment<FragmentReservationDetailFacilityBinding, ReservationDetailFacilityViewModel>() {
@@ -32,7 +34,7 @@ class ReservationDetailFacilityFragment() : BaseSessionFragment<FragmentReservat
     override val viewmodel: ReservationDetailFacilityViewModel by viewModels()
     private val args : ReservationDetailFacilityFragmentArgs by navArgs()
     private lateinit var facilityBundleData : ReservationFacilityBundle
-    private lateinit var reservationDetailFacilityViewPagerAdapter : ReservationDetailFacilityViewPagerAdapter
+    private var reservationDetailFacilityViewPagerAdapter : ReservationDetailFacilityViewPagerAdapter? = null
 
     override fun initViewbinding(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewbinding = FragmentReservationDetailFacilityBinding.inflate(inflater, container, false)
@@ -47,20 +49,32 @@ class ReservationDetailFacilityFragment() : BaseSessionFragment<FragmentReservat
         initViewPager()
     }
 
-    override fun initDataBinding(savedInstanceState: Bundle?) { viewbinding.toolbarText.text = facilityBundleData.name }
+    override fun initDataBinding(savedInstanceState: Bundle?) { viewbinding.toolbarText.text = facilityBundleData.name
+        viewmodel.getReservationFacilitySettingData(facilityBundleData.name)
+            .observe(viewLifecycleOwner) {
+                if (it.boolean) facilityBundleData.settingData = it.facilitySettingData
+                else findNavController().navigate(R.id.action_reservationDetailFacilityFragment_pop)
+            }
+    }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run {
             reservationDetailSettingBtn.setOnClickListener {
-                // TODO
-                /*findNavController().navigate(ReservationDetailEquipmentFragmentDirections
-                    .actionReservationDetailEquipmentFragmentToReservationEditDetailFragment(
-                        ReservationItem(
-                            ReservationType.EQUIPMENT, ReservationData(equipmentSettingData.icon,
-                            equipmentSettingData.name, maxTime = equipmentSettingData.maxTime), listOf())
-                    ))*/
+                facilityBundleData.settingData?.let {
+                    findNavController().navigate(ReservationDetailFacilityFragmentDirections
+                        .actionReservationDetailFacilityFragmentToReservationEditDetailFragment(
+                            ReservationItem(
+                                ReservationType.FACILITY, ReservationData(it.icon,
+                                    it.name, it.intervalTime, it.maxTime), it.unableTimeList)))
+                }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        reservationDetailFacilityViewPagerAdapter?.deleteFragments()
+        reservationDetailFacilityViewPagerAdapter = null
     }
 
     private fun makeErrorEvent(){
@@ -110,19 +124,24 @@ class ReservationDetailFacilityFragment() : BaseSessionFragment<FragmentReservat
 
 class ReservationDetailFacilityViewPagerAdapter (activity: FragmentActivity, private val facilityInfo : ReservationFacilityBundle) : FragmentStateAdapter(activity) {
 
+    private var firstFragment : Fragment = ReservationDetailFacilityBasicFragment()
+    private var secondFragment : Fragment = ReservationDetailFacilityLogFragment()
+
+    fun deleteFragments() {
+        firstFragment.onDestroyView()
+        secondFragment.onDestroyView() }
+
     override fun getItemCount(): Int = 2
 
     override fun createFragment(position: Int): Fragment {
         val bundle = Bundle()
         bundle.putParcelable("facilityItemInfo", facilityInfo)
         return when (position) {
-            0 -> { val fragment = ReservationDetailFacilityBasicFragment()
-                fragment.arguments = bundle
-                fragment }
+            0 -> { firstFragment.arguments = bundle
+                firstFragment }
             1 -> {
-                val fragment = ReservationDetailFacilityLogFragment()
-                fragment.arguments = bundle
-                fragment }
+                secondFragment.arguments = bundle
+                secondFragment }
             else -> error("no such position: $position")
         }
     }

@@ -3,6 +3,8 @@ package com.example.adminapp.ui.main.reservation.log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,15 +13,13 @@ import com.example.adminapp.data.model.ReservationEquipmentLog
 import com.example.adminapp.data.model.ReservationLogItem
 import com.example.adminapp.data.model.ReservationType
 import com.example.adminapp.databinding.ItemReservationLogBinding
-import com.example.adminapp.ui.main.reservation.getHourMinuteString
-import com.example.adminapp.ui.main.reservation.getMonthDayString
-import com.example.adminapp.ui.main.reservation.getMonthString
+import com.example.adminapp.ui.main.reservation.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ReservationLogRVAdapter() : ListAdapter<ReservationLogItem, ReservationLogRVAdapter.ViewHolder>(AddressDiffCallback) {
+class ReservationLogRVAdapter(private val viewModel : ReservationViewModel) : ListAdapter<ReservationLogItem, ReservationLogRVAdapter.ViewHolder>(AddressDiffCallback) {
 
     companion object {
         val AddressDiffCallback = object : DiffUtil.ItemCallback<ReservationLogItem>() {
@@ -46,6 +46,9 @@ class ReservationLogRVAdapter() : ListAdapter<ReservationLogItem, ReservationLog
                 when (item.type){
                     ReservationType.EQUIPMENT -> {
                         item.equipmentLog?.let {
+                            if (item.equipmentLog.reservationState == "사용중" || item.equipmentLog.reservationState =="예약중"){
+                                val checkingPassTime = withContext(Dispatchers.IO){ calculateDurationWithCurrent(item.equipmentLog.endTime) }
+                                if (checkingPassTime.isNegative) viewModel.makeReservationLogFinished(item.equipmentLog.documentId) }
                             holder.binding.itemReservationLogReservationType.text = "바로 사용"
                             holder.binding.itemReservationLogName.text = item.equipmentLog.name
                             holder.binding.itemReservationLogMonth.text = withContext(Dispatchers.IO){ getMonthString(item.equipmentLog.startTime) }
@@ -71,6 +74,9 @@ class ReservationLogRVAdapter() : ListAdapter<ReservationLogItem, ReservationLog
                     }
                     ReservationType.FACILITY -> {
                         item.facilityLog?.let {
+                            if (item.facilityLog.reservationState == "사용중" || item.facilityLog.reservationState =="예약중"){
+                                val checkingPassTime = withContext(Dispatchers.IO){ calculateDurationWithCurrent(item.facilityLog.endTime) }
+                                if (checkingPassTime.isNegative) viewModel.makeReservationLogFinished(item.facilityLog.documentId) }
                             holder.binding.itemReservationLogReservationType.text = "예약 사용"
                             holder.binding.itemReservationLogName.text = item.facilityLog.name
                             holder.binding.itemReservationLogMonth.text = withContext(Dispatchers.IO){ getMonthString(item.facilityLog.startTime) }

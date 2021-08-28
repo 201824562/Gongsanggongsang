@@ -13,7 +13,7 @@ import com.example.adminapp.base.BaseSessionFragment
 import com.example.adminapp.data.model.AdminModel
 import com.example.adminapp.databinding.FragmentSettingsBinding
 import com.example.adminapp.restartActivity
-import com.example.adminapp.utils.MatchedDialogAccentTwoButton
+import com.example.adminapp.utils.WrapedDialogAccentTwoButton
 import com.example.adminapp.utils.WrapedDialogBasicTwoButton
 import java.io.IOException
 
@@ -93,9 +93,9 @@ class SettingsFragment : BaseSessionFragment<FragmentSettingsBinding, SettingsVi
     }
 
     private fun makeWithdrawalDialog(){
-        val dialog = MatchedDialogAccentTwoButton(requireContext(), "모든 정보가 삭제되며, 복구할 수 없습니다.\n" +
+        val dialog = WrapedDialogAccentTwoButton(requireContext(), "모든 정보가 삭제되며,\n복구할 수 없습니다.\n" +
                 "정말 회원탈퇴 하시겠습니까?", "취소", "탈퇴").apply {
-            clickListener = object : MatchedDialogAccentTwoButton.DialogButtonClickListener{
+            clickListener = object : WrapedDialogAccentTwoButton.DialogButtonClickListener{
                 override fun dialogCloseClickListener() { dismiss() }
                 override fun dialogCustomClickListener() {
                     viewmodel.deleteAdminInfoFromServerDatabase()

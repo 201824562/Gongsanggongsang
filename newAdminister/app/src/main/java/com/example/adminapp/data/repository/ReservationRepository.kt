@@ -3,12 +3,18 @@ package com.example.adminapp.data.repository
 import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.adminapp.data.model.*
+import com.example.adminapp.ui.main.reservation.calculateDurationWithCurrent
 import com.example.adminapp.utils.SingleLiveEvent
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import io.reactivex.Completable
 import io.reactivex.Single
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ReservationRepository() {
 
@@ -35,15 +41,15 @@ class ReservationRepository() {
 
     private val _onSuccessGetReservationEquipmentSettingDataList = SingleLiveEvent<List<ReservationEquipmentSettingData>>()
     private val onSuccessGetReservationEquipmentSettingDataList: LiveData<List<ReservationEquipmentSettingData>> get() = _onSuccessGetReservationEquipmentSettingDataList
-    private val _onSuccessGetReservationEquipmentLogData = SingleLiveEvent<List<ReservationEquipmentLog>>()
+    private var _onSuccessGetReservationEquipmentLogData = SingleLiveEvent<List<ReservationEquipmentLog>>()
     private val onSuccessGetReservationEquipmentLogData: LiveData<List<ReservationEquipmentLog>> get() = _onSuccessGetReservationEquipmentLogData
-    private val _onSuccessGetReservationEquipmentData = SingleLiveEvent<ReceiverEquipment>()
+    private var _onSuccessGetReservationEquipmentData = SingleLiveEvent<ReceiverEquipment>()
     private val onSuccessGetReservationEquipmentData: LiveData<ReceiverEquipment> get() = _onSuccessGetReservationEquipmentData
     private val _onSuccessGetReservationUsingEquipmentDataList = SingleLiveEvent<List<ReservationEquipmentData>>()
     private val onSuccessGetReservationUsingEquipmentDataList: LiveData<List<ReservationEquipmentData>> get() = _onSuccessGetReservationUsingEquipmentDataList
     private val _onSuccessGetReservationEquipmentDataList = SingleLiveEvent<List<ReservationEquipmentData>>()
     private val onSuccessGetReservationEquipmentDataList: LiveData<List<ReservationEquipmentData>> get() = _onSuccessGetReservationEquipmentDataList
-    private val _onSuccessGetReservationFacilityLogData = SingleLiveEvent<ReceiverFacilityLog>()
+    private var _onSuccessGetReservationFacilityLogData = SingleLiveEvent<ReceiverFacilityLog>()
     private val onSuccessGetReservationFacilityLogData: LiveData<ReceiverFacilityLog> get() = _onSuccessGetReservationFacilityLogData
     private val _onSuccessGetReservationUsingFacilityLogList = SingleLiveEvent<List<ReservationFacilityLog>>()
     private val onSuccessGetReservationUsingFacilityLogList : LiveData<List<ReservationFacilityLog>> get() = _onSuccessGetReservationUsingFacilityLogList
@@ -55,15 +61,31 @@ class ReservationRepository() {
     private val onSuccessGetReservationLogEquipmentList : LiveData<List<ReservationLogItem>> get() = _onSuccessGetReservationLogEquipmentList
     private val _onSuccessGetReservationLogFacilityList = SingleLiveEvent<List<ReservationLogItem>>()
     private val onSuccessGetReservationLogFacilityList : LiveData<List<ReservationLogItem>> get() = _onSuccessGetReservationLogFacilityList
-    private val _onSuccessGetReservationFacilitySettingData = SingleLiveEvent<ReceiverFacilitySettingData>()
+    private var _onSuccessGetReservationFacilitySettingData = MutableLiveData<ReceiverFacilitySettingData>()
     private val onSuccessGetReservationFacilitySettingData: LiveData<ReceiverFacilitySettingData> get() = _onSuccessGetReservationFacilitySettingData
-    private val _onSuccessGetReservationFacilityDataList = SingleLiveEvent<List<ReservationFacilityLog>>()
+    private var _onSuccessGetReservationFacilityDataList = SingleLiveEvent<List<ReservationFacilityLog>>()
     private val onSuccessGetReservationFacilityDataList : LiveData<List<ReservationFacilityLog>> get() = _onSuccessGetReservationFacilityDataList
-    private val _onSuccessGetReservationFacilityNotDoneDataList = SingleLiveEvent<List<ReservationFacilityLog>>()
+    private var _onSuccessGetReservationFacilityNotDoneDataList = SingleLiveEvent<List<ReservationFacilityLog>>()
     private val onSuccessGetReservationFacilityNotDoneDataList : LiveData<List<ReservationFacilityLog>> get() = _onSuccessGetReservationFacilityNotDoneDataList
     private val _onSuccessGetReservationFacilitySettingDataList = SingleLiveEvent<List<ReservationFacilitySettingData>>()
     private val onSuccessGetReservationFacilitySettingDataList: LiveData<List<ReservationFacilitySettingData>> get() = _onSuccessGetReservationFacilitySettingDataList
 
+    fun initDetailEquipmentLiveData() {
+        /*_onSuccessGetReservationEquipmentData.postValue(ReceiverEquipment(false, null))
+        _onSuccessGetReservationEquipmentLogData.postValue(emptyList())*/
+        _onSuccessGetReservationEquipmentData = SingleLiveEvent()
+        _onSuccessGetReservationEquipmentLogData = SingleLiveEvent()
+    }
+    fun initDetailFacilityLiveData() {
+        /*_onSuccessGetReservationFacilitySettingData.postValue(ReceiverFacilitySettingData(false, null))
+        _onSuccessGetReservationFacilityLogData.postValue(ReceiverFacilityLog(false, null))
+        _onSuccessGetReservationFacilityDataList.postValue(emptyList())
+        _onSuccessGetReservationFacilityNotDoneDataList.postValue(emptyList())*/
+        _onSuccessGetReservationFacilitySettingData = MutableLiveData()
+        _onSuccessGetReservationFacilityLogData = SingleLiveEvent()
+        _onSuccessGetReservationFacilityDataList = SingleLiveEvent()
+        _onSuccessGetReservationFacilityNotDoneDataList = SingleLiveEvent()
+    }
 
     fun getReservationEquipmentSettingData(agency: String, itemName : String): Single<ReservationEquipmentSettingData> {
         return Single.create { emitter ->
@@ -74,7 +96,7 @@ class ReservationRepository() {
                     if (it.data != null && it.get("name") == itemName) {
                         emitter.onSuccess(
                             ReservationEquipmentSettingData(
-                                it.getLong("icon")!!.toInt(),
+                                CategoryResources.makeIconStringToDrawableID((it.get("icon") as String)),
                                 it.get("name") as String,
                                 it.get("maxTime") as Long
                             )
@@ -98,6 +120,7 @@ class ReservationRepository() {
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     Log.w(TAG, "Listen failed.", e)
+                    _onSuccessGetReservationEquipmentSettingDataList.postValue(emptyList())
                     return@addSnapshotListener }
                 if (snapshot == null) _onSuccessGetReservationEquipmentSettingDataList.postValue(emptyList())
                 else {
@@ -105,7 +128,7 @@ class ReservationRepository() {
                     for (document in snapshot) {
                         equipmentSettingList.add(
                             ReservationEquipmentSettingData(
-                                document.getLong("icon")!!.toInt(),
+                                CategoryResources.makeIconStringToDrawableID((document.get("icon") as String)),
                                 document.get("name") as String,
                                 document.get("maxTime") as Long)
                         )
@@ -127,6 +150,7 @@ class ReservationRepository() {
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     Log.w(TAG, "Listen failed.", e)
+                    _onSuccessGetReservationEquipmentLogData.postValue(emptyList())
                     return@addSnapshotListener }
                 if (snapshot == null) _onSuccessGetReservationEquipmentLogData.postValue(emptyList())
                 else {
@@ -134,14 +158,15 @@ class ReservationRepository() {
                     for (document in snapshot) {
                         equipmentLogList.add(
                             ReservationEquipmentLog(
-                                document.getLong("icon")!!.toInt(),
+                                CategoryResources.makeIconStringToDrawableID((document.get("icon") as String)),
                                 document.get("name") as String,
                                 document.get("userId") as String,
                                 document.get("userName") as String,
                                 document.get("reservationState") as String,
                                 document.get("reservationType") as String,
                                 document.get("startTime") as String,
-                                document.get("endTime") as String))
+                                document.get("endTime") as String,
+                                document.get("documentId") as String))
                     }
                     _onSuccessGetReservationEquipmentLogData.postValue(equipmentLogList)
                 }
@@ -159,6 +184,7 @@ class ReservationRepository() {
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     Log.w(TAG, "Listen failed.", e)
+                    _onSuccessGetReservationEquipmentData.postValue(ReceiverEquipment(false, null))
                     return@addSnapshotListener }
                 when {
                     snapshot == null -> _onSuccessGetReservationEquipmentData.postValue(ReceiverEquipment(false, null))
@@ -168,7 +194,7 @@ class ReservationRepository() {
                             ReceiverEquipment(
                                 true,
                                 ReservationEquipmentData(
-                                    it.getLong("icon")!!.toInt(),
+                                    CategoryResources.makeIconStringToDrawableID((it.get("icon") as String)),
                                     it.get("name") as String,
                                     it.get("user") as String,
                                     it.get("startTime") as String,
@@ -176,7 +202,8 @@ class ReservationRepository() {
                                     it.getLong("intervalTime")!!,
                                     it.get("using") as Boolean,
                                     it.get("usable") as Boolean,
-                                    it.getLong("maxTime")!!
+                                    it.getLong("maxTime")!!,
+                                    it.get("documentId") as String
                                 )
                             )
                         )
@@ -195,6 +222,7 @@ class ReservationRepository() {
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     Log.w(TAG, "Listen failed.", e)
+                    _onSuccessGetReservationUsingEquipmentDataList.postValue(emptyList())
                     return@addSnapshotListener }
                 if (snapshot == null) _onSuccessGetReservationUsingEquipmentDataList.postValue(emptyList())
                 else {
@@ -206,7 +234,7 @@ class ReservationRepository() {
                         if (document.get("endTime") != null) endTime = (document.get("endTime") as String)
                         equipmentList.add(
                             ReservationEquipmentData(
-                                document.getLong("icon")!!.toInt(),
+                                CategoryResources.makeIconStringToDrawableID((document.get("icon") as String)),
                                 document.get("name") as String,
                                 document.get("user") as String,
                                 startTime,
@@ -214,7 +242,8 @@ class ReservationRepository() {
                                 document.getLong("intervalTime")!!,
                                 document.getBoolean("using")!!,
                                 document.getBoolean("usable")!!,
-                                document.getLong("maxTime")!!
+                                document.getLong("maxTime")!!,
+                                document.get("documentId") as String
                             ))
                     }
                     _onSuccessGetReservationUsingEquipmentDataList.postValue(equipmentList)
@@ -233,6 +262,7 @@ class ReservationRepository() {
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     Log.w(TAG, "Listen failed.", e)
+                    _onSuccessGetReservationEquipmentDataList.postValue(emptyList())
                     return@addSnapshotListener }
                 if (snapshot == null) _onSuccessGetReservationEquipmentDataList.postValue(emptyList())
                 else {
@@ -244,7 +274,7 @@ class ReservationRepository() {
                         if (document.get("endTime") != null) endTime = (document.get("endTime") as String)
                         equipmentList.add(
                             ReservationEquipmentData(
-                                document.getLong("icon")!!.toInt(),
+                                CategoryResources.makeIconStringToDrawableID((document.get("icon") as String)),
                                 document.get("name") as String,
                                 document.get("user") as String,
                                 startTime,
@@ -252,7 +282,8 @@ class ReservationRepository() {
                                 document.getLong("intervalTime")!!,
                                 document.getBoolean("using")!!,
                                 document.getBoolean("usable")!!,
-                                document.getLong("maxTime")!!))
+                                document.getLong("maxTime")!!,
+                                document.get("documentId") as String))
                     }
                     _onSuccessGetReservationEquipmentDataList.postValue(equipmentList)
                 }
@@ -269,6 +300,7 @@ class ReservationRepository() {
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     Log.w(TAG, "Listen failed.", e)
+                    _onSuccessGetReservationFacilitySettingData.postValue(ReceiverFacilitySettingData(false, null))
                     return@addSnapshotListener
                 }
                 when {
@@ -282,7 +314,7 @@ class ReservationRepository() {
                             ReceiverFacilitySettingData(
                                 true,
                                 ReservationFacilitySettingData(
-                                    it.getLong("icon")!!.toInt(),
+                                    CategoryResources.makeIconStringToDrawableID((it.get("icon") as String)),
                                     it.get("name") as String,
                                     it.get("intervalTime") as Long,
                                     it.get("maxTime") as Long,
@@ -310,6 +342,10 @@ class ReservationRepository() {
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     Log.w(TAG, "Listen failed.", e)
+                    when (index) {
+                        0 -> _onSuccessGetReservationUsingFacilityLogList.postValue(emptyList())
+                        1 -> _onSuccessGetReservationFacilityLogList.postValue(emptyList())
+                        else -> _onSuccessGetReservationUsingFacilityLogList.postValue(emptyList()) }
                     return@addSnapshotListener }
                 if (snapshot == null) {
                     when (index) {
@@ -320,21 +356,25 @@ class ReservationRepository() {
                 }
                 else {
                     val facilityLogList: MutableList<ReservationFacilityLog> = mutableListOf()
-                    Log.e("checking", "${snapshot.documents.size}")
                     for (document in snapshot) {
-                        facilityLogList.add(
-                            ReservationFacilityLog(
-                                document.getLong("icon")!!.toInt(),
-                                document.get("name") as String,
-                                document.get("userId") as String,
-                                document.get("userName") as String,
-                                document.get("reservationState") as String,
-                                document.get("reservationType") as String,
-                                document.get("startTime") as String,
-                                document.get("endTime") as String,
-                                document.get("documentId") as String,
-                                document.getLong("maxTime")!!,
-                                document.get("usable") as Boolean))
+                        CoroutineScope(Dispatchers.Main).launch{
+                            val checkingPassTime = withContext(Dispatchers.IO){ calculateDurationWithCurrent((document.get("endTime") as String)) }
+                            if (!(checkingPassTime.isNegative || checkingPassTime.isZero)){
+                                facilityLogList.add(
+                                    ReservationFacilityLog(
+                                        CategoryResources.makeIconStringToDrawableID((document.get("icon") as String)),
+                                        document.get("name") as String,
+                                        document.get("userId") as String,
+                                        document.get("userName") as String,
+                                        document.get("reservationState") as String,
+                                        document.get("reservationType") as String,
+                                        document.get("startTime") as String,
+                                        document.get("endTime") as String,
+                                        document.get("documentId") as String,
+                                        document.getLong("maxTime")!!,
+                                        document.get("usable") as Boolean))
+                            }
+                        }
                     }
                     when (index) {
                         0 -> _onSuccessGetReservationUsingFacilityLogList.postValue(facilityLogList)
@@ -355,15 +395,15 @@ class ReservationRepository() {
         }
     }
 
-    //TODO : 로그 전체 말고 분리하기 (함수)
     private fun getReservationLogDataListFromFirebase(agency: String, index: Int) {
         when (index){
             0 -> {
                 firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_LOG)
-                .orderBy("endTime", Query.Direction.DESCENDING)
+                    .orderBy("startTime", Query.Direction.DESCENDING)
                     .addSnapshotListener { snapshot, e ->
                         if (e != null) {
                             Log.w(TAG, "Listen failed.", e)
+                            _onSuccessGetReservationLogAllList.postValue(emptyList())
                             return@addSnapshotListener }
                         if (snapshot == null)  _onSuccessGetReservationLogAllList.postValue(emptyList())
                         else {
@@ -374,14 +414,15 @@ class ReservationRepository() {
                                         ReservationLogItem(
                                             ReservationType.EQUIPMENT,
                                             ReservationEquipmentLog(
-                                                document.getLong("icon")!!.toInt(),
+                                                CategoryResources.makeIconStringToDrawableID((document.get("icon") as String)),
                                                 document.get("name") as String,
                                                 document.get("userId") as String,
                                                 document.get("userName") as String,
                                                 document.get("reservationState") as String,
                                                 document.get("reservationType") as String,
                                                 document.get("startTime") as String,
-                                                document.get("endTime") as String ),
+                                                document.get("endTime") as String,
+                                                document.get("documentId") as String),
                                             null )) }
                                 else {
                                     logItemList.add(
@@ -389,7 +430,7 @@ class ReservationRepository() {
                                             ReservationType.FACILITY,
                                             null,
                                             ReservationFacilityLog(
-                                                document.getLong("icon")!!.toInt(),
+                                                CategoryResources.makeIconStringToDrawableID((document.get("icon") as String)),
                                                 document.get("name") as String,
                                                 document.get("userId") as String,
                                                 document.get("userName") as String,
@@ -411,6 +452,7 @@ class ReservationRepository() {
                     .addSnapshotListener { snapshot, e ->
                         if (e != null) {
                             Log.w(TAG, "Listen failed.", e)
+                            _onSuccessGetReservationLogEquipmentList.postValue(emptyList())
                             return@addSnapshotListener }
                         if (snapshot == null)  _onSuccessGetReservationLogEquipmentList.postValue(emptyList())
                         else {
@@ -420,14 +462,15 @@ class ReservationRepository() {
                                     ReservationLogItem(
                                         ReservationType.EQUIPMENT,
                                         ReservationEquipmentLog(
-                                            document.getLong("icon")!!.toInt(),
+                                            CategoryResources.makeIconStringToDrawableID((document.get("icon") as String)),
                                             document.get("name") as String,
                                             document.get("userId") as String,
                                             document.get("userName") as String,
                                             document.get("reservationState") as String,
                                             document.get("reservationType") as String,
                                             document.get("startTime") as String,
-                                            document.get("endTime") as String ),
+                                            document.get("endTime") as String,
+                                            document.get("documentId") as String),
                                         null ))
                             }
                             _onSuccessGetReservationLogEquipmentList.postValue(logItemList)
@@ -439,6 +482,7 @@ class ReservationRepository() {
                 .addSnapshotListener { snapshot, e ->
                     if (e != null) {
                         Log.w(TAG, "Listen failed.", e)
+                        _onSuccessGetReservationLogFacilityList.postValue(emptyList())
                         return@addSnapshotListener }
                     if (snapshot == null)  _onSuccessGetReservationLogFacilityList.postValue(emptyList())
                     else {
@@ -449,7 +493,7 @@ class ReservationRepository() {
                                     ReservationType.FACILITY,
                                     null,
                                     ReservationFacilityLog(
-                                        document.getLong("icon")!!.toInt(),
+                                        CategoryResources.makeIconStringToDrawableID((document.get("icon") as String)),
                                         document.get("name") as String,
                                         document.get("userId") as String,
                                         document.get("userName") as String,
@@ -480,22 +524,19 @@ class ReservationRepository() {
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     Log.w(TAG, "Listen failed.", e)
+                    _onSuccessGetReservationFacilityLogData.postValue(ReceiverFacilityLog(false, null))
                     return@addSnapshotListener
                 }
                 when {
-                    snapshot == null -> _onSuccessGetReservationFacilityLogData.postValue(
-                        ReceiverFacilityLog(false, null)
-                    )
-                    snapshot.isEmpty -> _onSuccessGetReservationFacilityLogData.postValue(
-                        ReceiverFacilityLog(false, null)
-                    )
+                    snapshot == null -> _onSuccessGetReservationFacilityLogData.postValue(ReceiverFacilityLog(false, null))
+                    snapshot.isEmpty -> _onSuccessGetReservationFacilityLogData.postValue(ReceiverFacilityLog(false, null))
                     else -> {
                         val it = snapshot.documents[0]
                         _onSuccessGetReservationFacilityLogData.postValue(
                             ReceiverFacilityLog(
                                 true,
                                 ReservationFacilityLog(
-                                    it.getLong("icon")!!.toInt(),
+                                    CategoryResources.makeIconStringToDrawableID((it.get("icon") as String)),
                                     it.get("name") as String,
                                     it.get("userId") as String,
                                     it.get("userName") as String,
@@ -523,9 +564,11 @@ class ReservationRepository() {
         firestore.collection(agency).document(FIRESTORE_RESERVATION)
             .collection(FIRESTORE_RESERVATION_LOG)
             .whereEqualTo("reservationType", itemType).whereEqualTo("name", itemName)
+            .orderBy("startTime", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     Log.w(TAG, "Listen failed.", e)
+                    _onSuccessGetReservationFacilityDataList.postValue(emptyList())
                     return@addSnapshotListener }
                 if (snapshot == null) _onSuccessGetReservationFacilityDataList.postValue(emptyList())
                 else {
@@ -533,7 +576,7 @@ class ReservationRepository() {
                     for (document in snapshot) {
                         facilityList.add(
                             ReservationFacilityLog(
-                                document.getLong("icon")!!.toInt(),
+                                CategoryResources.makeIconStringToDrawableID((document.get("icon") as String)),
                                 document.get("name") as String,
                                 document.get("userId") as String,
                                 document.get("userName") as String,
@@ -558,9 +601,11 @@ class ReservationRepository() {
         firestore.collection(agency).document(FIRESTORE_RESERVATION)
             .collection(FIRESTORE_RESERVATION_LOG)
             .whereEqualTo("reservationType", itemType).whereEqualTo("name", itemName).whereIn("reservationState", listOf("사용중", "예약중"))
+            .orderBy("startTime", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     Log.w(TAG, "Listen failed.", e)
+                    _onSuccessGetReservationFacilityNotDoneDataList.postValue(emptyList())
                     return@addSnapshotListener }
                 if (snapshot == null) _onSuccessGetReservationFacilityNotDoneDataList.postValue(emptyList())
                 else {
@@ -568,7 +613,7 @@ class ReservationRepository() {
                     for (document in snapshot) {
                         facilityLogList.add(
                             ReservationFacilityLog(
-                                document.getLong("icon")!!.toInt(),
+                                CategoryResources.makeIconStringToDrawableID((document.get("icon") as String)),
                                 document.get("name") as String,
                                 document.get("userId") as String,
                                 document.get("userName") as String,
@@ -595,6 +640,7 @@ class ReservationRepository() {
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     Log.w(TAG, "Listen failed.", e)
+                    _onSuccessGetReservationFacilitySettingDataList.postValue(emptyList())
                     return@addSnapshotListener }
                 if (snapshot == null) _onSuccessGetReservationFacilitySettingDataList.postValue(emptyList())
                 else {
@@ -605,7 +651,7 @@ class ReservationRepository() {
                         }
                         facilitySettingList.add(
                             ReservationFacilitySettingData(
-                                document.getLong("icon")!!.toInt(),
+                                CategoryResources.makeIconStringToDrawableID((document.get("icon") as String)),
                                 document.get("name") as String,
                                 document.get("intervalTime") as Long,
                                 document.get("maxTime") as Long,
@@ -628,22 +674,20 @@ class ReservationRepository() {
     }
 
 
-    fun finishReservationEquipment (agency: String, itemName: String)  {
-        firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_EQUIPMENT)
-            .document(itemName).update("using", false, "user", "", "startTime", "", "endTime", "", "intervalTime", 0)
-    }
 
-    fun finishReservationFacility (agency: String, documentId: String){
+
+    fun makeReservationLogFinished (agency: String, documentId: String){
         firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_LOG)
             .document(documentId).update("reservationState", "사용완료")
             .addOnSuccessListener {  Log.e("checking", "Succeed updating RESERVATION_LOG OF FACILITY") }
             .addOnFailureListener { Log.e("checking", "Error updating RESERVATION_LOG OF FACILITY") }
     }
-    fun cancelReservationFacility (agency: String, documentId: String){
+
+    fun makeReservationLogForcedCancel (agency: String, documentId: String){
         firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_LOG)
             .document(documentId).update("reservationState", "강제취소")
-            .addOnSuccessListener {  Log.e("checking", "Succeed updating RESERVATION_LOG OF FACILITY") }
-            .addOnFailureListener { Log.e("checking", "Error updating RESERVATION_LOG OF FACILITY") }
+            .addOnSuccessListener {  Log.e("checking", "Succeed updating RESERVATION_LOG TO BE CANCEL") }
+            .addOnFailureListener { Log.e("checking", "Error updating RESERVATION_LOG TO BE CANCEL") }
     }
 
     fun startReservationEquipment(agency: String, itemName : String) : Completable{
@@ -664,13 +708,9 @@ class ReservationRepository() {
         }
     }
 
-    fun stopReservationEquipment(agency: String, item : ReservationEquipmentData): Completable {
-        return Completable.create{ emitter ->
-            firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_EQUIPMENT)
-                .document(item.name).set(item)
-                .addOnSuccessListener { emitter.onComplete() }
-                .addOnFailureListener { emitter.onError(Throwable("Error stopping RESERVATION_INFO OF EQUIPMENT")) }
-        }
+    fun stopReservationEquipment (agency: String, itemName: String)  {
+        firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_EQUIPMENT)
+            .document(itemName).update("using", false, "usable", false, "user", "", "startTime", "", "endTime", "", "intervalTime", 0, "documentId", "")
     }
 
     fun stopReservationFacility(agency: String, itemName: String): Completable {
@@ -693,6 +733,16 @@ class ReservationRepository() {
                         .document(reservationDataName).delete()
                         .addOnSuccessListener { emitter.onComplete() }
                         .addOnFailureListener { emitter.onError(Throwable("Error deleting RESERVATION_INFO OF EQUIPMENT")) }
+                    firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_LOG)
+                        .whereEqualTo("name", reservationDataName).whereEqualTo("reservationType", "바로 사용")
+                        .whereIn("reservationState", listOf("사용중", "예약중")).get()
+                        .addOnSuccessListener { snapshot ->
+                            for (document in (snapshot.documents)){
+                                val documentId : String = (document.get("documentId") as String)
+                                firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_LOG)
+                                    .document(documentId).update("reservationState", "강제취소") }
+                            Log.e("checking", "수정된 시간 리스트로 인해 예약로그들이 삭제되었습니다!")
+                        }.addOnFailureListener { emitter.onError(Throwable("Error updating RESERVATION_INFO OF FACILITY"))}
                 }
                 ReservationType.FACILITY -> {
                     firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_FACILITY_SETTINGS)
@@ -702,6 +752,16 @@ class ReservationRepository() {
                         .document(reservationDataName).delete()
                         .addOnSuccessListener { emitter.onComplete() }
                         .addOnFailureListener { emitter.onError(Throwable("Error deleting RESERVATION_INFO OF FACILITY")) }
+                    firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_LOG)
+                        .whereEqualTo("name", reservationDataName).whereEqualTo("reservationType", "예약 사용")
+                        .whereIn("reservationState", listOf("사용중", "예약중")).get()
+                        .addOnSuccessListener { snapshot ->
+                            for (document in (snapshot.documents)){
+                                val documentId : String = (document.get("documentId") as String)
+                                firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_LOG)
+                                    .document(documentId).update("reservationState", "강제취소") }
+                            Log.e("checking", "수정된 시간 리스트로 인해 예약로그들이 삭제되었습니다!")
+                        }.addOnFailureListener { emitter.onError(Throwable("Error updating RESERVATION_INFO OF FACILITY"))}
                 }
             }
         }
@@ -719,15 +779,21 @@ class ReservationRepository() {
                     .addOnSuccessListener { Log.e("checking", "삭제되었습니다!") }
                     .addOnFailureListener { emitter.onError(Throwable("Error deleting RESERVATION_INFO OF EQUIPMENT")) }
                 firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_EQUIPMENT)
-                    .document(data.data.name).set(data.equipmentData)
+                    .document(data.data.name).set(data.equipmentData.getNewThis())
                     .addOnFailureListener { emitter.onError(Throwable("Error saving RESERVATION_INFO OF EQUIPMENT")) }
             }
             firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_EQUIPMENT)
-                .document(data.data.name).update("icon", data.equipmentData.icon, "name", data.equipmentData.name)
+                .document(data.data.name).update("icon", CategoryResources.makeDrawableIDToString(data.equipmentData.icon),
+                    "name", data.equipmentData.name)
                 .addOnSuccessListener { Log.e("checking", "부분 수정되었습니다!") }
                 .addOnFailureListener { emitter.onError(Throwable("Error saving RESERVATION_INFO OF EQUIPMENT")) }
             firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_EQUIPMENT_SETTINGS)
-                .document(data.data.name).set(data.data)
+                .document(data.data.name).update("icon", CategoryResources.makeDrawableIDToString(data.equipmentData.icon),
+                    "name", data.equipmentData.name)
+                .addOnSuccessListener { Log.e("checking", "부분 수정되었습니다!") }
+                .addOnFailureListener { emitter.onError(Throwable("Error saving RESERVATION_SETTING OF EQUIPMENT")) }
+            firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_EQUIPMENT_SETTINGS)
+                .document(data.data.name).set(data.data.getNewThis())
                 .addOnSuccessListener { emitter.onComplete() }
                 .addOnFailureListener { emitter.onError(Throwable("Error saving RESERVATION_SETTING OF EQUIPMENT")) }
         }
@@ -760,9 +826,19 @@ class ReservationRepository() {
                         .document(data.data.name).set(facilityListData)
                         .addOnSuccessListener { Log.e("checking", "시간 리스트가 수정되었습니다!") }
                         .addOnFailureListener { emitter.onError(Throwable("Error updating RESERVATION_INFO OF FACILITY")) }
+                    firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_LOG)
+                        .whereEqualTo("name", data.data.name).whereEqualTo("reservationType", "예약 사용")
+                        .whereIn("reservationState", listOf("사용중", "예약중")).get()
+                        .addOnSuccessListener { snapshot ->
+                            for (document in (snapshot.documents)){
+                                val documentId : String = (document.get("documentId") as String)
+                                firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_LOG)
+                                    .document(documentId).update("reservationState", "강제취소") }
+                            Log.e("checking", "수정된 시간 리스트로 인해 예약로그들이 삭제되었습니다!")
+                        }.addOnFailureListener { emitter.onError(Throwable("Error updating RESERVATION_INFO OF FACILITY")) }
                 }
                 firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_FACILITY_SETTINGS)
-                    .document(data.data.name).set(data.data)
+                    .document(data.data.name).set(data.data.getNewThis())
                     .addOnSuccessListener { emitter.onComplete() }
                     .addOnFailureListener { emitter.onError(Throwable("Error updating RESERVATION_INFO OF FACILITY")) }
             }
@@ -773,10 +849,10 @@ class ReservationRepository() {
         return Completable.create { emitter ->
             firestore.collection(agency).document(FIRESTORE_RESERVATION)
             firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_EQUIPMENT_SETTINGS)
-                .document(data.data.name).set(data.data)
+                .document(data.data.name).set(data.data.getNewThis())
                 .addOnFailureListener { emitter.onError(Throwable("Error saving RESERVATION_SETTING OF EQUIPMENT")) }
             firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_EQUIPMENT)
-                .document(data.data.name).set(data.equipmentData)
+                .document(data.data.name).set(data.equipmentData.getNewThis())
                 .addOnSuccessListener { emitter.onComplete() }
                 .addOnFailureListener { emitter.onError(Throwable("Error saving RESERVATION_INFO OF EQUIPMENT")) }
         }
@@ -786,7 +862,7 @@ class ReservationRepository() {
         return Completable.create { emitter ->
             firestore.collection(agency).document(FIRESTORE_RESERVATION)
             firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_FACILITY_SETTINGS)
-                .document(data.data.name).set(data.data)
+                .document(data.data.name).set(data.data.getNewThis())
                 .addOnFailureListener { emitter.onError(Throwable("Error saving RESERVATION_SETTING OF FACILITY")) }
             val facilityListData = ReservationFacilityItem(data.data, data.unableTimeList).makeReservationFacilityListData()
             firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_FACILITY)

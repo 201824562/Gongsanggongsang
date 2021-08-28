@@ -16,14 +16,13 @@
         android:textSize="14sp"
         android:textColor="@color/black_87"
         android:gravity="center"
-        android:visibility="visible" />
+        android:visibility="gone" />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/reservation_log_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:layout_editor_absoluteX="0dp"
         tools:listitem="@layout/item_reservation_log" />
 </androidx.constraintlayout.widget.ConstraintLayout>

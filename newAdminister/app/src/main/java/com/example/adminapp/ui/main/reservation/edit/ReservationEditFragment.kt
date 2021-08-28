@@ -1,6 +1,7 @@
 package com.example.adminapp.ui.main.reservation.edit
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +23,7 @@ class ReservationEditFragment : BaseSessionFragment<FragmentReservationEditBindi
 
     override lateinit var viewbinding: FragmentReservationEditBinding
     override val viewmodel: ReservationEditViewModel by viewModels()
-    private lateinit var reservationEditViewPagerAdapter : ReservationEditViewPagerAdapter
+    private var reservationEditViewPagerAdapter : ReservationEditViewPagerAdapter? = null
 
     override fun initViewbinding(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -45,23 +46,26 @@ class ReservationEditFragment : BaseSessionFragment<FragmentReservationEditBindi
 
     override fun initViewFinal(savedInstanceState: Bundle?) { }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        reservationEditViewPagerAdapter?.deleteFragments()
+        reservationEditViewPagerAdapter = null
+    }
+
     private fun initViewPager() {
         viewbinding.run {
             reservationEditViewPagerAdapter = ReservationEditViewPagerAdapter(requireActivity())
-            viewbinding.editViewpager.adapter = reservationEditViewPagerAdapter
+            viewbinding.editViewpager.apply {
+                adapter = reservationEditViewPagerAdapter
+            }
+            editTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab?) { viewbinding.editViewpager.currentItem = tab!!.position }
+                override fun onTabUnselected(tab: TabLayout.Tab?) {}
+                override fun onTabReselected(tab: TabLayout.Tab?) { viewbinding.editViewpager.currentItem = tab!!.position } })
             //if(viewmodel.selectedTabPosition!=null) viewbinding.editTab.getTabAt(viewmodel.selectedTabPosition!!)?.select()
             TabLayoutMediator(editTab, editViewpager){ tab, position ->
-                val tabTextList = arrayListOf("사용중", "바로 사용", "예약 사용", "사용 기록")
+                val tabTextList = arrayListOf("바로 사용", "예약 사용")
                 tab.text = tabTextList[position] }.attach()
-
-            /*editTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                override fun onTabSelected(tab: TabLayout.Tab?) {
-                    when(tab?.position) {
-                        TAB_INDEX_EQUIPMENT -> viewbinding.editViewpager.currentItem = TAB_INDEX_EQUIPMENT
-                        TAB_INDEX_FACILITY -> viewbinding.editViewpager.currentItem = TAB_INDEX_FACILITY
-                        else -> throw IllegalStateException("에러가 발생했습니다. 다시 시도해주세요.") } }
-                override fun onTabUnselected(tab: TabLayout.Tab?) {}
-                override fun onTabReselected(tab: TabLayout.Tab?) {} })*/
 
         }
     }

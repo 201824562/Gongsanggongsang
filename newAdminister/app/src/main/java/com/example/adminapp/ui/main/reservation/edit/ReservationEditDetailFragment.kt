@@ -341,8 +341,8 @@ class ReservationEditDetailFragment: BaseSessionFragment<FragmentReservationEdit
         viewbinding.unableReserveTimeLayout.visibility = View.VISIBLE }
 
     private fun deleteDialog(){
-        val dialog = WrapedDialogBasicTwoButton(requireContext(), "카테고리를 삭제하면, 해당 카테고리로 예약 된\n"+
-                "모든 예약정보가 삭제됩니다. 정말 삭제하시겠어요?", "취소", "삭제").apply {
+        val dialog = WrapedDialogBasicTwoButton(requireContext(), "카테고리를 삭제하면,\n해당 카테고리로 예약 된\n"+
+                "모든 예약정보가 삭제됩니다.\n정말 삭제하시겠어요?", "취소", "삭제").apply {
             clickListener = object : WrapedDialogBasicTwoButton.DialogButtonClickListener{
                 override fun dialogCloseClickListener() { dismiss() }
                 override fun dialogCustomClickListener() {

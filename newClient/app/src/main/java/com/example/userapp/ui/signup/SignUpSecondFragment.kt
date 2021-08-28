@@ -115,7 +115,6 @@ class SignUpSecondFragment : BaseSessionFragment<FragmentSignupSecondBinding, Si
                 else setNicknameEmptyMessage()
             }
 
-            //TODO : 힌트/일반 상태에 따라 폰트타입 바뀌는 거 수정하기.
             showingPwdBtn.setOnClickListener {
                 showingPwdBtn.isSelected = !showingPwdBtn.isSelected
                 if (showingPwdBtn.isSelected) {
@@ -127,7 +126,7 @@ class SignUpSecondFragment : BaseSessionFragment<FragmentSignupSecondBinding, Si
                 showingPwd2Btn.isSelected = !showingPwd2Btn.isSelected
                 if (showingPwd2Btn.isSelected) {
                     editTextPwd2.inputType = 0x00000001
-                    editTextPwd.typeface = resources.getFont(R.font.notosan_font_family) }
+                    editTextPwd2.typeface = resources.getFont(R.font.notosan_font_family) }
                 else editTextPwd2.inputType = 0x00000081
             }
 

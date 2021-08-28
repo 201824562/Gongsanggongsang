@@ -116,18 +116,19 @@
                     android:fontFamily="@font/notosanskr_regular_hestia" />
             </LinearLayout>
         </LinearLayout>
+
         <Button
             android:id="@+id/deny_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/button_10dp_stroke_rectangle_black20"
+            android:fontFamily="@font/notosanskr_regular_hestia"
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:text="회원 퇴출"
             android:textColor="@color/pinkish_orange"
-            android:fontFamily="@font/notosanskr_regular_hestia"
-            android:textSize="14sp"
-            android:background="@drawable/button_15dp_event_stroke_rectangle_black20"/>
+            android:textSize="14sp" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

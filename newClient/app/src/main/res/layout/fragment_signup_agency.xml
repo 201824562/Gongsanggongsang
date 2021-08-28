@@ -87,12 +87,12 @@
             android:textColor="@color/pinkish_orange"
             android:fontFamily="@font/notosanskr_regular_hestia"
             android:text=""
-            android:visibility="gone"/>
+            android:visibility="invisible"/>
         <TextView
             android:id="@+id/signup_search_result_empty_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="80dp"
             android:text="검색결과가 없습니다.\n공생공생에 등록되지 않았거나 잘못된 이름입니다."
             android:textSize="12sp"
             android:textColor="@color/black_87"

@@ -33,7 +33,7 @@ class ReservationLogFacilityFragment : BaseSessionFragment<FragmentReservationCh
     }
 
     private fun setRecyclerView() {
-        reservationLogRVAdapter = ReservationLogRVAdapter()
+        reservationLogRVAdapter = ReservationLogRVAdapter(viewmodel)
         viewbinding.reservationLogRv.adapter =  reservationLogRVAdapter
     }
 
