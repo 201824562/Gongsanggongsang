@@ -53,17 +53,16 @@ class CommunityWriteMarketFragment : BaseSessionFragment<FragmentCommunityWriteM
 
     @RequiresApi(Build.VERSION_CODES.P)
     override fun initViewStart(savedInstanceState: Bundle?) {
-        val ac : MainActivity = activity as MainActivity
-        userAgency = ac.getUserData()!!.agency
-        userName = ac.getUserData()!!.name
-        collectionName = arguments?.getString("collection_name").toString()
-        documentName = arguments?.getString("postId").toString()
-        bundle = bundleOf(
-            "collection_name" to collectionName
-        )
+        viewmodel.getUserInfo()
+        viewmodel.onSuccessGettingUserInfo.observe(this, {
+            userAgency = it.agency
+            userName = it.nickname
+        })
 
+        val ac : MainActivity = activity as MainActivity
         getLocalPhotoUri = ac.getPhoto()
         getBitmap()
+
         initAttachPhotoRecycler()
     }
 
@@ -101,10 +100,9 @@ class CommunityWriteMarketFragment : BaseSessionFragment<FragmentCommunityWriteM
                         post_anonymous = false
                     )
                     bundle = bundleOf(
-                        "collection_name" to collectionName,
-                        "document_name" to postData.post_id
+                        "post_data_info" to postData
                     )
-                    viewmodel.insertPostData(userAgency, postData).observe(viewLifecycleOwner){
+                    viewmodel.insertPostData(postData).observe(viewLifecycleOwner){
                         if(it){
                             findNavController().navigate(R.id.action_communityWriteMarket_to_communityPostMarket, bundle)
                         }

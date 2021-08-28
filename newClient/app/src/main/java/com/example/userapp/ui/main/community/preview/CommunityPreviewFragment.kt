@@ -45,12 +45,7 @@ class CommunityPreviewFragment : BaseSessionFragment<FragmentCommunityPreviewBin
         collectionNameBundle = bundleOf(
             "collection_name" to collectionName
         )
-
-        var ac = activity as MainActivity
-        userAgency = ac.getUserData()!!.agency
-
-        ac.selectedItems.clear()
-        viewmodel.deletePostPhoto()
+        viewmodel.getUserInfo()
 
         when(collectionName){
             "1_free" -> viewbinding.previewToolbarName.text = "자유게시판"
@@ -65,7 +60,7 @@ class CommunityPreviewFragment : BaseSessionFragment<FragmentCommunityPreviewBin
             "5_market" -> initMarketRecyclerView()
             else -> initMarketElseRecyclerView()
         }
-        viewmodel.getCategoryAllPostData(userAgency, collectionName).observe(viewLifecycleOwner){
+        viewmodel.getCategoryAllPostData(collectionName).observe(viewLifecycleOwner){
             when(collectionName){
                 "5_market" -> {
                     communityPreviewMarketItem = it
@@ -82,8 +77,14 @@ class CommunityPreviewFragment : BaseSessionFragment<FragmentCommunityPreviewBin
         }
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        viewmodel.initCategoryPostData()
+    }
     override fun initDataBinding(savedInstanceState: Bundle?) {
-
+        viewmodel.onSuccessGettingUserInfo.observe(this, {
+            userAgency = it.agency
+        })
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
@@ -115,10 +116,9 @@ class CommunityPreviewFragment : BaseSessionFragment<FragmentCommunityPreviewBin
             listener =
                 object : CommunityPreviewRecyclerAdapter.OnCommunityMarketItemClickListener {
                     override fun onPreviewItemClick(position: Int) {
-                        var documentName = getItem(position).post_id
+                        var postItemDataInfo : PostDataInfo = getItem(position)
                         var bundle = bundleOf(
-                            "collection_name" to collectionName,
-                            "document_name" to documentName
+                            "post_data_info" to postItemDataInfo
                         )
                         findNavController().navigate(R.id.action_communityPreview_to_communityPost, bundle)
                     }
@@ -137,10 +137,9 @@ class CommunityPreviewFragment : BaseSessionFragment<FragmentCommunityPreviewBin
         viewbinding.communityPreviewRecyclerView.adapter = communityPreviewMarketRecyclerAdapter.apply {
             listener = object : CommunityPreviewMarketRecyclerAdapter.OnCommunityMarketItemClickListener {
                     override fun onPreviewItemClick(position: Int) {
-                        var documentName = getItem(position).post_id
+                        var postItemDataInfo : PostDataInfo = getItem(position)
                         var bundle = bundleOf(
-                            "collection_name" to collectionName,
-                            "document_name" to documentName
+                            "post_data_info" to postItemDataInfo
                         )
                         findNavController().navigate(R.id.action_communityPreview_to_communityPostMarket, bundle)
                     }

@@ -164,6 +164,9 @@ class CommunityDataRepository() {
         updateCategoryAllPostData(agency, collection_name)
         return collectionPostDataInfoList
     }
+    fun initCategoryPostData(){
+        collectionPostDataInfoList = MutableLiveData()
+    }
 
 
     private fun updateNoticePostData(agency: String) {
@@ -225,8 +228,11 @@ class CommunityDataRepository() {
             }
     }
     fun initPostData(){
-        documentPostDataInfo.postValue(null)
+        documentPostDataInfo = MutableLiveData()
+        postDataCommentList = MutableLiveData()
+        postDataPhotoUrl = MutableLiveData()
     }
+
     fun getPostData(agency: String, collection_name: String, document_name: String) : MutableLiveData<PostDataInfo>{
         updatePostData(agency, collection_name, document_name)
         Log.e("check", "{${documentPostDataInfo.value}}")
@@ -296,19 +302,16 @@ class CommunityDataRepository() {
             val u = "file://$uri"
             val storageRefer: StorageReference = fireStorage.reference.child("images/").child(u)
             storageRefer.downloadUrl.addOnSuccessListener {
-                System.out.println(it.toString())
                 postData.add(it.toString())
+                postDataPhotoUrl.postValue(postData)
             }
         }
-        postDataPhotoUrl.postValue(postData)
     }
 
     fun getDataPhoto() : MutableLiveData<ArrayList<String>>{
         return postDataPhotoUrl
     }
-    fun deletePhotoData() {
-        postDataPhotoUrl.postValue(arrayListOf())
-    }
+
     //공지 카테고리 받아오기
     private fun updateNoticeCategoryPostData(agency: String, noticeCategory : String) {
         var noticeDataList: ArrayList<PostDataInfo> = arrayListOf()
@@ -367,7 +370,6 @@ class CommunityDataRepository() {
                         searchPostList.add(item)
                     }
                 }
-                Log.v("s", "{$searchPostList}")
                 postSearchPostDataList.value = searchPostList
             }
     }

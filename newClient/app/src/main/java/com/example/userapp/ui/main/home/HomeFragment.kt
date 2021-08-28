@@ -28,17 +28,14 @@ class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityV
         return viewbinding.root
     }
 
-    override fun initViewStart(savedInstanceState: Bundle?) {
-        val ac = activity as MainActivity
-        ac.getUserData()?.let {
-            agency = it.agency
-        }
-    }
+    override fun initViewStart(savedInstanceState: Bundle?) { }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
+
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
+        viewmodel.getUserInfo()
         viewbinding.run {
             mainHomeToSuggestCommunity.setOnClickListener {
                 var collection_name = "3_suggest"
@@ -65,7 +62,8 @@ class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityV
                 findNavController().navigate(R.id.action_mainFragment_to_mainhomeNoticeFragment)
             }
 
-            viewmodel.getNoticePostData(agency).observe(viewLifecycleOwner){
+            viewmodel.getNoticePostData().observe(viewLifecycleOwner){
+                Log.e("agency", "$agency")
                 when {
                     it.size >= 3 -> {
                         mainHomeNotice1Title.text = it[0].post_title

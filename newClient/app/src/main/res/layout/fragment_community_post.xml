@@ -136,6 +136,7 @@
                     android:textSize="12sp"
                     android:textColor="#7f000000"
                     android:lineSpacingExtra="6sp"
+                    android:visibility="gone"
                     android:gravity="right|center"/>
             </LinearLayout>
 

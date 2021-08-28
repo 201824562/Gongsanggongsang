@@ -40,8 +40,7 @@ import java.time.LocalTime
 
 class CommunityWriteFragment : BaseSessionFragment<FragmentCommunityWriteBinding, CommunityViewModel>() {
     private lateinit var collectionName : String
-    private lateinit var documentName : String
-    private lateinit var bundle: Bundle
+
     override lateinit var viewbinding: FragmentCommunityWriteBinding
     override val viewmodel: CommunityViewModel by viewModels()
     private val categorySpinnerArray = arrayOf("", "소음", "예약", "냉장고", "세탁실", "수질", "와이파이", "전기", "기타")
@@ -66,18 +65,18 @@ class CommunityWriteFragment : BaseSessionFragment<FragmentCommunityWriteBinding
 
     @RequiresApi(Build.VERSION_CODES.P)
     override fun initViewStart(savedInstanceState: Bundle?) {
-        val ac : MainActivity = activity as MainActivity
-        userAgency = ac.getUserData()!!.agency
-        userName = ac.getUserData()!!.nickname
-        collectionName = arguments?.getString("collection_name").toString()
-        documentName = arguments?.getString("postId").toString()
-        bundle = bundleOf(
-            "collection_name" to collectionName
-        )
+        viewmodel.getUserInfo()
+        viewmodel.onSuccessGettingUserInfo.observe(this, {
+            userAgency = it.agency
+            userName = it.nickname
+        })
 
+        collectionName = arguments?.getString("collection_name").toString()
+
+        val ac = activity as MainActivity
         getLocalPhotoUri = ac.getPhoto()
-        Log.e("tt", "{$getLocalPhotoUri}")
         getBitmap()
+
         when(collectionName){
             "1_free" -> viewbinding.previewToolbarName.text = "자유게시판"
             "2_emergency" -> viewbinding.previewToolbarName.text = "긴급게시판"
@@ -85,6 +84,7 @@ class CommunityWriteFragment : BaseSessionFragment<FragmentCommunityWriteBinding
             "4_with" -> viewbinding.previewToolbarName.text = "함께게시판"
             "5_market" -> viewbinding.previewToolbarName.text = "장터게시판"
         }
+
         viewbinding.run {
             if(collectionName == "2_emergency" || collectionName == "3_suggest"){
                 initWriteCategorySelect()
@@ -133,14 +133,13 @@ class CommunityWriteFragment : BaseSessionFragment<FragmentCommunityWriteBinding
                         post_state = writePostCategoryData,
                         post_anonymous = false
                     )
-                    bundle = bundleOf(
-                        "collection_name" to collectionName,
-                        "document_name" to postData.post_id
+                    val bundle = bundleOf(
+                        "post_data_info" to postData,
                     )
                     viewmodel.uploadPhoto(bitmapArray, uriArray)
                     viewmodel.getUploadPhoto().observe(viewLifecycleOwner){
                         if(it){
-                            viewmodel.insertPostData(userAgency, postData).observe(viewLifecycleOwner){
+                            viewmodel.insertPostData(postData).observe(viewLifecycleOwner){
                                 if(it){
                                     findNavController().navigate(R.id.action_communityWrite_to_communityPost, bundle)
                                 }

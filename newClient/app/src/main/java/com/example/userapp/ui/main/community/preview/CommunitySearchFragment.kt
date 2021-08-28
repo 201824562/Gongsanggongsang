@@ -49,13 +49,18 @@ class CommunitySearchFragment : BaseSessionFragment<FragmentCommunitySearchBindi
     override fun initDataBinding(savedInstanceState: Bundle?) {
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        viewmodel.initCategoryPostData()
+    }
+
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run{
             searchBackButton.setOnClickListener {
                 findNavController().navigate(R.id.action_communitySearch_pop)
             }
             searchCompleteButton.setOnClickListener {
-                viewmodel.getSearchPostData(userAgency, collectionName, searchKeyword.text.toString()).observe(viewLifecycleOwner){
+                viewmodel.getSearchPostData(collectionName, searchKeyword.text.toString()).observe(viewLifecycleOwner){
                     when(collectionName){
                         "5_market" -> {
                             communityPreviewMarketItem = it
@@ -84,10 +89,9 @@ class CommunitySearchFragment : BaseSessionFragment<FragmentCommunitySearchBindi
             listener =
                 object : CommunityPreviewRecyclerAdapter.OnCommunityMarketItemClickListener {
                     override fun onPreviewItemClick(position: Int) {
-                        var documentName = getItem(position).post_id
+                        var postItemDataInfo : PostDataInfo = getItem(position)
                         var bundle = bundleOf(
-                            "collection_name" to collectionName,
-                            "document_name" to documentName
+                            "post_data_info" to postItemDataInfo
                         )
                         findNavController().navigate(R.id.action_communitySearch_to_communityPost, bundle)
                     }
@@ -105,12 +109,11 @@ class CommunitySearchFragment : BaseSessionFragment<FragmentCommunitySearchBindi
         viewbinding.communityPreviewRecyclerView.adapter = communityPreviewMarketRecyclerAdapter.apply {
             listener = object : CommunityPreviewMarketRecyclerAdapter.OnCommunityMarketItemClickListener {
                 override fun onPreviewItemClick(position: Int) {
-                    var documentName = getItem(position).post_id
+                    var postItemDataInfo : PostDataInfo = getItem(position)
                     var bundle = bundleOf(
-                        "collection_name" to collectionName,
-                        "document_name" to documentName
+                        "post_data_info" to postItemDataInfo
                     )
-                    findNavController().navigate(R.id.action_communityPreview_to_communityPostMarket, bundle)
+                    findNavController().navigate(R.id.action_communitySearch_to_communityPostMarket, bundle)
                 }
             }
         }

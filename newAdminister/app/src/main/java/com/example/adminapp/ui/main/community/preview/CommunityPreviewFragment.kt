@@ -85,6 +85,11 @@ class CommunityPreviewFragment : BaseSessionFragment<FragmentCommunityPreviewBin
 
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        viewmodel.initCategoryPostData()
+    }
+
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run{
             previewBackButton.setOnClickListener {

@@ -159,6 +159,9 @@ class CommunityDataRepository() {
         updateCategoryAllPostData(agency, collection_name)
         return collectionPostDataInfoList
     }
+    fun initCatagoryPostData(){
+        collectionPostDataInfoList = MutableLiveData()
+    }
 
 
     private fun updateNoticePostData(agency: String) {

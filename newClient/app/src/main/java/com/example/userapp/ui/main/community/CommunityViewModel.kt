@@ -9,45 +9,44 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.userapp.base.BaseSessionViewModel
-import com.example.userapp.base.BaseViewModel
 import com.example.userapp.data.entity.PostCommentDataClass
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.data.repository.CommunityDataRepository
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+
 
 class CommunityViewModel(application: Application) : BaseSessionViewModel(application) {
-    var selectedItems : ArrayList<String> = arrayListOf()
     private val communityDataRepository : CommunityDataRepository = CommunityDataRepository.getInstance()
-
-    fun getCategoryAllPostData(agency: String, collection_name: String) : LiveData<ArrayList<PostDataInfo>> {
-        return communityDataRepository.getCategoryAllPostData(agency, collection_name)
+    fun getCategoryAllPostData(collection_name: String) : LiveData<ArrayList<PostDataInfo>> {
+        return communityDataRepository.getCategoryAllPostData(agencyInfo, collection_name)
     }
-    fun getPostData(agency: String, collection_name: String, document_name : String) : MutableLiveData<PostDataInfo>{
-        return communityDataRepository.getPostData(agency, collection_name, document_name)
+    fun initCategoryPostData(){
+        communityDataRepository.initCategoryPostData()
+    }
+    fun getPostData(collection_name: String, document_name : String) : MutableLiveData<PostDataInfo>{
+        return communityDataRepository.getPostData(agencyInfo, collection_name, document_name)
     }
     fun initPostData(){
         communityDataRepository.initPostData()
     }
-    fun insertPostData(agency : String, it: PostDataInfo) : MutableLiveData<Boolean> {
-        return communityDataRepository.insertPostData(agency, it)
+    fun insertPostData(it: PostDataInfo) : MutableLiveData<Boolean> {
+        return communityDataRepository.insertPostData(agencyInfo, it)
     }
-    fun insertPostCommentData(agency: String, collection_name: String, document_name: String, postComment : PostCommentDataClass) : MutableLiveData<Boolean> {
-        return communityDataRepository.insertPostCommentData(agency, collection_name, document_name, postComment)
+    fun insertPostCommentData(collection_name: String, document_name: String, postComment : PostCommentDataClass) : MutableLiveData<Boolean> {
+        return communityDataRepository.insertPostCommentData(agencyInfo, collection_name, document_name, postComment)
     }
-    fun deletePostCommentData(agency: String, collection_name: String, document_name: String, postComment : PostCommentDataClass) : MutableLiveData<Boolean> {
-        return communityDataRepository.deletePostCommentData(agency, collection_name, document_name, postComment)
+    fun deletePostCommentData(collection_name: String, document_name: String, postComment : PostCommentDataClass) : MutableLiveData<Boolean> {
+        return communityDataRepository.deletePostCommentData(agencyInfo, collection_name, document_name, postComment)
     }
-    fun deletePostData(agency: String, collection_name: String, document_name: String) : MutableLiveData<Boolean> {
-        return communityDataRepository.deletePostDataSuccess(agency, collection_name, document_name)
+    fun deletePostData(collection_name: String, document_name: String) : MutableLiveData<Boolean> {
+        return communityDataRepository.deletePostDataSuccess(agencyInfo, collection_name, document_name)
     }
-    fun modifyPostPartData(agency: String, collection_name: String, document_name: String, partKey: String, modifyContent: Any) : MutableLiveData<Boolean>{
-        return communityDataRepository.modifyPostPartData(agency, collection_name, document_name, partKey, modifyContent)
+    fun modifyPostPartData(collection_name: String, document_name: String, partKey: String, modifyContent: Any) : MutableLiveData<Boolean>{
+        return communityDataRepository.modifyPostPartData(agencyInfo, collection_name, document_name, partKey, modifyContent)
     }
-    fun getPostCommentData(agency: String, collection_name: String, document_name: String) : MutableLiveData<ArrayList<PostCommentDataClass>> {
-        return communityDataRepository.getPostCommentData(agency, collection_name, document_name)
+    fun getPostCommentData(collection_name: String, document_name: String) : MutableLiveData<ArrayList<PostCommentDataClass>> {
+        return communityDataRepository.getPostCommentData(agencyInfo, collection_name, document_name)
     }
     fun getPostPhotoSuccess() : MutableLiveData<ArrayList<String>>{
         return communityDataRepository.getDataPhoto()
@@ -55,9 +54,7 @@ class CommunityViewModel(application: Application) : BaseSessionViewModel(applic
     fun getPostPhotoData(photoUri : ArrayList<String>) = viewModelScope.launch(Dispatchers.IO) {
         communityDataRepository.updatePhotoData(photoUri)
     }
-    fun deletePostPhoto(){
-        communityDataRepository.deletePhotoData()
-    }
+
     fun getUploadPhoto() : MutableLiveData<Boolean>{
         return communityDataRepository.getUploadPhotoSuccess()
     }
@@ -67,14 +64,14 @@ class CommunityViewModel(application: Application) : BaseSessionViewModel(applic
         }
 
 
-    fun getNoticeCategoryPostData(agency: String, collectionName : String) : MutableLiveData<ArrayList<PostDataInfo>> {
-        return communityDataRepository.getNoticeCategoryPostData(agency, collectionName)
+    fun getNoticeCategoryPostData(collectionName : String) : MutableLiveData<ArrayList<PostDataInfo>> {
+        return communityDataRepository.getNoticeCategoryPostData(agencyInfo, collectionName)
     }
-    fun getNoticePostData(agency: String) : MutableLiveData<ArrayList<PostDataInfo>>{
-        return communityDataRepository.getNoticePostData(agency)
+    fun getNoticePostData() : MutableLiveData<ArrayList<PostDataInfo>>{
+        return communityDataRepository.getNoticePostData(agencyInfo)
     }
-    fun getSearchPostData(agency: String, collectionName: String, searchKeyword : String) : MutableLiveData<ArrayList<PostDataInfo>>{
-        return communityDataRepository.getSearchPostData(agency, collectionName, searchKeyword)
+    fun getSearchPostData(collectionName: String, searchKeyword : String) : MutableLiveData<ArrayList<PostDataInfo>>{
+        return communityDataRepository.getSearchPostData(agencyInfo, collectionName, searchKeyword)
     }
 
 }
