@@ -40,8 +40,6 @@ class CommunitySearchFragment : BaseSessionFragment<FragmentCommunitySearchBindi
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-        val ac = activity as MainActivity
-        userAgency = ac.getUserData().agency
         collectionName = arguments?.getString("collection_name").toString()
 
     }
@@ -60,19 +58,27 @@ class CommunitySearchFragment : BaseSessionFragment<FragmentCommunitySearchBindi
                 findNavController().navigate(R.id.action_communitySearch_pop)
             }
             searchCompleteButton.setOnClickListener {
-                viewmodel.getSearchPostData(collectionName, searchKeyword.text.toString()).observe(viewLifecycleOwner){
-                    when(collectionName){
-                        "5_market" -> {
-                            communityPreviewMarketItem = it
-                            initMarketRecyclerView()
-                            communityPreviewMarketRecyclerAdapter.notifyDataSetChanged()
-                        }
-                        else -> {
-                            communityPreviewItem = it
-                            initMarketElseRecyclerView()
-                            communityPreviewRecyclerAdapter.notifyDataSetChanged()
+                if(searchKeyword.text.isNotEmpty()){
+                    viewmodel.getSearchPostData(collectionName, searchKeyword.text.toString()).observe(viewLifecycleOwner){
+                        if(it.isEmpty()) { searchNoResultPage.visibility = View.VISIBLE }
+                        else {
+                            when(collectionName){
+                                "5_market" -> {
+                                    communityPreviewMarketItem = it
+                                    initMarketRecyclerView()
+                                    communityPreviewMarketRecyclerAdapter.notifyDataSetChanged()
+                                }
+                                else -> {
+                                    communityPreviewItem = it
+                                    initMarketElseRecyclerView()
+                                    communityPreviewRecyclerAdapter.notifyDataSetChanged()
+                                }
+                            }
                         }
                     }
+                }
+                else{
+                    showToast("검색어를 입력해주세요.")
                 }
             }
         }

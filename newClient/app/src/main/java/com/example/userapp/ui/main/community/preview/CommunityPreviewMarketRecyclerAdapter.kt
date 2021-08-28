@@ -1,12 +1,15 @@
 package com.example.userapp.ui.main.community.preview
 
+import android.graphics.Color
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.userapp.R
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentCommunityPreviewMarketItemBinding
 import com.example.userapp.ui.main.community.CommunityViewModel
@@ -50,6 +53,11 @@ class CommunityPreviewMarketRecyclerAdapter(var postDataList : ArrayList<PostDat
             binding.communityMarketPreviewCommentNumber.text = postDataInfo.post_comments.toString()
             binding.communityMarketPreviewName.text = postDataInfo.post_name.toString()
             binding.communityPreviewPhotoNumber.text = postDataInfo.post_photo_uri.size.toString()
+            if(!postDataInfo.post_anonymous){
+                binding.communityMarketPreviewCategory.text = "판매 중"
+            }
+            else{ binding.communityMarketPreviewCategory.text = "판매 완료" }
+
             val postDateNow: String = LocalDate.now().toString()
             val postTimeNow: String = LocalTime.now().toString()
             if(postDataInfo.post_date == postDateNow){

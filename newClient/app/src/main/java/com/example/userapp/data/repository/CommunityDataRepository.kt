@@ -160,7 +160,7 @@ class CommunityDataRepository() {
                 collectionPostDataListSuccess.postValue(false)
             }
     }
-    fun getCategoryAllPostData(agency: String, collection_name: String) : LiveData<ArrayList<PostDataInfo>>{
+    fun getPostDataInCategory(agency: String, collection_name: String) : LiveData<ArrayList<PostDataInfo>>{
         updateCategoryAllPostData(agency, collection_name)
         return collectionPostDataInfoList
     }

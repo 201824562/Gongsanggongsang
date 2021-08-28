@@ -49,9 +49,6 @@ class CommunityPreviewRecyclerAdapter(var postDataList : ArrayList<PostDataInfo>
             if(postDataInfo.post_state != "none"){
                 binding.communityPreviewCategory.text = postDataInfo.post_state
             }
-            if(postDataInfo.post_anonymous){
-                binding.communityPreviewName.text = "익명"
-            }
             else{
                 binding.communityPreviewName.text = postDataInfo.post_name
             }
@@ -59,6 +56,9 @@ class CommunityPreviewRecyclerAdapter(var postDataList : ArrayList<PostDataInfo>
             binding.communityPreviewTitle.text = postDataInfo.post_title
             binding.communityPreviewContents.text = postDataInfo.post_contents
             binding.communityPreviewPhotoNumber.text = postDataInfo.post_photo_uri.size.toString()
+            if(postDataInfo.post_category == "4_WITH" && !postDataInfo.post_anonymous){ binding.communityPreviewCategory.text = "모집 중" }
+            if(postDataInfo.post_category == "4_WITH" && postDataInfo.post_anonymous){ binding.communityPreviewCategory.text = "모집 완료" }
+
             val postDateNow: String = LocalDate.now().toString()
             val postTimeNow: String = LocalTime.now().toString()
             if(postDataInfo.post_date == postDateNow){

@@ -264,7 +264,7 @@
             app:popUpTo="@id/communityPreviewFragment"/>
         <argument
             app:argType="string"
-            android:name="collection_name"
+            android:name="getCollectionName"
             android:defaultValue="0"/>
         <action
             android:id="@+id/action_communityWrite_pop"
@@ -288,15 +288,6 @@
         <action
             app:destination="@+id/communityPostFragment"
             android:id="@+id/action_communityPreview_to_communityPost"/>
-
-        <argument
-            app:argType="string"
-            android:name="collection_name"
-            android:defaultValue="0"/>
-        <action
-            android:id="@+id/action_communityPreviewFragment_self"
-            app:popUpTo="@id/communityPreviewFragment"
-            app:popUpToInclusive="true"/>
         <action
             android:id="@+id/action_communityPreview_communitySearch"
             app:destination="@id/communitySearchFragment" />
@@ -304,6 +295,10 @@
             android:id="@+id/action_communityPreview_pop"
             app:popUpTo="@id/communityPreviewFragment"
             app:popUpToInclusive="true" />
+        <argument
+            app:argType="string"
+            android:name="getCollectionName"
+            android:defaultValue="0"/>
     </fragment>
     <fragment
         android:id="@id/communityWriteMarketFragment"
@@ -469,6 +464,9 @@
             android:id="@+id/action_settingsOut_to_settingsOutWrite"
             app:destination="@id/settingsOutWriteFragment"
             app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_settingOut_to_settingOutPost"
+            app:destination="@id/communityPostMarketFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsOutWriteFragment"

@@ -90,12 +90,21 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:textStyle="bold"
-                    android:textSize="16sp"
+                    android:textSize="20sp"
                     android:textColor="@color/black"
                     android:letterSpacing="-0.03"
                     android:lineSpacingExtra="8sp"/>
             </LinearLayout>
-
+            <TextView
+                android:id="@+id/post_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#de000000"
+                android:lineSpacingExtra="4sp"
+                android:layout_gravity="center|left"
+                tools:text=""/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -141,6 +150,7 @@
                     android:textSize="12sp"
                     android:textColor="#7f000000"
                     android:lineSpacingExtra="6sp"
+                    android:visibility="gone"
                     android:gravity="right|center"/>
             </LinearLayout>
 
@@ -158,8 +168,8 @@
                 android:id="@+id/post_with_complete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:background="#19ff9966"
+                android:visibility="gone"
                 android:orientation="vertical">
                 <TextView
                     android:layout_width="wrap_content"
@@ -168,7 +178,7 @@
                     android:textSize="14sp"
                     android:textColor="#cc000000"
                     android:lineSpacingExtra="6sp"
-                    android:text="위 상품의 거래가 다\끝나셨다면?"
+                    android:text="위 상품의 거래가 다\n끝나셨다면?"
                     android:background="@color/transparent"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="20dp"/>
@@ -184,6 +194,7 @@
                     android:lineSpacingExtra="6sp"
                     android:gravity="center"
                     android:layout_marginLeft="20dp"
+                    android:layout_marginVertical="10dp"
                     android:padding="5dp" />
 
             </LinearLayout>
@@ -231,14 +242,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginLeft="16dp"
         android:orientation="horizontal">
-        <CheckBox
-            android:id="@+id/commentAnonymousCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="익명"
-            android:textColor="@color/black"
-            android:layout_gravity="center"/>
         <EditText
             android:id="@+id/write_comment"
             android:layout_width="wrap_content"
@@ -246,11 +251,11 @@
             android:hint="댓글을 남겨보세요"
             android:textColorHint="#7f000000"
             android:textColor="@color/black"
-            android:background="#0c000000"
+            android:background="@drawable/edittext_round"
             android:textStyle="normal"
             android:textSize="14sp"
             android:lineSpacingExtra="6sp"
-            android:layout_marginLeft="10dp"
+            android:paddingLeft="10dp"
             android:layout_marginRight="2dp"
             android:layout_weight="1"/>
         <ImageButton

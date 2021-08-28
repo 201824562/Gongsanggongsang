@@ -8,17 +8,23 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.userapp.MainActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.R
-import com.example.userapp.base.BaseFragment
 import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentMainhomeHomeBinding
 import com.example.userapp.ui.main.community.CommunityViewModel
+import com.example.userapp.ui.main.community.preview.CommunityPreviewMarketRecyclerAdapter
 
 class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityViewModel>(){
     override lateinit var viewbinding: FragmentMainhomeHomeBinding
     override val viewmodel: CommunityViewModel by viewModels()
-    var agency = ""
+
+    private lateinit var homeNoticeRecyclerAdapter: HomeNoticeRecyclerAdapter
+    private var homeNoticeItem : ArrayList<PostDataInfo> = arrayListOf()
+
+    private lateinit var toCollectionBundle : Bundle
+
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -28,62 +34,45 @@ class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityV
         return viewbinding.root
     }
 
-    override fun initViewStart(savedInstanceState: Bundle?) { }
+    override fun initViewStart(savedInstanceState: Bundle?) {
+        initMainHomeNoticeRecyclerView()
+    }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
-
+        viewmodel.getNoticePostData().observe(viewLifecycleOwner){
+            homeNoticeItem = it
+            homeNoticeRecyclerAdapter.notifyDataSetChanged()
+            initMainHomeNoticeRecyclerView()
+        }
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewmodel.getUserInfo()
         viewbinding.run {
             mainHomeToSuggestCommunity.setOnClickListener {
-                var collection_name = "3_suggest"
-                var collection_name_bundle = bundleOf(
-                    "collection_name" to collection_name
-                )
-                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, collection_name_bundle)
+                toCollectionBundle = bundleOf( "getCollectionName" to "3_SUGGEST")
+                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, toCollectionBundle)
             }
             mainHomeToWithCommunity.setOnClickListener {
-                var collection_name = "4_with"
-                var collection_name_bundle = bundleOf(
-                    "collection_name" to collection_name
-                )
-                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, collection_name_bundle)
+                toCollectionBundle = bundleOf( "getCollectionName" to "4_WITH")
+                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, toCollectionBundle)
             }
             mainHomeToMarketCommunity.setOnClickListener {
-                var collection_name = "5_market"
-                var collection_name_bundle = bundleOf(
-                    "collection_name" to collection_name
-                )
-                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, collection_name_bundle)
+                toCollectionBundle = bundleOf( "getCollectionName" to "5_MARKET")
+                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, toCollectionBundle)
             }
             mainHomeNoticeAllButton.setOnClickListener {
                 findNavController().navigate(R.id.action_mainFragment_to_mainhomeNoticeFragment)
             }
-
-            viewmodel.getNoticePostData().observe(viewLifecycleOwner){
-                Log.e("agency", "$agency")
-                when {
-                    it.size >= 3 -> {
-                        mainHomeNotice1Title.text = it[0].post_title
-                        mainHomeNotice1Date.text = it[0].post_date
-                        mainHomeNotice2Title.text = it[1].post_title
-                        mainHomeNotice2Date.text = it[1].post_date
-                        mainHomeNotice3Title.text = it[2].post_title
-                        mainHomeNotice3Date.text = it[2].post_date
-                    }
-                    it.size == 2 -> {
-                        mainHomeNotice1Title.text = it[0].post_title
-                        mainHomeNotice1Date.text = it[0].post_date
-                        mainHomeNotice2Title.text = it[1].post_title
-                        mainHomeNotice2Date.text = it[1].post_date
-                    }
-                    it.size == 1 -> {
-                        mainHomeNotice1Title.text = it[0].post_title
-                        mainHomeNotice1Date.text = it[0].post_date
-                    }
-                }
+        }
+    }
+    private fun initMainHomeNoticeRecyclerView(){
+        viewbinding.run {
+            homeNoticeRecyclerAdapter = HomeNoticeRecyclerAdapter(homeNoticeItem)
+            mainHomeNoticeNoticeRecycler.run {
+                setHasFixedSize(true)
+                layoutManager = LinearLayoutManager(context)
+                adapter = homeNoticeRecyclerAdapter
             }
         }
     }

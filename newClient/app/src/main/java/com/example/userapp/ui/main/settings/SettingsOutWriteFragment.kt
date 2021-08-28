@@ -101,7 +101,7 @@ class SettingsOutWriteFragment : BaseSessionFragment<FragmentSettingsOutWriteBin
                     val postDateNow: String = LocalDate.now().toString()
                     val postTimeNow : String = LocalTime.now().toString()
                     postData = PostDataInfo(
-                        "out",
+                        "OUT",
                         post_name = userName,
                         post_title = marketWriteTitle.text.toString(),
                         post_contents = marketWriteContent.text.toString(),

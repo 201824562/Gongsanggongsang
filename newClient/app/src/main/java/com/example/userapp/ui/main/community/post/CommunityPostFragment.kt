@@ -122,7 +122,7 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                 makeDialog("정말로 글을 삭제할까요?", "isPost", PostCommentDataClass())
             }
             postWithCompleteButton.setOnClickListener {
-                viewmodel.modifyPostPartData(collectionName, documentName, "post_state", "모집 완료").observe(viewLifecycleOwner){
+                viewmodel.modifyPostPartData(collectionName, documentName, "post_anonymous", true).observe(viewLifecycleOwner){
                     if(it){
                         postWithComplete.visibility = View.GONE
                         postCategory.text = "모집 완료"
@@ -131,6 +131,7 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
             }
         }
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initPostView(){
         val postDateNow: String = LocalDate.now().toString()
@@ -143,16 +144,20 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
 
         viewbinding.run {
             when(collectionName){
-                "1_free" -> postToolbarName.text = "자유게시판"
-                "2_emergency" -> postToolbarName.text = "긴급게시판"
-                "3_suggest" -> postToolbarName.text = "건의게시판"
-                "4_with" -> postToolbarName.text = "함께게시판"
-                "5_market" -> postToolbarName.text = "장터게시판"
+                "1_FREE" -> postToolbarName.text = "자유게시판"
+                "2_EMERGENCY" -> postToolbarName.text = "긴급게시판"
+                "3_SUGGEST" -> postToolbarName.text = "건의게시판"
+                "4_WITH" -> postToolbarName.text = "함께게시판"
+                "5_MARKET" -> postToolbarName.text = "장터게시판"
             }
             println(localUserName)
+
             if(navPostDataInfo.postDataInfo.post_name == localUserName) { postRemoveButton.visibility = View.VISIBLE }
-            if(collectionName == "4_with" && localUserName == navPostDataInfo.postDataInfo.post_name && navPostDataInfo.postDataInfo.post_state == "모집 중") { postWithComplete.visibility = View.VISIBLE }
+            if(collectionName == "4_WITH" && localUserName == navPostDataInfo.postDataInfo.post_name && !navPostDataInfo.postDataInfo.post_anonymous) { postWithComplete.visibility = View.VISIBLE }
             if(navPostDataInfo.postDataInfo.post_state != "none"){ postCategory.text = navPostDataInfo.postDataInfo.post_state }
+            if(collectionName == "4_WITH" && navPostDataInfo.postDataInfo.post_state == "none" && !navPostDataInfo.postDataInfo.post_anonymous) {postCategory.text = "모집 중"}
+            if(collectionName == "4_WITH" && navPostDataInfo.postDataInfo.post_state == "none" && navPostDataInfo.postDataInfo.post_anonymous) {postCategory.text = "모집 완료"}
+
             if(navPostDataInfo.postDataInfo.post_date == postDateNow) {
                 val hour = postTimeNow.substring(0,2).toInt() - navPostDataInfo.postDataInfo.post_time.substring(0,2).toInt()
                 val minute = postTimeNow.substring(3,5).toInt() - navPostDataInfo.postDataInfo.post_time.substring(3,5).toInt()
