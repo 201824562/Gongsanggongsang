@@ -146,6 +146,7 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
                             startEquipmentTimer(ReservationUseEquipment(
                                 document.id,
                                 tmpId,
+                                "바로 사용",
                                 document.get("startTime") as String,
                                 document.get("endTime") as String,
                                 remainMilli,
@@ -163,6 +164,55 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
 //                                makeIconStringToDrawableID(document.get("icon") as String),
 //                                coroutine
 //                            ).toString())
+                        }
+                    }
+                }
+                UseEquipmentLiveData.value = UseEquipmentData
+            }
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getUseFacilityData() {
+        lateinit var tmpId: String
+        var remainMilli: Long = 0L
+        var remain_time: Long = 0L
+
+        database.collection("한국장학재단_부산").document("RESERVATION")
+            .collection("LOG")
+            .addSnapshotListener { value, e ->
+                if (e != null) {
+                    return@addSnapshotListener
+                }
+                UseEquipmentData.clear()
+                for (document in value!!) {
+                    if((document.get("userId") as String == authToken)){
+                        Log.e("test1",document.id)
+                        val startTimeValid = (ChronoUnit.SECONDS.between(
+                            LocalDateTime.now(),
+                            LocalDateTime.parse(document.get("startTime") as String)
+                        ))
+                        val endTimeValid = (ChronoUnit.SECONDS.between(
+                            LocalDateTime.now(),
+                            LocalDateTime.parse(document.get("endTime") as String)
+                        ))
+
+                        if(startTimeValid < 0L && endTimeValid >= 0L){
+
+                            remainMilli = (ChronoUnit.MILLIS.between(
+                                LocalDateTime.now(),
+                                LocalDateTime.parse(document.get("endTime") as String)
+                            ))
+
+                            startEquipmentTimer(ReservationUseEquipment(
+                                document.id.split("_")[1],
+                                authToken,
+                                "예약 사용",
+                                document.get("startTime") as String,
+                                document.get("endTime") as String,
+                                remainMilli,
+                                makeIconStringToDrawableID(document.get("icon") as String),
+                                null,
+                                remain_time
+                            ))
                         }
                     }
                 }
@@ -220,7 +270,6 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
                 }
                 FacilityReserveData.clear()
                 for (document in value!!) {
-
                     if((document.get("reservationType") as String == "예약 사용") && (document.get("userId") as String == authToken)){
                         Log.e("test1",document.id)
                         val valid = (ChronoUnit.SECONDS.between(
@@ -240,7 +289,6 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
                                     document.get("endTime") as String
                                 )
                             )
-                            Log.e("icon",document.get("icon") as String)
                         }
                     }
 
@@ -344,7 +392,7 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
             .document(map1["startTime"].toString() + "_" + ReservationEquipment.document_name)
             .set(
                 ReservationEquipmentLog(
-                    map1["startTime"].toString() + ReservationEquipment.document_name,
+                    map1["startTime"].toString() + "_" +ReservationEquipment.document_name,
                     makeDrawableIDToString(ReservationEquipment.icon),
                     ReservationEquipment.document_name,
                     userInfo.name,
@@ -401,6 +449,12 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
         database.collection("한국장학재단_부산").document("RESERVATION")
             .collection("EQUIPMENT").document(ReservationUseEquipment.document_name)
             .update(map5)
+
+        database.collection("한국장학재단_부산").document("RESERVATION")
+            .collection("LOG")
+            .document(ReservationUseEquipment.startTime + "_" + ReservationUseEquipment.document_name).update("reservationState", "사용완료")
+            .addOnSuccessListener {  Log.e("checking", "Succeed updating RESERVATION_LOG OF FACILITY") }
+            .addOnFailureListener { Log.e("checking", "Error updating RESERVATION_LOG OF FACILITY") }
 
         UseEquipmentLiveData.value = UseEquipmentData
 
@@ -635,19 +689,7 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
                 @RequiresApi(Build.VERSION_CODES.O)
                 override fun onFinish() {
                     end_use(reservationUseEquipment)
-//                    val builder = createNotificationChannel("id", "name")
-//                        .setTicker("Ticker")
-//                        .setSmallIcon(android.R.drawable.ic_menu_search)
-//                        .setNumber(100)
-//                        .setAutoCancel(true)
-//                        .setContentTitle("Content Title")
-//                        .setContentText("Content Text")
-//                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-//
-//                    with(NotificationManagerCompat.from(this)) {
-//                        notify(0, builder.build())
-//                    }
-                }
+                    }
             }.start()
 
         UseEquipmentData.add(

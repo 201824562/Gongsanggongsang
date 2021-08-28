@@ -45,7 +45,8 @@ class ReservationCurrentFragment :
         viewbinding.equipmentUsingRecyclerView.adapter = EquipmentUsingAdapter(
             emptyList(),
             onClickNoUsingIcon = {
-                viewmodel.end_use(it)
+                if(it.reservationType == "바로 사용") viewmodel.end_use(it)
+
             }
         )
         viewbinding.facilityReserveRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -68,7 +69,8 @@ class ReservationCurrentFragment :
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun initViewFinal(savedInstanceState: Bundle?) {
-        viewmodel.getUseEquipmentData()
+//        viewmodel.getUseEquipmentData()
+        viewmodel.getUseFacilityData()
         viewmodel.getReserveFacilityData()
     }
 }
@@ -93,8 +95,6 @@ class EquipmentUsingAdapter(
     override fun onBindViewHolder(viewHolder: EquipmentUsingViewHolder, position: Int) {
         val data = dataSet[position]
 
-
-        println("remaintime : " + data.remain_time + "\n")
 
         viewHolder.viewbinding.document.text = data.document_name
         viewHolder.viewbinding.icon.load(data.icon)
