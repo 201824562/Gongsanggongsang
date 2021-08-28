@@ -35,7 +35,15 @@
             app:exitAnim="@anim/slide_exit"
             app:popEnterAnim="@anim/slide_pop_enter"
             app:popExitAnim="@anim/slide_pop_exit"/>
+        <action
+            android:id="@+id/action_mainFragment_to_settingOutFragment"
+            app:destination="@id/settingsOutFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
     </fragment>
+
     <fragment
         android:id="@+id/mainhomeNoticeFragment"
         android:name="com.example.userapp.ui.main.home.HomeNoticeFragment">
@@ -452,5 +460,33 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsOutFragment"
+        android:name="com.example.userapp.ui.main.settings.SettingsOutFragment"
+        android:label="SettingsOutFragment">
+        <action
+            android:id="@+id/action_settingsOut_to_settingsOutWrite"
+            app:destination="@id/settingsOutWriteFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+    <fragment
+        android:id="@+id/settingsOutWriteFragment"
+        android:name="com.example.userapp.ui.main.settings.SettingsOutWriteFragment"
+        android:label="SettingsOutWriteFragment">
+        <action
+            android:id="@+id/action_settingOutWrite_to_settingOutLog"
+            app:destination="@id/settingsOutFragment"
+            app:popUpTo="@id/settingsOutWriteFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_settingsOutWrite_to_getPhoto"
+            app:destination="@+id/communityGetPhotoFragment"/>
+        <action
+            android:id="@+id/action_settingsOutWriteFragment_self"
+            app:destination="@id/settingsOutWriteFragment"
+            app:popUpTo="@id/settingsOutWriteFragment"
+            app:popUpToInclusive="true" />
+
     </fragment>
 </navigation>

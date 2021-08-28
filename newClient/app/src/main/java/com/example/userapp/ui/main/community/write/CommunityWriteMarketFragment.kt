@@ -16,6 +16,7 @@ import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
@@ -58,7 +59,7 @@ class CommunityWriteMarketFragment : BaseSessionFragment<FragmentCommunityWriteM
             userAgency = it.agency
             userName = it.nickname
         })
-
+        collectionName = arguments?.getString("collection_name").toString()
         val ac : MainActivity = activity as MainActivity
         getLocalPhotoUri = ac.getPhoto()
         getBitmap()
@@ -146,7 +147,7 @@ class CommunityWriteMarketFragment : BaseSessionFragment<FragmentCommunityWriteM
             "collection_name" to collectionName,
             "photoUriArray" to uriArr
         )
-        findNavController().navigate(R.id.action_communityWrite_to_communityGetPhoto, bundle)
+        findNavController().navigate(R.id.action_communityWriteMarket_to_communityGetPhoto, bundle)
 
     }
     @RequiresApi(Build.VERSION_CODES.P)
@@ -167,6 +168,11 @@ class CommunityWriteMarketFragment : BaseSessionFragment<FragmentCommunityWriteM
     }
 
     private fun initAttachPhotoRecycler() {
+        viewbinding.marketWritePhotoRecycler.run {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context).also { it.orientation = LinearLayoutManager.HORIZONTAL }
+            adapter = CommunityAttachPhotoRecyclerAdapter(getLocalPhotoUri)
+        }
         attachPostPhotoRecyclerAdapter = CommunityAttachPhotoRecyclerAdapter(getLocalPhotoUri)
         viewbinding.marketWritePhotoRecycler.adapter = attachPostPhotoRecyclerAdapter.apply {
             deleteButtonListener =

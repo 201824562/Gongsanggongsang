@@ -31,8 +31,6 @@ class CommunityGetPhotoFragment : BaseSessionFragment<FragmentCommunityGetPhotoB
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-
-        collection_name = arguments?.getString("collection_name").toString()
         var photoUriArray : ArrayList<String> = arguments?.getStringArrayList("photoUriArray") as ArrayList<String>
         val adapter = context?.let { CommunityGetPhotoGridAdapter(it, photoUriArray, viewmodel) }
             ?.apply {
