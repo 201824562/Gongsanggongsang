@@ -42,7 +42,7 @@ class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityV
                 findNavController().navigate(R.id.action_mainFragment_to_mainhomeNoticeFragment)
             }
 
-            viewmodel.getNoticePostData(agency).observe(viewLifecycleOwner){
+            viewmodel.getNoticePostData().observe(viewLifecycleOwner){
                 when {
                     it.size >= 3 -> {
                         mainHomeNotice1Title.text = it[0].post_title

@@ -22,14 +22,8 @@ class CommunityViewModel(application: Application) : BaseSessionViewModel(applic
     fun getCategoryAllPostData(collection_name: String) : LiveData<ArrayList<PostDataInfo>> {
         return communityDataRepository.getCategoryAllPostData(agencyInfo, collection_name)
     }
-    fun initCategoryPostData(){
-        communityDataRepository.initCategoryPostData()
-    }
     fun getPostData(collection_name: String, document_name : String) : MutableLiveData<PostDataInfo>{
         return communityDataRepository.getPostData(agencyInfo, collection_name, document_name)
-    }
-    fun initPostData(){
-        communityDataRepository.initPostData()
     }
     fun insertPostData(it: PostDataInfo) : MutableLiveData<Boolean> {
         return communityDataRepository.insertPostData(agencyInfo, it)
@@ -49,18 +43,11 @@ class CommunityViewModel(application: Application) : BaseSessionViewModel(applic
     fun getPostCommentData(collection_name: String, document_name: String) : MutableLiveData<ArrayList<PostCommentDataClass>> {
         return communityDataRepository.getPostCommentData(agencyInfo, collection_name, document_name)
     }
-    fun getPostPhotoSuccess() : MutableLiveData<ArrayList<String>>{
-        return communityDataRepository.getDataPhoto()
-    }
-    fun getPostPhotoData(photoUri : ArrayList<String>) = viewModelScope.launch(Dispatchers.IO) {
-        communityDataRepository.updatePhotoData(photoUri)
-    }
+
     fun deletePostPhoto(){
         communityDataRepository.deletePhotoData()
     }
-    fun getUploadPhoto() : MutableLiveData<Boolean>{
-        return communityDataRepository.getUploadPhotoSuccess()
-    }
+
     @RequiresApi(Build.VERSION_CODES.P)
     fun uploadPhoto(bitmapArrayList: ArrayList<Bitmap>, uriArrayList : ArrayList<Uri>)= viewModelScope.launch(
         Dispatchers.Main){
