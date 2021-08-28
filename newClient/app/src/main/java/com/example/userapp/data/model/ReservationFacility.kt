@@ -8,7 +8,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class ReservationFacility(
     val document_name: String,
-    val category_icon: Long,
+    val category_icon: Int,
     var max_time: Long,
     var interval_time: Long,
     var usable: Boolean,
