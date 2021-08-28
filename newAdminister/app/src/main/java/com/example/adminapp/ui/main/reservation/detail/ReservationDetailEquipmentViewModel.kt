@@ -43,7 +43,7 @@ class ReservationDetailEquipmentViewModel(application: Application) : BaseSessio
     }
 
     fun stopReservationEquipment(itemName : String){
-        reservationRepository.stopReservationEquipment(agencyInfo, itemName)
+        reservationRepository.stopReservationEquipment(false, agencyInfo, itemName)
     }
 
     fun cancelReservationEquipment(documentId : String)  {

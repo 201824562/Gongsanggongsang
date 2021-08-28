@@ -708,9 +708,14 @@ class ReservationRepository() {
         }
     }
 
-    fun stopReservationEquipment (agency: String, itemName: String)  {
-        firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_EQUIPMENT)
-            .document(itemName).update("using", false, "usable", false, "user", "", "startTime", "", "endTime", "", "intervalTime", 0, "documentId", "")
+    fun stopReservationEquipment (usable : Boolean, agency: String, itemName: String)  {
+        if (usable){
+            firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_EQUIPMENT)
+                .document(itemName).update("using", false, "user", "", "startTime", "", "endTime", "", "intervalTime", 0, "documentId", "")
+        }else{
+            firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_EQUIPMENT)
+                .document(itemName).update("using", false, "usable", false, "user", "", "startTime", "", "endTime", "", "intervalTime", 0, "documentId", "")
+        }
     }
 
     fun stopReservationFacility(agency: String, itemName: String): Completable {
@@ -740,8 +745,8 @@ class ReservationRepository() {
                             for (document in (snapshot.documents)){
                                 val documentId : String = (document.get("documentId") as String)
                                 firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_LOG)
-                                    .document(documentId).update("reservationState", "강제취소") }
-                            Log.e("checking", "수정된 시간 리스트로 인해 예약로그들이 삭제되었습니다!")
+                                    .document(documentId).update("reservationState", "강제취소").addOnSuccessListener {
+                                        Log.e("checking", "기기/물품 삭제로 인해 예약로그들이 취소되었습니다!") } }
                         }.addOnFailureListener { emitter.onError(Throwable("Error updating RESERVATION_INFO OF FACILITY"))}
                 }
                 ReservationType.FACILITY -> {
@@ -759,8 +764,8 @@ class ReservationRepository() {
                             for (document in (snapshot.documents)){
                                 val documentId : String = (document.get("documentId") as String)
                                 firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_LOG)
-                                    .document(documentId).update("reservationState", "강제취소") }
-                            Log.e("checking", "수정된 시간 리스트로 인해 예약로그들이 삭제되었습니다!")
+                                    .document(documentId).update("reservationState", "강제취소").addOnSuccessListener {
+                                        Log.e("checking", "기기/물품 삭제로 인해 예약로그들이 취소되었습니다!") } }
                         }.addOnFailureListener { emitter.onError(Throwable("Error updating RESERVATION_INFO OF FACILITY"))}
                 }
             }
