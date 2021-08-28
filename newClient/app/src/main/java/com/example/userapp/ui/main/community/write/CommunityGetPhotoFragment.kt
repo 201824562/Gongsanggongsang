@@ -11,10 +11,11 @@ import androidx.navigation.fragment.findNavController
 import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
+import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.databinding.FragmentCommunityGetPhotoBinding
 import com.example.userapp.ui.main.community.CommunityViewModel
 
-class CommunityGetPhotoFragment : BaseFragment<FragmentCommunityGetPhotoBinding, CommunityViewModel>() {
+class CommunityGetPhotoFragment : BaseSessionFragment<FragmentCommunityGetPhotoBinding, CommunityViewModel>() {
     override lateinit var viewbinding: FragmentCommunityGetPhotoBinding
     override val viewmodel : CommunityViewModel by viewModels()
     private var localSelectedPhotoItem : ArrayList<String> = arrayListOf()
@@ -30,8 +31,6 @@ class CommunityGetPhotoFragment : BaseFragment<FragmentCommunityGetPhotoBinding,
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-
-        collection_name = arguments?.getString("collection_name").toString()
         var photoUriArray : ArrayList<String> = arguments?.getStringArrayList("photoUriArray") as ArrayList<String>
         val adapter = context?.let { CommunityGetPhotoGridAdapter(it, photoUriArray, viewmodel) }
             ?.apply {

@@ -1,6 +1,9 @@
 package com.example.userapp.data.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class PostDataInfo(
     val post_category: String = "",
 
@@ -23,4 +26,4 @@ data class PostDataInfo(
     val post_state: String = "",
 
     val post_anonymous: Boolean = false
-)
+) : Parcelable

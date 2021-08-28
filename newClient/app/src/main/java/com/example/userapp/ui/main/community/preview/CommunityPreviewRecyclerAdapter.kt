@@ -31,6 +31,7 @@ class CommunityPreviewRecyclerAdapter(var postDataList : ArrayList<PostDataInfo>
         return  CommunityPreviewViewHolder(viewbinding, parent, listener)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: CommunityPreviewViewHolder, position: Int) {
         holder.bind(postDataList[position])
 

@@ -11,7 +11,6 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseSessionFragment
@@ -113,7 +112,6 @@ class EquipmentAdapter(
     override fun onBindViewHolder(viewHolder: EquipmentViewHolder, position: Int) {
         val data = dataSet[position]
         Log.e("icon : ", data.icon.toString())
-        viewHolder.viewbinding.icon.load(data.icon)
         viewHolder.viewbinding.document.text = data.document_name
         viewHolder.viewbinding.usingStatus.text = data.using
         //사용중일때 사용하기 버튼 없애기

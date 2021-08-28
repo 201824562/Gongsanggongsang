@@ -9,10 +9,11 @@ import androidx.navigation.fragment.findNavController
 import com.example.adminapp.MainActivity
 import com.example.adminapp.R
 import com.example.adminapp.base.BaseFragment
+import com.example.adminapp.base.BaseSessionFragment
 import com.example.adminapp.databinding.FragmentMainhomeHomeBinding
 import com.example.adminapp.ui.main.community.CommunityViewModel
 
-class HomeFragment : BaseFragment<FragmentMainhomeHomeBinding, CommunityViewModel>(){
+class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityViewModel>(){
     override lateinit var viewbinding: FragmentMainhomeHomeBinding
     override val viewmodel: CommunityViewModel by viewModels()
     var agency = ""
@@ -41,7 +42,7 @@ class HomeFragment : BaseFragment<FragmentMainhomeHomeBinding, CommunityViewMode
                 findNavController().navigate(R.id.action_mainFragment_to_mainhomeNoticeFragment)
             }
 
-            viewmodel.getNoticePostData(agency).observe(viewLifecycleOwner){
+            viewmodel.getNoticePostData().observe(viewLifecycleOwner){
                 when {
                     it.size >= 3 -> {
                         mainHomeNotice1Title.text = it[0].post_title

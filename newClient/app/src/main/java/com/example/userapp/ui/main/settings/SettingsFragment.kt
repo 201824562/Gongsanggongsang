@@ -49,6 +49,7 @@ class SettingsFragment : BaseSessionFragment<FragmentSettingsBinding, SettingsVi
             changePwdBtn.setOnClickListener { findNavController().navigate(R.id.action_mainFragment_to_settingsChangePwdFragment) }
             withdrawalBtn.setOnClickListener { makeWithdrawalDialog() }
             logoutBtn.setOnClickListener{ makeLogoutDialog() }
+            gettingOutBtn.setOnClickListener{ findNavController().navigate(R.id.action_mainFragment_to_settingOutFragment)}
         }
     }
 

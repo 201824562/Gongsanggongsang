@@ -1,5 +1,6 @@
 package com.example.userapp
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
@@ -19,6 +21,12 @@ import androidx.viewbinding.ViewBinding
 import com.example.userapp.base.*
 import com.example.userapp.data.dto.UserModel
 import com.example.userapp.databinding.ActivityMainBinding
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.iid.FirebaseInstanceIdReceiver
+import com.google.firebase.iid.internal.FirebaseInstanceIdInternal
+import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() {
     companion object{ val TOOLBAR_TITLE = "title" }
@@ -32,7 +40,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     private lateinit var navController : NavController
     private var userData : UserModel? = null
     var selectedItems : ArrayList<String> = arrayListOf()
-
+    var token : String = ""
     override fun initToolbar() {
         window.apply {
             navigationBarColor = ContextCompat.getColor(this@MainActivity, R.color.white)
@@ -44,7 +52,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
         setContentView(viewbinding.root)
     }
 
-    override fun initViewStart(savedInstanceState: Bundle?) {}
+    override fun initViewStart(savedInstanceState: Bundle?) {
+        getToken()
+    }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
         viewmodel.onSuccessGettingUserInfo.observe(this, {  userData = it })
@@ -123,6 +133,22 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     fun getUserData() : UserModel{
         return this.userData!!
     }
+    fun getToken(){
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            // Log and toast
+            Log.e("TAG", token.toString())
+        })
+
+    }
+
 }
 
 fun <VB : ViewBinding, VM : BaseSessionViewModel> BaseSessionFragment<VB, VM>.restartActivity() {

@@ -12,11 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
+import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.ui.main.community.CommunityViewModel
 import com.example.userapp.ui.main.community.preview.CommunityPreviewRecyclerAdapter
 
-class HomeNoticeFragment : BaseFragment<FragmentMainhomeHomeNoticeBinding, CommunityViewModel>(){
+class HomeNoticeFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeBinding, CommunityViewModel>(){
     override lateinit var viewbinding: FragmentMainhomeHomeNoticeBinding
     override val viewmodel: CommunityViewModel by viewModels()
     private lateinit var noticePreviewRecyclerAdapter: CommunityPreviewRecyclerAdapter
@@ -47,33 +48,34 @@ class HomeNoticeFragment : BaseFragment<FragmentMainhomeHomeNoticeBinding, Commu
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
-        viewmodel.getNoticePostData(adminAgency).observe(viewLifecycleOwner){ it
+        viewmodel.getNoticePostData().observe(viewLifecycleOwner){ it
             noticePreviewItem = it
             initNoticeRecyclerView()
             noticePreviewRecyclerAdapter.notifyDataSetChanged()
         }
         viewbinding.run {
-
+            previewBackButton.setOnClickListener {
+                findNavController().navigate(R.id.action_mainNotice_pop)
+            }
             previewSearchButton.setOnClickListener {
-                findNavController().
-                navigate(R.id.action_communityNotice_to_communitySearch, collectionNameBundle)
+                findNavController().navigate(R.id.action_communityNotice_to_communitySearch, collectionNameBundle)
             }
             mainhomeNoticeShowAllButton.setOnClickListener {
-                viewmodel.getNoticePostData(adminAgency).observe(viewLifecycleOwner){
+                viewmodel.getNoticePostData().observe(viewLifecycleOwner){
                     noticePreviewItem = it
                     initNoticeRecyclerView()
                     noticePreviewRecyclerAdapter.notifyDataSetChanged()
                 }
             }
             mainhomeNoticeShowNoticeButton.setOnClickListener {
-                viewmodel.getNoticeCategoryPostData(adminAgency,"공지").observe(viewLifecycleOwner){
+                viewmodel.getNoticeCategoryPostData("공지").observe(viewLifecycleOwner){
                     noticePreviewItem = it
                     initNoticeRecyclerView()
                     noticePreviewRecyclerAdapter.notifyDataSetChanged()
                 }
             }
             mainhomeNoticeShowEventButton.setOnClickListener {
-                viewmodel.getNoticeCategoryPostData(adminAgency,"행사").observe(viewLifecycleOwner){
+                viewmodel.getNoticeCategoryPostData("행사").observe(viewLifecycleOwner){
                     noticePreviewItem = it
                     initNoticeRecyclerView()
                     noticePreviewRecyclerAdapter.notifyDataSetChanged()
@@ -81,7 +83,7 @@ class HomeNoticeFragment : BaseFragment<FragmentMainhomeHomeNoticeBinding, Commu
 
             }
             mainhomeNoticeShowEtcButton.setOnClickListener {
-                viewmodel.getNoticeCategoryPostData(adminAgency,"기타").observe(viewLifecycleOwner){
+                viewmodel.getNoticeCategoryPostData("기타").observe(viewLifecycleOwner){
                     noticePreviewItem = it
                     initNoticeRecyclerView()
                     noticePreviewRecyclerAdapter.notifyDataSetChanged()
@@ -102,11 +104,9 @@ class HomeNoticeFragment : BaseFragment<FragmentMainhomeHomeNoticeBinding, Commu
             listener =
                 object : CommunityPreviewRecyclerAdapter.OnCommunityMarketItemClickListener {
                     override fun onPreviewItemClick(position: Int) {
-                        var collectionName = "notice"
-                        var documentName = getItem(position).post_id
+                        var postItemDataInfo : PostDataInfo = getItem(position)
                         var bundle = bundleOf(
-                            "collection_name" to collectionName,
-                            "document_name" to documentName
+                            "post_data_info" to postItemDataInfo
                         )
                         findNavController().navigate(R.id.action_mainhomeNoticeFragment_to_noticePostFragment, bundle)
                     }

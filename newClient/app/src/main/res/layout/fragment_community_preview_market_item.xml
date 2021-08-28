@@ -46,7 +46,7 @@
             android:id="@+id/community_preview_self_image"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_basic_profile_photo"
+            android:src="@drawable/ic_no_profile"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

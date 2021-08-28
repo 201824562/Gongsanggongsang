@@ -11,13 +11,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
+import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentCommunityPhotoBinding
 import com.example.userapp.databinding.FragmentCommunitySearchBinding
 import com.example.userapp.ui.main.community.CommunityViewModel
 import com.example.userapp.ui.main.community.write.CommunityPhotoRecyclerAdapter
 
-class CommunitySearchFragment : BaseFragment<FragmentCommunitySearchBinding, CommunityViewModel>(){
+class CommunitySearchFragment : BaseSessionFragment<FragmentCommunitySearchBinding, CommunityViewModel>(){
     override lateinit var viewbinding: FragmentCommunitySearchBinding
 
     override val viewmodel: CommunityViewModel by viewModels()
@@ -48,10 +49,18 @@ class CommunitySearchFragment : BaseFragment<FragmentCommunitySearchBinding, Com
     override fun initDataBinding(savedInstanceState: Bundle?) {
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        viewmodel.initCategoryPostData()
+    }
+
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run{
+            searchBackButton.setOnClickListener {
+                findNavController().navigate(R.id.action_communitySearch_pop)
+            }
             searchCompleteButton.setOnClickListener {
-                viewmodel.getSearchPostData(userAgency, collectionName, searchKeyword.text.toString()).observe(viewLifecycleOwner){
+                viewmodel.getSearchPostData(collectionName, searchKeyword.text.toString()).observe(viewLifecycleOwner){
                     when(collectionName){
                         "5_market" -> {
                             communityPreviewMarketItem = it
@@ -80,10 +89,9 @@ class CommunitySearchFragment : BaseFragment<FragmentCommunitySearchBinding, Com
             listener =
                 object : CommunityPreviewRecyclerAdapter.OnCommunityMarketItemClickListener {
                     override fun onPreviewItemClick(position: Int) {
-                        var documentName = getItem(position).post_id
+                        var postItemDataInfo : PostDataInfo = getItem(position)
                         var bundle = bundleOf(
-                            "collection_name" to collectionName,
-                            "document_name" to documentName
+                            "post_data_info" to postItemDataInfo
                         )
                         findNavController().navigate(R.id.action_communitySearch_to_communityPost, bundle)
                     }
@@ -101,12 +109,11 @@ class CommunitySearchFragment : BaseFragment<FragmentCommunitySearchBinding, Com
         viewbinding.communityPreviewRecyclerView.adapter = communityPreviewMarketRecyclerAdapter.apply {
             listener = object : CommunityPreviewMarketRecyclerAdapter.OnCommunityMarketItemClickListener {
                 override fun onPreviewItemClick(position: Int) {
-                    var documentName = getItem(position).post_id
+                    var postItemDataInfo : PostDataInfo = getItem(position)
                     var bundle = bundleOf(
-                        "collection_name" to collectionName,
-                        "document_name" to documentName
+                        "post_data_info" to postItemDataInfo
                     )
-                    findNavController().navigate(R.id.action_communityPreview_to_communityPostMarket, bundle)
+                    findNavController().navigate(R.id.action_communitySearch_to_communityPostMarket, bundle)
                 }
             }
         }

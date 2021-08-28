@@ -104,7 +104,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_icon_basic_profile_photo"
+                    android:src="@drawable/ic_no_profile"
                     android:layout_gravity="center"/>
                 <TextView
                     android:id="@+id/community_post_name"

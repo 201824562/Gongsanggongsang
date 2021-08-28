@@ -1,8 +1,6 @@
 package com.example.userapp.ui.main.community.post
 
-import android.opengl.Visibility
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,18 +17,22 @@ class CommunityCommentRecyclerAdapter(
     private val communityCommentItems:ArrayList<PostCommentDataClass>,
     private val localUserName : String
 ): RecyclerView.Adapter<CommunityCommentRecyclerAdapter.CommunityCommentViewHolder>() {
-    val viewmodel : CommunityViewModel = CommunityViewModel()
+
     interface OnCommunityCommentItemClickListener{
         fun onCommentItemClick(position: Int)
     }
+    interface OnCommunityCommentItemTagClickListener{
+        fun onCommentItemTagClick(position: Int)
+    }
     var listener: OnCommunityCommentItemClickListener? = null
+    var tagListener : OnCommunityCommentItemTagClickListener? = null
     override fun getItemCount(): Int {
         return communityCommentItems.size;
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommunityCommentViewHolder {
         val viewbinding = FragmentCommunityCommentItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return  CommunityCommentViewHolder(viewbinding, parent, listener, localUserName)
+        return  CommunityCommentViewHolder(viewbinding, parent, listener, localUserName, tagListener)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -46,11 +48,11 @@ class CommunityCommentRecyclerAdapter(
         viewbinding: FragmentCommunityCommentItemBinding,
         itemview: ViewGroup,
         listener: OnCommunityCommentItemClickListener?,
-        localUserName: String
+        localUserName: String,
+        tagListener: OnCommunityCommentItemTagClickListener?
     ) : RecyclerView.ViewHolder(viewbinding.root) {
         val binding = viewbinding
         val listener = listener
-        val viewModel : CommunityViewModel = CommunityViewModel()
         val localUserName = localUserName
         @RequiresApi(Build.VERSION_CODES.O)
         fun bind(it : PostCommentDataClass) {
@@ -84,6 +86,10 @@ class CommunityCommentRecyclerAdapter(
         init {
             binding.commentDeleteButton.setOnClickListener{
                 listener?.onCommentItemClick(bindingAdapterPosition)
+                return@setOnClickListener
+            }
+            binding.commentTagButton.setOnClickListener {
+                tagListener?.onCommentItemTagClick(bindingAdapterPosition)
                 return@setOnClickListener
             }
         }

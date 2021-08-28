@@ -5,15 +5,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
+import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.databinding.FragmentMainhomeHomeBinding
 import com.example.userapp.ui.main.community.CommunityViewModel
 
-class HomeFragment : BaseFragment<FragmentMainhomeHomeBinding, CommunityViewModel>(){
+class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityViewModel>(){
     override lateinit var viewbinding: FragmentMainhomeHomeBinding
     override val viewmodel: CommunityViewModel by viewModels()
     var agency = ""
@@ -26,23 +28,42 @@ class HomeFragment : BaseFragment<FragmentMainhomeHomeBinding, CommunityViewMode
         return viewbinding.root
     }
 
-    override fun initViewStart(savedInstanceState: Bundle?) {
-        val ac = activity as MainActivity
-        ac.getUserData()?.let {
-            agency = it.agency
-        }
-    }
+    override fun initViewStart(savedInstanceState: Bundle?) { }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
+
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
+        viewmodel.getUserInfo()
         viewbinding.run {
+            mainHomeToSuggestCommunity.setOnClickListener {
+                var collection_name = "3_suggest"
+                var collection_name_bundle = bundleOf(
+                    "collection_name" to collection_name
+                )
+                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, collection_name_bundle)
+            }
+            mainHomeToWithCommunity.setOnClickListener {
+                var collection_name = "4_with"
+                var collection_name_bundle = bundleOf(
+                    "collection_name" to collection_name
+                )
+                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, collection_name_bundle)
+            }
+            mainHomeToMarketCommunity.setOnClickListener {
+                var collection_name = "5_market"
+                var collection_name_bundle = bundleOf(
+                    "collection_name" to collection_name
+                )
+                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, collection_name_bundle)
+            }
             mainHomeNoticeAllButton.setOnClickListener {
                 findNavController().navigate(R.id.action_mainFragment_to_mainhomeNoticeFragment)
             }
 
-            viewmodel.getNoticePostData(agency).observe(viewLifecycleOwner){
+            viewmodel.getNoticePostData().observe(viewLifecycleOwner){
+                Log.e("agency", "$agency")
                 when {
                     it.size >= 3 -> {
                         mainHomeNotice1Title.text = it[0].post_title

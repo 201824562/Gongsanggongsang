@@ -1,12 +1,14 @@
 package com.example.userapp.ui.main.community.write
 
 import android.Manifest
+import android.content.ContentValues
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,20 +20,27 @@ import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
+import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.data.entity.PushNotification
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentCommunityWriteBinding
+import com.example.userapp.ui.main.alarm.RetrofitInstance
 import com.example.userapp.ui.main.community.CommunityViewModel
+import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
 
 
-class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding, CommunityViewModel>() {
+class CommunityWriteFragment : BaseSessionFragment<FragmentCommunityWriteBinding, CommunityViewModel>() {
     private lateinit var collectionName : String
-    private lateinit var documentName : String
-    private lateinit var bundle: Bundle
+
     override lateinit var viewbinding: FragmentCommunityWriteBinding
     override val viewmodel: CommunityViewModel by viewModels()
     private val categorySpinnerArray = arrayOf("", "소음", "예약", "냉장고", "세탁실", "수질", "와이파이", "전기", "기타")
@@ -56,17 +65,18 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding, Commu
 
     @RequiresApi(Build.VERSION_CODES.P)
     override fun initViewStart(savedInstanceState: Bundle?) {
-        val ac : MainActivity = activity as MainActivity
-        userAgency = ac.getUserData()!!.agency
-        userName = ac.getUserData()!!.nickname
-        collectionName = arguments?.getString("collection_name").toString()
-        documentName = arguments?.getString("postId").toString()
-        bundle = bundleOf(
-            "collection_name" to collectionName
-        )
+        viewmodel.getUserInfo()
+        viewmodel.onSuccessGettingUserInfo.observe(this, {
+            userAgency = it.agency
+            userName = it.nickname
+        })
 
+        collectionName = arguments?.getString("collection_name").toString()
+
+        val ac = activity as MainActivity
         getLocalPhotoUri = ac.getPhoto()
         getBitmap()
+
         when(collectionName){
             "1_free" -> viewbinding.previewToolbarName.text = "자유게시판"
             "2_emergency" -> viewbinding.previewToolbarName.text = "긴급게시판"
@@ -74,6 +84,7 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding, Commu
             "4_with" -> viewbinding.previewToolbarName.text = "함께게시판"
             "5_market" -> viewbinding.previewToolbarName.text = "장터게시판"
         }
+
         viewbinding.run {
             if(collectionName == "2_emergency" || collectionName == "3_suggest"){
                 initWriteCategorySelect()
@@ -81,8 +92,6 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding, Commu
             initAttachPhotoRecycler()
         }
         //TODO: mainActivity clear 처리
-        getLocalPhotoUri = ac.getPhoto()
-        getBitmap()
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?){
@@ -92,6 +101,9 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding, Commu
     override fun initViewFinal(savedInstanceState: Bundle?) {
 
         viewbinding.run {
+            writeBackButton.setOnClickListener {
+                findNavController().navigate(R.id.action_communityWrite_pop)
+            }
             writeAttachPhotoButton.setOnClickListener{
                 getPhotoPermission()
             }
@@ -101,6 +113,9 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding, Commu
                 }
                 else if((collectionName == "2_emergency" || collectionName == "3_suggest") && writePostCategoryData == "none"){
                     showToast("분류를 선택해주세요.")
+                }
+                else if(collectionName == "4_with"){
+                    writePostCategoryData = "모집 중"
                 }
                 else{
                     val postDateNow: String = LocalDate.now().toString()
@@ -118,13 +133,27 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding, Commu
                         post_state = writePostCategoryData,
                         post_anonymous = false
                     )
-                    bundle = bundleOf(
-                        "collection_name" to collectionName,
-                        "document_name" to postData.post_id
+                    val bundle = bundleOf(
+                        "post_data_info" to postData,
                     )
-                    viewmodel.insertPostData(userAgency, postData).observe(viewLifecycleOwner){
-                        if(it){
-                            findNavController().navigate(R.id.action_communityWrite_to_communityPost, bundle)
+                    Log.e("namem", "$userName")
+                    if(uriArray.isEmpty()){
+                        viewmodel.insertPostData(postData).observe(viewLifecycleOwner){
+                            if(it){
+                                findNavController().navigate(R.id.action_communityWrite_to_communityPost, bundle)
+                            }
+                        }
+                    }
+                    else{
+                        viewmodel.uploadPhoto(bitmapArray, uriArray)
+                        viewmodel.getUploadPhoto().observe(viewLifecycleOwner){
+                            if(it){
+                                viewmodel.insertPostData(postData).observe(viewLifecycleOwner){
+                                    if(it){
+                                        findNavController().navigate(R.id.action_communityWrite_to_communityPost, bundle)
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -135,7 +164,10 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding, Commu
     private val requestLocationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()){ result : Boolean ->
         if (result) getAllPhoto()
-        else showSnackbar("권한이 거부되었습니다.")
+        else {
+            showSnackbar("권한이 거부되었습니다.")
+            showPermissionRationale("")
+        }
     }
 
     private fun getPhotoPermission(){
@@ -187,6 +219,11 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding, Commu
     }
 
     private fun initAttachPhotoRecycler() {
+        viewbinding.writePhotoRecycler.run {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context).also { it.orientation = LinearLayoutManager.HORIZONTAL }
+            adapter = CommunityAttachPhotoRecyclerAdapter(getLocalPhotoUri)
+        }
         attachPostPhotoRecyclerAdapter = CommunityAttachPhotoRecyclerAdapter(getLocalPhotoUri)
         viewbinding.writePhotoRecycler.adapter = attachPostPhotoRecyclerAdapter.apply {
             deleteButtonListener =
@@ -195,9 +232,9 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding, Commu
                         getLocalPhotoUri.removeAt(position)
                         attachPostPhotoRecyclerAdapter.notifyDataSetChanged()
                     }
-
                 }
         }
+        attachPostPhotoRecyclerAdapter.notifyDataSetChanged()
     }
     private fun initWriteCategorySelect(){
         viewbinding.run {
@@ -228,4 +265,5 @@ class CommunityWriteFragment : BaseFragment<FragmentCommunityWriteBinding, Commu
             }
         }
     }
+
 }

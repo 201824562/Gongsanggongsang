@@ -1,15 +1,19 @@
-package com.example.adminapp.ui.main.community.write
+package com.example.userapp.ui.main.settings
 
 import android.Manifest
+import android.content.ContentValues
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
@@ -17,87 +21,88 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.adminapp.MainActivity
-import com.example.adminapp.R
-import com.example.adminapp.base.BaseFragment
-import com.example.adminapp.data.model.PostDataInfo
-import com.example.adminapp.databinding.FragmentCommunityWriteMarketBinding
-import com.example.adminapp.ui.main.community.CommunityViewModel
+import com.example.userapp.MainActivity
+import com.example.userapp.R
+import com.example.userapp.base.BaseFragment
+import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.data.entity.PushNotification
+import com.example.userapp.data.model.PostDataInfo
+import com.example.userapp.databinding.FragmentCommunityWriteBinding
+import com.example.userapp.databinding.FragmentCommunityWriteMarketBinding
+import com.example.userapp.databinding.FragmentSettingsOutWriteBinding
+import com.example.userapp.ui.main.alarm.RetrofitInstance
+import com.example.userapp.ui.main.community.CommunityViewModel
+import com.example.userapp.ui.main.community.write.CommunityAttachPhotoRecyclerAdapter
+import com.example.userapp.ui.main.community.write.CommunityAttachPostPhotoRecyclerAdapter
+import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
 
 
-class CommunityWriteMarketFragment : BaseFragment<FragmentCommunityWriteMarketBinding, CommunityViewModel>() {
-    private val collection_name = "5_market"
-    private lateinit var document_name : String
+class SettingsOutWriteFragment : BaseSessionFragment<FragmentSettingsOutWriteBinding, CommunityViewModel>() {
+    private lateinit var collectionName : String
+    private lateinit var documentName : String
     private lateinit var bundle: Bundle
-    override lateinit var viewbinding: FragmentCommunityWriteMarketBinding
+    override lateinit var viewbinding: FragmentSettingsOutWriteBinding
     override val viewmodel: CommunityViewModel by viewModels()
-
-    private lateinit var marketPostData : PostDataInfo
+    private lateinit var postData : PostDataInfo
+    private lateinit var attachPostPhotoRecyclerAdapter : CommunityAttachPhotoRecyclerAdapter
     private var getLocalPhotoUri : ArrayList<String> = arrayListOf()
     private val bitmapArray : ArrayList<Bitmap> = arrayListOf()
     private val uriArray : ArrayList<Uri> = arrayListOf()
-    private lateinit var userName : String
     private lateinit var userAgency : String
-    private lateinit var attachPostPhotoRecyclerAdapter : CommunityAttachPhotoRecyclerAdapter
+    lateinit var userName : String
+
+    var postPhotoUri : ArrayList<String> = arrayListOf()
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewbinding = FragmentCommunityWriteMarketBinding.inflate(inflater, container, false)
+        viewbinding = FragmentSettingsOutWriteBinding.inflate(inflater, container, false)
         return viewbinding.root
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
     override fun initViewStart(savedInstanceState: Bundle?) {
-        val ac = activity as MainActivity
+        viewmodel.getUserInfo()
+        viewmodel.onSuccessGettingUserInfo.observe(this, {
+            userAgency = it.agency
+            userName = it.name
+        })
+        val ac : MainActivity = activity as MainActivity
         getLocalPhotoUri = ac.getPhoto()
-        userAgency  = ac.getAdminData()!!.agency
-        userName  = ac.getAdminData()!!.name
-        viewbinding.marketWritePhotoRecycler.visibility = View.VISIBLE
-        viewbinding.marketWritePhotoRecycler.run {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context).also { it.orientation = LinearLayoutManager.HORIZONTAL }
-            adapter = CommunityAttachPhotoRecyclerAdapter(getLocalPhotoUri)
-        }
-        attachPostPhotoRecyclerAdapter = CommunityAttachPhotoRecyclerAdapter(getLocalPhotoUri)
-        viewbinding.marketWritePhotoRecycler.adapter = attachPostPhotoRecyclerAdapter.apply {
-            listener =
-                object :
-                    CommunityAttachPhotoRecyclerAdapter.OnCommunityPhotoItemClickListener {
-                    override fun onPhotoItemClick(position: Int) {
-                        var bundle = bundleOf(
-                            "photo_uri" to getLocalPhotoUri.toTypedArray(),
-                        )
-                        findNavController().navigate(R.id.action_communityWriteMarket_to_communityPhoto, bundle)
-                    }
-                }
-        }
         getBitmap()
+
+        initAttachPhotoRecycler()
     }
 
-    override fun initDataBinding(savedInstanceState: Bundle?) {
+    override fun initDataBinding(savedInstanceState: Bundle?){
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun initViewFinal(savedInstanceState: Bundle?) {
+
         viewbinding.run {
+            marketWriteBackButton.setOnClickListener {
+                findNavController().navigate(R.id.action_settingsOutWriteFragment_self)
+            }
             marketWritePhoto.setOnClickListener{
                 getPhotoPermission()
             }
             marketWriteRegisterButton.setOnClickListener {
-                if(marketWriteTitle.text.toString() == "" && marketWriteContent.text.toString() == ""){
+                if(marketWriteTitle.text.toString() == "" || marketWriteContent.text.toString() == ""){
                     showToast("빈 칸을 채워주세요.")
                 }
                 else{
                     val postDateNow: String = LocalDate.now().toString()
                     val postTimeNow : String = LocalTime.now().toString()
-                    var postAnonymous : Boolean = false
-                    marketPostData = PostDataInfo(
-                        collection_name,
-                        userName,
+                    postData = PostDataInfo(
+                        "out",
+                        post_name = userName,
                         post_title = marketWriteTitle.text.toString(),
                         post_contents = marketWriteContent.text.toString(),
                         post_date = postDateNow,
@@ -109,12 +114,11 @@ class CommunityWriteMarketFragment : BaseFragment<FragmentCommunityWriteMarketBi
                         post_anonymous = false
                     )
                     bundle = bundleOf(
-                        "collection_name" to collection_name,
-                        "document_name" to marketPostData.post_id
+                        "post_data_info" to postData
                     )
-                    viewmodel.insertPostData(userAgency, marketPostData).observe(viewLifecycleOwner){
+                    viewmodel.insertPostData(postData).observe(viewLifecycleOwner){
                         if(it){
-                            findNavController().navigate(R.id.action_communityWriteMarket_to_communityPostMarket, bundle)
+                            findNavController().navigate(R.id.action_settingOutWrite_to_settingOutLog)
                         }
                     }
                 }
@@ -136,7 +140,6 @@ class CommunityWriteMarketFragment : BaseFragment<FragmentCommunityWriteMarketBi
     }
 
     private fun getAllPhoto(){
-        System.out.println("get");
         val cursor = activity?.contentResolver?.query(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
             null,
@@ -154,10 +157,9 @@ class CommunityWriteMarketFragment : BaseFragment<FragmentCommunityWriteMarketBi
             cursor.close()
         }
         val bundle = bundleOf(
-            "collection_name" to collection_name,
             "photoUriArray" to uriArr
         )
-        findNavController().navigate(R.id.action_communityWriteMarket_to_communityGetPhoto, bundle)
+        findNavController().navigate(R.id.action_settingsOutWrite_to_getPhoto, bundle)
 
     }
     @RequiresApi(Build.VERSION_CODES.P)
@@ -165,7 +167,7 @@ class CommunityWriteMarketFragment : BaseFragment<FragmentCommunityWriteMarketBi
         val bitmap : Bitmap
         for(photo_uri in getLocalPhotoUri) {
             val photoUri = photo_uri.toUri()
-            val photoUri2 = Uri.parse("file://" + photoUri)
+            val photoUri2 = Uri.parse("file://$photoUri")
             uriArray.add(photoUri2)
             val bitmap = ImageDecoder.decodeBitmap(
                 ImageDecoder.createSource(
@@ -177,4 +179,22 @@ class CommunityWriteMarketFragment : BaseFragment<FragmentCommunityWriteMarketBi
         }
     }
 
+    private fun initAttachPhotoRecycler() {
+        viewbinding.marketWritePhotoRecycler.run {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context).also { it.orientation = LinearLayoutManager.HORIZONTAL }
+            adapter = CommunityAttachPhotoRecyclerAdapter(getLocalPhotoUri)
+        }
+        attachPostPhotoRecyclerAdapter = CommunityAttachPhotoRecyclerAdapter(getLocalPhotoUri)
+        viewbinding.marketWritePhotoRecycler.adapter = attachPostPhotoRecyclerAdapter.apply {
+            deleteButtonListener =
+                object : CommunityAttachPhotoRecyclerAdapter.OnCommunityPhotoDeleteClickListener {
+                    override fun onPhotoDeleteButtonClick(position: Int) {
+                        getLocalPhotoUri.removeAt(position)
+                        attachPostPhotoRecyclerAdapter.notifyDataSetChanged()
+                    }
+
+                }
+        }
+    }
 }
