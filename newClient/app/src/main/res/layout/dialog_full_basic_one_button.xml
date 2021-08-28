@@ -52,6 +52,7 @@
         android:text="동의"
         android:textSize="16sp"
         android:textColor="@color/white"
+        android:fontFamily="@font/notosanskr_bold_hestia"
         android:background="@drawable/button_10dp_event_rectangle_blugreen"/>
 </LinearLayout>
 

@@ -339,6 +339,7 @@ class ReservationRepository() {
     private fun getReservationUsingFacilityLogListFromFirebase(agency: String, index: Int) {
         firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_LOG)
             .whereEqualTo("reservationType", "예약 사용").whereEqualTo("reservationState", "사용중")
+            .orderBy("startTime", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     Log.w(TAG, "Listen failed.", e)
@@ -357,24 +358,21 @@ class ReservationRepository() {
                 else {
                     val facilityLogList: MutableList<ReservationFacilityLog> = mutableListOf()
                     for (document in snapshot) {
-                        CoroutineScope(Dispatchers.Main).launch{
-                            val checkingPassTime = withContext(Dispatchers.IO){ calculateDurationWithCurrent((document.get("endTime") as String)) }
-                            if (!(checkingPassTime.isNegative || checkingPassTime.isZero)){
-                                facilityLogList.add(
-                                    ReservationFacilityLog(
-                                        CategoryResources.makeIconStringToDrawableID((document.get("icon") as String)),
-                                        document.get("name") as String,
-                                        document.get("userId") as String,
-                                        document.get("userName") as String,
-                                        document.get("reservationState") as String,
-                                        document.get("reservationType") as String,
-                                        document.get("startTime") as String,
-                                        document.get("endTime") as String,
-                                        document.get("documentId") as String,
-                                        document.getLong("maxTime")!!,
-                                        document.get("usable") as Boolean))
-                            }
-                        }
+                        val checkingPassTime = calculateDurationWithCurrent((document.get("endTime") as String))
+                        if (!(checkingPassTime.isNegative || checkingPassTime.isZero)){
+                            facilityLogList.add(
+                                ReservationFacilityLog(
+                                    CategoryResources.makeIconStringToDrawableID((document.get("icon") as String)),
+                                    document.get("name") as String,
+                                    document.get("userId") as String,
+                                    document.get("userName") as String,
+                                    document.get("reservationState") as String,
+                                    document.get("reservationType") as String,
+                                    document.get("startTime") as String,
+                                    document.get("endTime") as String,
+                                    document.get("documentId") as String,
+                                    document.getLong("maxTime")!!,
+                                    document.get("usable") as Boolean)) }
                     }
                     when (index) {
                         0 -> _onSuccessGetReservationUsingFacilityLogList.postValue(facilityLogList)
@@ -674,13 +672,11 @@ class ReservationRepository() {
     }
 
 
-
-
     fun makeReservationLogFinished (agency: String, documentId: String){
         firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_LOG)
             .document(documentId).update("reservationState", "사용완료")
-            .addOnSuccessListener {  Log.e("checking", "Succeed updating RESERVATION_LOG OF FACILITY") }
-            .addOnFailureListener { Log.e("checking", "Error updating RESERVATION_LOG OF FACILITY") }
+            .addOnSuccessListener {  Log.e("checking", "Error updating RESERVATION_LOG OF FINISH") }
+            .addOnFailureListener { Log.e("checking", "Error updating RESERVATION_LOG OF FINISH") }
     }
 
     fun makeReservationLogForcedCancel (agency: String, documentId: String){

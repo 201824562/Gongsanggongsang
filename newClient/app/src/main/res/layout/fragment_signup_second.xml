@@ -237,6 +237,7 @@
                     app:layout_constraintRight_toLeftOf="@id/check_nickname_btn"
                     android:background="@drawable/edittext_underline_black20"
                     android:hint="5~10자리의 한글로 입력해주세요."
+                    android:imeOptions="actionDone"
                     android:padding="8dp"
                     android:maxLength="10"
                     android:singleLine="true"

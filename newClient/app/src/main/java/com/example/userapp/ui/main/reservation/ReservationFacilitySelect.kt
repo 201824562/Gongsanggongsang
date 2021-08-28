@@ -24,6 +24,7 @@ import com.example.userapp.data.model.ReservationFacilityDayInfo
 import com.example.userapp.data.model.ReservationFacilityTimeSlot
 import com.example.userapp.databinding.FragmentMainhomeReservationFacilitySelectBinding
 import com.example.userapp.databinding.FragmentMainhomeReservationFacilitySelectItemBinding
+import com.example.userapp.restartActivity
 import com.example.userapp.utils.CautionMessageDialog
 import com.example.userapp.utils.ConfirmReserveDialog
 import com.example.userapp.utils.ConfirmUsingDialog
@@ -40,7 +41,7 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
     val database = FirebaseFirestore.getInstance()
     val args: ReservationFacilitySelectArgs by navArgs()
     private var ac: MainActivity? = null
-    private lateinit var userInfo : UserModel
+    private var userInfo : UserModel? = null
 
     override fun initViewbinding(
         inflater: LayoutInflater,
@@ -100,6 +101,8 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
+        viewmodel.onSuccessGettingUserInfo.observe(this, { userInfo = it })
+        viewmodel.onSuccessGettingNullUserInfo.observe(this, { restartActivity() })
         viewmodel.FacilityDayInfoLiveData.observe(viewLifecycleOwner, {
             (viewbinding.facilityTimesliceRecyclerView.adapter as FacilitySelectAdapter).setData(it.day_time_slot_list)
         })
@@ -107,8 +110,7 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun initViewFinal(savedInstanceState: Bundle?) {
-        ac = activity as MainActivity
-        ac?.let { userInfo = it.getUserData() }
+        viewmodel.getUserInfo()
         viewbinding.documentNameTextview.text = args.myArg.document_name + " 예약"
         viewbinding.message2Textview.text = "최대 예약 가능한 시간:" + args.myArg.max_time.toString()+"분"
 
@@ -189,7 +191,7 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
                 }
 
                 override fun dialogReserveClickListener() {
-                    viewmodel.add_reserve(userInfo, args.myArg)
+                    userInfo?.let { info ->  viewmodel.add_reserve(info, args.myArg) }
                     confirmUsingDialog.dismiss()
                 }
             }

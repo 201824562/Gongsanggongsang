@@ -10,13 +10,16 @@ import com.example.adminapp.MainActivity
 import com.example.adminapp.R
 import com.example.adminapp.base.BaseFragment
 import com.example.adminapp.base.BaseSessionFragment
+import com.example.adminapp.data.model.ReservationType
 import com.example.adminapp.databinding.FragmentMainhomeHomeBinding
+import com.example.adminapp.ui.main.MainFragment
+import com.example.adminapp.ui.main.MainFragmentDirections
 import com.example.adminapp.ui.main.community.CommunityViewModel
 
 class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityViewModel>(){
     override lateinit var viewbinding: FragmentMainhomeHomeBinding
     override val viewmodel: CommunityViewModel by viewModels()
-    var agency = ""
+
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -26,21 +29,23 @@ class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityV
         return viewbinding.root
     }
 
-    override fun initViewStart(savedInstanceState: Bundle?) {
-        val ac = activity as MainActivity
-        ac.getAdminData()?.let {
-            agency = it.agency
-        }
-    }
+    override fun initViewStart(savedInstanceState: Bundle?) {  }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run {
+            textMainHomeToEquipment.setOnClickListener {
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToReservationAddFragment(ReservationType.EQUIPMENT)) }
+            iconMainHomeToEquipment.setOnClickListener {
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToReservationAddFragment(ReservationType.EQUIPMENT)) }
+            textMainHomeToFacility.setOnClickListener {
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToReservationAddFragment(ReservationType.FACILITY)) }
+            iconMainHomeToFacility.setOnClickListener {
+                findNavController().navigate(MainFragmentDirections.actionMainFragmentToReservationAddFragment(ReservationType.FACILITY)) }
             mainHomeNoticeAllButton.setOnClickListener {
-                findNavController().navigate(R.id.action_mainFragment_to_mainhomeNoticeFragment)
-            }
+                findNavController().navigate(R.id.action_mainFragment_to_mainhomeNoticeFragment) }
 
             viewmodel.getNoticePostData().observe(viewLifecycleOwner){
                 when {

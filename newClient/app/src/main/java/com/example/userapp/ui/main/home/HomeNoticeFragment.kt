@@ -23,8 +23,8 @@ class HomeNoticeFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeBinding
     private lateinit var noticePreviewRecyclerAdapter: CommunityPreviewRecyclerAdapter
     private var noticePreviewItem : ArrayList<PostDataInfo> = arrayListOf()
     private lateinit var collectionNameBundle : Bundle
-    private var adminName = ""
-    private var adminAgency = ""
+
+
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,9 +35,6 @@ class HomeNoticeFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeBinding
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-        val ac = activity as MainActivity
-        adminAgency = ac.getUserData().agency
-        adminName = ac.getUserData().name
         collectionNameBundle = bundleOf(
             "collection_name" to "notice"
         )

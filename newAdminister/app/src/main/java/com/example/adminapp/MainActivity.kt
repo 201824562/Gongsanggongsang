@@ -34,7 +34,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController : NavController
-    private var adminData : AdminModel? = null
 
     override fun initToolbar() {
         window.apply {
@@ -50,16 +49,10 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     override fun initViewStart(savedInstanceState: Bundle?) {}
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
-        viewmodel.onSuccessGettingAdminInfo.observe(this, {
-            adminData = it
-        })
-        viewmodel.onSuccessGettingNullAdminInfo.observe(this, {
-            //restartActivity()
-        })
+
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
-        viewmodel.getAdminInfo()
         setToolbarWithNavcontroller()
     }
 
@@ -121,9 +114,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     }
     fun getPhoto() : ArrayList<String>{
         return selectedItems
-    }
-    fun getAdminData() : AdminModel{
-        return this.adminData!!
     }
 
 }

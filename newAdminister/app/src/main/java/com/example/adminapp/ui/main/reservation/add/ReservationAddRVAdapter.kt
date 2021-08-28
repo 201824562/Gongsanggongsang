@@ -52,7 +52,6 @@ class ReservationAddRVAdapter (val  listener : OnItemClickListener): ListAdapter
                 holder.binding.itemAddView.setOnClickListener { listener.onItemClick(position, null, false) }
             }
             else {
-                Log.e("checking", "${item.data!!.iconID}")
                 setDataView(holder.binding, item.data!!)
                 holder.binding.itemAddView.setOnClickListener {
                     when (item.data.clicked){

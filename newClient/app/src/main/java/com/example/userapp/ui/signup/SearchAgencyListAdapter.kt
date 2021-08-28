@@ -1,6 +1,7 @@
 package com.example.userapp.ui.signup
 
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,8 +31,17 @@ class SearchAgencyListAdapter (val  listener : OnItemClickListener): ListAdapter
     private var lastChecked : CheckBox ?= null
     private var lastCheckedPos : Int ?= null
 
+    fun clearCheckedVariables(){
+        lastChecked = null
+        lastCheckedPos = null
+    }
+    fun setCheckedVariables(checkBox: CheckBox, lastCheckBoxPosition : Int){
+        lastChecked = checkBox
+        lastCheckedPos = lastCheckBoxPosition
+    }
 
-    interface OnItemClickListener { fun onItemClick(v: View, position: Int) }
+    interface OnItemClickListener { fun onItemClick(v: View, position: Int, agencyInfo : Agency?,
+                                                    checkBox: CheckBox?, checkPos : Int?) }
     inner class ViewHolder(val binding: ItemSignupSearchListBinding): RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -39,28 +49,38 @@ class SearchAgencyListAdapter (val  listener : OnItemClickListener): ListAdapter
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        getItem(position)?.let{ agencyItem ->
+        getItem(position)?.let{ item ->
             if (holder is ViewHolder) {
-                holder.binding.itemCheckBox.isChecked = agencyItem.clicked
-                holder.binding.listItemAgencyName.text = agencyItem.name
-                holder.binding.listItemAgencyLocation.text = agencyItem.location
+                if (item.clicked){
+                    lastCheckedPos = position
+                    lastChecked = holder.binding.itemCheckBox
+                    holder.binding.itemCheckBox.isChecked = item.clicked }
+                holder.binding.listItemAgencyName.text = item.name
+                holder.binding.listItemAgencyLocation.text = item.location
                 holder.binding.listItemAgencyLayout.setOnClickListener {
-                    if (holder.binding.itemCheckBox.isChecked){
-                        agencyItem.clicked = false
-                        lastChecked = null
-                        lastCheckedPos = null
-                        holder.binding.itemCheckBox.isChecked = false
-                    }
-                    else {
-                        if (lastChecked != null){
-                            lastCheckedPos?.let { pos -> getItem(pos).clicked = false}
-                            lastChecked!!.isChecked = false}
+                    when (lastCheckedPos){
+                        null -> {
                             lastChecked = holder.binding.itemCheckBox
                             lastCheckedPos = position
-                        agencyItem.clicked = true
-                        holder.binding.itemCheckBox.isChecked = true
+                            item.clicked = true
+                            holder.binding.itemCheckBox.isChecked = true
+                            listener.onItemClick(holder.itemView, position, item, lastChecked, lastCheckedPos) }
+                        position -> {
+                            lastChecked = null
+                            lastCheckedPos = null
+                            item.clicked = false
+                            holder.binding.itemCheckBox.isChecked = false
+                            listener.onItemClick(holder.itemView, position, null, null, null) }
+                        else -> {
+                            getItem(lastCheckedPos!!).clicked = false
+                            lastChecked!!.isChecked = false
+                            lastChecked = holder.binding.itemCheckBox
+                            lastCheckedPos = position
+                            item.clicked = true
+                            holder.binding.itemCheckBox.isChecked = true
+                            listener.onItemClick(holder.itemView, position, item, lastChecked, lastCheckedPos)
+                        }
                     }
-                    listener.onItemClick(holder.itemView, position)
                 }
             }
         }

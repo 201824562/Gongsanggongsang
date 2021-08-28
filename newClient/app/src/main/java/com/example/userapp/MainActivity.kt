@@ -35,7 +35,6 @@ import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.channels.Channel
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() {
-    companion object{ val TOOLBAR_TITLE = "title" }
 
     override lateinit var  viewbinding: ActivityMainBinding
     override val viewmodel: MainActivityViewModel by viewModels()
@@ -44,9 +43,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController : NavController
-    private var userData : UserModel? = null
     var selectedItems : ArrayList<String> = arrayListOf()
-    var token : String = ""
+
     override fun initToolbar() {
         window.apply {
             navigationBarColor = ContextCompat.getColor(this@MainActivity, R.color.white)
@@ -62,15 +60,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
         getToken()
     }
 
-    override fun initDataBinding(savedInstanceState: Bundle?) {
-        viewmodel.onSuccessGettingUserInfo.observe(this, {  userData = it })
-        viewmodel.onSuccessGettingNullUserInfo.observe(this, {
-            //restartActivity()
-        })
-    }
+    override fun initDataBinding(savedInstanceState: Bundle?) { }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
-        viewmodel.getUserInfo()
         setToolbarWithNavcontroller()
     }
 
@@ -136,9 +128,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     fun getPhoto() : ArrayList<String>{
         return selectedItems
     }
-    fun getUserData() : UserModel{
-        return this.userData!!
-    }
+
     fun getToken(){
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {

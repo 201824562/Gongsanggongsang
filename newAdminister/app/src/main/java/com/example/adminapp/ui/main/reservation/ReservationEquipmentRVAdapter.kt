@@ -69,7 +69,9 @@ class ReservationEquipmentRVAdapter(private val context : Context, private val v
                             holder.binding.reservationLeftTimeMinute.text = minute.toString()
                             holder.binding.reservationLeftTimeSecond.text = if (second<10) "0${second}" else second.toString()
                         }
-                        override fun onFinish() { viewmodel.finishReservationEquipmentData(item.name) } }.start()
+                        override fun onFinish() {
+                            viewmodel.finishReservationEquipmentData(item.name)
+                            viewmodel.makeReservationLogFinished(item.documentId) } }.start()
                 }
             }
             holder.binding.itemContentLayout.setOnClickListener { listener.onItemClick(position, item) }

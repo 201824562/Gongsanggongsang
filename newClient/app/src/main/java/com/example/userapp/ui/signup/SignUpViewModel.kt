@@ -1,6 +1,7 @@
 package com.example.userapp.ui.signup
 
 import android.app.Application
+import android.widget.CheckBox
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.userapp.base.BaseSessionViewModel
@@ -131,6 +132,10 @@ class SignUpViewModel(application: Application) : BaseSessionViewModel(applicati
             _onClickedAllBtn.value = clickedAllBtn
             false
         }
+    }
+
+    fun clearAgencyVars(){
+        selectedAgency = null
     }
 
     fun clearAgencyResult(searchClicked : Boolean) {
