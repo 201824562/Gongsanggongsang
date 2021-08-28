@@ -77,7 +77,7 @@ class FacilityAdapter(
         val data = dataSet[position]
 //        viewHolder.viewbinding.icon.load(data.)
         viewHolder.viewbinding.documentNameTextview.text = data.document_name
-
+        viewHolder.viewbinding.icon.load(data.category_icon)
         //사용하기 버튼
         viewHolder.viewbinding.reservationBtn.setOnClickListener() {
             onClickUsingIcon.invoke(data)

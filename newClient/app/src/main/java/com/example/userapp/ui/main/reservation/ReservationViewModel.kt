@@ -234,11 +234,13 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
                             FacilityReserveData.add(
                                 ReservationReserveFacility(
                                     document.id.split("_")[1],
-                                    document.get("icon") as String,
+                                    makeIconStringToDrawableID(document.get("icon") as String),
+                                    document.get("userId") as String,
                                     document.get("startTime") as String,
                                     document.get("endTime") as String
                                 )
                             )
+                            Log.e("icon",document.get("icon") as String)
                         }
                     }
 
@@ -622,7 +624,6 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
 
 
     fun startEquipmentTimer(reservationUseEquipment: ReservationUseEquipment) {
-        activity
         reservationUseEquipment.countdowntimer =
             object : CountDownTimer(reservationUseEquipment.remainMilli, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
@@ -634,18 +635,18 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
                 @RequiresApi(Build.VERSION_CODES.O)
                 override fun onFinish() {
                     end_use(reservationUseEquipment)
-                    val builder = createNotificationChannel("id", "name")
-                        .setTicker("Ticker")
-                        .setSmallIcon(android.R.drawable.ic_menu_search)
-                        .setNumber(100)
-                        .setAutoCancel(true)
-                        .setContentTitle("Content Title")
-                        .setContentText("Content Text")
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-
-                    with(NotificationManagerCompat.from(this)) {
-                        notify(0, builder.build())
-                    }
+//                    val builder = createNotificationChannel("id", "name")
+//                        .setTicker("Ticker")
+//                        .setSmallIcon(android.R.drawable.ic_menu_search)
+//                        .setNumber(100)
+//                        .setAutoCancel(true)
+//                        .setContentTitle("Content Title")
+//                        .setContentText("Content Text")
+//                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+//
+//                    with(NotificationManagerCompat.from(this)) {
+//                        notify(0, builder.build())
+//                    }
                 }
             }.start()
 

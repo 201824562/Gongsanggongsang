@@ -19,9 +19,9 @@
 
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/ic_washer"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@color/transparent"
         app:layout_constraintBottom_toBottomOf="@id/icon_background"
         app:layout_constraintLeft_toLeftOf="@id/icon_background"
         app:layout_constraintRight_toRightOf="@id/icon_background"
