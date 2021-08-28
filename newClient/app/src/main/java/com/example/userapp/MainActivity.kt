@@ -1,8 +1,12 @@
 package com.example.userapp
 
 import android.content.ContentValues.TAG
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -11,6 +15,7 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -27,6 +32,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceIdReceiver
 import com.google.firebase.iid.internal.FirebaseInstanceIdInternal
 import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.channels.Channel
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() {
     companion object{ val TOOLBAR_TITLE = "title" }
@@ -149,6 +155,51 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
 
     }
 
+
+//    fun displayNotification(){
+//        val notificationId = 45
+//        val notification: Notification = NotificationCompat.Builder(this, ChannelID)
+//            .setSmallIcon(R.drawable.ic_box)
+//            .setContentTitle("textTitle")
+//            .setContentText("textContent")
+//            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+//            .build()
+//
+////        val notificationManager : NotificationManager
+//        notificationManager?.notify()
+//    }
+
+    fun createNotificationChannel(id :String, name :String) : NotificationCompat.Builder{
+
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+
+            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val channel = NotificationChannel(id, name, NotificationManager.IMPORTANCE_HIGH)
+
+            manager.createNotificationChannel(channel)
+
+            NotificationCompat.Builder(this, id)
+
+        } else {
+            NotificationCompat.Builder(this)
+        }
+    }
+
+//    private fun createNotificationChannel(CHANNEL_ID:String, channel_name:String, channel_description:String) {
+//        // Create the NotificationChannel, but only on API 26+ because
+//        // the NotificationChannel class is new and not in the support library
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            val importance = NotificationManager.IMPORTANCE_DEFAULT
+//
+//            val channel = NotificationChannel(CHANNEL_ID, channel_name, importance).apply {
+//                description = channel_description
+//            }
+//            // Register the channel with the system
+//            val notificationManager: NotificationManager =
+//                getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+//            notificationManager.createNotificationChannel(channel)
+//        }
+//    }
 }
 
 fun <VB : ViewBinding, VM : BaseSessionViewModel> BaseSessionFragment<VB, VM>.restartActivity() {

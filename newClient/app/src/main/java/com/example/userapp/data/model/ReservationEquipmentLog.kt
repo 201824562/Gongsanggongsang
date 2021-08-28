@@ -1,7 +1,8 @@
 package com.example.userapp.data.model
 
 data class ReservationEquipmentLog(
-    val icon: Int,
+    val documentId: String,
+    val icon: String,
     val name: String,
     val userName: String,
     val userId: String,

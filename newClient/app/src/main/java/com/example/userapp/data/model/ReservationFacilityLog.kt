@@ -3,7 +3,7 @@ package com.example.userapp.data.model
 import com.example.userapp.data.entity.DayTimeSlot
 
 data class ReservationFacilityLog(
-    val icon: Long,
+    val icon: String,
     val documentId: String,
     val name: String,
     val userName: String,

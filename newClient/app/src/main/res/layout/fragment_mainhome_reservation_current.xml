@@ -66,11 +66,14 @@
 
             <TextView
                 android:id="@+id/facility_reserve_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
                 android:text="예약내역"
-                android:textSize="20sp"
-                android:layout_margin="8dp"
+                android:textSize="16sp"
+                android:textColor="@color/black_87"
+                android:fontFamily="@font/notosanskr_bold_hestia"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/line1"/>
 
@@ -78,11 +81,9 @@
                 android:id="@+id/facility_reserve_recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginTop="12dp"
                 android:nestedScrollingEnabled="false"
+                android:layout_marginHorizontal="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/facility_reserve_textview"
                 tools:listitem="@layout/fragment_mainhome_reservation_current_reserve_item" />
