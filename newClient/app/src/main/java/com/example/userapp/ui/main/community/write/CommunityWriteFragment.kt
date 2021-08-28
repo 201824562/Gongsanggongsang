@@ -136,12 +136,22 @@ class CommunityWriteFragment : BaseSessionFragment<FragmentCommunityWriteBinding
                     val bundle = bundleOf(
                         "post_data_info" to postData,
                     )
-                    viewmodel.uploadPhoto(bitmapArray, uriArray)
-                    viewmodel.getUploadPhoto().observe(viewLifecycleOwner){
-                        if(it){
-                            viewmodel.insertPostData(postData).observe(viewLifecycleOwner){
-                                if(it){
-                                    findNavController().navigate(R.id.action_communityWrite_to_communityPost, bundle)
+                    Log.e("namem", "$userName")
+                    if(uriArray.isEmpty()){
+                        viewmodel.insertPostData(postData).observe(viewLifecycleOwner){
+                            if(it){
+                                findNavController().navigate(R.id.action_communityWrite_to_communityPost, bundle)
+                            }
+                        }
+                    }
+                    else{
+                        viewmodel.uploadPhoto(bitmapArray, uriArray)
+                        viewmodel.getUploadPhoto().observe(viewLifecycleOwner){
+                            if(it){
+                                viewmodel.insertPostData(postData).observe(viewLifecycleOwner){
+                                    if(it){
+                                        findNavController().navigate(R.id.action_communityWrite_to_communityPost, bundle)
+                                    }
                                 }
                             }
                         }

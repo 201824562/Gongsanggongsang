@@ -103,9 +103,23 @@ class CommunityWriteMarketFragment : BaseSessionFragment<FragmentCommunityWriteM
                     bundle = bundleOf(
                         "post_data_info" to postData
                     )
-                    viewmodel.insertPostData(postData).observe(viewLifecycleOwner){
-                        if(it){
-                            findNavController().navigate(R.id.action_communityWriteMarket_to_communityPostMarket, bundle)
+                    if(uriArray.isEmpty()){
+                        viewmodel.insertPostData(postData).observe(viewLifecycleOwner){
+                            if(it){
+                                findNavController().navigate(R.id.action_communityWrite_to_communityPost, bundle)
+                            }
+                        }
+                    }
+                    else{
+                        viewmodel.uploadPhoto(bitmapArray, uriArray)
+                        viewmodel.getUploadPhoto().observe(viewLifecycleOwner){
+                            if(it){
+                                viewmodel.insertPostData(postData).observe(viewLifecycleOwner){
+                                    if(it){
+                                        findNavController().navigate(R.id.action_communityWrite_to_communityPost, bundle)
+                                    }
+                                }
+                            }
                         }
                     }
                 }
