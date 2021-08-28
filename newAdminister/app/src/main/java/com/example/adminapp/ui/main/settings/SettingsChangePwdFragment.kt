@@ -63,7 +63,7 @@ class SettingsChangePwdFragment : BaseSessionFragment<FragmentSettingsChangePwdB
                 showingPwd2Btn.isSelected = !showingPwd2Btn.isSelected
                 if (showingPwd2Btn.isSelected) {
                     editTextPwd2.inputType = 0x00000001
-                    editTextPwd.typeface = resources.getFont(R.font.notosan_font_family) }
+                    editTextPwd2.typeface = resources.getFont(R.font.notosan_font_family) }
                 else editTextPwd2.inputType = 0x00000081
             }
             changeInfoBtn.setOnClickListener { viewmodel.checkForSendChangePwd(getUserPwd(), getUserPwd2()) }

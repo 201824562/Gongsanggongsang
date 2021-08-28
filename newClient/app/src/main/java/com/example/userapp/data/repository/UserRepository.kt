@@ -118,26 +118,42 @@ class UserRepository(appDatabase: AppDatabase) {
 
     private val fireStore = FirebaseFirestore.getInstance()   //.getReference()
 
-    fun getSearchAgencyResult(keyWord : String) : Single<List<Agency>> {
+    fun getSearchAgencyResult(keyWord : String?, getAll : Boolean) : Single<List<Agency>> {
         return Single.create { emitter ->
-            fireStore.collection(FIRESTORE_AGENCY).whereArrayContainsAny("location", listOf(keyWord)).get()
-                .addOnSuccessListener { documents ->
-                    Log.e("checking","CHECKING")
-                    Log.e("checking","$documents")
-                    val agencyList : MutableList<Agency> = mutableListOf()
-                    for (document in documents){
-                        Log.e("checking","${document.data["name"]}")
-                        agencyList.add(
-                            Agency(key = document["key"].toString(), name = document["name"].toString().replace(",", " "),
-                            location = document["location"].toString().replace(",", " "))
-                        )
+            if (getAll){
+                fireStore.collection(FIRESTORE_AGENCY).get()
+                    .addOnSuccessListener { documents ->
+                        val agencyList : MutableList<Agency> = mutableListOf()
+                        for (document in documents){
+                            agencyList.add(
+                                Agency(key = document["key"].toString(), name = document["name"].toString().replace(",", " "),
+                                    location = document["location"].toString().replace(",", " "))
+                            )
+                        }
+                        emitter.onSuccess(agencyList)
                     }
-                    emitter.onSuccess(agencyList)
-                }
-                .addOnFailureListener { exception ->
-                    Log.w(ContentValues.TAG, "Error getting documents: ", exception)
-                    emitter.onError(Throwable("Error getting SEARCHED AGENGYINFO at SIGN_UP_AGENCY"))
-                }
+                    .addOnFailureListener { exception ->
+                        Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                        emitter.onError(Throwable("Error getting SEARCHED AGENGYINFO at SIGN_UP_AGENCY"))
+                    }
+            }else{
+                fireStore.collection(FIRESTORE_AGENCY).get()
+                    .addOnSuccessListener { documents ->
+                        val agencyList : MutableList<Agency> = mutableListOf()
+                        for (document in documents){
+                            if ((document["location"].toString()).contains(keyWord!!) || (document["name"].toString()).contains(keyWord)){
+                                agencyList.add(
+                                    Agency(key = document["key"].toString(), name = document["name"].toString().replace(",", " "),
+                                        location = document["location"].toString().replace(",", " ")))
+                            }
+                        }
+                        emitter.onSuccess(agencyList)
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                        emitter.onError(Throwable("Error getting SEARCHED AGENGYINFO at SIGN_UP_AGENCY"))
+                    }
+            }
         }
     }
 

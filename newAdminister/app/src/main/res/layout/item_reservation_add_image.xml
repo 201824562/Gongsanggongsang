@@ -6,6 +6,8 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp"
+    android:layout_marginLeft="2dp"
+    android:layout_marginRight="2dp"
     android:gravity="center">
     <LinearLayout
         android:layout_width="wrap_content"
@@ -17,8 +19,8 @@
         android:background="@drawable/view_5dp_event_stroke_rectangle_applemint" >
         <ImageView
             android:id="@+id/item_add_image"
-            android:layout_width="24sp"
-            android:layout_height="24sp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_gravity="center"
             android:background="@color/transparent" />
 

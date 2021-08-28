@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import coil.load
 import com.example.adminapp.R
@@ -31,6 +33,7 @@ class ReservationDetailFacilityBasicFragment : BaseSessionFragment<FragmentReser
     override lateinit var viewbinding: FragmentReservationDetailFacilityBasicBinding
     override val viewmodel: ReservationDetailFacilityViewModel by viewModels()
     private lateinit var reservationDetailLogRVAdapter : ReservationDetailLogRVAdapter
+    private var observerHashMap : MutableMap<LiveData<*>, Observer<*>>?= null
     private lateinit var facilityBundleData : ReservationFacilityBundle
     private var timer : CountDownTimer ?= null
 
@@ -52,25 +55,34 @@ class ReservationDetailFacilityBasicFragment : BaseSessionFragment<FragmentReser
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
         viewmodel.run {
-            getReservationFacilitySettingData(facilityBundleData.name).observe(viewLifecycleOwner) {
-                if (!it.boolean){ findNavController().navigate(R.id.action_reservationDetailFacilityFragment_pop) } //TODO : 얘는 다른쪽에도 필요함. (pop하는 것만)
-                else{ facilityBundleData.settingData = it.facilitySettingData
+            if (observerHashMap == null) observerHashMap = mutableMapOf()
+            val observer1 = Observer<ReceiverFacilitySettingData> {
+                if (it.boolean) {
+                    facilityBundleData.settingData = it.facilitySettingData
                     setItemSettingData(facilityBundleData) }
-            }
-            getReservationFacilityLogData(facilityBundleData.name).observe(viewLifecycleOwner){
+                /*else { findNavController().navigate(R.id.action_reservationDetailFacilityFragment_pop) }*/
+                }
+            getReservationFacilitySettingData(facilityBundleData.name).observeForever(observer1)
+            observerHashMap = mutableMapOf(getReservationFacilitySettingData(facilityBundleData.name) to observer1)
+
+            val observer2 = Observer<ReceiverFacilityLog> {
                 if (!it.boolean){
                     facilityBundleData.using = false
                     facilityBundleData.logData = it.facilityLogData
                     setItemData(facilityBundleData) }
                 else{
+                    facilityBundleData.using = true
                     facilityBundleData.logData = it.facilityLogData
                     setItemData(facilityBundleData) }
-                getReservationFacilitySettingData(facilityBundleData.name)
-            }
-            getReservationFacilityLogDataList("예약 사용", facilityBundleData.name).observe(viewLifecycleOwner){
+                getReservationFacilitySettingData(facilityBundleData.name) }
+            getReservationFacilityLogData(facilityBundleData.name).observeForever(observer2)
+            observerHashMap?.put(getReservationFacilityLogData(facilityBundleData.name), observer2)
+
+            val observer3 = Observer<List<ReservationFacilityLog>> {
                 if (it.isEmpty()) showEmptyView()
-                else showRV( it.map {logData ->  ReservationLogItem(ReservationType.FACILITY, null, logData)})
-            }
+                else showRV( it.map {logData ->  ReservationLogItem(ReservationType.FACILITY, null, logData)}) }
+            getReservationFacilityLogDataList("예약 사용", facilityBundleData.name).observeForever(observer3)
+            observerHashMap?.put(getReservationFacilityLogDataList("예약 사용", facilityBundleData.name), observer3)
         }
     }
 
@@ -88,10 +100,13 @@ class ReservationDetailFacilityBasicFragment : BaseSessionFragment<FragmentReser
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        try { timer?.cancel() }
-        catch (e: Exception) { }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        try { timer?.cancel()
+            observerHashMap?.let {
+                for (i in it){ (i.key).removeObserver(i.value as Observer<in Any>) } }
+            //viewmodel.initDetailFacilityLiveData()
+        } catch (e: Exception) { }
     }
 
     private fun makeErrorEvent(){
@@ -115,7 +130,7 @@ class ReservationDetailFacilityBasicFragment : BaseSessionFragment<FragmentReser
     }
 
     private fun setRecyclerView() {
-        reservationDetailLogRVAdapter = ReservationDetailLogRVAdapter()
+        reservationDetailLogRVAdapter = ReservationDetailLogRVAdapter(null, viewmodel)
         viewbinding.reservationDetailRv.adapter = reservationDetailLogRVAdapter
     }
 
@@ -133,8 +148,6 @@ class ReservationDetailFacilityBasicFragment : BaseSessionFragment<FragmentReser
         }
     }
 
-
-    //TODO : 사용중인것만 로그에서 usable no! -> 예약불가능 상태인데 다음로그가 왔다? 그럼 체킹 필요. + 실시간 로그 체킹 필요.
     private fun setItemSettingData(bundleItem : ReservationFacilityBundle){
         viewbinding.run {
             if (bundleItem.using) {
@@ -147,7 +160,8 @@ class ReservationDetailFacilityBasicFragment : BaseSessionFragment<FragmentReser
                 reserveDetailItemIconBackground.background = ContextCompat.getDrawable(requireContext(), R.drawable.view_oval_gray)
                 reserveDetailItemState.apply {
                     text = CAN_USE_STATE
-                    setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.light_gray)) }
+                    setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.light_gray))
+                    setTextColor(ContextCompat.getColor(requireContext(), R.color.black_50)) }
             }
             if (bundleItem.settingData != null){
                 bundleItem.settingData?.let { item ->
@@ -214,6 +228,8 @@ class ReservationDetailFacilityBasicFragment : BaseSessionFragment<FragmentReser
                 reserveDetailItemUsedTime1.text = NO_USING_STRING
                 reserveDetailItemLeftTime1.text = NO_USING_STRING
                 reserveDetailItemLeftTime2.text = NO_USING_BLANK_STRING
+                reserveDetailItemStartTime.text = NO_USING_BLANK_STRING
+                reserveDetailItemEndTime.text = NO_USING_BLANK_STRING
             }
         }
     }

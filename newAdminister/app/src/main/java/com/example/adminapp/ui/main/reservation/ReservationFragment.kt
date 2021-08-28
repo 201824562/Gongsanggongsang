@@ -47,6 +47,10 @@ class ReservationFragment : BaseSessionFragment<FragmentMainReservationBinding, 
         viewbinding.run {
             reservationViewPagerAdapter  = ReservationViewPagerAdapter(requireActivity())
             reservationViewpager.adapter = reservationViewPagerAdapter
+            reservationTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab?) { viewbinding.reservationViewpager.currentItem = tab!!.position }
+                override fun onTabUnselected(tab: TabLayout.Tab?) {}
+                override fun onTabReselected(tab: TabLayout.Tab?) { viewbinding.reservationViewpager.currentItem = tab!!.position } })
             TabLayoutMediator(reservationTab, reservationViewpager){ tab, position ->
                 val tabTextList = arrayListOf("사용중", "바로 사용", "예약 사용", "사용 기록")
                 tab.text = tabTextList[position] }.attach() }

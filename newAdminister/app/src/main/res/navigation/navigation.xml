@@ -334,6 +334,19 @@
             app:exitAnim="@anim/slide_exit"
             app:popEnterAnim="@anim/slide_pop_enter"
             app:popExitAnim="@anim/slide_pop_exit" />
+        <action
+            android:id="@+id/action_reservationDetailFacilityFragment_to_reservationEditDetailFragment"
+            app:destination="@id/reservationEditDetailFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit" >
+            <argument
+                android:name="reservationItem"
+                app:argType="com.example.adminapp.data.model.ReservationItem"
+                app:nullable="true"
+                android:defaultValue="@null"/>
+        </action>
     </fragment>
     <!--    community-->
     <fragment

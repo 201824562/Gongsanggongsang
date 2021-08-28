@@ -28,7 +28,7 @@ class WrapedDialogBasicTwoButton (context: Context, content: String, closeBtnTex
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
         window?.run {
-            setBackgroundDrawable(InsetDrawable(ColorDrawable(Color.TRANSPARENT), 30))
+            setBackgroundDrawable(InsetDrawable(ColorDrawable(Color.TRANSPARENT), 50))
             attributes.width = ViewGroup.LayoutParams.MATCH_PARENT
             attributes.height = ViewGroup.LayoutParams.WRAP_CONTENT
         } ?: exitProcess(0)
@@ -43,7 +43,7 @@ class WrapedDialogBasicTwoButton (context: Context, content: String, closeBtnTex
     }
 }
 
-class MatchedDialogAccentTwoButton (context: Context, content: String, closeBtnText: String, customBtnText: String) : Dialog(context){
+class WrapedDialogAccentTwoButton (context: Context, content: String, closeBtnText: String, customBtnText: String) : Dialog(context){
 
     var clickListener : DialogButtonClickListener ? = null
     interface DialogButtonClickListener {
@@ -57,7 +57,7 @@ class MatchedDialogAccentTwoButton (context: Context, content: String, closeBtnT
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
         window?.run {
-            setBackgroundDrawable(InsetDrawable(ColorDrawable(Color.TRANSPARENT), 30))
+            setBackgroundDrawable(InsetDrawable(ColorDrawable(Color.TRANSPARENT), 50))
             attributes.width = ViewGroup.LayoutParams.MATCH_PARENT
             attributes.height = ViewGroup.LayoutParams.WRAP_CONTENT
         } ?: exitProcess(0)
@@ -81,7 +81,7 @@ class WrapedDialogBasicOneButton (context: Context, content: String) : Dialog(co
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
         window?.run {
-            setBackgroundDrawable(InsetDrawable(ColorDrawable(Color.TRANSPARENT), 24))
+            setBackgroundDrawable(InsetDrawable(ColorDrawable(Color.TRANSPARENT), 30))
             attributes.width = ViewGroup.LayoutParams.MATCH_PARENT
             attributes.height = ViewGroup.LayoutParams.WRAP_CONTENT
         } ?: exitProcess(0)

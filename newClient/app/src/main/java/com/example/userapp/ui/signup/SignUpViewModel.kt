@@ -140,16 +140,14 @@ class SignUpViewModel(application: Application) : BaseSessionViewModel(applicati
         if (searchClicked) _invalidSearchResultEventLiveData.postValue("검색어를 입력해주세요.")
     }
 
-    fun loadSearchAgencyResult(keyword : String) {
-        apiCall(userRepository.getSearchAgencyResult(keyword), {
+    fun loadSearchAgencyResult(keyword : String?, getAll : Boolean) {
+        apiCall(userRepository.getSearchAgencyResult(keyword, getAll), {
             _agencyDataList.postValue(it)
             _validSearchResultEventLiveData.call()
         })
     }
 
-    fun observeAgencyBtnState() {
-        _checkAgencyClickedState.call()
-    }
+    fun observeAgencyBtnState() { _checkAgencyClickedState.call() }
 
     private fun checkForUserName(userName: String) : Boolean{
         return if (userName.isBlank() || userName.isEmpty()) {

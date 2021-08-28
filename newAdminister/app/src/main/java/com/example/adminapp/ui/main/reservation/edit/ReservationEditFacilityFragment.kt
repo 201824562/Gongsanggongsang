@@ -1,20 +1,20 @@
 package com.example.adminapp.ui.main.reservation.edit
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.adminapp.base.BaseSessionFragment
-import com.example.adminapp.data.model.ReservationData
-import com.example.adminapp.data.model.ReservationFacilitySettingData
-import com.example.adminapp.data.model.ReservationItem
-import com.example.adminapp.data.model.ReservationType
+import com.example.adminapp.data.model.*
 import com.example.adminapp.databinding.FragmentReservationEditChildBinding
 import com.example.adminapp.databinding.ItemReservationEditSettingBinding
 import com.example.adminapp.ui.main.reservation.ReservationViewModel
@@ -25,12 +25,13 @@ class ReservationEditFacilityFragment : BaseSessionFragment<FragmentReservationE
     override lateinit var viewbinding: FragmentReservationEditChildBinding
     override val viewmodel: ReservationEditViewModel by viewModels()
     private lateinit var reservationEditFacilitySettingRVAdapter: ReservationEditFacilitySettingRVAdapter
+    private var observer : Observer<List<ReservationFacilitySettingData>>? = null
 
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         viewbinding = FragmentReservationEditChildBinding.inflate(inflater, container, false)
         return viewbinding.root
     }
@@ -40,9 +41,8 @@ class ReservationEditFacilityFragment : BaseSessionFragment<FragmentReservationE
     override fun initDataBinding(savedInstanceState: Bundle?) { }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
-        viewmodel.getReservationFacilitySettingDataList().observe(viewLifecycleOwner){
-            reservationEditFacilitySettingRVAdapter.submitList(it)
-        }
+        observer = Observer { if (it.isEmpty()) showEmptyView() else showRV(it) }
+        observer?.let {observer -> viewmodel.getReservationFacilitySettingDataList().observeForever(observer) }
     }
 
     private fun setRecyclerView() {
@@ -57,6 +57,26 @@ class ReservationEditFacilityFragment : BaseSessionFragment<FragmentReservationE
         })
         viewbinding.reservationEditRv.adapter = reservationEditFacilitySettingRVAdapter
     }
+
+    private fun showEmptyView(){
+        viewbinding.apply {
+            reservationEditChildEmptyView.visibility = View.VISIBLE
+            reservationEditRv.visibility = View.GONE
+        }
+    }
+    private fun showRV(list : List<ReservationFacilitySettingData>){
+        viewbinding.run{
+            reservationEditChildEmptyView.visibility  = View.GONE
+            reservationEditRv.visibility = View.VISIBLE
+            reservationEditFacilitySettingRVAdapter.submitList(list)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        observer?.let {observer -> viewmodel.getReservationFacilitySettingDataList().removeObserver(observer) }
+    }
+
 }
 
 class ReservationEditFacilitySettingRVAdapter(private val  listener : OnItemClickListener)
@@ -87,6 +107,7 @@ class ReservationEditFacilitySettingRVAdapter(private val  listener : OnItemClic
             holder.binding.reserveEditItemName.text = item.name
             holder.binding.reserveEditItemIntervalTime.text = item.getIntervalTimeView()
             holder.binding.reserveEditItemMaxTime.text = item.getMaxTimeView()
+            holder.binding.reserveEditBtn.setOnClickListener { listener.onItemClick(position, item) }
             holder.binding.itemEditSetting.setOnClickListener { listener.onItemClick(position, item) }
 
         }

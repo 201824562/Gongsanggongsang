@@ -55,7 +55,7 @@
                     android:id="@+id/permission_all_btn"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_marginStart="25dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/ic_checkbox_gray" />
                 <TextView
@@ -80,31 +80,34 @@
                     android:id="@+id/permission_first_btn"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_marginStart="25dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/ic_check_gray" />
-                <TextView
+                <LinearLayout
+                    android:id="@+id/detailInfo_first_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/black_87"
-                    android:fontFamily="@font/notosanskr_regular_hestia"
-                    android:text="이용약관 동의 "/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/applemint"
-                    android:fontFamily="@font/notosanskr_regular_hestia"
-                    android:text="(필수)"/>
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/black_87"
+                        android:fontFamily="@font/notosanskr_regular_hestia"
+                        android:text="이용약관 동의 "/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/applemint"
+                        android:fontFamily="@font/notosanskr_regular_hestia"
+                        android:text="(필수)"/>
+                </LinearLayout>
                 <ImageView
                     android:id="@+id/detailInfo_fist_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="8sp"
+                    android:layout_height="14sp"
                     android:background="@drawable/ic_shownext_gray"
                     android:layout_gravity="center"/>
             </LinearLayout>
@@ -133,31 +136,34 @@
                     android:id="@+id/permission_second_btn"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_marginStart="25dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/ic_check_gray" />
-                <TextView
+                <LinearLayout
+                    android:id="@+id/detailInfo_second_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/black_87"
-                    android:fontFamily="@font/notosanskr_regular_hestia"
-                    android:text="개인정보 수집 및 이용동의 "/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/applemint"
-                    android:fontFamily="@font/notosanskr_regular_hestia"
-                    android:text="(필수)"/>
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/notosanskr_regular_hestia"
+                        android:text="개인정보 수집 및 이용동의 "
+                        android:textColor="@color/black_87"
+                        android:textSize="14sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/applemint"
+                        android:fontFamily="@font/notosanskr_regular_hestia"
+                        android:text="(필수)" />
+                </LinearLayout>
                 <ImageView
                     android:id="@+id/detailInfo_second_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="8sp"
+                    android:layout_height="14sp"
                     android:background="@drawable/ic_shownext_gray"
                     android:layout_gravity="center"/>
             </LinearLayout>

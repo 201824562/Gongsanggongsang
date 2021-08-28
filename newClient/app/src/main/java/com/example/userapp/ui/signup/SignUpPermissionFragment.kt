@@ -58,41 +58,44 @@ class SignUpPermissionFragment : BaseSessionFragment<FragmentSignupPermissionBin
            permissionAllBtn.setOnClickListener { viewmodel.changeAllBtnValue() }
            permissionFirstBtn.setOnClickListener { viewmodel.changeFirstBtnValue() }
            permissionSecondBtn.setOnClickListener { viewmodel.changeSecondBtnValue() }
-
-           detailInfoFistBtn.setOnClickListener {
-               val dialog = MatchedFullDialogBasicOneButton(requireContext(), "이용약관 동의", getString(R.string.permission_content1)).apply {
-                       clickListener = object : MatchedFullDialogBasicOneButton.DialogButtonClickListener {
-                               override fun dialogCloseClickListener() {
-                                   dismiss()
-                               }
-                               override fun dialogClickListener() {
-                                   dismiss()
-                                   viewmodel.changeFirstBtnValueTrue()
-                               }
-                           }
-                   }
-               showDialog(dialog, viewLifecycleOwner)
-           }
-           detailInfoSecondBtn.setOnClickListener {
-               val dialog = MatchedFullDialogBasicOneButton(requireContext(), "개인정보 수집 및 이용동의", getString(R.string.permission_content2)).apply {
-                   clickListener = object : MatchedFullDialogBasicOneButton.DialogButtonClickListener {
-                       override fun dialogCloseClickListener() {
-                           dismiss()
-                       }
-                       override fun dialogClickListener() {
-                           dismiss()
-                           viewmodel.changeSecondBtnValueTrue()
-                       }
-                   }
-               }
-               showDialog(dialog, viewLifecycleOwner)
-           }
+           detailInfoFirstLayout.setOnClickListener { makeFirstDialog() }
+           detailInfoFistBtn.setOnClickListener { makeFirstDialog() }
+           detailInfoSecondLayout.setOnClickListener { makeSecondDialog()  }
+           detailInfoSecondBtn.setOnClickListener { makeSecondDialog() }
            signupNextbtn.setOnClickListener {
                if (nextBtnAvailable) findNavController().navigate(SignUpPermissionFragmentDirections.actionSignUpPermissionFragmentToSignUpAgencyFragment(true))
            }
        }
     }
 
+    private fun makeFirstDialog(){
+        val dialog = MatchedFullDialogBasicOneButton(requireContext(), "이용약관 동의", getString(R.string.permission_content1)).apply {
+            clickListener = object : MatchedFullDialogBasicOneButton.DialogButtonClickListener {
+                override fun dialogCloseClickListener() {
+                    dismiss()
+                }
+                override fun dialogClickListener() {
+                    dismiss()
+                    viewmodel.changeFirstBtnValueTrue()
+                }
+            }
+        }
+        showDialog(dialog, viewLifecycleOwner)
+    }
+    private fun makeSecondDialog(){
+        val dialog = MatchedFullDialogBasicOneButton(requireContext(), "개인정보 수집 및 이용동의", getString(R.string.permission_content2)).apply {
+            clickListener = object : MatchedFullDialogBasicOneButton.DialogButtonClickListener {
+                override fun dialogCloseClickListener() {
+                    dismiss()
+                }
+                override fun dialogClickListener() {
+                    dismiss()
+                    viewmodel.changeSecondBtnValueTrue()
+                }
+            }
+        }
+        showDialog(dialog, viewLifecycleOwner)
+    }
     private fun getCheckedInfo() {
         when (viewmodel.clickedAllBtn) {
             true -> {

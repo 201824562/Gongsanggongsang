@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.appcompat.widget.SearchView
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
@@ -41,7 +42,6 @@ class SignUpAgencyFragment : BaseSessionFragment<FragmentSignupAgencyBinding, Si
 
     override fun initViewStart(savedInstanceState: Bundle?) {
         setupKeyboardHide(viewbinding.fragmentRootLayout, activity)
-        clearVariables()
         setRecyclerView()
         setSearchEditTextView()
         getCheckedInfo()
@@ -61,6 +61,7 @@ class SignUpAgencyFragment : BaseSessionFragment<FragmentSignupAgencyBinding, Si
                 if (selectedAgency == null) {
                     clickedAgencyBtn = false
                     makeNextButtonNotAvailable()
+                    viewmodel.loadSearchAgencyResult(null, true)
                 }
                 else {
                     clickedAgencyBtn = true
@@ -72,18 +73,25 @@ class SignUpAgencyFragment : BaseSessionFragment<FragmentSignupAgencyBinding, Si
         viewbinding.signupSearchBtn.setOnClickListener {
             query = viewbinding.signupSearchEdit.query.toString()
             if(query.isEmpty()) {
-                viewmodel.clearAgencyResult(true)
+                viewmodel.loadSearchAgencyResult(null, true)
+                //viewmodel.clearAgencyResult(true)
             }else{
                 submitQuery(query.lines().first().trim()) }
         }
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
+        viewmodel.observeAgencyBtnState()
         viewbinding.run {
             signupNextbtn.setOnClickListener {
                 if (nextBtnAvailable) findNavController().navigate(R.id.action_signUpAgencyFragment_to_signUpFirstFragment)
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        clearVariables()
     }
 
     private fun setRecyclerView() {
@@ -114,26 +122,21 @@ class SignUpAgencyFragment : BaseSessionFragment<FragmentSignupAgencyBinding, Si
                     editText.setTextColor(resources.getColor(R.color.black))
                 }
             }
-            /*signupSearchEdit.setOnQueryTextListener( object : SearchView.OnQueryTextListener {
+            signupSearchEdit.setOnQueryTextListener( object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    if(query.isNullOrEmpty()){
-                        showSnackbar("검색어를 입력해주세요.")
-                    }else{
+                    if(query.isNullOrEmpty()){ viewmodel.loadSearchAgencyResult(null, true) }
+                    else{
                         signupSearchEdit.clearFocus()
-                        submitQuery(query.lines().first().trim())
-                    }
+                        submitQuery(query.lines().first().trim()) }
                     return true
                 }
                 override fun onQueryTextChange(newText: String?): Boolean {
                     return true }
-            })*/
+            })
         }
     }
 
-    private fun submitQuery(query:String){
-        //TODO : 쿼리하는 함수 만들기. (영우오빠한테 물어보기?)
-        viewmodel.loadSearchAgencyResult(query)
-    }
+    private fun submitQuery(query:String){ viewmodel.loadSearchAgencyResult(query, false) }
 
     private fun getCheckedInfo() {
         when (viewmodel.clickedAgencyBtn) {

@@ -77,6 +77,7 @@ class ReservationAddFragment : BaseSessionFragment<FragmentReservationAddBinding
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run {
+            reserveLaterLayout.setOnClickListener { hideKeyboard(it) }
             unableReserveTimeButton.setOnClickListener {
                 when (it.isSelected) {
                     true -> setUnableModeOff()
@@ -88,7 +89,7 @@ class ReservationAddFragment : BaseSessionFragment<FragmentReservationAddBinding
             }
             reserveAddBtn.setOnClickListener {
                 if (checkDataSave()) {
-                    showEditDialog("해당 정보로 추가하시겠습니까?\n" + "물품/시설 이름은 후에 수정할 수 없습니다.\n")
+                    showEditDialog("해당 정보로 추가하시겠습니까?\n" + "물품/시설 이름은 후에\n수정할 수 없습니다.\n")
                 }
             }
         }
