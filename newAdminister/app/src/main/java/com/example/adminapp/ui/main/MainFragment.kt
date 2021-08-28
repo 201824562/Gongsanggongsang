@@ -1,6 +1,7 @@
 package com.example.adminapp.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,10 +38,9 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>(){
 
     override fun initViewFinal(savedInstanceState: Bundle?) {}
 
-
     private fun initViewPager(){
         viewbinding.run{
-            mainViewPagerAdapter = MainViewPagerAdapter(requireActivity())
+            mainViewPagerAdapter = MainViewPagerAdapter(childFragmentManager, lifecycle)
             mainhomeViewpager.apply {
                 offscreenPageLimit = 5
                 adapter = mainViewPagerAdapter

@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BaseStructure"> <!--android:label="App ${variant}"/ android:label="@string/app_name" -->
-        <activity android:name="com.example.userapp.MainActivity">
+        <activity android:name="com.example.userapp.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -51,7 +51,6 @@ class SettingsChangePwdFragment : BaseSessionFragment<FragmentSettingsChangePwdB
                 }else if (hasFocus && getUserPwd().isNotEmpty() && getUserPwd().isNotBlank()) setPwdEmptyMessage()
             }
 
-            //TODO : 힌트/일반 상태에 따라 폰트타입 바뀌는 거 수정하기.
             showingPwdBtn.setOnClickListener {
                 showingPwdBtn.isSelected = !showingPwdBtn.isSelected
                 if (showingPwdBtn.isSelected) {

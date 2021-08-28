@@ -11,16 +11,4 @@ import com.example.adminapp.utils.SingleLiveEvent
 
 open class MainActivityViewModel(application: Application) : BaseActivityViewModel(application) {
 
-    private val adminRepository : AdminRepository  = AdminRepository.getInstance(AppDatabase.getDatabase(application, viewModelScope))
-
-    private val _onSuccessGettingAdminInfo = SingleLiveEvent<AdminModel>()
-    val onSuccessGettingAdminInfo : LiveData<AdminModel> get() = _onSuccessGettingAdminInfo
-    private val _onSuccessGettingNullAdminInfo  = SingleLiveEvent<AdminModel>()
-    val onSuccessGettingNullAdminInfo : LiveData<AdminModel> get() = _onSuccessGettingNullAdminInfo
-
-    fun getAdminInfo() {
-        apiCall(adminRepository.getAdminInfo(), {
-            _onSuccessGettingAdminInfo.postValue(it) },
-            { _onSuccessGettingNullAdminInfo.call() })
-    }
 }

@@ -42,7 +42,7 @@ class WrapedDialogBasicTwoButton (context: Context, content: String, closeBtnTex
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
         window?.run {
-            setBackgroundDrawable(InsetDrawable(ColorDrawable(Color.TRANSPARENT), 30))
+            setBackgroundDrawable(InsetDrawable(ColorDrawable(Color.TRANSPARENT), 50))
             attributes.width = ViewGroup.LayoutParams.MATCH_PARENT
             attributes.height = ViewGroup.LayoutParams.WRAP_CONTENT
         } ?: exitProcess(0)
@@ -71,7 +71,7 @@ class MatchedDialogAccentTwoButton (context: Context, content: String, closeBtnT
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
         window?.run {
-            setBackgroundDrawable(InsetDrawable(ColorDrawable(Color.TRANSPARENT), 30))
+            setBackgroundDrawable(InsetDrawable(ColorDrawable(Color.TRANSPARENT), 50))
             attributes.width = ViewGroup.LayoutParams.MATCH_PARENT
             attributes.height = ViewGroup.LayoutParams.WRAP_CONTENT
         } ?: exitProcess(0)
@@ -138,7 +138,7 @@ class WrapedDialogBasicOneButton (context: Context, content: String) : Dialog(co
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
         window?.run {
-            setBackgroundDrawable(InsetDrawable(ColorDrawable(Color.TRANSPARENT), 30))
+            setBackgroundDrawable(InsetDrawable(ColorDrawable(Color.TRANSPARENT), 50))
             attributes.width = ViewGroup.LayoutParams.MATCH_PARENT
             attributes.height = ViewGroup.LayoutParams.WRAP_CONTENT
         } ?: exitProcess(0)

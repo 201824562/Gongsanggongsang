@@ -29,7 +29,6 @@ class CommunitySearchFragment : BaseSessionFragment<FragmentCommunitySearchBindi
     private var communityPreviewMarketItem = arrayListOf<PostDataInfo>()
 
     private lateinit var collectionName : String
-    private var userAgency : String = ""
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -40,8 +39,6 @@ class CommunitySearchFragment : BaseSessionFragment<FragmentCommunitySearchBindi
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-        val ac = activity as MainActivity
-        userAgency = ac.getUserData().agency
         collectionName = arguments?.getString("collection_name").toString()
 
     }

@@ -18,6 +18,7 @@ import com.example.userapp.data.dto.UserModel
 import com.example.userapp.data.model.ReservationEquipment
 import com.example.userapp.databinding.FragmentMainhomeReservationEquipmentBinding
 import com.example.userapp.databinding.FragmentMainhomeReservationEquipmentItemBinding
+import com.example.userapp.restartActivity
 import com.example.userapp.utils.ConfirmUsingDialog
 import com.example.userapp.utils.InputUsingTimeDialog
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,8 +32,7 @@ class ReservationEquipmentFragment :
     override lateinit var viewbinding: FragmentMainhomeReservationEquipmentBinding
     override val viewmodel: ReservationViewModel by viewModels()
     val database = FirebaseFirestore.getInstance()
-    private var ac: MainActivity? = null
-    private lateinit var userInfo : UserModel
+    private var userInfo : UserModel? = null
 
     override fun initViewbinding(
         inflater: LayoutInflater,
@@ -44,8 +44,6 @@ class ReservationEquipmentFragment :
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-        ac = activity as MainActivity
-        ac?.let { userInfo = it.getUserData() }
         viewbinding.equipmentRecyclerView.layoutManager = LinearLayoutManager(context)
         viewbinding.equipmentRecyclerView.adapter = EquipmentAdapter(
             emptyList(),
@@ -66,7 +64,7 @@ class ReservationEquipmentFragment :
 
                                 override fun dialogUsingClickListener() {
                                     if (usingtime > 0) { //사용시간이 0보다 큰 경우만 사용
-                                        viewmodel.add_use(userInfo,it,usingtime)
+                                        userInfo?.let { info ->  viewmodel.add_use(info,it,usingtime) }
                                     }
                                     confirmUsingDialog.dismiss()
                                     dismiss()
@@ -82,12 +80,15 @@ class ReservationEquipmentFragment :
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
+        viewmodel.onSuccessGettingUserInfo.observe(this, { userInfo = it })
+        viewmodel.onSuccessGettingNullUserInfo.observe(this, { restartActivity() })
         viewmodel.EquipmentLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             (viewbinding.equipmentRecyclerView.adapter as EquipmentAdapter).setData(it)
         })
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
+        viewmodel.getUserInfo()
         viewmodel.getEquipmentData()
     }
 }

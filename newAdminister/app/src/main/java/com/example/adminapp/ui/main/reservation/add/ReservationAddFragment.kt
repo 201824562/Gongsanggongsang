@@ -19,6 +19,7 @@ import com.example.adminapp.base.BaseSessionFragment
 import com.example.adminapp.data.model.*
 import com.example.adminapp.databinding.DialogReservationAddCategoryBinding
 import com.example.adminapp.databinding.FragmentReservationAddBinding
+import com.example.adminapp.utils.WrapedDialogAccentTwoButton
 import com.example.adminapp.utils.WrapedDialogBasicTwoButton
 import com.example.adminapp.utils.hideKeyboard
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -120,6 +121,27 @@ class ReservationAddFragment : BaseSessionFragment<FragmentReservationAddBinding
         }
     }
 
+    private fun makeDeleteCategoryDialog(categoryData: CategoryData){
+        val dialog = WrapedDialogAccentTwoButton(requireContext(), "해당 카테고리를 삭제하시겠습니까?",
+            "취소", "확인").apply {
+            clickListener = object : WrapedDialogAccentTwoButton.DialogButtonClickListener{
+                override fun dialogCloseClickListener() { dismiss() }
+                override fun dialogCustomClickListener() {
+                    viewmodel.deleteCategoryItem(categoryData)
+                    dismiss()
+                }
+            }
+        }
+        showDialog(dialog, viewLifecycleOwner)
+        /*AlertDialog.Builder(requireContext(), R.style.MyAlertDialogStyle)
+            .setTitle("해당 카테고리를 삭제하시겠습니까?")
+            .setPositiveButton("확인") { _, _ ->
+                viewmodel.deleteCategoryItem(categoryData) }
+            .setNegativeButton("취소") { dialog, _ ->
+                dialog.dismiss() }
+            .show()*/
+    }
+
     private fun setRecyclerView() {
         categoryItemListRVAdapter = ReservationAddRVAdapter(object : ReservationAddRVAdapter.OnItemClickListener {
             override fun onItemClick(position: Int, categoryData: CategoryData?, askDelete : Boolean) {
@@ -127,15 +149,7 @@ class ReservationAddFragment : BaseSessionFragment<FragmentReservationAddBinding
                 else{
                     when (askDelete){
                         false -> selectedCategoryData = categoryData
-                        true -> {
-                            AlertDialog.Builder(requireContext(), R.style.MyAlertDialogStyle)
-                                .setTitle("해당 카테고리를 삭제하시겠습니까?")
-                                .setPositiveButton("확인") { _, _ ->
-                                    viewmodel.deleteCategoryItem(categoryData!!) }
-                                .setNegativeButton("취소") { dialog, _ ->
-                                    dialog.dismiss() }
-                                .show()
-                        }
+                        true -> { makeDeleteCategoryDialog(categoryData!!) }
                     }
                 }
             }
@@ -315,7 +329,7 @@ class ReservationAddFragment : BaseSessionFragment<FragmentReservationAddBinding
 
     private fun checkDataSave() : Boolean {
         if (selectedCategoryData == null) {
-            showSnackbar("카테고리룰 선택해주세요.")
+            showSnackbar("카테고리를 선택해주세요.")
             return false }
         else if (getEditItemName().isBlank() || getEditItemName().isEmpty()) {
             showSnackbar("물품 이름을 입력해주세요.")

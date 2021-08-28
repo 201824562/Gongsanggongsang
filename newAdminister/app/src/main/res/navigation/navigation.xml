@@ -22,6 +22,19 @@
             app:popEnterAnim="@anim/slide_pop_enter"
             app:popExitAnim="@anim/slide_pop_exit"/>
         <action
+            android:id="@+id/action_mainFragment_to_reservationAddFragment"
+            app:destination="@id/reservationAddFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit">
+            <argument
+                android:name="reservationType"
+                app:argType="com.example.adminapp.data.model.ReservationType"
+                app:nullable="true"
+                android:defaultValue="@null" />
+        </action>
+        <action
             android:id="@+id/action_mainFragment_to_reservationDetailEquipmentFragment"
             app:destination="@id/reservationDetailEquipmentFragment"
             app:enterAnim="@anim/slide_enter"

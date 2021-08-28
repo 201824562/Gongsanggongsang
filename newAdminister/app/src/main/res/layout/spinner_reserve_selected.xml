@@ -11,7 +11,6 @@
     android:singleLine="true"
     android:textSize="12sp"
     android:textColor="@color/black_60"
-    app:drawableEndCompat="@drawable/button_reserve_arrow_down"
     app:drawableTint="@color/black_87"
     app:tint="@color/white"
     tools:text="단위시간을 선택해주세요. (단위: 분)" />

@@ -16,7 +16,7 @@
             android:gravity="center_horizontal"
             android:layout_gravity="center"
             android:textStyle="normal"
-            android:textSize="20sp"
+            android:textSize="24sp"
             android:textColor="#de000000"
             android:lineSpacingExtra="4sp"
             android:text="커뮤니티"
@@ -28,7 +28,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/black_20"/>
+        android:background="@color/light_gray"/>
     <LinearLayout
         android:id="@+id/community_free_button"
         android:clickable="true"

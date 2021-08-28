@@ -6,18 +6,21 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.EditText
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
 import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.data.model.Agency
 import com.example.userapp.databinding.FragmentSignupAgencyBinding
 import com.example.userapp.utils.setupKeyboardHide
 
-//TODO Agency : 얘 손봐야함.
 class SignUpAgencyFragment : BaseSessionFragment<FragmentSignupAgencyBinding, SignUpViewModel>() {
     override lateinit var viewbinding: FragmentSignupAgencyBinding
     override val viewmodel: SignUpViewModel by navGraphViewModels(R.id.signUpGraph)
@@ -28,8 +31,6 @@ class SignUpAgencyFragment : BaseSessionFragment<FragmentSignupAgencyBinding, Si
         return viewbinding.root
     }
 
-
-    private val args: SignUpAgencyFragmentArgs by navArgs()
     private lateinit var searchListAdapter: SearchAgencyListAdapter
     private var query : String = ""
     private var nextBtnAvailable : Boolean = false
@@ -40,6 +41,7 @@ class SignUpAgencyFragment : BaseSessionFragment<FragmentSignupAgencyBinding, Si
         //if (args.emptyStateAgencyFrag) viewmodel.clearAgencyResult(false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun initViewStart(savedInstanceState: Bundle?) {
         setupKeyboardHide(viewbinding.fragmentRootLayout, activity)
         setRecyclerView()
@@ -50,19 +52,26 @@ class SignUpAgencyFragment : BaseSessionFragment<FragmentSignupAgencyBinding, Si
     override fun initDataBinding(savedInstanceState: Bundle?) {
         viewmodel.run {
             agencyDataList.observe(viewLifecycleOwner){
-                if (it.isEmpty()){ showEmptyView() }
+                val agencyList = it
+                searchListAdapter.clearCheckedVariables()
+                if (it.isEmpty()){
+                    clearAgencyVars()
+                    observeAgencyBtnState()
+                    showEmptyView() }
                 else {
-                    searchListAdapter.submitList(it)
-                    showRecyclerView() }
+                    if (selectedAgency != null){
+                        agencyList.forEach { agency -> if (agency.name == selectedAgency!!.name) agency.clicked = true }
+                        searchListAdapter.submitList(agencyList)
+                    }else searchListAdapter.submitList(agencyList)
+                    showRecyclerView()
+                }
             }
             invalidSearchResultEventLiveData.observe(viewLifecycleOwner) { setSearchResultErrorMessage(it) }
             validSearchResultEventLiveData.observe(viewLifecycleOwner){ setSearchResultEmptyMessage() }
             checkAgencyClickedState.observe(viewLifecycleOwner){
                 if (selectedAgency == null) {
                     clickedAgencyBtn = false
-                    makeNextButtonNotAvailable()
-                    viewmodel.loadSearchAgencyResult(null, true)
-                }
+                    makeNextButtonNotAvailable() }
                 else {
                     clickedAgencyBtn = true
                     makeNextButtonAvailable()
@@ -96,30 +105,26 @@ class SignUpAgencyFragment : BaseSessionFragment<FragmentSignupAgencyBinding, Si
 
     private fun setRecyclerView() {
         searchListAdapter = SearchAgencyListAdapter(object : SearchAgencyListAdapter.OnItemClickListener {
-            override fun onItemClick(v: View, position: Int) {
-                viewmodel.selectedAgency = if (searchListAdapter.currentList[position].clicked){
-                    searchListAdapter.currentList[position]
-                } else null
-                Log.e("checking", "${searchListAdapter.currentList[position]}")
-                Log.e("checking", "${viewmodel.selectedAgency}")
-                viewmodel.observeAgencyBtnState()
-            }
-        })
+            override fun onItemClick(v: View, position: Int, agencyInfo: Agency?, checkBox: CheckBox?, checkPos: Int?) {
+                viewmodel.selectedAgency = agencyInfo
+                viewmodel.observeAgencyBtnState() } })
         viewbinding.signupSearchResultRv.adapter = searchListAdapter
         viewbinding.signupSearchResultRv.setHasFixedSize(true)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun setSearchEditTextView(){
         viewbinding.run {
-             // SearchView 입력 글자색과 힌트 색상 변경하기
             signupSearchEdit.setIconifiedByDefault(false)
             signupSearchEdit.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)?.let{ editText ->
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     editText.setHintTextColor(resources.getColor(R.color.black_60, null))
                     editText.setTextColor(resources.getColor(R.color.black, null))
+                    editText.typeface = resources.getFont(R.font.notosan_font_family)
                 } else {
                     editText.setHintTextColor(resources.getColor(R.color.black_60))
                     editText.setTextColor(resources.getColor(R.color.black))
+                    editText.typeface = resources.getFont(R.font.notosan_font_family)
                 }
             }
             signupSearchEdit.setOnQueryTextListener( object : SearchView.OnQueryTextListener {
@@ -139,6 +144,7 @@ class SignUpAgencyFragment : BaseSessionFragment<FragmentSignupAgencyBinding, Si
     private fun submitQuery(query:String){ viewmodel.loadSearchAgencyResult(query, false) }
 
     private fun getCheckedInfo() {
+        if (viewmodel.selectedAgency == null) viewmodel.loadSearchAgencyResult(null, true)
         when (viewmodel.clickedAgencyBtn) {
             true -> makeNextButtonAvailable()
             false -> makeNextButtonNotAvailable()
