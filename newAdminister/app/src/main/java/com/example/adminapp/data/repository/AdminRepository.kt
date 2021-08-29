@@ -15,7 +15,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.Completable
 import io.reactivex.Single
 
-//TODO : 와이파이(서버연결관련) 에러처리
 class AdminRepository(appDatabase: AppDatabase) {
 
     companion object {

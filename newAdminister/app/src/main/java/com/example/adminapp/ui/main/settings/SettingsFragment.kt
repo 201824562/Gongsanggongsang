@@ -14,6 +14,7 @@ import com.example.adminapp.data.model.AdminModel
 import com.example.adminapp.databinding.FragmentSettingsBinding
 import com.example.adminapp.restartActivity
 import com.example.adminapp.utils.WrapedDialogAccentTwoButton
+import com.example.adminapp.utils.WrapedDialogBasicOneButton
 import com.example.adminapp.utils.WrapedDialogBasicTwoButton
 import java.io.IOException
 
@@ -98,11 +99,18 @@ class SettingsFragment : BaseSessionFragment<FragmentSettingsBinding, SettingsVi
             clickListener = object : WrapedDialogAccentTwoButton.DialogButtonClickListener{
                 override fun dialogCloseClickListener() { dismiss() }
                 override fun dialogCustomClickListener() {
-                    viewmodel.deleteAdminInfoFromServerDatabase()
+                    //viewmodel.deleteAdminInfoFromServerDatabase()
+                    askUsDialog()
                     dismiss()
                 }
             }
         }
+        showDialog(dialog, viewLifecycleOwner)
+    }
+    private fun askUsDialog(){
+        val dialog = WrapedDialogBasicOneButton(requireContext(), "관리자님의 탈퇴관련은\n 공생공생에 문의해주세요.")
+            .apply { clickListener = object : WrapedDialogBasicOneButton.DialogButtonClickListener {
+                override fun dialogClickListener() { dismiss() } } }
         showDialog(dialog, viewLifecycleOwner)
     }
 

@@ -167,6 +167,7 @@ class SignUpSecondFragment : BaseSessionFragment<FragmentSignupSecondBinding, Si
         viewbinding.textIdWarning.apply {
             text = message
             visibility = View.VISIBLE
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.pinkish_orange))
         }
     }
     private fun setIdEmptyMessage() {
@@ -189,6 +190,7 @@ class SignUpSecondFragment : BaseSessionFragment<FragmentSignupSecondBinding, Si
         viewbinding.textPwd2Warning.apply {
             text = message
             visibility = View.VISIBLE
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.pinkish_orange))
         }
     }
     private fun setPwd2EmptyMessage() {
@@ -200,6 +202,7 @@ class SignUpSecondFragment : BaseSessionFragment<FragmentSignupSecondBinding, Si
         viewbinding.textNicknameWarning.apply {
             text = message
             visibility = View.VISIBLE
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.pinkish_orange))
         }
     }
     private fun setNicknameEmptyMessage() {

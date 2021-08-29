@@ -23,11 +23,6 @@ class SignInFragment : BaseSessionFragment<FragmentSigninBinding, SignInViewMode
     override val viewmodel: SignInViewModel by viewModels()
     private lateinit var connectionManager : ConnectivityManager
 
-    private var idInfoExist : Boolean = false
-    private var pwdInfoExist : Boolean = false
-    private var nextBtnAvailable : Boolean = false
-
-
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
