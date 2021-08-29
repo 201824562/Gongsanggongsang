@@ -1,16 +1,19 @@
 package com.example.adminapp.ui.signin
 
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.getSystemService
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.adminapp.R
 import com.example.adminapp.base.BaseSessionFragment
 import com.example.adminapp.data.model.AdminStatus
 import com.example.adminapp.databinding.FragmentSigninBinding
+import com.example.adminapp.restartActivity
 import com.example.adminapp.utils.WrapedDialogBasicOneButton
 import com.example.adminapp.utils.hideKeyboard
 import kotlinx.android.parcel.Parcelize
@@ -18,6 +21,7 @@ import kotlinx.android.parcel.Parcelize
 class SignInFragment : BaseSessionFragment<FragmentSigninBinding, SignInViewModel>(){
     override lateinit var viewbinding: FragmentSigninBinding
     override val viewmodel: SignInViewModel by viewModels()
+    private lateinit var connectionManager : ConnectivityManager
 
     private var idInfoExist : Boolean = false
     private var pwdInfoExist : Boolean = false
@@ -34,6 +38,12 @@ class SignInFragment : BaseSessionFragment<FragmentSigninBinding, SignInViewMode
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
+        when (context){
+            null -> {
+                showToast("에러가 발생했습니다.\n앱을 재부팅합니다.")
+                restartActivity()
+            }else ->{ connectionManager = requireContext().getSystemService()!! }
+        }
         viewbinding.fragmentRootLayout.setOnClickListener { hideKeyboard(it) }
     }
 
@@ -60,10 +70,16 @@ class SignInFragment : BaseSessionFragment<FragmentSigninBinding, SignInViewMode
                 findNavController().navigate(SignInFragmentDirections.actionSignInFragmentToSignInFindInfoFragment(FindInfoType.PWD))
             }
             loginBtn.setOnClickListener {
-                if (viewmodel.checkForSignInInfo(getAdminId(), getAdminPwd())) viewmodel.sendSignInInfo(getAdminId(), getAdminPwd()) }
-
+                if (checkServiceState()) {
+                    if (viewmodel.checkForSignInInfo(getAdminId(), getAdminPwd())) viewmodel.sendSignInInfo(getAdminId(), getAdminPwd())
+                } else {
+                    showToast("인터넷 연결이 불안정합니다.\nWifi 상태를 체킹해주세요.")
+                }
+            }
         }
     }
+
+    private fun checkServiceState() : Boolean { return connectionManager.activeNetwork != null }
 
     private fun getAdminId() = viewbinding.editTextId.text.toString().trim()
     private fun getAdminPwd() = viewbinding.editTextPwd.text.toString().trim()

@@ -1,5 +1,6 @@
 package com.example.userapp.ui.signup
 
+import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +12,7 @@ import android.widget.EditText
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
@@ -19,11 +21,13 @@ import com.example.userapp.base.BaseFragment
 import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.data.model.Agency
 import com.example.userapp.databinding.FragmentSignupAgencyBinding
+import com.example.userapp.restartActivity
 import com.example.userapp.utils.setupKeyboardHide
 
 class SignUpAgencyFragment : BaseSessionFragment<FragmentSignupAgencyBinding, SignUpViewModel>() {
     override lateinit var viewbinding: FragmentSignupAgencyBinding
     override val viewmodel: SignUpViewModel by navGraphViewModels(R.id.signUpGraph)
+    private lateinit var connectionManager : ConnectivityManager
 
     override fun initViewbinding(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -43,6 +47,12 @@ class SignUpAgencyFragment : BaseSessionFragment<FragmentSignupAgencyBinding, Si
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun initViewStart(savedInstanceState: Bundle?) {
+        when (context){
+            null -> {
+                showToast("에러가 발생했습니다.\n앱을 재부팅합니다.")
+                restartActivity()
+            }else ->{ connectionManager = requireContext().getSystemService()!! }
+        }
         setupKeyboardHide(viewbinding.fragmentRootLayout, activity)
         setRecyclerView()
         setSearchEditTextView()
@@ -93,7 +103,8 @@ class SignUpAgencyFragment : BaseSessionFragment<FragmentSignupAgencyBinding, Si
         viewmodel.observeAgencyBtnState()
         viewbinding.run {
             signupNextbtn.setOnClickListener {
-                if (nextBtnAvailable) findNavController().navigate(R.id.action_signUpAgencyFragment_to_signUpFirstFragment)
+                if (checkServiceState()){ if (nextBtnAvailable) findNavController().navigate(R.id.action_signUpAgencyFragment_to_signUpFirstFragment)  }
+                else{ showToast("인터넷 연결이 불안정합니다.\nWifi 상태를 체킹해주세요.") }
             }
         }
     }
@@ -103,6 +114,7 @@ class SignUpAgencyFragment : BaseSessionFragment<FragmentSignupAgencyBinding, Si
         clearVariables()
     }
 
+    private fun checkServiceState() : Boolean { return connectionManager.activeNetwork != null }
     private fun setRecyclerView() {
         searchListAdapter = SearchAgencyListAdapter(object : SearchAgencyListAdapter.OnItemClickListener {
             override fun onItemClick(v: View, position: Int, agencyInfo: Agency?, checkBox: CheckBox?, checkPos: Int?) {

@@ -1,10 +1,13 @@
 package com.example.userapp.ui.signin
 
+import android.location.LocationManager
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.getSystemService
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -13,6 +16,7 @@ import com.example.userapp.R
 import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.data.model.UserStatus
 import com.example.userapp.databinding.FragmentSigninBinding
+import com.example.userapp.restartActivity
 import com.example.userapp.utils.WrapedDialogBasicOneButton
 import com.example.userapp.utils.hideKeyboard
 import kotlinx.android.parcel.Parcelize
@@ -20,6 +24,7 @@ import kotlinx.android.parcel.Parcelize
 class SignInFragment : BaseSessionFragment<FragmentSigninBinding, SignInViewModel>() {
     override lateinit var viewbinding: FragmentSigninBinding
     override val viewmodel: SignInViewModel by navGraphViewModels(R.id.signInGraph)
+    private lateinit var connectionManager : ConnectivityManager
 
     private var idInfoExist : Boolean = false
     private var pwdInfoExist : Boolean = false
@@ -32,6 +37,12 @@ class SignInFragment : BaseSessionFragment<FragmentSigninBinding, SignInViewMode
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
+        when (context){
+            null -> {
+                showToast("에러가 발생했습니다.\n앱을 재부팅합니다.")
+                restartActivity()
+            }else ->{ connectionManager = requireContext().getSystemService()!! }
+        }
         viewbinding.fragmentContent.setOnClickListener { hideKeyboard(it) }
     }
 
@@ -70,12 +81,14 @@ class SignInFragment : BaseSessionFragment<FragmentSigninBinding, SignInViewMode
                 else makeNextButtonNotAvailable()
             }
             loginBtn.setOnClickListener {
-                if (nextBtnAvailable) {
-                    viewmodel.sendSignInInfo(getUserId(), getUserPwd())
-                }
+                if (checkServiceState()){
+                    if (nextBtnAvailable) { viewmodel.sendSignInInfo(getUserId(), getUserPwd()) }
+                }else{ showToast("인터넷 연결이 불안정합니다.\nWifi 상태를 체킹해주세요.") }
             }
         }
     }
+
+    private fun checkServiceState() : Boolean { return connectionManager.activeNetwork != null }
 
     private fun getUserId() = viewbinding.editTextId.text.toString().trim()
     private fun getUserPwd() = viewbinding.editTextPwd.text.toString().trim()

@@ -1,10 +1,12 @@
 package com.example.adminapp.ui.signin
 
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.getSystemService
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -12,6 +14,7 @@ import androidx.navigation.navGraphViewModels
 import com.example.adminapp.R
 import com.example.adminapp.base.BaseSessionFragment
 import com.example.adminapp.databinding.FragmentSigninFindInfoBinding
+import com.example.adminapp.restartActivity
 import com.example.adminapp.utils.WrapedDialogBasicOneButton
 import com.example.adminapp.utils.hideKeyboard
 
@@ -20,6 +23,7 @@ class SignInFindInfoFragment : BaseSessionFragment<FragmentSigninFindInfoBinding
     override lateinit var viewbinding: FragmentSigninFindInfoBinding
     override val viewmodel: SignInViewModel by navGraphViewModels(R.id.signInGraph)
     val args: SignInFindInfoFragmentArgs by navArgs()
+    private lateinit var connectionManager : ConnectivityManager
     private var type : FindInfoType = FindInfoType.ID
 
     override fun initViewbinding(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -31,6 +35,12 @@ class SignInFindInfoFragment : BaseSessionFragment<FragmentSigninFindInfoBinding
         else viewmodel.run { type = findInfoType }
     }
     override fun initViewStart(savedInstanceState: Bundle?) {
+        when (context){
+            null -> {
+                showToast("에러가 발생했습니다.\n앱을 재부팅합니다.")
+                restartActivity()
+            }else ->{ connectionManager = requireContext().getSystemService()!! }
+        }
         viewbinding.fragmentContent.setOnClickListener { hideKeyboard(it) }
         setArgVar()
     }
@@ -117,11 +127,14 @@ class SignInFindInfoFragment : BaseSessionFragment<FragmentSigninFindInfoBinding
                 }
             }
             findInfoBtn.setOnClickListener {
-                viewmodel.checkForFindInfo(getFindInfoType(), getUserName(), getUserBirthday(),
-                    getUserSmsInfo(), getUserName2(), getUserId())
+                if (checkServiceState()){ viewmodel.checkForFindInfo(getFindInfoType(), getUserName(), getUserBirthday(),
+                    getUserSmsInfo(), getUserName2(), getUserId())  }
+                else{ showToast("인터넷 연결이 불안정합니다.\nWifi 상태를 체킹해주세요.") }
             }
         }
     }
+
+    private fun checkServiceState() : Boolean { return connectionManager.activeNetwork != null }
 
     private fun setPwdView(){
         viewbinding.run {

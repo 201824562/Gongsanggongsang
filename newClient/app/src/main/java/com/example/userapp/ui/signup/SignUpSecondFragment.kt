@@ -2,6 +2,7 @@ package com.example.userapp.ui.signup
 
 import android.R.attr.typeface
 import android.graphics.Typeface
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
@@ -12,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import androidx.core.widget.addTextChangedListener
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
@@ -19,6 +21,7 @@ import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
 import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.databinding.FragmentSignupSecondBinding
+import com.example.userapp.restartActivity
 import com.example.userapp.utils.hideKeyboard
 
 
@@ -26,6 +29,7 @@ class SignUpSecondFragment : BaseSessionFragment<FragmentSignupSecondBinding, Si
 
     override lateinit var viewbinding: FragmentSignupSecondBinding
     override val viewmodel: SignUpViewModel by navGraphViewModels(R.id.signUpGraph)
+    private lateinit var connectionManager : ConnectivityManager
 
     override fun initViewbinding(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewbinding = FragmentSignupSecondBinding.inflate(inflater, container, false)
@@ -33,6 +37,12 @@ class SignUpSecondFragment : BaseSessionFragment<FragmentSignupSecondBinding, Si
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
+        when (context){
+            null -> {
+                showToast("에러가 발생했습니다.\n앱을 재부팅합니다.")
+                restartActivity()
+            }else ->{ connectionManager = requireContext().getSystemService()!! }
+        }
         viewbinding.fragmentContent.setOnClickListener { hideKeyboard(it) }
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             viewmodel.clearSecondFragmentVar()
@@ -130,12 +140,22 @@ class SignUpSecondFragment : BaseSessionFragment<FragmentSignupSecondBinding, Si
                 else editTextPwd2.inputType = 0x00000081
             }
 
-            checkIdBtn.setOnClickListener { if(viewmodel.checkForUserId(getUserId())) viewmodel.checkIdFromServer(getUserId()) }
-            checkNicknameBtn.setOnClickListener { if(viewmodel.checkForUserNickname(getUserNickname())) viewmodel.checkNicknameFromServer(getUserNickname()) }
-            signupBtn.setOnClickListener { viewmodel.checkForSendSignUpInfo(getUserId(), getUserPwd(), getUserPwd2(), getUserNickname()) }
+            checkIdBtn.setOnClickListener {
+                if (checkServiceState()){ if(viewmodel.checkForUserId(getUserId())) viewmodel.checkIdFromServer(getUserId())  }
+                else{ showToast("인터넷 연결이 불안정합니다.\nWifi 상태를 체킹해주세요.") }
+            }
+            checkNicknameBtn.setOnClickListener {
+                if (checkServiceState()){ if(viewmodel.checkForUserNickname(getUserNickname())) viewmodel.checkNicknameFromServer(getUserNickname()) }
+                else{ showToast("인터넷 연결이 불안정합니다.\nWifi 상태를 체킹해주세요.") }
+            }
+            signupBtn.setOnClickListener {
+                if (checkServiceState()){ viewmodel.checkForSendSignUpInfo(getUserId(), getUserPwd(), getUserPwd2(), getUserNickname()) }
+                else{ showToast("인터넷 연결이 불안정합니다.\nWifi 상태를 체킹해주세요.") }
+            }
         }
     }
 
+    private fun checkServiceState() : Boolean { return connectionManager.activeNetwork != null }
     private fun getUserId() = viewbinding.editTextId.text.toString().trim()
     private fun getUserPwd() = viewbinding.editTextPwd.text.toString().trim()
     private fun getUserPwd2() = viewbinding.editTextPwd2.text.toString().trim()
