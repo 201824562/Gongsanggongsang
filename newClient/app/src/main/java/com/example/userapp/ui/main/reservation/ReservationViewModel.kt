@@ -2,19 +2,12 @@ package com.example.userapp.ui.main.reservation
 
 import android.annotation.SuppressLint
 import android.app.*
-import android.content.Context
 import android.os.Build
 import android.os.CountDownTimer
-import android.provider.Settings.Global.getString
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.userapp.MainActivity
-import com.example.userapp.R
 import com.example.userapp.base.BaseSessionViewModel
 import com.example.userapp.data.dto.UserModel
 import com.example.userapp.data.entity.DayTimeSlot
@@ -26,13 +19,10 @@ import com.example.userapp.ui.main.reservation.CategoryResources.Companion.makeD
 import com.example.userapp.ui.main.reservation.CategoryResources.Companion.makeIconStringToDrawableID
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.*
-import okhttp3.internal.notify
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 class ReservationViewModel(application: Application) : BaseSessionViewModel(application) {
     init {
@@ -42,6 +32,7 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
     val database = FirebaseFirestore.getInstance()
 
     val UseEquipmentLiveData = MutableLiveData<List<ReservationUseEquipment>>()
+    val UseFacilityLiveData = MutableLiveData<List<ReservationUseEquipment>>()
     val EquipmentLiveData = MutableLiveData<List<ReservationEquipment>>()
     val FacilityLiveData = MutableLiveData<List<ReservationFacility>>()
     val FacilityTimeSlotLiveData = MutableLiveData<List<ReservationFacilityTimeSlot>>()
@@ -51,6 +42,7 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
 
 
     private val UseEquipmentData = arrayListOf<ReservationUseEquipment>()
+    private val UseFacilityData = arrayListOf<ReservationUseEquipment>()
     private val EquipmentData = arrayListOf<ReservationEquipment>()
     private val FacilityData = arrayListOf<ReservationFacility>()
     private val FacilityTimeSlotData = arrayListOf<ReservationFacilityTimeSlot>()
@@ -154,16 +146,6 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
                                 null,
                                 remain_time
                             ))
-
-//                            Log.e("ReservationUseEquipment",ReservationUseEquipment(
-//                                document.id,
-//                                tmpId,
-//                                document.get("startTime") as String,
-//                                document.get("endTime") as String,
-//                                remain_time,
-//                                makeIconStringToDrawableID(document.get("icon") as String),
-//                                coroutine
-//                            ).toString())
                         }
                     }
                 }
@@ -172,7 +154,6 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun getUseFacilityData() {
-        lateinit var tmpId: String
         var remainMilli: Long = 0L
         var remain_time: Long = 0L
 
@@ -182,9 +163,10 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
                 if (e != null) {
                     return@addSnapshotListener
                 }
-                UseEquipmentData.clear()
+                UseFacilityData.clear()
                 for (document in value!!) {
-                    if((document.get("userId") as String == authToken)){
+                    if((document.get("userId") as String == authToken && (document.get("reservationType") as String) == "예약 사용")){
+
                         Log.e("test1",document.id)
                         val startTimeValid = (ChronoUnit.SECONDS.between(
                             LocalDateTime.now(),
@@ -194,8 +176,10 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
                             LocalDateTime.now(),
                             LocalDateTime.parse(document.get("endTime") as String)
                         ))
+                        Log.e("test2",(document.get("reservationState") as String))
 
-                        if(startTimeValid < 0L && endTimeValid >= 0L){
+                        if(startTimeValid < 0L && endTimeValid >= 0L ){
+                            Log.e("test2",document.id)
 
                             remainMilli = (ChronoUnit.MILLIS.between(
                                 LocalDateTime.now(),
@@ -213,10 +197,13 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
                                 null,
                                 remain_time
                             ))
+                            database.collection("한국장학재단_부산").document("RESERVATION")
+                                .collection("LOG")
+                                .document(document.get("documentId") as String).update("reservationState", "사용중")
                         }
                     }
                 }
-                UseEquipmentLiveData.value = UseEquipmentData
+                UseFacilityLiveData.value = UseFacilityData
             }
     }
 
@@ -277,8 +264,12 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
                             LocalDateTime.parse(document.get("startTime") as String)
                         ))
 
-                        if(valid >= 0L){
+                        if(valid >= 0L && document.get("reservationState") as String == "예약중" ){
                             Log.e("test2",document.get("startTime") as String)
+                            val sdf = SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS", Locale.KOREA)
+                            var calendar = Calendar.getInstance()
+                            val date = sdf.parse(document.get("startTime") as String)
+                            calendar.setTime(date)
 
                             FacilityReserveData.add(
                                 ReservationReserveFacility(
@@ -286,7 +277,8 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
                                     makeIconStringToDrawableID(document.get("icon") as String),
                                     document.get("userId") as String,
                                     document.get("startTime") as String,
-                                    document.get("endTime") as String
+                                    document.get("endTime") as String,
+                                    weekdayInttoString(calendar.get(Calendar.DAY_OF_WEEK))
                                 )
                             )
                         }
@@ -330,6 +322,8 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
                                     },
                                     element["index"] as Long,
                                     element["user"] as String
+//                                    ,
+//                                    weekdayStringToInt(document.id)
                                 )
                                 tmpList.add(tmp)
                             }
@@ -426,11 +420,11 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
         //LOG UPDATE
         database.collection("한국장학재단_부산").document("RESERVATION")
             .collection("LOG")
-            .document(ReservationUseEquipment.document_name + "_" + ReservationUseEquipment.startTime)
+            .document(ReservationUseEquipment.startTime + "_" + ReservationUseEquipment.document_name)
             .update("reservationState", "사용 완료")
         database.collection("한국장학재단_부산").document("RESERVATION")
             .collection("LOG")
-            .document(ReservationUseEquipment.document_name + "_" + ReservationUseEquipment.startTime)
+            .document(ReservationUseEquipment.startTime + "_" + ReservationUseEquipment.document_name)
             .update("endTime", LocalDateTime.now().toString())
 
         //EQUIPMENT UPDATE
@@ -450,12 +444,6 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
             .collection("EQUIPMENT").document(ReservationUseEquipment.document_name)
             .update(map5)
 
-        database.collection("한국장학재단_부산").document("RESERVATION")
-            .collection("LOG")
-            .document(ReservationUseEquipment.startTime + "_" + ReservationUseEquipment.document_name).update("reservationState", "사용완료")
-            .addOnSuccessListener {  Log.e("checking", "Succeed updating RESERVATION_LOG OF FACILITY") }
-            .addOnFailureListener { Log.e("checking", "Error updating RESERVATION_LOG OF FACILITY") }
-
         UseEquipmentLiveData.value = UseEquipmentData
 
     }
@@ -463,7 +451,7 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
     fun add_select_time_slot(dayTimeSlot: DayTimeSlot, maxSlot: Long): Boolean {
         if (FacilitySelectedTimeSlotData.day_time_slot_list.isEmpty()) {
             dayTimeSlot.buttonSelected = true
-            dayTimeSlot.user = "kijung" //룸에서 데이터 가져오기
+            dayTimeSlot.user = authToken
             FacilitySelectedTimeSlotData.day_time_slot_list.add(dayTimeSlot)
             FacilitySelectedTimeSlotLiveData.value = FacilitySelectedTimeSlotData
             Log.e(
@@ -476,7 +464,7 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
                 for (timeslot in FacilitySelectedTimeSlotData.day_time_slot_list) {
                     if (timeslot.index - dayTimeSlot.index == 1L || timeslot.index - dayTimeSlot.index == -1L) {
                         dayTimeSlot.buttonSelected = true
-                        dayTimeSlot.user = "kijung" //룸에서 데이터 가져오기
+                        dayTimeSlot.user = authToken
                         FacilitySelectedTimeSlotData.day_time_slot_list.add(dayTimeSlot)
                         FacilitySelectedTimeSlotData.day_time_slot_list.sortBy { it.index }
                         FacilitySelectedTimeSlotLiveData.value = FacilitySelectedTimeSlotData
@@ -619,6 +607,88 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
     }
 
     fun cancel_reserve(reservationReserveFacility: ReservationReserveFacility) {
+        Log.e("reservation_weekday",reservationReserveFacility.weekday)
+        database.collection("한국장학재단_부산").document("RESERVATION")
+            .collection("LOG")
+            .document(reservationReserveFacility.startTime + "_" + reservationReserveFacility.document_name)
+            .update("reservationState", "예약 취소")
+
+//        var tmpList = mutableListOf<DayTimeSlotForFirebaseUpdate>()
+//        lateinit var tmp: DayTimeSlotForFirebaseUpdate
+//        var startCal: Calendar = Calendar.getInstance()
+//        var endCal: Calendar = Calendar.getInstance()
+//        val sdf = SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS", Locale.KOREA)
+//
+//        database.collection("한국장학재단_부산").document("RESERVATION")
+//            .collection("FACILITY")
+//            .addSnapshotListener { value, e ->
+//                if (e != null) {
+//                    return@addSnapshotListener
+//                }
+//                for (document in value!!) {
+//                    if (document.id == reservationReserveFacility.document_name) {
+//                        (document.get(reservationReserveFacility.weekday) as ArrayList<HashMap<String, DayTimeSlot>>).let {
+//                            for (element in it) {
+//                                tmp = DayTimeSlotForFirebaseUpdate(
+//                                    element["buttonSelected"] as Boolean,
+//                                    (element["data"] as HashMap<String, Long>)["hour"]?.let { it1 ->
+//                                        (element["data"] as HashMap<String, Long>)["min"]?.let { it2 ->
+//                                            ReservationTimeData(
+//                                                it1, it2
+//                                            )
+//                                        }
+//                                    },
+//                                    element["index"] as Long,
+//                                    element["user"] as String
+//                                )
+//                                tmpList.add(tmp)
+//                            }
+//                        }
+//                        Log.e("tmpList", tmpList.toString())
+////                        FacilityDayInfoData = ReservationFacilityDayInfo(
+////                            document_name,
+////                            icon,
+////                            interval_time,
+////                            weekday,
+////                            tmpList
+////                        )
+//                    }
+//                    startCal.setTime(sdf.parse(reservationReserveFacility.startTime))
+//                    endCal.setTime(sdf.parse(reservationReserveFacility.endTime))
+//
+//                    for(element in tmpList){
+//                        var tmpCal: Calendar = Calendar.getInstance()
+//                        tmpCal.set(Calendar.DAY_OF_WEEK, weekdayStringToInt(reservationReserveFacility.weekday))
+//                        tmpCal.set(
+//                            Calendar.HOUR_OF_DAY,
+//                            Math.toIntExact(element.data?.hour!!)
+//                        )
+//                        tmpCal.set(
+//                            Calendar.MINUTE,
+//                            Math.toIntExact(element.data?.min!!)
+//                        )
+//
+//                        if(tmpCal.compareTo(startCal) >=0 && tmpCal.compareTo(endCal) < 0){
+//                            element.user = "Nope"
+//                        }
+//                    }
+//
+//
+//                }
+//
+//            }
+//        Log.e("modified tmpList", tmpList.toString())
+//        database.collection("한국장학재단_부산").document("RESERVATION")
+//            .collection("FACILITY").document(reservationReserveFacility.document_name)
+//            .update(reservationReserveFacility.weekday, tmpList)
+//
+
+
+
+
+
+
+
 //        var map1 = mutableMapOf<String, Any>()
 //
 //        map1["name"] = "Nope" // name을 맨마지막으로 지우지 않으면 nullpointerexception 발생
@@ -642,6 +712,19 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
             "saturday" -> 7
             "sunday" -> 1
             else -> 1
+        }
+    }
+
+    fun weekdayInttoString(weekdayInt: Int): String {
+        return when (weekdayInt) {
+            2->"monday"
+            3->"tuesday"
+            4->"wednesday"
+            5->"thursday"
+            6->"friday"
+            7->"saturday"
+            1->"sunday"
+            else -> "sunday"
         }
     }
 
@@ -684,6 +767,7 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
                     reservationUseEquipment.remain_time = (millisUntilFinished / 60000)
                     Log.e("remain_time", reservationUseEquipment.remain_time.toString())
                     UseEquipmentLiveData.value = UseEquipmentData
+                    UseFacilityLiveData.value = UseFacilityData
                 }
 
                 @RequiresApi(Build.VERSION_CODES.O)
@@ -691,29 +775,7 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
                     end_use(reservationUseEquipment)
                     }
             }.start()
-
-        UseEquipmentData.add(
-            reservationUseEquipment
-        )
+        if(reservationUseEquipment.reservationType == "바로 사용") UseEquipmentData.add(reservationUseEquipment)
+        else UseFacilityData.add(reservationUseEquipment)
     }
 }
-
-
-//        //시설 예약 데이터에 추가
-//        database.collection("한국장학재단_부산").document("RESERVATION")
-//            .collection("FACILITY_LOG").document(FacilitySelectedTimeSlotData.document_name)
-//            .update(FacilitySelectedTimeSlotData)
-
-//        ReservationReserveFacility(
-//            FacilitySelectedTimeSlotData.first().document_name,
-//            "kijung",
-//            0L,
-//            0L,
-//            FacilitySelectedTimeSlotData.first().collection_name,
-//            tempList
-//        ).also{
-//            FacilityReserveData.add(it)
-//            database.collection("COMMUNAL_Log")
-//                .add(it)
-//        }
-//

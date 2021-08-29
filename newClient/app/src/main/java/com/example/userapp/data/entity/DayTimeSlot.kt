@@ -5,6 +5,7 @@ data class DayTimeSlot(
     var data: ReservationTimeData?,
     var index: Long,
     var user: String
+//    var weekday: Int
 ){
     fun modifyBtnSlctFalse(dayTimeSlot: DayTimeSlot){
         dayTimeSlot.buttonSelected = false

@@ -113,22 +113,56 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
         viewbinding.message2Textview.text = "최대 예약 가능한 시간:" + args.myArg.max_time.toString()+"분"
 
         var cal :Calendar = Calendar.getInstance()
+        var cal2 :Calendar = Calendar.getInstance()
         val dateFmt :SimpleDateFormat = SimpleDateFormat("dd")
 
-        cal.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY)
-        viewbinding.daySunTextview.text = dateFmt.format(cal.time)
+        if(cal2.get(Calendar.DAY_OF_WEEK) == 1) cal.add(Calendar.DATE, -1)
+        else cal2.add(Calendar.DATE, 7)
+
+        cal2.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY)
+        viewbinding.daySunTextview.text = dateFmt.format(cal2.time)
+
         cal.set(Calendar.DAY_OF_WEEK,Calendar.MONDAY)
         viewbinding.dayMonTextview.text = dateFmt.format(cal.time)
+        if(Calendar.getInstance().compareTo(cal) == 1) {
+            viewbinding.monView.isEnabled = false
+            viewbinding.dayMonTextview.isEnabled = false
+        }
+
         cal.set(Calendar.DAY_OF_WEEK,Calendar.TUESDAY)
         viewbinding.dayTueTextview.text = dateFmt.format(cal.time)
+        if(Calendar.getInstance().compareTo(cal) == 1) {
+            viewbinding.tueView.isEnabled = false
+            viewbinding.dayTueTextview.isEnabled = false
+        }
+
         cal.set(Calendar.DAY_OF_WEEK,Calendar.WEDNESDAY)
         viewbinding.dayWedTextview.text = dateFmt.format(cal.time)
+        if(Calendar.getInstance().compareTo(cal) == 1) {
+            viewbinding.wedView.isEnabled = false
+            viewbinding.dayWedTextview.isEnabled = false
+        }
+
         cal.set(Calendar.DAY_OF_WEEK,Calendar.THURSDAY)
         viewbinding.dayThuTextview.text = dateFmt.format(cal.time)
+        if(Calendar.getInstance().compareTo(cal) == 1) {
+            viewbinding.thuView.isEnabled = false
+            viewbinding.dayThuTextview.isEnabled = false
+        }
+
         cal.set(Calendar.DAY_OF_WEEK,Calendar.FRIDAY)
         viewbinding.dayFriTextview.text = dateFmt.format(cal.time)
+        if(Calendar.getInstance().compareTo(cal) == 1) {
+            viewbinding.friView.isEnabled = false
+            viewbinding.dayFriTextview.isEnabled = false
+        }
+
         cal.set(Calendar.DAY_OF_WEEK,Calendar.SATURDAY)
         viewbinding.daySatTextview.text = dateFmt.format(cal.time)
+        if(Calendar.getInstance().compareTo(cal) == 1) {
+            viewbinding.satView.isEnabled = false
+            viewbinding.daySatTextview.isEnabled = false
+        }
 
         viewbinding.monView.setOnClickListener(View.OnClickListener {
             viewmodel.getFacilityTimeSlotData(args.myArg.document_name,"monday",args.myArg.category_icon,args.myArg.interval_time)
@@ -227,7 +261,6 @@ class FacilitySelectAdapter(
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(viewHolder: FacilitySelectViewHolder, position: Int) {
-
         val data = dataSet[position]
         Log.e("data", data.data.toString())
         Log.e("data position", position.toString())
@@ -237,6 +270,13 @@ class FacilitySelectAdapter(
     //버튼 상태 그리기
         viewHolder.viewbinding.timeSlotBtn.isSelected = data.user.toString() != "Nope"
         viewHolder.viewbinding.timeSlotBtn.isEnabled = data.user.toString() == "Nope"
+
+//        if(data.weekday == Calendar.getInstance().get(Calendar.DAY_OF_WEEK)){
+//            if((data.data?.hour?.toInt())?.times(60)?.plus((data.data?.min?.toInt()!!))!! < Calendar.getInstance().get(Calendar.HOUR)*60 + Calendar.getInstance().get(Calendar.MINUTE)){
+//                viewHolder.viewbinding.timeSlotBtn.isEnabled = false
+//            }
+//        }
+
         //사용하기 버튼
         viewHolder.viewbinding.timeSlotBtn.setOnClickListener() {
             onClickUsingIcon.invoke(data)
