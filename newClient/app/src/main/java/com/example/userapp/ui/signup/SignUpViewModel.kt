@@ -287,11 +287,11 @@ class SignUpViewModel(application: Application) : BaseSessionViewModel(applicati
         return if (userNickname.isBlank() || userNickname.isEmpty()) {
             _invalidUserNicknameEventLiveData.postValue("닉네임을 입력해주세요.")
             false
-        }else if (userNickname.length < 5) {
-            _invalidUserNicknameEventLiveData.postValue("닉네임은 다섯글자 이상이어야 합니다.")
+        }else if (userNickname.length < 2) {
+            _invalidUserNicknameEventLiveData.postValue("닉네임은 두글자 이상이어야 합니다.")
             false
         } else if (!RegularExpressionUtils.validCheck(RegularExpressionUtils.Regex.NICKNAME, userNickname)) {
-            _invalidUserNicknameEventLiveData.postValue("닉네임은 10글자 이내의 한글만 입력가능합니다.")
+            _invalidUserNicknameEventLiveData.postValue("닉네임은 8글자 이내의 한글만 입력가능합니다.")
             false
         } else {
             _validUserNicknameEventLiveData.call()

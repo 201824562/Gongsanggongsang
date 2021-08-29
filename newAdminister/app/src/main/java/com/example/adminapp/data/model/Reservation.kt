@@ -59,7 +59,8 @@ data class ReservationEquipmentSettingData(val icon : Int, val name : String, va
 
 data class  ReservationEquipmentSettingData2(val icon : String, val name : String, val maxTime : Long)
 
-data class ReservationFacilitySettingData(val icon : Int, val name : String, val intervalTime: Long, val maxTime : Long, val unableTimeList : List<ReservationUnableTimeItem>, val usable : Boolean = true){
+@Parcelize
+data class ReservationFacilitySettingData(val icon : Int, val name : String, val intervalTime: Long, val maxTime : Long, val unableTimeList : @RawValue List<ReservationUnableTimeItem>, val usable : Boolean = true) : Parcelable {
     fun getIntervalTimeView() : String = intervalTime.toString() + "분"
     fun getMaxTimeView() : String = maxTime.toString() + "분"
     fun getNewThis() : ReservationFacilitySettingData2 {

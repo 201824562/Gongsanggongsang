@@ -169,12 +169,12 @@
             <action
                 android:id="@+id/action_signUpSecondFragment_to_signUpWaitFragment"
                 app:destination="@id/signUpWaitFragment"
-                app:popUpTo="@id/signUpSecondFragment"
-                app:popUpToInclusive="true"
                 app:enterAnim="@anim/slide_enter"
                 app:exitAnim="@anim/slide_exit"
                 app:popEnterAnim="@anim/slide_pop_enter"
-                app:popExitAnim="@anim/slide_pop_exit"/>
+                app:popExitAnim="@anim/slide_pop_exit"
+                app:popUpTo="@id/signUpGraph"
+                app:popUpToInclusive="true" />
             <action
                 android:id="@+id/action_signUpSecondFragment_pop"
                 app:popUpTo="@id/signUpSecondFragment"
@@ -190,7 +190,7 @@
             android:label="SignUpWaitFragment" >
             <action
                 android:id="@+id/action_signUpWaitFragment_pop"
-                app:popUpTo="@id/signUpGraph"
+                app:popUpTo="@id/signUpWaitFragment"
                 app:popUpToInclusive="true" />
         </fragment>
     </navigation>
