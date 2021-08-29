@@ -5,6 +5,7 @@ import android.os.CountDownTimer
 data class ReservationUseEquipment(
     val document_name: String,
     var user: String,
+    var reservationType: String,
     var startTime: String,
     var endTime: String,
     var remainMilli: Long = 0,

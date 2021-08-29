@@ -55,13 +55,22 @@
                 app:layout_constraintTop_toBottomOf="@+id/equipment_using_textview"
                 tools:listitem="@layout/fragment_mainhome_reservation_current_using_item" />
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/facility_using_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:layout_marginHorizontal="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/equipment_using_recyclerView"
+                tools:listitem="@layout/fragment_mainhome_reservation_current_using_facility_item" />
+
             <View
                 android:id="@+id/line1"
                 android:background="@color/black_5"
                 android:layout_width="match_parent"
                 android:layout_height="8dp"
-                android:layout_marginTop="4dp"
-                app:layout_constraintTop_toBottomOf="@id/equipment_using_recyclerView"
+                app:layout_constraintTop_toBottomOf="@id/facility_using_recyclerView"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
