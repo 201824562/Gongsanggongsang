@@ -44,7 +44,7 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
     private lateinit var commentRecyclerAdapter: CommunityCommentRecyclerAdapter
     private var postCommentsArray : ArrayList<PostCommentDataClass> = arrayListOf()
 
-    private var localUserName = ""
+    private var localUserName = "관리자"
     private var agency = ""
     private var token = ""
     override fun initViewbinding(
@@ -61,6 +61,7 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
     override fun initViewStart(savedInstanceState: Bundle?) {
         //val ac = activity as MainActivity
         //token = ac.token
+        initPostView()
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
@@ -222,7 +223,7 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                     when(isPostOrComment){
                         "isPost" -> viewmodel.deletePostData(collectionName, documentName).observe(viewLifecycleOwner){
                             if(it){
-                                findNavController().navigate(R.id.action_community_post_pop, bundle)
+                                findNavController().navigate(R.id.action_community_post_pop)
                             }
                         }
                         "isComment" -> viewmodel.deletePostCommentData(collectionName, documentName, commentData).observe(viewLifecycleOwner){

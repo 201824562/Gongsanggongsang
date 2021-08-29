@@ -150,7 +150,6 @@
                     android:textSize="12sp"
                     android:textColor="#7f000000"
                     android:lineSpacingExtra="6sp"
-                    android:visibility="gone"
                     android:gravity="right|center"/>
             </LinearLayout>
 
@@ -252,6 +251,7 @@
             android:textColorHint="#7f000000"
             android:textColor="@color/black"
             android:textStyle="normal"
+            android:background="@drawable/edittext_round"
             android:textSize="14sp"
             android:lineSpacingExtra="6sp"
             android:paddingLeft="10dp"

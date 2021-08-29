@@ -44,7 +44,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
     private lateinit var commentRecyclerAdapter: CommunityCommentRecyclerAdapter
     private var postCommentsArray : ArrayList<PostCommentDataClass> = arrayListOf()
 
-    private var localUserName = ""
+    private var localUserName = "관리자"
     private var agency = ""
     private var token = ""
     override fun initViewbinding(
@@ -61,6 +61,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
     override fun initViewStart(savedInstanceState: Bundle?) {
         //val ac = activity as MainActivity
         //token = ac.token
+        initPostView()
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {

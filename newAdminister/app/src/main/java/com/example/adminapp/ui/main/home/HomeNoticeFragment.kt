@@ -22,7 +22,7 @@ class HomeNoticeFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeBinding
     override val viewmodel: CommunityViewModel by viewModels()
     private lateinit var noticePreviewRecyclerAdapter: CommunityPreviewRecyclerAdapter
     private var noticePreviewItem : ArrayList<PostDataInfo> = arrayListOf()
-    private lateinit var collectionNameBundle : Bundle
+    private var collectionNameBundle : Bundle = bundleOf("collection_name" to "notice")
 
     override fun initViewbinding(
         inflater: LayoutInflater,
@@ -55,6 +55,7 @@ class HomeNoticeFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeBinding
             previewSearchButton.setOnClickListener {
                 findNavController().navigate(R.id.action_communityNotice_to_communitySearch, collectionNameBundle)
             }
+            previewWriteButton.setOnClickListener { findNavController().navigate(R.id.action_noticeFragment_to_noticeWriteFragment) }
             mainhomeNoticeShowAllButton.setOnClickListener {
                 viewmodel.getNoticePostData().observe(viewLifecycleOwner){
                     noticePreviewItem = it

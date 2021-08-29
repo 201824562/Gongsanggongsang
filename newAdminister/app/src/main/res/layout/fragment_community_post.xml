@@ -136,7 +136,6 @@
                     android:textSize="12sp"
                     android:textColor="#7f000000"
                     android:lineSpacingExtra="6sp"
-                    android:visibility="gone"
                     android:gravity="right|center"/>
             </LinearLayout>
 
@@ -250,6 +249,7 @@
             android:paddingLeft="10dp"
             android:lineSpacingExtra="6sp"
             android:layout_marginRight="2dp"
+            android:background="@drawable/edittext_round"
             android:layout_weight="1" />
         <ImageButton
             android:id="@+id/comments_register"

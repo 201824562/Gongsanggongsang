@@ -42,7 +42,7 @@ class CommunityWriteFragment : BaseSessionFragment<FragmentCommunityWriteBinding
     private val bitmapArray : ArrayList<Bitmap> = arrayListOf()
     private val uriArray : ArrayList<Uri> = arrayListOf()
     private lateinit var userAgency : String
-    lateinit var userName : String
+    var userName : String = "관리자"
 
     var postPhotoUri : ArrayList<String> = arrayListOf()
     override fun initViewbinding(

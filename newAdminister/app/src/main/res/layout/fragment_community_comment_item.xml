@@ -99,7 +99,6 @@
                 android:textStyle="normal"
                 android:textSize="12sp"
                 android:textColor="#7f000000"
-                android:visibility="gone"
                 android:lineSpacingExtra="6sp"/>
         </LinearLayout>
     </LinearLayout>

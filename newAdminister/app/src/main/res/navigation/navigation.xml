@@ -85,7 +85,7 @@
         android:name="com.example.adminapp.ui.main.home.HomeNoticeFragment">
         <action
             android:id="@+id/action_noticeFragment_to_noticeWriteFragment"
-            app:destination="@+id/mainhomeNoticeWriteFragment"/>
+            app:destination="@+id/homeNoticeWriteFragment"/>
         <action
             android:id="@+id/action_mainhomeNoticeFragment_to_noticePostFragment"
             app:destination="@+id/communityPostFragment"/>
@@ -97,18 +97,7 @@
             app:popUpTo="@id/mainhomeNoticeFragment"
             app:popUpToInclusive="true" />
     </fragment>
-    <fragment
-        android:id="@+id/mainhomeNoticeWriteFragment"
-        android:name="com.example.adminapp.ui.main.community.write.HomeNoticeWriteFragment">
-        <action
-            android:id="@+id/action_noticeWrite_to_noticePost"
-            app:destination="@+id/communityPostFragment"
-            app:popUpTo="@id/mainhomeNoticeWriteFragment"/>
-        <action
-            android:id="@+id/action_mainNoticeWrite_pop"
-            app:popUpTo="@id/mainhomeNoticeWriteFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
+
     <fragment
         android:id="@+id/splashFragment"
         android:name="com.example.adminapp.ui.splash.SplashFragment"
@@ -378,6 +367,26 @@
             app:popUpToInclusive="true" />
 
     </fragment>
+    <fragment
+        android:id="@+id/homeNoticeWriteFragment"
+        android:name="com.example.adminapp.ui.main.home.HomeNoticeWriteFragment"
+        android:label="HomeNoticeWriteFragment">
+        <action
+            android:id="@+id/action_homeNoticeWrite_to_homeNoticePost"
+            app:destination="@id/communityPostFragment"
+            app:popUpTo="@id/homeNoticeWriteFragment"
+            app:popUpToInclusive="true" />
+
+        <action
+            android:id="@+id/action_homeNoticeWriteFragment_pop"
+            app:popUpTo="@id/homeNoticeWriteFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_homeNoticeWriteFragment_to_homeNoticePhotoFragment"
+            app:destination="@id/communityGetPhotoFragment" />
+
+    </fragment>
+
     <fragment
         android:id="@+id/communityPreviewFragment"
         android:name="com.example.adminapp.ui.main.community.preview.CommunityPreviewFragment">

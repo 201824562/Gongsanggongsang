@@ -30,7 +30,7 @@
                 android:textColor="#de000000"
                 android:textStyle="bold"
                 android:textSize="24sp"
-                android:text="안녕하세요\n메이트님!"/>
+                android:text="안녕하세요\n관리자님!"/>
             <LinearLayout
                 android:id="@+id/main_home_shortcut_icon"
                 android:layout_width="match_parent"
