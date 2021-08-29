@@ -444,6 +444,10 @@
             app:argType="string"
             android:name="document_name"
             android:defaultValue="0"/>
+        <argument
+            android:name="post_data_info"
+            app:argType="com.example.adminapp.data.model.PostDataInfo" />
+
     </fragment>
 
     <fragment
@@ -456,6 +460,9 @@
         <action
             android:id="@+id/action_communityPostMarket_to_communityPhoto"
             app:destination="@+id/communityPhotoFragment"/>
+        <argument
+            android:name="post_data_info"
+            app:argType="com.example.adminapp.data.model.PostDataInfo" />
     </fragment>
 
     <fragment

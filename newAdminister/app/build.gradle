@@ -3,9 +3,9 @@ plugins {
     id 'kotlin-android'
     id 'koin'
     id 'kotlin-kapt'
-    // id 'kotlin-parcelize'
-    id 'kotlin-android-extensions'
-    id "androidx.navigation.safeargs.kotlin"
+    id 'kotlin-parcelize'
+    //id 'kotlin-android-extensions'
+    id("androidx.navigation.safeargs.kotlin")
     id 'com.google.gms.google-services' //firbase
 }
 
@@ -15,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId 'com.example.adminapp'
-        minSdkVersion 28
+        minSdkVersion 24
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"

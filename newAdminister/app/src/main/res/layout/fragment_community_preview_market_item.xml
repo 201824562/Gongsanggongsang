@@ -7,16 +7,34 @@
     android:orientation="vertical"
     android:layout_marginLeft="18dp"
     android:layout_marginRight="18dp">
-    <TextView
-        android:id="@+id/community_market_preview_title"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="normal"
-        android:textSize="16sp"
-        android:textColor="@color/black"
-        android:letterSpacing="-0.01"
-        android:lineSpacingExtra="8sp"
-        android:layout_marginTop="6dp"/>
+        android:orientation="horizontal">
+        <View
+            android:id="@+id/community_preview_point"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:background="#ff7146"
+            android:layout_gravity="center"/>
+        <TextView
+            android:id="@+id/community_market_preview_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="12sp"
+            android:textColor="#7f000000"
+            android:layout_marginLeft="1dp"/>
+        <TextView
+            android:id="@+id/community_market_preview_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="normal"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:layout_marginLeft="6dp"
+            android:layout_gravity="center"/>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/community_market_preview_price"

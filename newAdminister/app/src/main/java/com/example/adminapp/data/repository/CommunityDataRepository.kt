@@ -8,7 +8,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.adminapp.data.model.PostCommentDataClass
+import com.example.adminapp.data.entity.PostCommentDataClass
 import com.example.adminapp.data.model.PostDataInfo
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -33,6 +33,7 @@ class CommunityDataRepository() {
     private var collectionPostDataListSuccess : MutableLiveData<Boolean> = MutableLiveData()
     private var postDeleteSuccess : MutableLiveData<Boolean> = MutableLiveData()
     private var getDocumentPostDataSuccess : MutableLiveData<Boolean> = MutableLiveData()
+    private var uploadPhotoSuccess : MutableLiveData<Boolean> = MutableLiveData()
     companion object {
         private var sInstance: CommunityDataRepository? = null
         fun getInstance(): CommunityDataRepository {
@@ -155,11 +156,11 @@ class CommunityDataRepository() {
                 collectionPostDataListSuccess.postValue(false)
             }
     }
-    fun getCategoryAllPostData(agency: String, collection_name: String) : LiveData<ArrayList<PostDataInfo>>{
+    fun getPostDataInCategory(agency: String, collection_name: String) : LiveData<ArrayList<PostDataInfo>>{
         updateCategoryAllPostData(agency, collection_name)
         return collectionPostDataInfoList
     }
-    fun initCatagoryPostData(){
+    fun initCategoryPostData(){
         collectionPostDataInfoList = MutableLiveData()
     }
 
@@ -219,11 +220,18 @@ class CommunityDataRepository() {
                     },
                     result["post_state"].toString(),
                     result["post_anonymous"] as Boolean)
-                documentPostDataInfo.value = postData
+                documentPostDataInfo.postValue(postData)
             }
     }
+    fun initPostData(){
+        documentPostDataInfo = MutableLiveData()
+        postDataCommentList = MutableLiveData()
+        postDataPhotoUrl = MutableLiveData()
+    }
+
     fun getPostData(agency: String, collection_name: String, document_name: String) : MutableLiveData<PostDataInfo>{
         updatePostData(agency, collection_name, document_name)
+        Log.e("check", "{${documentPostDataInfo.value}}")
         return documentPostDataInfo
     }
     private fun deletePostData(agency: String, collection_name: String, document_name: String) {
@@ -260,7 +268,7 @@ class CommunityDataRepository() {
     }
     //사진 등록, 받아오기
     @RequiresApi(Build.VERSION_CODES.P)
-    fun uploadPhoto(bitmap_array : ArrayList<Bitmap>, uri_array : ArrayList<Uri>) {
+    suspend fun uploadPhoto(bitmap_array : ArrayList<Bitmap>, uri_array : ArrayList<Uri>) {
         var i : Int = 0
         for(bitmap in bitmap_array){
             val file_name = uri_array[i].toString()
@@ -274,33 +282,32 @@ class CommunityDataRepository() {
             }.addOnSuccessListener { taskSnapshot ->
                 // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
                 // ...
+                uploadPhotoSuccess.postValue(true)
                 System.out.println("sucess");
             }
             i++
         }
     }
+    fun getUploadPhotoSuccess() : MutableLiveData<Boolean> {
+        return uploadPhotoSuccess
+    }
     //
-    private fun updatePhotoData(uri_array: ArrayList<String>) {
+    fun updatePhotoData(uri_array: ArrayList<String>) {
         val postData: ArrayList<String> = arrayListOf()
         for (uri in uri_array) {
             val u = "file://$uri"
             val storageRefer: StorageReference = fireStorage.reference.child("images/").child(u)
             storageRefer.downloadUrl.addOnSuccessListener {
-                System.out.println(it.toString())
                 postData.add(it.toString())
-                postDataPhotoUrl.value = postData
+                postDataPhotoUrl.postValue(postData)
             }
         }
     }
 
-    fun getDataPhoto(uri_array: ArrayList<String>) : MutableLiveData<ArrayList<String>>{
-        deletePhotoData()
-        updatePhotoData(uri_array)
+    fun getDataPhoto() : MutableLiveData<ArrayList<String>>{
         return postDataPhotoUrl
     }
-    fun deletePhotoData() {
-        postDataPhotoUrl.postValue(arrayListOf())
-    }
+
     //공지 카테고리 받아오기
     private fun updateNoticeCategoryPostData(agency: String, noticeCategory : String) {
         var noticeDataList: ArrayList<PostDataInfo> = arrayListOf()
@@ -359,7 +366,6 @@ class CommunityDataRepository() {
                         searchPostList.add(item)
                     }
                 }
-                Log.v("s", "{$searchPostList}")
                 postSearchPostDataList.value = searchPostList
             }
     }
