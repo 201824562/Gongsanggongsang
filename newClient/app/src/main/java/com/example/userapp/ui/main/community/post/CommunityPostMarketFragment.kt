@@ -23,6 +23,7 @@ import com.example.userapp.data.entity.PostCommentDataClass
 import com.example.userapp.data.entity.PushNotification
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentCommunityPostBinding
+import com.example.userapp.databinding.FragmentCommunityPostMarketBinding
 import com.example.userapp.ui.main.alarm.RetrofitInstance
 import com.example.userapp.ui.main.community.CommunityViewModel
 import com.example.userapp.ui.main.community.write.CommunityAttachPostPhotoRecyclerAdapter
@@ -35,8 +36,8 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 
-class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostBinding, CommunityViewModel>(){
-    override lateinit var viewbinding: FragmentCommunityPostBinding
+class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMarketBinding, CommunityViewModel>(){
+    override lateinit var viewbinding: FragmentCommunityPostMarketBinding
     override val viewmodel: CommunityViewModel by viewModels()
 
     private val navPostDataInfo : CommunityPostFragmentArgs by navArgs()
@@ -58,7 +59,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostBin
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewbinding = FragmentCommunityPostBinding.inflate(inflater, container, false)
+        viewbinding = FragmentCommunityPostMarketBinding.inflate(inflater, container, false)
         return viewbinding.root
     }
 
@@ -122,10 +123,10 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostBin
                 makeDialog("정말로 글을 삭제할까요?", "isPost", PostCommentDataClass())
             }
             postWithCompleteButton.setOnClickListener {
-                viewmodel.modifyPostPartData(collectionName, documentName, "post_state", "모집 완료").observe(viewLifecycleOwner){
+                viewmodel.modifyPostPartData(collectionName, documentName, "post_anonymous", true).observe(viewLifecycleOwner){
                     if(it){
                         postWithComplete.visibility = View.GONE
-                        postCategory.text = "모집 완료"
+                        postCategory.text = "판매 완료"
                     }
                 }
             }
@@ -143,16 +144,21 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostBin
 
         viewbinding.run {
             when(collectionName){
-                "1_free" -> postToolbarName.text = "자유게시판"
-                "2_emergency" -> postToolbarName.text = "긴급게시판"
-                "3_suggest" -> postToolbarName.text = "건의게시판"
-                "4_with" -> postToolbarName.text = "함께게시판"
-                "5_market" -> postToolbarName.text = "장터게시판"
+                "1_FREE" -> postToolbarName.text = "자유게시판"
+                "2_EMERGENCY" -> postToolbarName.text = "긴급게시판"
+                "3_SUGGEST" -> postToolbarName.text = "건의게시판"
+                "4_WITH" -> postToolbarName.text = "함께게시판"
+                "5_MARKET" -> postToolbarName.text = "장터게시판"
+                "OUT" -> postToolbarName.text = "퇴실 신청 내역"
             }
-            println(localUserName)
+            if(collectionName == "5_MARKET") {postPrice.text = navPostDataInfo.postDataInfo.post_state + "원" }
+            else { postPrice.text = navPostDataInfo.postDataInfo.post_state }
             if(navPostDataInfo.postDataInfo.post_name == localUserName) { postRemoveButton.visibility = View.VISIBLE }
-            if(collectionName == "4_with" && localUserName == navPostDataInfo.postDataInfo.post_name && navPostDataInfo.postDataInfo.post_state == "모집 중") { postWithComplete.visibility = View.VISIBLE }
-            if(navPostDataInfo.postDataInfo.post_state != "none"){ postCategory.text = navPostDataInfo.postDataInfo.post_state }
+            if(collectionName == "5_MARKET" && localUserName == navPostDataInfo.postDataInfo.post_name && !navPostDataInfo.postDataInfo.post_anonymous) { postWithComplete.visibility = View.VISIBLE }
+            if(collectionName == "OUT" && !navPostDataInfo.postDataInfo.post_anonymous) {postCategory.text = "승인 대기"}
+            if(collectionName == "OUT" && navPostDataInfo.postDataInfo.post_anonymous) {postCategory.text = "퇴실 완료"}
+            if(collectionName == "5_MARKET" && !navPostDataInfo.postDataInfo.post_anonymous) {postCategory.text = "판매 중"}
+            if(collectionName == "5_MARKET" && navPostDataInfo.postDataInfo.post_anonymous) {postCategory.text = "판매 완료"}
             if(navPostDataInfo.postDataInfo.post_date == postDateNow) {
                 val hour = postTimeNow.substring(0,2).toInt() - navPostDataInfo.postDataInfo.post_time.substring(0,2).toInt()
                 val minute = postTimeNow.substring(3,5).toInt() - navPostDataInfo.postDataInfo.post_time.substring(3,5).toInt()
@@ -160,7 +166,6 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostBin
                 else{ communityPostTime.text = "${hour}시간 전" }
             }
             else{ communityPostTime.text = navPostDataInfo.postDataInfo.post_date.substring(5) }
-
             communityPostName.text = navPostDataInfo.postDataInfo.post_name
             postContents.text = navPostDataInfo.postDataInfo.post_contents
             postTitle.text = navPostDataInfo.postDataInfo.post_title

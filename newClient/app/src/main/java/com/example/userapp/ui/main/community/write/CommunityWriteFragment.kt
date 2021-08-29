@@ -71,22 +71,22 @@ class CommunityWriteFragment : BaseSessionFragment<FragmentCommunityWriteBinding
             userName = it.nickname
         })
 
-        collectionName = arguments?.getString("collection_name").toString()
+        collectionName = arguments?.getString("getCollectionName").toString()
 
         val ac = activity as MainActivity
         getLocalPhotoUri = ac.getPhoto()
         getBitmap()
 
         when(collectionName){
-            "1_free" -> viewbinding.previewToolbarName.text = "자유게시판"
-            "2_emergency" -> viewbinding.previewToolbarName.text = "긴급게시판"
-            "3_suggest" -> viewbinding.previewToolbarName.text = "건의게시판"
-            "4_with" -> viewbinding.previewToolbarName.text = "함께게시판"
-            "5_market" -> viewbinding.previewToolbarName.text = "장터게시판"
+            "1_FREE" -> viewbinding.previewToolbarName.text = "자유게시판"
+            "2_EMERGENCY" -> viewbinding.previewToolbarName.text = "긴급게시판"
+            "3_SUGGEST" -> viewbinding.previewToolbarName.text = "건의게시판"
+            "4_WITH" -> viewbinding.previewToolbarName.text = "함께게시판"
+            "5_MARKET" -> viewbinding.previewToolbarName.text = "장터게시판"
         }
 
         viewbinding.run {
-            if(collectionName == "2_emergency" || collectionName == "3_suggest"){
+            if(collectionName == "2_EMERGENCY" || collectionName == "3_SUGGEST"){
                 initWriteCategorySelect()
             }
             initAttachPhotoRecycler()
@@ -95,6 +95,12 @@ class CommunityWriteFragment : BaseSessionFragment<FragmentCommunityWriteBinding
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?){
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        val ac = activity as MainActivity
+        ac.selectedItems.clear()
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -111,11 +117,8 @@ class CommunityWriteFragment : BaseSessionFragment<FragmentCommunityWriteBinding
                 if(writeTitle.text.toString() == "" || writeContent.text.toString() == ""){
                     showToast("빈 칸을 채워주세요.")
                 }
-                else if((collectionName == "2_emergency" || collectionName == "3_suggest") && writePostCategoryData == "none"){
+                else if((collectionName == "2_EMERGENCY" || collectionName == "3_SUGGEST") && writePostCategoryData == "none"){
                     showToast("분류를 선택해주세요.")
-                }
-                else if(collectionName == "4_with"){
-                    writePostCategoryData = "모집 중"
                 }
                 else{
                     val postDateNow: String = LocalDate.now().toString()
@@ -136,7 +139,6 @@ class CommunityWriteFragment : BaseSessionFragment<FragmentCommunityWriteBinding
                     val bundle = bundleOf(
                         "post_data_info" to postData,
                     )
-                    Log.e("namem", "$userName")
                     if(uriArray.isEmpty()){
                         viewmodel.insertPostData(postData).observe(viewLifecycleOwner){
                             if(it){

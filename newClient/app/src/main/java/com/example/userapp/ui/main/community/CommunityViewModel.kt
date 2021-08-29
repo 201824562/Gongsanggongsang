@@ -18,8 +18,8 @@ import kotlinx.coroutines.launch
 
 class CommunityViewModel(application: Application) : BaseSessionViewModel(application) {
     private val communityDataRepository : CommunityDataRepository = CommunityDataRepository.getInstance()
-    fun getCategoryAllPostData(collection_name: String) : LiveData<ArrayList<PostDataInfo>> {
-        return communityDataRepository.getCategoryAllPostData(agencyInfo, collection_name)
+    fun getPostDataInCategory(collection_name: String) : LiveData<ArrayList<PostDataInfo>> {
+        return communityDataRepository.getPostDataInCategory(agencyInfo, collection_name)
     }
     fun initCategoryPostData(){
         communityDataRepository.initCategoryPostData()

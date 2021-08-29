@@ -69,6 +69,11 @@ class CommunityWriteMarketFragment : BaseSessionFragment<FragmentCommunityWriteM
 
     override fun initDataBinding(savedInstanceState: Bundle?){
     }
+    override fun onDetach() {
+        super.onDetach()
+        val ac = activity as MainActivity
+        ac.selectedItems.clear()
+    }
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun initViewFinal(savedInstanceState: Bundle?) {
@@ -88,7 +93,7 @@ class CommunityWriteMarketFragment : BaseSessionFragment<FragmentCommunityWriteM
                     val postDateNow: String = LocalDate.now().toString()
                     val postTimeNow : String = LocalTime.now().toString()
                     postData = PostDataInfo(
-                        collectionName,
+                        "5_MARKET",
                         post_name = userName,
                         post_title = marketWriteTitle.text.toString(),
                         post_contents = marketWriteContent.text.toString(),
@@ -97,7 +102,7 @@ class CommunityWriteMarketFragment : BaseSessionFragment<FragmentCommunityWriteM
                         post_comments = 0,
                         post_id = postDateNow + postTimeNow + userName,
                         post_photo_uri = getLocalPhotoUri,
-                        post_state = "판매 중",
+                        post_state = marketWritePrice.text.toString(),
                         post_anonymous = false
                     )
                     bundle = bundleOf(
@@ -106,7 +111,7 @@ class CommunityWriteMarketFragment : BaseSessionFragment<FragmentCommunityWriteM
                     if(uriArray.isEmpty()){
                         viewmodel.insertPostData(postData).observe(viewLifecycleOwner){
                             if(it){
-                                findNavController().navigate(R.id.action_communityWrite_to_communityPost, bundle)
+                                findNavController().navigate(R.id.action_communityWriteMarket_to_communityPostMarket, bundle)
                             }
                         }
                     }
@@ -116,7 +121,7 @@ class CommunityWriteMarketFragment : BaseSessionFragment<FragmentCommunityWriteM
                             if(it){
                                 viewmodel.insertPostData(postData).observe(viewLifecycleOwner){
                                     if(it){
-                                        findNavController().navigate(R.id.action_communityWrite_to_communityPost, bundle)
+                                        findNavController().navigate(R.id.action_communityWriteMarket_to_communityPostMarket, bundle)
                                     }
                                 }
                             }

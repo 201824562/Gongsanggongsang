@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.adminapp.ui.main.alarm.AlarmFragment
-import com.example.adminapp.ui.main.community.CommunityMainFragment
+import com.example.adminapp.ui.main.community.CommunityFragment
 import com.example.adminapp.ui.main.home.HomeFragment
 import com.example.adminapp.ui.main.reservation.ReservationFragment
 import com.example.adminapp.ui.main.settings.SettingsFragment
@@ -19,7 +19,7 @@ class MainViewPagerAdapter (fragmentManager: FragmentManager, lifecycle: Lifecyc
         return when(position){
             0 -> HomeFragment()
             1 -> ReservationFragment()
-            2 -> CommunityMainFragment()
+            2 -> CommunityFragment()
             3 -> AlarmFragment()
             4 -> SettingsFragment()
             else -> error("no such position: $position")

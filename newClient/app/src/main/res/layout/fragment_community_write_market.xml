@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:layout_constraintBottom_toBottomOf="parent"
     android:orientation="vertical">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -100,7 +107,8 @@
         android:layout_marginRight="18dp"
         android:layout_marginTop="16dp"
         android:paddingBottom="20dp"
-        android:backgroundTint="#33000000"/>
+        android:backgroundTint="#33000000"
+        android:imeOptions="actionNext"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -125,6 +133,7 @@
         android:layout_marginTop="16dp"
         android:paddingBottom="20dp"
         android:backgroundTint="#33000000"
+        android:imeOptions="actionNext"
         android:inputType="number"/>
 
     <TextView
@@ -146,11 +155,15 @@
         android:textSize="12sp"
         android:textColorHint="#7f000000"
         android:lineSpacingExtra="8sp"
+
         android:hint="내용을 입력해주세요."
         android:layout_marginLeft="16dp"
         android:layout_marginRight="18dp"
         android:layout_marginTop="16dp"
         android:paddingBottom="20dp"
-        android:backgroundTint="#33000000" />
+        android:background="@color/transparent"
+        android:backgroundTint="#33000000"
+        android:imeOptions="actionDone"/>
 
 </LinearLayout>
+</androidx.core.widget.NestedScrollView>

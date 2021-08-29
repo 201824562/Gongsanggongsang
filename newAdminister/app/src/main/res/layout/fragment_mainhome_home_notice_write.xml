@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:background="#0c000000">
         <ImageButton
-            android:id="@+id/emergency_write_back_button"
+            android:id="@+id/write_back_button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@drawable/ic_community_back_icon"
@@ -36,7 +36,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
         <Button
-            android:id="@+id/emergency_write_register_button"
+            android:id="@+id/write_register_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/transparent"
@@ -60,9 +60,10 @@
         android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"/>
     <EditText
-        android:id="@+id/emergency_write_title"
+        android:id="@+id/write_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:imeOptions="actionNext"
         android:hint="제목을 입력해주세요"
         android:textStyle="normal"
         android:textSize="14sp"
@@ -85,7 +86,7 @@
         android:layout_marginLeft="16dp"/>
 
     <Spinner
-        android:id="@+id/emergency_write_category_select"
+        android:id="@+id/write_category_select"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="공지 분류를 선택해주세요."
@@ -117,7 +118,7 @@
         android:layout_marginLeft="16dp" />
 
     <EditText
-        android:id="@+id/emergency_write_content"
+        android:id="@+id/write_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textStyle="normal"
@@ -129,13 +130,14 @@
         android:layout_marginRight="18dp"
         android:layout_marginTop="16dp"
         android:paddingBottom="20dp"
-        android:backgroundTint="#33000000" />
+        android:backgroundTint="#33000000"
+        android:imeOptions="actionDone"/>
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_weight="1" />
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/emergency_write_photo_recycler"
+        android:id="@+id/write_photo_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#0c000000"/>
@@ -144,12 +146,11 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <LinearLayout
-            android:id="@+id/emergency_write_photo"
-            android:clickable="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <ImageButton
+                android:id="@+id/write_photo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_community_write_photo_icon"

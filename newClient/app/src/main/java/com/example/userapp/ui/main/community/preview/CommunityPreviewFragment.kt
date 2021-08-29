@@ -1,17 +1,15 @@
 package com.example.userapp.ui.main.community.preview
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.userapp.MainActivity
 import com.example.userapp.R
-import com.example.userapp.base.BaseFragment
 import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentCommunityPreviewBinding
@@ -27,9 +25,10 @@ class CommunityPreviewFragment : BaseSessionFragment<FragmentCommunityPreviewBin
     private lateinit var communityPreviewMarketRecyclerAdapter: CommunityPreviewMarketRecyclerAdapter
     private var communityPreviewMarketItem = arrayListOf<PostDataInfo>()
 
-    private lateinit var collectionName : String
-    private lateinit var collectionNameBundle : Bundle
-    private var userAgency = ""
+    private val getArgs : CommunityPreviewFragmentArgs by navArgs()
+    private lateinit var getCollection : String
+    private lateinit var toCollectionBundle : Bundle
+
 
     override fun initViewbinding(
         inflater: LayoutInflater,
@@ -41,28 +40,32 @@ class CommunityPreviewFragment : BaseSessionFragment<FragmentCommunityPreviewBin
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-        collectionName= arguments?.getString("collection_name").toString()
-        collectionNameBundle = bundleOf(
-            "collection_name" to collectionName
-        )
-        viewmodel.getUserInfo()
+        getCollection = getArgs.getCollectionName
+        toCollectionBundle = bundleOf( "getCollectionName" to getCollection)
 
-        when(collectionName){
-            "1_free" -> viewbinding.previewToolbarName.text = "자유게시판"
-            "2_emergency" -> viewbinding.previewToolbarName.text = "긴급게시판"
-            "3_suggest" -> viewbinding.previewToolbarName.text = "건의게시판"
-            "4_with" -> viewbinding.previewToolbarName.text = "함께게시판"
-            "5_market" -> viewbinding.previewToolbarName.text = "장터게시판"
+        when(getCollection){
+            "1_FREE" -> viewbinding.previewToolbarName.text = "자유게시판"
+            "2_EMERGENCY" -> viewbinding.previewToolbarName.text = "긴급게시판"
+            "3_SUGGEST" -> viewbinding.previewToolbarName.text = "건의게시판"
+            "4_WITH" -> viewbinding.previewToolbarName.text = "함께게시판"
+            "5_MARKET" -> viewbinding.previewToolbarName.text = "장터게시판"
         }
 
-        //TODO: notifyset 안 먹어서 리사이클러뷰 계속 초기화 됨.
-        when(collectionName){
-            "5_market" -> initMarketRecyclerView()
+        when(getCollection){
+            "5_MARKET" -> initMarketRecyclerView()
             else -> initMarketElseRecyclerView()
         }
-        viewmodel.getCategoryAllPostData(collectionName).observe(viewLifecycleOwner){
-            when(collectionName){
-                "5_market" -> {
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        viewmodel.initCategoryPostData()
+    }
+
+    override fun initDataBinding(savedInstanceState: Bundle?) {
+        viewmodel.getPostDataInCategory(getCollection).observe(viewLifecycleOwner){
+            when(getCollection){
+                "5_MARKET" -> {
                     communityPreviewMarketItem = it
                     initMarketRecyclerView()
                     communityPreviewMarketRecyclerAdapter.notifyDataSetChanged()
@@ -73,33 +76,22 @@ class CommunityPreviewFragment : BaseSessionFragment<FragmentCommunityPreviewBin
                     communityPreviewRecyclerAdapter.notifyDataSetChanged()
                 }
             }
-
         }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        viewmodel.initCategoryPostData()
-    }
-    override fun initDataBinding(savedInstanceState: Bundle?) {
-        viewmodel.onSuccessGettingUserInfo.observe(this, {
-            userAgency = it.agency
-        })
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run{
             previewWriteRegisterButton.setOnClickListener{
-                when(collectionName){
-                    "5_market" -> findNavController().navigate(R.id.action_communityPreview_to_communityWriteMarket, collectionNameBundle)
-                    else -> findNavController().navigate(R.id.action_communityPreview_to_communityWrite, collectionNameBundle)
+                when(getCollection){
+                    "5_MARKET" -> findNavController().navigate(R.id.action_communityPreview_to_communityWriteMarket, toCollectionBundle)
+                    else -> findNavController().navigate(R.id.action_communityPreview_to_communityWrite, toCollectionBundle)
                 }
             }
             previewSearchButton.setOnClickListener {
-                findNavController().navigate(R.id.action_communityPreview_communitySearch, collectionNameBundle)
+                findNavController().navigate(R.id.action_communityPreview_communitySearch, toCollectionBundle)
             }
             previewBackButton.setOnClickListener {
-                findNavController().navigate(R.id.action_communityPreviewFragment_self)
+                findNavController().navigate(R.id.action_communityPreview_pop)
             }
         }
 

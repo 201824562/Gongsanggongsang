@@ -149,11 +149,13 @@
                 android:layout_marginTop="10dp"
                 android:paddingBottom="16dp"
                 android:lineSpacingExtra="6sp"/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/post_photo_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="20dp"/>
+                android:paddingBottom="20dp" />
+
             <LinearLayout
                 android:id="@+id/post_with_complete"
                 android:layout_width="match_parent"
@@ -179,10 +181,12 @@
                     android:text="모집완료 처리하기"
                     android:textStyle="normal"
                     android:textSize="14sp"
+                    android:layout_marginTop="6dp"
                     android:textColor="@color/pale_orange"
                     android:background="@drawable/button_with_complete"
                     android:lineSpacingExtra="6sp"
                     android:gravity="center"
+                    android:layout_marginVertical="10dp"
                     android:layout_marginLeft="20dp"
                     android:padding="5dp" />
 
@@ -231,14 +235,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginLeft="16dp"
         android:orientation="horizontal">
-        <CheckBox
-            android:id="@+id/commentAnonymousCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="익명"
-            android:textColor="@color/black"
-            android:layout_gravity="center"/>
         <EditText
             android:id="@+id/write_comment"
             android:layout_width="wrap_content"
@@ -246,13 +244,13 @@
             android:hint="댓글을 남겨보세요"
             android:textColorHint="#7f000000"
             android:textColor="@color/black"
-            android:background="#0c000000"
             android:textStyle="normal"
             android:textSize="14sp"
+            android:paddingLeft="10dp"
             android:lineSpacingExtra="6sp"
-            android:layout_marginLeft="10dp"
             android:layout_marginRight="2dp"
-            android:layout_weight="1"/>
+            android:background="@drawable/edittext_round"
+            android:layout_weight="1" />
         <ImageButton
             android:id="@+id/comments_register"
             android:src="@drawable/ic_community_comment_upload"

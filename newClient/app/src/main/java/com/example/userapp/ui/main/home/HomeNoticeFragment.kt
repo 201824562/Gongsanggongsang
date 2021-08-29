@@ -1,5 +1,6 @@
 package com.example.userapp.ui.main.home
 
+import android.annotation.SuppressLint
 import com.example.userapp.databinding.FragmentMainhomeHomeNoticeBinding
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -24,7 +25,6 @@ class HomeNoticeFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeBinding
     private var noticePreviewItem : ArrayList<PostDataInfo> = arrayListOf()
     private lateinit var collectionNameBundle : Bundle
 
-
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,15 +35,14 @@ class HomeNoticeFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeBinding
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-        collectionNameBundle = bundleOf(
-            "collection_name" to "notice"
-        )
+        val ac = activity as MainActivity
         initNoticeRecyclerView()
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
     }
 
+    @SuppressLint("ResourceAsColor")
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewmodel.getNoticePostData().observe(viewLifecycleOwner){ it
             noticePreviewItem = it
@@ -85,7 +84,6 @@ class HomeNoticeFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeBinding
                     initNoticeRecyclerView()
                     noticePreviewRecyclerAdapter.notifyDataSetChanged()
                 }
-
             }
         }
 

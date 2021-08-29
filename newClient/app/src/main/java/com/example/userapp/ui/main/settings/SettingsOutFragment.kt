@@ -11,9 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.R
 import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.data.model.PostDataInfo
-import com.example.userapp.databinding.FragmentMainhomeCommunityBinding
 import com.example.userapp.databinding.FragmentSettingsOutBinding
-import com.example.userapp.databinding.FragmentSettingsOutWriteBinding
 import com.example.userapp.ui.main.community.CommunityViewModel
 import com.example.userapp.ui.main.community.preview.CommunityPreviewMarketRecyclerAdapter
 
@@ -33,7 +31,7 @@ class SettingsOutFragment : BaseSessionFragment<FragmentSettingsOutBinding, Comm
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-        viewmodel.getCategoryAllPostData("out").observe(viewLifecycleOwner){
+        viewmodel.getPostDataInCategory("OUT").observe(viewLifecycleOwner){
             settingsOutLog = it
             initSettingsLogRecycler()
         }
@@ -62,7 +60,7 @@ class SettingsOutFragment : BaseSessionFragment<FragmentSettingsOutBinding, Comm
                     var bundle = bundleOf(
                         "post_data_info" to postItemDataInfo
                     )
-                    findNavController().navigate(R.id.action_communityPreview_to_communityPostMarket, bundle)
+                    findNavController().navigate(R.id.action_settingOut_to_settingOutPost, bundle)
                 }
             }
         }
