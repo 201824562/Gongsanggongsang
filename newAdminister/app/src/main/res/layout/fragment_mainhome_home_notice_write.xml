@@ -124,6 +124,7 @@
         android:textStyle="normal"
         android:textSize="14sp"
         android:textColorHint="#7f000000"
+        android:background="@color/transparent"
         android:lineSpacingExtra="8sp"
         android:hint="내용을 입력해주세요."
         android:layout_marginLeft="16dp"
@@ -155,8 +156,9 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_community_write_photo_icon"
                 android:background="@color/transparent"
-                android:layout_marginLeft="26dp"
-                android:layout_marginTop="6dp"/>
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="6dp"
+                android:paddingHorizontal="10dp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

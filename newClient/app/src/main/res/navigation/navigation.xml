@@ -323,7 +323,7 @@
         android:id="@+id/communityPostFragment"
         android:name="com.example.userapp.ui.main.community.post.CommunityPostFragment">
         <action
-            android:id="@+id/action_communityPost_to_communityPhoto"
+            android:id="@+id/action_communityPostFragment_to_communityGetPhotoFragment"
             app:destination="@+id/communityPhotoFragment"/>
         <action
             android:id="@+id/action_community_post_pop"
@@ -331,7 +331,7 @@
             app:popUpToInclusive="true" />
          <argument
             android:name="post_data_info"
-            app:argType="com.example.userapp.data.model.PostDataInfo" />
+            app:argType="com.example.userapp.data.model.PostDataInfo"/>
     </fragment>
 
     <fragment

@@ -66,7 +66,7 @@ class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityV
                 findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, toCollectionBundle)
             }
             mainHomeToMarketCommunity.setOnClickListener {
-                toCollectionBundle = bundleOf( "getCollectionName" to "5_MARKET")
+                toCollectionBundle = bundleOf( "getCollectionName" to "2_EMERGENCY")
                 findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, toCollectionBundle)
             }
             mainHomeNoticeAllButton.setOnClickListener {

@@ -14,15 +14,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.userapp.MainActivity
 import com.example.userapp.R
-import com.example.userapp.base.BaseFragment
 import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.data.entity.NotificationData
 import com.example.userapp.data.entity.PostCommentDataClass
 import com.example.userapp.data.entity.PushNotification
-import com.example.userapp.data.model.PostDataInfo
-import com.example.userapp.databinding.FragmentCommunityPostBinding
 import com.example.userapp.databinding.FragmentCommunityPostMarketBinding
 import com.example.userapp.ui.main.alarm.RetrofitInstance
 import com.example.userapp.ui.main.community.CommunityViewModel
@@ -89,7 +85,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run{
             marketWriteBackButton.setOnClickListener {
-                findNavController().navigate(R.id.action_community_post_pop)
+                findNavController().navigate(R.id.action_communityPostMarketFragment_pop)
             }
             commentsRegister.setOnClickListener{
                 val postDateNow: String = LocalDate.now().toString()
@@ -104,6 +100,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                 )
                 viewmodel.insertPostCommentData(collectionName, documentName, postComment).observe(viewLifecycleOwner){
                     if(it){
+                        showToast("댓글이 등록되었습니다.")
                         viewmodel.getPostCommentData(collectionName, documentName).observe(viewLifecycleOwner){
                             postCommentsArray = it
                             commentRecyclerAdapter.notifyDataSetChanged()
@@ -144,10 +141,6 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
 
         viewbinding.run {
             when(collectionName){
-                "1_FREE" -> postToolbarName.text = "자유게시판"
-                "2_EMERGENCY" -> postToolbarName.text = "긴급게시판"
-                "3_SUGGEST" -> postToolbarName.text = "건의게시판"
-                "4_WITH" -> postToolbarName.text = "함께게시판"
                 "5_MARKET" -> postToolbarName.text = "장터게시판"
                 "OUT" -> postToolbarName.text = "퇴실 신청 내역"
             }
@@ -222,7 +215,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                     var bundle = bundleOf(
                         "photo_uri" to remoteGetPhotoUri.toTypedArray(),
                     )
-                    findNavController().navigate(R.id.action_communityPost_to_communityPhoto, bundle)
+                    findNavController().navigate(R.id.action_communityPostMarket_to_communityPhoto, bundle)
                 }
             }
         }

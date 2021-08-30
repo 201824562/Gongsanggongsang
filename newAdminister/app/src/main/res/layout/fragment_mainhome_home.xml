@@ -59,21 +59,21 @@
                     android:id="@+id/mainHome_to_suggestCommunity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_community_main_market_icon"
+                    android:src="@drawable/ic_community_main_suggest_icon"
                     android:layout_weight="1"
                     android:background="@color/transparent"/>
                 <ImageButton
                     android:id="@+id/mainHome_to_withCommunity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_community_main_emergency_icon"
+                    android:src="@drawable/ic_community_main_with_icon"
                     android:layout_weight="1"
                     android:background="@color/transparent"/>
                 <ImageButton
                     android:id="@+id/mainHome_to_marketCommunity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_community_main_suggest_icon"
+                    android:src="@drawable/ic_community_main_emergency_icon"
                     android:layout_weight="1"
                     android:background="@color/transparent"/>
             </LinearLayout>
@@ -123,7 +123,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="장터"
+                    android:text="긴급"
                     android:textSize="12sp"
                     android:layout_weight="1"
                     android:gravity="center"

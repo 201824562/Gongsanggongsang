@@ -53,11 +53,10 @@ class CommunityPreviewMarketRecyclerAdapter(var postDataList : ArrayList<PostDat
             binding.communityMarketPreviewCommentNumber.text = postDataInfo.post_comments.toString()
             binding.communityMarketPreviewName.text = postDataInfo.post_name.toString()
             binding.communityPreviewPhotoNumber.text = postDataInfo.post_photo_uri.size.toString()
-            if(!postDataInfo.post_anonymous){
-                binding.communityMarketPreviewCategory.text = "판매 중"
-            }
-            else{ binding.communityMarketPreviewCategory.text = "판매 완료" }
-
+            if(!postDataInfo.post_anonymous && postDataInfo.post_category == "5_MARKET"){ binding.communityMarketPreviewCategory.text = "판매 중" }
+            if(postDataInfo.post_anonymous && postDataInfo.post_category == "5_MARKET"){ binding.communityMarketPreviewCategory.text = "판매 완료" }
+            if(!postDataInfo.post_anonymous && postDataInfo.post_category == "OUT"){ binding.communityMarketPreviewCategory.text = "승인대기" }
+            if(postDataInfo.post_anonymous && postDataInfo.post_category == "OUT"){ binding.communityMarketPreviewCategory.text = "승인완료" }
             val postDateNow: String = LocalDate.now().toString()
             val postTimeNow: String = LocalTime.now().toString()
             if(postDataInfo.post_date == postDateNow){

@@ -62,6 +62,8 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
         //val ac = activity as MainActivity
         //token = ac.token
         initPostView()
+        collectionName = navPostDataInfo.postDataInfo.post_category
+        documentName = navPostDataInfo.postDataInfo.post_name
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
@@ -77,7 +79,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run{
             marketWriteBackButton.setOnClickListener {
-                findNavController().navigate(R.id.action_community_post_pop)
+                findNavController().navigate(R.id.action_communityPostMarketFragment_pop)
             }
             commentsRegister.setOnClickListener{
                 val postDateNow: String = LocalDate.now().toString()
@@ -92,6 +94,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                 )
                 viewmodel.insertPostCommentData(collectionName, documentName, postComment).observe(viewLifecycleOwner){
                     if(it){
+                        showToast("댓글이 등록되었습니다.")
                         viewmodel.getPostCommentData(collectionName, documentName).observe(viewLifecycleOwner){
                             postCommentsArray = it
                             commentRecyclerAdapter.notifyDataSetChanged()
@@ -135,6 +138,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                 "5_MARKET" -> postToolbarName.text = "장터게시판"
                 "OUT" -> postToolbarName.text = "퇴실 신청 내역"
             }
+            if(navPostDataInfo.postDataInfo.post_name == localUserName) { postRemoveButton.visibility = View.VISIBLE }
             if(collectionName == "5_MARKET") {postPrice.text = navPostDataInfo.postDataInfo.post_state + "원" }
             else { postPrice.text = navPostDataInfo.postDataInfo.post_state }
             if(navPostDataInfo.postDataInfo.post_name == localUserName) { postRemoveButton.visibility = View.VISIBLE }
@@ -206,7 +210,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                     var bundle = bundleOf(
                         "photo_uri" to remoteGetPhotoUri.toTypedArray(),
                     )
-                    findNavController().navigate(R.id.action_communityPost_to_communityPhoto, bundle)
+                    findNavController().navigate(R.id.action_communityPostMarket_to_communityPhoto, bundle)
                 }
             }
         }

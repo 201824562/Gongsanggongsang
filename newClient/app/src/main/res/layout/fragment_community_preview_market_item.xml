@@ -45,16 +45,19 @@
         android:textColor="#de000000"
         android:lineSpacingExtra="8sp"
         android:layout_marginTop="10dp" />
+
     <TextView
         android:id="@+id/community_market_preview_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="normal"
-        android:textSize="14sp"
-        android:textColor="@color/black"
+        android:layout_marginTop="7dp"
+        android:ellipsize="end"
         android:letterSpacing="-0.03"
-        android:lineSpacingExtra="12sp"
-        android:layout_marginTop="7dp" />
+        android:lineSpacingExtra="5sp"
+        android:maxLines="3"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="normal" />
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.adminapp.MainActivity
@@ -45,6 +46,7 @@ class SettingsFragment : BaseSessionFragment<FragmentSettingsBinding, SettingsVi
             changePwdBtn.setOnClickListener { findNavController().navigate(R.id.action_mainFragment_to_settingsChangePwdFragment) }
             allowUserBtn.setOnClickListener { findNavController().navigate(R.id.action_mainFragment_to_settingsAllowUserFragment) }
             manageUserBtn.setOnClickListener { findNavController().navigate(R.id.action_mainFragment_to_settingsManageUserFragment) }
+            manageOutBtn.setOnClickListener { findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, bundleOf("getCollectionName" to "OUT"))}
             withdrawalBtn.setOnClickListener { makeWithdrawalDialog() }
             logoutBtn.setOnClickListener{ makeLogoutDialog() }
         }

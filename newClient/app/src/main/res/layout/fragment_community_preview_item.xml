@@ -48,13 +48,9 @@
             android:textStyle="normal"
             android:textSize="14sp"
             android:textColor="@color/black"
-            android:lineSpacingExtra="10sp"/>
-        <ImageView
-            android:id="@+id/community_preview_thumbnail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:padding="2dp"/>
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:lineSpacingExtra="5sp"/>
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

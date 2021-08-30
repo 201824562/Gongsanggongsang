@@ -92,6 +92,21 @@
             app:exitAnim="@anim/slide_exit"
             app:popEnterAnim="@anim/slide_pop_enter"
             app:popExitAnim="@anim/slide_pop_exit"/>
+        <action
+            android:id="@+id/action_mainFragment_to_settingsManageOutFragment"
+            app:destination="@id/communityPreviewFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+    </fragment>
+    <fragment
+        android:id="@+id/settingsOutFragment"
+        android:name="com.example.adminapp.ui.main.settings.SettingsOutFragment"
+        android:label="SettingsOutFragment">
+        <action
+            android:id="@+id/action_settingOut_to_settingOutPost"
+            app:destination="@id/communityPostMarketFragment" />
     </fragment>
     <fragment
         android:id="@+id/mainhomeNoticeFragment"

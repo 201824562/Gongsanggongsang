@@ -20,9 +20,10 @@
             android:id="@+id/market_write_back_button"
             android:background="@color/transparent"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:src="@drawable/ic_community_back_icon"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="6dp"
+            android:padding="10dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
