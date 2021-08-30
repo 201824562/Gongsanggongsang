@@ -44,6 +44,7 @@ class SettingsOutFragment : BaseSessionFragment<FragmentSettingsOutBinding, Comm
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run {
             previewWriteRegisterButton.setOnClickListener { findNavController().navigate(R.id.action_settingsOut_to_settingsOutWrite) }
+            previewBackButton.setOnClickListener { findNavController().navigate(R.id.action_settingsOutFragment_pop) }
         }
     }
     private fun initSettingsLogRecycler(){

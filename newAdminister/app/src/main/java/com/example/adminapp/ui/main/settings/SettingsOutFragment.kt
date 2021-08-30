@@ -46,6 +46,7 @@ class SettingsOutFragment : BaseSessionFragment<FragmentSettingsOutBinding, Comm
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
+        viewbinding.previewBackButton.setOnClickListener { findNavController().navigate(R.id.action_settingsOutFragment_pop) }
     }
     private fun initSettingsLogRecycler(){
         viewbinding.communityPreviewRecyclerView.run {

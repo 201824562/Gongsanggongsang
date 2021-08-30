@@ -110,6 +110,10 @@
         <action
             android:id="@+id/action_settingOut_to_settingOutPost"
             app:destination="@id/communityPostMarketFragment" />
+        <action
+            android:id="@+id/action_settingsOutFragment_pop"
+            app:popUpTo="@id/settingsOutFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/mainhomeNoticeFragment"

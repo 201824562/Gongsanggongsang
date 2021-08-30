@@ -467,6 +467,10 @@
         <action
             android:id="@+id/action_settingOut_to_settingOutPost"
             app:destination="@id/communityPostMarketFragment" />
+        <action
+            android:id="@+id/action_settingsOutFragment_pop"
+            app:popUpTo="@id/settingsOutFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/settingsOutWriteFragment"
@@ -482,7 +486,6 @@
             app:destination="@+id/communityGetPhotoFragment"/>
         <action
             android:id="@+id/action_settingsOutWriteFragment_self"
-            app:destination="@id/settingsOutWriteFragment"
             app:popUpTo="@id/settingsOutWriteFragment"
             app:popUpToInclusive="true" />
 
