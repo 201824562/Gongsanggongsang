@@ -145,7 +145,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                 "OUT" -> postToolbarName.text = "퇴실 신청 내역"
             }
             if(collectionName == "5_MARKET") {postPrice.text = navPostDataInfo.postDataInfo.post_state + "원" }
-            else { postPrice.text = navPostDataInfo.postDataInfo.post_state }
+            else { postPrice.text = navPostDataInfo.postDataInfo.post_state + "호"}
             if(navPostDataInfo.postDataInfo.post_name == localUserName) { postRemoveButton.visibility = View.VISIBLE }
             if(collectionName == "5_MARKET" && localUserName == navPostDataInfo.postDataInfo.post_name && !navPostDataInfo.postDataInfo.post_anonymous) { postWithComplete.visibility = View.VISIBLE }
             if(collectionName == "OUT" && !navPostDataInfo.postDataInfo.post_anonymous) {postCategory.text = "승인 대기"}

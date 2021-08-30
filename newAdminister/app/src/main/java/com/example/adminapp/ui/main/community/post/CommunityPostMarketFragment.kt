@@ -63,7 +63,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
         //token = ac.token
         initPostView()
         collectionName = navPostDataInfo.postDataInfo.post_category
-        documentName = navPostDataInfo.postDataInfo.post_name
+        documentName = navPostDataInfo.postDataInfo.post_id
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
@@ -112,8 +112,13 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
             postWithCompleteButton.setOnClickListener {
                 viewmodel.modifyPostPartData(collectionName, documentName, "post_anonymous", true).observe(viewLifecycleOwner){
                     if(it){
+                        print("success")
                         postWithComplete.visibility = View.GONE
-                        postCategory.text = "판매 완료"
+                        if(collectionName == "5_MARKET") { postCategory.text = "판매 완료" }
+                        else { postCategory.text = "승인 완료" }
+                    }
+                    else{
+                        print("fail")
                     }
                 }
             }
@@ -140,9 +145,14 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
             }
             if(navPostDataInfo.postDataInfo.post_name == localUserName) { postRemoveButton.visibility = View.VISIBLE }
             if(collectionName == "5_MARKET") {postPrice.text = navPostDataInfo.postDataInfo.post_state + "원" }
-            else { postPrice.text = navPostDataInfo.postDataInfo.post_state }
-            if(navPostDataInfo.postDataInfo.post_name == localUserName) { postRemoveButton.visibility = View.VISIBLE }
+            else { postPrice.text = navPostDataInfo.postDataInfo.post_state + "호" }
+
             if(collectionName == "5_MARKET" && localUserName == navPostDataInfo.postDataInfo.post_name && !navPostDataInfo.postDataInfo.post_anonymous) { postWithComplete.visibility = View.VISIBLE }
+            if(collectionName == "OUT"  && !navPostDataInfo.postDataInfo.post_anonymous) {
+                postCompleteText.text = "방 청소가 잘 되어있다면,\n" + "퇴실 승인을 해주세요."
+                postWithCompleteButton.text = "퇴실 완료 처리"
+                postWithComplete.visibility = View.VISIBLE
+            }
             if(collectionName == "OUT" && !navPostDataInfo.postDataInfo.post_anonymous) {postCategory.text = "승인 대기"}
             if(collectionName == "OUT" && navPostDataInfo.postDataInfo.post_anonymous) {postCategory.text = "퇴실 완료"}
             if(collectionName == "5_MARKET" && !navPostDataInfo.postDataInfo.post_anonymous) {postCategory.text = "판매 중"}

@@ -37,6 +37,10 @@ class SettingsOutFragment : BaseSessionFragment<FragmentSettingsOutBinding, Comm
         }
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        viewmodel.initCategoryPostData()
+    }
     override fun initDataBinding(savedInstanceState: Bundle?) {
 
     }

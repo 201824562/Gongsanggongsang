@@ -43,7 +43,7 @@ class SettingsOutLogRecyclerAdapter(var postDataList : ArrayList<PostDataInfo>):
        @RequiresApi(Build.VERSION_CODES.O)
        fun bind(postDataInfo: PostDataInfo) {
            binding.settingsOutItemName.text = postDataInfo.post_name.toString()
-           binding.settingsOutItemWhere.text = postDataInfo.post_state
+           binding.settingsOutItemWhere.text = postDataInfo.post_state + "호"
            val postDateNow: String = LocalDate.now().toString()
            val postTimeNow: String = LocalTime.now().toString()
 

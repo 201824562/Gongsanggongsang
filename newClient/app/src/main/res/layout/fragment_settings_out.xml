@@ -58,7 +58,7 @@
         android:layout_height="wrap_content"
         android:background="#0c000000" >
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/settings_out_item_time"
             android:layout_weight="1"
@@ -72,7 +72,7 @@
 
         <TextView
             android:id="@+id/settings_out_item_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textStyle="normal"
             android:textSize="14sp"
@@ -84,7 +84,7 @@
             android:text="신청인"/>
         <TextView
             android:id="@+id/settings_out_item_where"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textStyle="normal"
             android:textSize="14sp"
@@ -96,7 +96,7 @@
             android:text="호수"/>
         <TextView
             android:id="@+id/settings_out_item_state"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textStyle="normal"
             android:textSize="12sp"

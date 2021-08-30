@@ -72,6 +72,9 @@
             app:destination="@+id/communityPreviewFragment"
             android:id="@+id/action_mainFragment_to_communityPreviewFragment"/>
         <action
+            app:destination="@+id/settingsOutFragment"
+            android:id="@+id/action_mainFragment_to_settingsOutFragment"/>
+        <action
             android:id="@+id/action_mainFragment_to_settingsChangePwdFragment"
             app:destination="@id/settingsChangePwdFragment"
             app:enterAnim="@anim/slide_enter"
@@ -579,5 +582,6 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpToInclusive="true" />
     </fragment>
+
 
 </navigation>
