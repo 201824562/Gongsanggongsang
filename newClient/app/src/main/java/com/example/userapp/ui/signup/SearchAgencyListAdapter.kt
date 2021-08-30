@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.core.net.toUri
-import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
