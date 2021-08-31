@@ -105,7 +105,7 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                     }
                 }
                 val PushNotification = PushNotification(
-                    NotificationData("StreetCat", "내가 쓴 게시글에 댓글이 달렸어요!"),
+                    NotificationData("공생공", "내가 쓴 게시글에 댓글이 달렸어요!"),
                     token
                 )
                 sendNotification(PushNotification)
@@ -251,7 +251,7 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
         try {
             val response = RetrofitInstance.api.postNotification(notification)
             if(response.isSuccessful) {
-                Log.d(TAG, "Response: ${Gson().toJson(response)}")
+                //Log.d(TAG, "Response: ${Gson().toJson(response)}")
             } else {
                 Log.e(TAG, response.errorBody().toString())
             }
