@@ -1,6 +1,5 @@
 package com.example.userapp.ui.signin
 
-import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Parcelable
@@ -9,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.getSystemService
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.example.userapp.R
@@ -17,6 +15,7 @@ import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.data.model.UserStatus
 import com.example.userapp.databinding.FragmentSigninBinding
 import com.example.userapp.restartActivity
+import com.example.userapp.service.getFCMToken
 import com.example.userapp.utils.WrapedDialogBasicOneButton
 import com.example.userapp.utils.hideKeyboard
 import kotlinx.android.parcel.Parcelize
@@ -29,6 +28,7 @@ class SignInFragment : BaseSessionFragment<FragmentSigninBinding, SignInViewMode
     private var idInfoExist : Boolean = false
     private var pwdInfoExist : Boolean = false
     private var nextBtnAvailable : Boolean = false
+    private lateinit var token : String
 
     override fun initViewbinding(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -49,11 +49,12 @@ class SignInFragment : BaseSessionFragment<FragmentSigninBinding, SignInViewMode
     override fun initDataBinding(savedInstanceState: Bundle?) {
         viewmodel.run {
             clearTypeData()
+            deviceToken.observe(viewLifecycleOwner){ token = it }
             userStatusEvent.observe(viewLifecycleOwner) {
                 when (it) {
                     UserStatus.NOT_USER -> showErrorDialog("로그인에 실패했습니다.\n아이디나 비밀번호를 확인해주세요.")
                     UserStatus.WAIT_APPROVE -> showErrorDialog("가입 승인 대기중이에요.\n공간 관리자님께 문의해주세요.")
-                    UserStatus.USER -> viewmodel.saveUserInfo()
+                    UserStatus.USER -> viewmodel.saveUserInfo(token)
                     else -> showErrorDialog("오류가 발생했습니다. 다시 시도하거나 문의해주세요.") }
             }
             onSuccessSaveUserInfo.observe(viewLifecycleOwner) { findNavController().navigate(R.id.action_signInFragment_to_mainFragment) }
@@ -62,6 +63,7 @@ class SignInFragment : BaseSessionFragment<FragmentSigninBinding, SignInViewMode
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run {
+            viewmodel.getDeviceToken()
             findIdBtn.setOnClickListener {
                 viewmodel.findInfoType = FindInfoType.ID
                 findNavController().navigate(R.id.action_signInFragment_to_signInFindInfoFragment)
@@ -82,7 +84,7 @@ class SignInFragment : BaseSessionFragment<FragmentSigninBinding, SignInViewMode
             }
             loginBtn.setOnClickListener {
                 if (checkServiceState()){
-                    if (nextBtnAvailable) { viewmodel.sendSignInInfo(getUserId(), getUserPwd()) }
+                    if (nextBtnAvailable) { viewmodel.sendSignInInfo(getUserId(), getUserPwd(), token) }
                 }else{ showToast("인터넷 연결이 불안정합니다.\nWifi 상태를 체킹해주세요.") }
             }
         }

@@ -22,6 +22,7 @@ class SignInFragment : BaseSessionFragment<FragmentSigninBinding, SignInViewMode
     override lateinit var viewbinding: FragmentSigninBinding
     override val viewmodel: SignInViewModel by viewModels()
     private lateinit var connectionManager : ConnectivityManager
+    private lateinit var token : String
 
     override fun initViewbinding(
         inflater: LayoutInflater,
@@ -44,12 +45,14 @@ class SignInFragment : BaseSessionFragment<FragmentSigninBinding, SignInViewMode
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
         viewmodel.run {
+            clearTypeData()
+            deviceToken.observe(viewLifecycleOwner){ token = it }
             onFailCheckingAdminData.observe(viewLifecycleOwner){ showErrorDialog(it) }
             adminStatusEvent.observe(viewLifecycleOwner) {
                 when (it) {
                     AdminStatus.NOT_ADMIN -> showErrorDialog("로그인에 실패했습니다.\n아이디나 비밀번호를 확인해주세요.")
                     /*AdminStatus.WAIT_APPROVE -> showErrorDialog("가입 승인 대기중이에요.\n공간 관리자님께 문의해주세요.")*/
-                    AdminStatus.ADMIN -> viewmodel.saveUserInfo()
+                    AdminStatus.ADMIN -> viewmodel.saveUserInfo(token)
                     else -> showErrorDialog("오류가 발생했습니다. 다시 시도하거나 문의해주세요.") }
             }
             onSuccessSaveUserInfo.observe(viewLifecycleOwner) { findNavController().navigate(R.id.action_signInFragment_to_mainFragment) }
@@ -58,6 +61,7 @@ class SignInFragment : BaseSessionFragment<FragmentSigninBinding, SignInViewMode
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run{
+            viewmodel.getDeviceToken()
             findIdBtn.setOnClickListener {
                 findNavController().navigate(SignInFragmentDirections.actionSignInFragmentToSignInFindInfoFragment(FindInfoType.ID))
             }

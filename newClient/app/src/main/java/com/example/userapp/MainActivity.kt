@@ -44,7 +44,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController : NavController
     var selectedItems : ArrayList<String> = arrayListOf()
-    var token : String? = ""
     override fun initToolbar() {
         window.apply {
             navigationBarColor = ContextCompat.getColor(this@MainActivity, R.color.white)
@@ -56,9 +55,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
         setContentView(viewbinding.root)
     }
 
-    override fun initViewStart(savedInstanceState: Bundle?) {
-        getToken()
-    }
+    override fun initViewStart(savedInstanceState: Bundle?) { }
 
     override fun initDataBinding(savedInstanceState: Bundle?) { }
 
@@ -128,68 +125,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     fun getPhoto() : ArrayList<String>{
         return selectedItems
     }
-
-    fun getToken(){
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
-            }
-
-            // Get new FCM registration token
-            token = task.result
-
-            // Log and toast
-            Log.e("TAG", token.toString())
-        })
-
-    }
-
-
-//    fun displayNotification(){
-//        val notificationId = 45
-//        val notification: Notification = NotificationCompat.Builder(this, ChannelID)
-//            .setSmallIcon(R.drawable.ic_box)
-//            .setContentTitle("textTitle")
-//            .setContentText("textContent")
-//            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-//            .build()
-//
-////        val notificationManager : NotificationManager
-//        notificationManager?.notify()
-//    }
-
-    fun createNotificationChannel(id :String, name :String) : NotificationCompat.Builder{
-
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-
-            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            val channel = NotificationChannel(id, name, NotificationManager.IMPORTANCE_HIGH)
-
-            manager.createNotificationChannel(channel)
-
-            NotificationCompat.Builder(this, id)
-
-        } else {
-            NotificationCompat.Builder(this)
-        }
-    }
-
-//    private fun createNotificationChannel(CHANNEL_ID:String, channel_name:String, channel_description:String) {
-//        // Create the NotificationChannel, but only on API 26+ because
-//        // the NotificationChannel class is new and not in the support library
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            val importance = NotificationManager.IMPORTANCE_DEFAULT
-//
-//            val channel = NotificationChannel(CHANNEL_ID, channel_name, importance).apply {
-//                description = channel_description
-//            }
-//            // Register the channel with the system
-//            val notificationManager: NotificationManager =
-//                getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-//            notificationManager.createNotificationChannel(channel)
-//        }
-//    }
 }
 
 fun <VB : ViewBinding, VM : BaseSessionViewModel> BaseSessionFragment<VB, VM>.restartActivity() {

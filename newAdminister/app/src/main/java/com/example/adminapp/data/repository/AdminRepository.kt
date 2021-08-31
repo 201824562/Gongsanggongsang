@@ -34,10 +34,12 @@ class AdminRepository(appDatabase: AppDatabase) {
 
 
     private val adminDao = appDatabase.adminDao()
-    private val SHARED_PREFERENCES_TOKEN = "admin_login_token"
     private val SHARED_PREFERENCES_AGENCY = "admin_agency_info"
-    private var storedToken: String? = null
+    private val SHARED_PREFERENCES_FCMTOKEN = "admin_fcm_token"
+    private val SHARED_PREFERENCES_TOKEN = "admin_login_token"
     private var storedAgency: String? = null
+    private var storedToken: String? = null
+    private var storeFcmToken : String? = null
 
     fun getAgencyInfo(application : Application)  : String? {
         val sharedPreferences = application.getSharedPreferences(SHARED_PREFERENCES_AGENCY, Context.MODE_PRIVATE)
@@ -63,6 +65,30 @@ class AdminRepository(appDatabase: AppDatabase) {
         val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_AGENCY, Context.MODE_PRIVATE)
         storedAgency = null
         sharedPreferences.edit { remove(SHARED_PREFERENCES_AGENCY ) }
+    }
+
+    fun saveFCMToken(fcmToken: String, context: Context){
+        val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FCMTOKEN, Context.MODE_PRIVATE)
+        storeFcmToken = fcmToken
+        sharedPreferences.edit {
+            putString(SHARED_PREFERENCES_FCMTOKEN , fcmToken)
+            apply()
+        }
+    }
+    fun getFCMToken(application : Application)  : String? {
+        val sharedPreferences = application.getSharedPreferences(SHARED_PREFERENCES_FCMTOKEN, Context.MODE_PRIVATE)
+        return if (storeFcmToken != null) storeFcmToken
+        else {
+            if (sharedPreferences.getString(SHARED_PREFERENCES_FCMTOKEN , "") != "") {
+                storeFcmToken = sharedPreferences.getString(SHARED_PREFERENCES_FCMTOKEN , "")
+                storeFcmToken
+            }else storeFcmToken
+        }
+    }
+    fun removeFCMToken(context: Context) {
+        val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FCMTOKEN, Context.MODE_PRIVATE)
+        storeFcmToken = null
+        sharedPreferences.edit { remove(SHARED_PREFERENCES_FCMTOKEN ) }
     }
 
     fun getAdminToken(application : Application)  : String? {

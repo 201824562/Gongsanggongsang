@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.example.userapp.data.AppDatabase
 import com.example.userapp.data.dto.UserModel
 import com.example.userapp.data.repository.UserRepository
+import com.example.userapp.service.sendFireStoreNotification
 import com.example.userapp.utils.SingleLiveEvent
 import com.example.userapp.utils.SnackbarMessageString
 import io.reactivex.Completable
@@ -47,6 +48,8 @@ abstract class BaseSessionViewModel(application: Application)  : AndroidViewMode
 
     private var _agencyInfo: String? = null
     val agencyInfo: String get() = _agencyInfo!!
+    private var _fcmToken: String? = null
+    private val fcmToken: String get() = _fcmToken!!
     private var _authToken: String? = null
     val authToken: String get() = _authToken!!
     val isTokenAvailable: Boolean get() = _authToken != null
@@ -54,6 +57,7 @@ abstract class BaseSessionViewModel(application: Application)  : AndroidViewMode
     init {
         _agencyInfo = userRepository.getAgencyInfo(application)
         _authToken = userRepository.getUserToken(application)
+        _fcmToken = userRepository.getFCMToken(application)
     }
 
     private val _onSuccessGettingUserInfo = SingleLiveEvent<UserModel>()
@@ -104,6 +108,10 @@ abstract class BaseSessionViewModel(application: Application)  : AndroidViewMode
 
     fun callSessionInvalidEvent() {
         _sessionInvalidEvent.call()
+    }
+
+    fun registerNotificationToFireStore(title : String, content : String){
+        sendFireStoreNotification(title, content, fcmToken )
     }
 
 

@@ -1,14 +1,12 @@
 package com.example.userapp.ui.main.community.write
 
 import android.Manifest
-import android.content.ContentValues
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,17 +21,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.MainActivity
 import com.example.userapp.R
-import com.example.userapp.base.BaseFragment
 import com.example.userapp.base.BaseSessionFragment
-import com.example.userapp.data.entity.PushNotification
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentCommunityWriteBinding
-import com.example.userapp.ui.main.alarm.RetrofitInstance
 import com.example.userapp.ui.main.community.CommunityViewModel
-import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
 

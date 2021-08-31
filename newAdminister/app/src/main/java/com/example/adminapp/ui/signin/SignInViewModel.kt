@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import com.example.adminapp.base.BaseSessionViewModel
 import com.example.adminapp.data.model.AdminModel
 import com.example.adminapp.data.model.AdminStatus
+import com.example.adminapp.service.getFCMToken
 import com.example.adminapp.utils.RegularExpressionUtils
 import com.example.adminapp.utils.SingleLiveEvent
 
@@ -36,6 +37,8 @@ class SignInViewModel (application: Application) : BaseSessionViewModel(applicat
     val onFailCheckingAdminData : LiveData<String> get() = _onFailCheckingAdminData
     private val _onSuccessSaveUserInfo = SingleLiveEvent<Any>()
     val onSuccessSaveUserInfo : LiveData<Any> get() = _onSuccessSaveUserInfo
+    private val _deviceToken = SingleLiveEvent<String>()
+    val deviceToken : LiveData<String> get() = _deviceToken
     private val _userStatusEvent = SingleLiveEvent<AdminStatus>()
     val adminStatusEvent : LiveData<AdminStatus> get() = _userStatusEvent
 
@@ -50,6 +53,9 @@ class SignInViewModel (application: Application) : BaseSessionViewModel(applicat
         findInfoResultData = ""
     }
 
+    fun getDeviceToken() {
+        apiCall(getFCMToken(), { _deviceToken.postValue(it) })
+    }
 
     private fun checkForUserName(userName: String) : Boolean{
         return if (userName.isBlank() || userName.isEmpty()) {
@@ -153,13 +159,15 @@ class SignInViewModel (application: Application) : BaseSessionViewModel(applicat
         })
     }
 
-    fun saveUserInfo() {
+    fun saveUserInfo(fcmToken : String) {
         val context = getApplication<Application>().applicationContext
         adminModelData?.let {
             apiCall(adminRepository.saveAdminInfo(it),{
                 _onSuccessSaveUserInfo.value = true
                 adminRepository.saveAgencyInfo(it.agency, context)
-                adminRepository.saveAdminToken(it.id, context) } )
+                adminRepository.saveAdminToken(it.id, context)
+                adminRepository.saveFCMToken(fcmToken, context)
+            } )
         }
     }
 

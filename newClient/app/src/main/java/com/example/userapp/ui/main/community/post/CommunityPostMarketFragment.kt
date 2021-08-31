@@ -16,11 +16,11 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.R
 import com.example.userapp.base.BaseSessionFragment
-import com.example.userapp.data.entity.NotificationData
+import com.example.userapp.service.NotificationData
 import com.example.userapp.data.entity.PostCommentDataClass
-import com.example.userapp.data.entity.PushNotification
+import com.example.userapp.service.PushNotification
 import com.example.userapp.databinding.FragmentCommunityPostMarketBinding
-import com.example.userapp.ui.main.alarm.RetrofitInstance
+import com.example.userapp.service.RetrofitInstance
 import com.example.userapp.ui.main.community.CommunityViewModel
 import com.example.userapp.ui.main.community.write.CommunityAttachPostPhotoRecyclerAdapter
 import com.example.userapp.utils.WrapedDialogBasicTwoButton
@@ -250,17 +250,5 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
             }
         }
         showDialog(dialog, viewLifecycleOwner)
-    }
-    private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
-        try {
-            val response = RetrofitInstance.api.postNotification(notification)
-            if(response.isSuccessful) {
-                Log.d(TAG, "Response: ${Gson().toJson(response)}")
-            } else {
-                Log.e(TAG, response.errorBody().toString())
-            }
-        } catch(e: Exception) {
-            Log.e(TAG, e.toString())
-        }
     }
 }
