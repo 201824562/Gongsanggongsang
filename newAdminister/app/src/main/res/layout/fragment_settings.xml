@@ -232,7 +232,7 @@
                     android:clickable="false"/>
             </androidx.cardview.widget.CardView>
             <androidx.cardview.widget.CardView
-                android:id="@+id/dfdfdfd"
+                android:id="@+id/manageOut_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView

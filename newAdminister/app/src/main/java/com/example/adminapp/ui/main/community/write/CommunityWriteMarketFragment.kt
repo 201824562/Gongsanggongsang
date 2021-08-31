@@ -129,12 +129,14 @@ class CommunityWriteMarketFragment : BaseSessionFragment<FragmentCommunityWriteM
     private val requestLocationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()){ result : Boolean ->
         if (result) getAllPhoto()
-        else showSnackbar("권한이 거부되었습니다.")
+        else {
+            showSnackbar("권한이 거부되었습니다.")
+        }
     }
 
     private fun getPhotoPermission(){
         requestPermission(requestLocationPermissionLauncher, Manifest.permission.READ_EXTERNAL_STORAGE,
-            "권한이 거부되었습니다."){
+            "권한이 거부 되었습니다.\n" + "공생공생에서 기기의 사진 및 미디어에 엑세스하도록 허용하시겠습니까?"){
             getAllPhoto()
         }
     }

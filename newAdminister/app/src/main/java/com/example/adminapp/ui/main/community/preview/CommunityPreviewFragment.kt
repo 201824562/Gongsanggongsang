@@ -49,10 +49,12 @@ class CommunityPreviewFragment : BaseSessionFragment<FragmentCommunityPreviewBin
             "3_SUGGEST" -> viewbinding.previewToolbarName.text = "건의게시판"
             "4_WITH" -> viewbinding.previewToolbarName.text = "함께게시판"
             "5_MARKET" -> viewbinding.previewToolbarName.text = "장터게시판"
+            "OUT" ->  viewbinding.previewToolbarName.text = "퇴실 신청 내역"
         }
 
         when(getCollection){
             "5_MARKET" -> initMarketRecyclerView()
+            "OUT" -> initMarketRecyclerView()
             else -> initMarketElseRecyclerView()
         }
     }
@@ -65,7 +67,7 @@ class CommunityPreviewFragment : BaseSessionFragment<FragmentCommunityPreviewBin
     override fun initDataBinding(savedInstanceState: Bundle?) {
         viewmodel.getPostDataInCategory(getCollection).observe(viewLifecycleOwner){
             when(getCollection){
-                "5_MARKET" -> {
+                "5_MARKET", "OUT" -> {
                     communityPreviewMarketItem = it
                     initMarketRecyclerView()
                     communityPreviewMarketRecyclerAdapter.notifyDataSetChanged()
@@ -83,7 +85,7 @@ class CommunityPreviewFragment : BaseSessionFragment<FragmentCommunityPreviewBin
         viewbinding.run{
             previewWriteRegisterButton.setOnClickListener{
                 when(getCollection){
-                    "5_MARKET" -> findNavController().navigate(R.id.action_communityPreview_to_communityWriteMarket, toCollectionBundle)
+                    "5_MARKET", "OUT" -> findNavController().navigate(R.id.action_communityPreview_to_communityWriteMarket, toCollectionBundle)
                     else -> findNavController().navigate(R.id.action_communityPreview_to_communityWrite, toCollectionBundle)
                 }
             }
@@ -91,7 +93,7 @@ class CommunityPreviewFragment : BaseSessionFragment<FragmentCommunityPreviewBin
                 findNavController().navigate(R.id.action_communityPreview_communitySearch, toCollectionBundle)
             }
             previewBackButton.setOnClickListener {
-                
+                findNavController().navigate(R.id.action_communityPreviewFragment_pop)
             }
         }
 

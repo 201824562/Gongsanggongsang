@@ -1,4 +1,4 @@
-package com.example.userapp.ui.main.settings
+package com.example.adminapp.ui.main.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,12 +8,12 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.userapp.R
-import com.example.userapp.base.BaseSessionFragment
-import com.example.userapp.data.model.PostDataInfo
-import com.example.userapp.databinding.FragmentSettingsOutBinding
-import com.example.userapp.ui.main.community.CommunityViewModel
-import com.example.userapp.ui.main.community.preview.CommunityPreviewMarketRecyclerAdapter
+import com.example.adminapp.R
+import com.example.adminapp.base.BaseSessionFragment
+import com.example.adminapp.data.model.PostDataInfo
+import com.example.adminapp.databinding.FragmentSettingsOutBinding
+import com.example.adminapp.ui.main.community.CommunityViewModel
+import com.example.adminapp.ui.main.community.preview.CommunityPreviewMarketRecyclerAdapter
 
 class SettingsOutFragment : BaseSessionFragment<FragmentSettingsOutBinding, CommunityViewModel>() {
     override lateinit var viewbinding : FragmentSettingsOutBinding
@@ -37,15 +37,16 @@ class SettingsOutFragment : BaseSessionFragment<FragmentSettingsOutBinding, Comm
         }
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        viewmodel.initCategoryPostData()
+    }
     override fun initDataBinding(savedInstanceState: Bundle?) {
 
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
-        viewbinding.run {
-            previewWriteRegisterButton.setOnClickListener { findNavController().navigate(R.id.action_settingsOut_to_settingsOutWrite) }
-            previewBackButton.setOnClickListener { findNavController().navigate(R.id.action_settingsOutFragment_pop) }
-        }
+        viewbinding.previewBackButton.setOnClickListener { findNavController().navigate(R.id.action_settingsOutFragment_pop) }
     }
     private fun initSettingsLogRecycler(){
         viewbinding.communityPreviewRecyclerView.run {

@@ -12,12 +12,13 @@
         android:background="#0c000000"
         tools:ignore="MissingConstraints">
         <ImageButton
-            android:id="@+id/market_write_back_button"
+            android:id="@+id/post_back_button"
             android:background="@color/transparent"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:src="@drawable/ic_community_back_icon"
-            android:layout_marginLeft="16dp"
+            android:paddingHorizontal="10dp"
+            android:layout_marginLeft="6dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -38,7 +39,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
         <Button
-            android:id="@+id/market_write_register_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/transparent"

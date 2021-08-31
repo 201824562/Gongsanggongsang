@@ -72,6 +72,9 @@
             app:destination="@+id/communityPreviewFragment"
             android:id="@+id/action_mainFragment_to_communityPreviewFragment"/>
         <action
+            app:destination="@+id/settingsOutFragment"
+            android:id="@+id/action_mainFragment_to_settingsOutFragment"/>
+        <action
             android:id="@+id/action_mainFragment_to_settingsChangePwdFragment"
             app:destination="@id/settingsChangePwdFragment"
             app:enterAnim="@anim/slide_enter"
@@ -92,6 +95,25 @@
             app:exitAnim="@anim/slide_exit"
             app:popEnterAnim="@anim/slide_pop_enter"
             app:popExitAnim="@anim/slide_pop_exit"/>
+        <action
+            android:id="@+id/action_mainFragment_to_settingsManageOutFragment"
+            app:destination="@id/communityPreviewFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+    </fragment>
+    <fragment
+        android:id="@+id/settingsOutFragment"
+        android:name="com.example.adminapp.ui.main.settings.SettingsOutFragment"
+        android:label="SettingsOutFragment">
+        <action
+            android:id="@+id/action_settingOut_to_settingOutPost"
+            app:destination="@id/communityPostMarketFragment" />
+        <action
+            android:id="@+id/action_settingsOutFragment_pop"
+            app:popUpTo="@id/settingsOutFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/mainhomeNoticeFragment"
@@ -564,5 +586,6 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpToInclusive="true" />
     </fragment>
+
 
 </navigation>

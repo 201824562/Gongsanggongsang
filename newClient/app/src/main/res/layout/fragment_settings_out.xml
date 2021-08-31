@@ -12,9 +12,10 @@
         <ImageButton
             android:id="@+id/preview_back_button"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:src="@drawable/ic_community_back_icon"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="6dp"
+            android:paddingHorizontal="10dp"
             android:background="@color/transparent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -58,7 +59,7 @@
         android:layout_height="wrap_content"
         android:background="#0c000000" >
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/settings_out_item_time"
             android:layout_weight="1"
@@ -72,7 +73,7 @@
 
         <TextView
             android:id="@+id/settings_out_item_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textStyle="normal"
             android:textSize="14sp"
@@ -84,7 +85,7 @@
             android:text="신청인"/>
         <TextView
             android:id="@+id/settings_out_item_where"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textStyle="normal"
             android:textSize="14sp"
@@ -96,7 +97,7 @@
             android:text="호수"/>
         <TextView
             android:id="@+id/settings_out_item_state"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textStyle="normal"
             android:textSize="12sp"

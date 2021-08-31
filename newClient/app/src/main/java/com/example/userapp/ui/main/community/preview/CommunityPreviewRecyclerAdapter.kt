@@ -46,7 +46,7 @@ class CommunityPreviewRecyclerAdapter(var postDataList : ArrayList<PostDataInfo>
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun bind(postDataInfo: PostDataInfo) {
-            if(postDataInfo.post_state != "none"){
+            if(postDataInfo.post_category != "4_WITH" && postDataInfo.post_state != "none"){
                 binding.communityPreviewCategory.text = postDataInfo.post_state
             }
             else{

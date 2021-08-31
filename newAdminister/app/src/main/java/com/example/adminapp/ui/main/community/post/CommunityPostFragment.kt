@@ -92,6 +92,7 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                 )
                 viewmodel.insertPostCommentData(collectionName, documentName, postComment).observe(viewLifecycleOwner){
                     if(it){
+                        showToast("댓글이 등록되었습니다.")
                         viewmodel.getPostCommentData(collectionName, documentName).observe(viewLifecycleOwner){
                             postCommentsArray = it
                             commentRecyclerAdapter.notifyDataSetChanged()
