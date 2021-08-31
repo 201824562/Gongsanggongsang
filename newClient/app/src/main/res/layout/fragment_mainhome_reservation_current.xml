@@ -44,6 +44,23 @@
 <!--                app:layout_constraintTop_toTopOf="parent"-->
 <!--                app:layout_constraintBottom_toTopOf="@id/equipment_using_recyclerView"/>-->
 
+
+            <TextView
+                android:id="@+id/no_using_textmessage_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginVertical="50dp"
+                android:paddingBottom="50dp"
+                android:text="사용중인 물품/시설이 없습니다."
+                android:textSize="14sp"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@id/equipment_using_recyclerView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/equipment_using_textview" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/equipment_using_recyclerView"
                 android:layout_width="match_parent"
@@ -52,7 +69,7 @@
                 android:nestedScrollingEnabled="false"
                 android:layout_marginHorizontal="16dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/equipment_using_textview"
+                app:layout_constraintTop_toBottomOf="@+id/no_using_textmessage_textview"
                 tools:listitem="@layout/fragment_mainhome_reservation_current_using_item" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -77,7 +94,7 @@
                 android:id="@+id/facility_reserve_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginStart="16dp"
                 android:text="예약내역"
                 android:textSize="16sp"
@@ -85,6 +102,23 @@
                 android:fontFamily="@font/notosanskr_bold_hestia"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/line1"/>
+
+            <TextView
+                android:id="@+id/no_reserve_textmessage_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginVertical="50dp"
+                android:paddingBottom="50dp"
+                android:text="예약중인 물품/시설이 없습니다."
+                android:textSize="14sp"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@id/facility_reserve_recyclerView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/facility_reserve_textview" />
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/facility_reserve_recyclerView"
@@ -94,7 +128,7 @@
                 android:nestedScrollingEnabled="false"
                 android:layout_marginHorizontal="16dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/facility_reserve_textview"
+                app:layout_constraintTop_toBottomOf="@+id/no_reserve_textmessage_textview"
                 tools:listitem="@layout/fragment_mainhome_reservation_current_reserve_item" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

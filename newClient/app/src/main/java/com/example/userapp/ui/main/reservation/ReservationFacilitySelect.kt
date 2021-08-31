@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -42,22 +43,26 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
     val args: ReservationFacilitySelectArgs by navArgs()
     private var ac: MainActivity? = null
     private var userInfo : UserModel? = null
+    private lateinit var unableRVlinearLayoutManager : LinearLayoutManager
+    var weekday : Int = 1
 
     override fun initViewbinding(
         inflater: LayoutInflater,
-         container: ViewGroup?,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         viewbinding = FragmentMainhomeReservationFacilitySelectBinding.inflate(inflater, container, false)
         return viewbinding.root
     }
 
+
     override fun initViewStart(savedInstanceState: Bundle?) {
-        viewbinding.facilityTimesliceRecyclerView.layoutManager = LinearLayoutManager(context).also{
-            it.orientation = LinearLayoutManager.HORIZONTAL
-        }
+        unableRVlinearLayoutManager = LinearLayoutManager(context)
+        unableRVlinearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        viewbinding.facilityTimesliceRecyclerView.layoutManager = unableRVlinearLayoutManager
         viewbinding.facilityTimesliceRecyclerView.adapter = FacilitySelectAdapter(
             emptyList(),
+            1,
             onClickUsingIcon = {
                 if(it.buttonSelected as Boolean){
                     if(viewmodel.delete_select_time_slot(it)){
@@ -98,6 +103,7 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
                 viewbinding.nextBtn.isEnabled = viewmodel.getDayTimeSlotListSize() != 0L
             }
         )
+        setTimeTabView()
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
@@ -106,6 +112,7 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
         viewmodel.FacilityDayInfoLiveData.observe(viewLifecycleOwner, {
             (viewbinding.facilityTimesliceRecyclerView.adapter as FacilitySelectAdapter).setData(it.day_time_slot_list)
         })
+        (viewbinding.facilityTimesliceRecyclerView.adapter as FacilitySelectAdapter).setweekdayData(weekday)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -114,6 +121,7 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
         viewbinding.documentNameTextview.text = args.myArg.document_name + " 예약"
         viewbinding.message2Textview.text = "최대 예약 가능한 시간:" + args.myArg.max_time.toString()+"분"
 
+        val defaultCal :Calendar = Calendar.getInstance()
         var cal :Calendar = Calendar.getInstance()
         var cal2 :Calendar = Calendar.getInstance()
         val dateFmt :SimpleDateFormat = SimpleDateFormat("dd")
@@ -126,42 +134,46 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
 
         cal.set(Calendar.DAY_OF_WEEK,Calendar.MONDAY)
         viewbinding.dayMonTextview.text = dateFmt.format(cal.time)
-        if(Calendar.getInstance().compareTo(cal) == 1) {
+        Log.e("compare check",Calendar.getInstance().compareTo(cal).toString())
+        if(defaultCal.compareTo(cal) == 1) {
             viewbinding.monView.isEnabled = false
             viewbinding.dayMonTextview.isEnabled = false
         }
 
         cal.set(Calendar.DAY_OF_WEEK,Calendar.TUESDAY)
         viewbinding.dayTueTextview.text = dateFmt.format(cal.time)
-        if(Calendar.getInstance().compareTo(cal) == 1) {
+        Log.e("compare check",Calendar.getInstance().compareTo(cal).toString())
+        if(defaultCal.compareTo(cal) == 1) {
             viewbinding.tueView.isEnabled = false
             viewbinding.dayTueTextview.isEnabled = false
         }
 
         cal.set(Calendar.DAY_OF_WEEK,Calendar.WEDNESDAY)
         viewbinding.dayWedTextview.text = dateFmt.format(cal.time)
-        if(Calendar.getInstance().compareTo(cal) == 1) {
+        Log.e("compare check",Calendar.getInstance().compareTo(cal).toString())
+
+        if(defaultCal.compareTo(cal) == 1) {
             viewbinding.wedView.isEnabled = false
             viewbinding.dayWedTextview.isEnabled = false
         }
 
         cal.set(Calendar.DAY_OF_WEEK,Calendar.THURSDAY)
         viewbinding.dayThuTextview.text = dateFmt.format(cal.time)
-        if(Calendar.getInstance().compareTo(cal) == 1) {
+        if(defaultCal.compareTo(cal) == 1) {
             viewbinding.thuView.isEnabled = false
             viewbinding.dayThuTextview.isEnabled = false
         }
 
         cal.set(Calendar.DAY_OF_WEEK,Calendar.FRIDAY)
         viewbinding.dayFriTextview.text = dateFmt.format(cal.time)
-        if(Calendar.getInstance().compareTo(cal) == 1) {
+        if(defaultCal.compareTo(cal) == 1) {
             viewbinding.friView.isEnabled = false
             viewbinding.dayFriTextview.isEnabled = false
         }
 
         cal.set(Calendar.DAY_OF_WEEK,Calendar.SATURDAY)
         viewbinding.daySatTextview.text = dateFmt.format(cal.time)
-        if(Calendar.getInstance().compareTo(cal) == 1) {
+        if(defaultCal.compareTo(cal) == 1) {
             viewbinding.satView.isEnabled = false
             viewbinding.daySatTextview.isEnabled = false
         }
@@ -171,6 +183,8 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
             viewbinding.dayInfo.visibility = View.VISIBLE
             button_not_selected()
             viewbinding.monView.isSelected = true
+            weekday = 2
+            (viewbinding.facilityTimesliceRecyclerView.adapter as FacilitySelectAdapter).setweekdayData(weekday)
             viewmodel.clear_select_time_slot()
         })
         viewbinding.tueView.setOnClickListener(View.OnClickListener {
@@ -178,6 +192,8 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
             viewbinding.dayInfo.visibility = View.VISIBLE
             button_not_selected()
             viewbinding.tueView.isSelected = true
+            weekday = 3
+            (viewbinding.facilityTimesliceRecyclerView.adapter as FacilitySelectAdapter).setweekdayData(weekday)
             viewmodel.clear_select_time_slot()
         })
         viewbinding.wedView.setOnClickListener(View.OnClickListener {
@@ -185,6 +201,8 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
             viewbinding.dayInfo.visibility = View.VISIBLE
             button_not_selected()
             viewbinding.wedView.isSelected = true
+            weekday = 4
+            (viewbinding.facilityTimesliceRecyclerView.adapter as FacilitySelectAdapter).setweekdayData(weekday)
             viewmodel.clear_select_time_slot()
         })
         viewbinding.thuView.setOnClickListener(View.OnClickListener {
@@ -192,6 +210,8 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
             viewbinding.dayInfo.visibility = View.VISIBLE
             button_not_selected()
             viewbinding.thuView.isSelected = true
+            weekday = 5
+            (viewbinding.facilityTimesliceRecyclerView.adapter as FacilitySelectAdapter).setweekdayData(weekday)
             viewmodel.clear_select_time_slot()
         })
         viewbinding.friView.setOnClickListener(View.OnClickListener {
@@ -199,6 +219,8 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
             viewbinding.dayInfo.visibility = View.VISIBLE
             button_not_selected()
             viewbinding.friView.isSelected = true
+            weekday = 6
+            (viewbinding.facilityTimesliceRecyclerView.adapter as FacilitySelectAdapter).setweekdayData(weekday)
             viewmodel.clear_select_time_slot()
         })
         viewbinding.satView.setOnClickListener(View.OnClickListener {
@@ -206,6 +228,8 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
             viewbinding.dayInfo.visibility = View.VISIBLE
             button_not_selected()
             viewbinding.satView.isSelected = true
+            weekday = 7
+            (viewbinding.facilityTimesliceRecyclerView.adapter as FacilitySelectAdapter).setweekdayData(weekday)
             viewmodel.clear_select_time_slot()
         })
         viewbinding.sunView.setOnClickListener(View.OnClickListener {
@@ -213,8 +237,11 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
             viewbinding.dayInfo.visibility = View.VISIBLE
             button_not_selected()
             viewbinding.sunView.isSelected = true
+            weekday = 1
+            (viewbinding.facilityTimesliceRecyclerView.adapter as FacilitySelectAdapter).setweekdayData(weekday)
             viewmodel.clear_select_time_slot()
         })
+
         viewbinding.nextBtn.setOnClickListener {
 
 
@@ -244,10 +271,64 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
         viewbinding.sunView.isSelected = false
         viewbinding.nextBtn.isEnabled = false
     }
+
+    private fun setTimeTextView(time : Int){
+        when (time){
+            0 -> {
+                viewbinding.timeText0.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                viewbinding.timeText6.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_50))
+                viewbinding.timeText12.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_50))
+                viewbinding.timeText18.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_50)) }
+            6 -> {
+                viewbinding.timeText6.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                viewbinding.timeText0.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_50))
+                viewbinding.timeText12.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_50))
+                viewbinding.timeText18.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_50)) }
+            12 -> {
+                viewbinding.timeText12.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                viewbinding.timeText0.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_50))
+                viewbinding.timeText6.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_50))
+                viewbinding.timeText18.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_50)) }
+            18 -> {
+                viewbinding.timeText18.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                viewbinding.timeText0.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_50))
+                viewbinding.timeText6.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_50))
+                viewbinding.timeText12.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_50)) }
+        }
+    }
+    private fun setTimeTabView(){
+        viewbinding.run {
+            unableReserveTimeRadioGroup.setOnCheckedChangeListener { _, checkedId ->
+                val timeTabValue = when (checkedId){
+                    timeText0.id -> 0
+                    timeText6.id -> 6
+                    timeText12.id -> 12
+                    timeText18.id -> 18
+                    else -> 0 }
+                setTimeTextView(timeTabValue)
+                scrollRVToTabTime(timeTabValue)
+            }
+        }
+    }
+    private fun scrollRVToTabTime(time : Int){
+        val position = when (args.myArg.interval_time){
+            30L -> {
+                if (time==0) 0
+                else time*2
+            }
+            60L -> {
+                if (time==0) 0
+                else time
+            }
+            else -> 0
+        }
+        unableRVlinearLayoutManager.scrollToPositionWithOffset(position, 0)
+    }
 }
 
 class FacilitySelectAdapter(
     private var dataSet: List<DayTimeSlot>,
+    var weekday: Int,
     val onClickUsingIcon: ( DayTimeSlot) -> Unit
 ) :
     RecyclerView.Adapter<FacilitySelectAdapter.FacilitySelectViewHolder>() {
@@ -269,15 +350,15 @@ class FacilitySelectAdapter(
         viewHolder.viewbinding.timeSlotBtn.text = String.format("%02d", data.data?.hour) + ":" + String.format("%02d", data.data?.min)
 
         Log.e("data", dataSet[position].toString())
-    //버튼 상태 그리기
+        //버튼 상태 그리기
         viewHolder.viewbinding.timeSlotBtn.isSelected = data.user.toString() != "Nope"
         viewHolder.viewbinding.timeSlotBtn.isEnabled = data.user.toString() == "Nope"
 
-//        if(data.weekday == Calendar.getInstance().get(Calendar.DAY_OF_WEEK)){
-//            if((data.data?.hour?.toInt())?.times(60)?.plus((data.data?.min?.toInt()!!))!! < Calendar.getInstance().get(Calendar.HOUR)*60 + Calendar.getInstance().get(Calendar.MINUTE)){
-//                viewHolder.viewbinding.timeSlotBtn.isEnabled = false
-//            }
-//        }
+        if(weekday == Calendar.getInstance().get(Calendar.DAY_OF_WEEK)){
+            if((data.data?.hour?.toInt())?.times(60)?.plus((data.data?.min?.toInt()!!))!! < Calendar.getInstance().get(Calendar.AM_PM)*12*60 + Calendar.getInstance().get(Calendar.HOUR)*60 + Calendar.getInstance().get(Calendar.MINUTE)){
+                viewHolder.viewbinding.timeSlotBtn.isEnabled = false
+            }
+        }
 
         //사용하기 버튼
         viewHolder.viewbinding.timeSlotBtn.setOnClickListener() {
@@ -295,6 +376,11 @@ class FacilitySelectAdapter(
     //라이브데이터 값이 변경되었을 때 필요한 메소 - 데이터갱신
     fun setData(newData: List<DayTimeSlot>) {
         dataSet = newData
+        notifyDataSetChanged()
+    }
+
+    fun setweekdayData(newWeekday: Int) {
+        weekday = newWeekday
         notifyDataSetChanged()
     }
 
