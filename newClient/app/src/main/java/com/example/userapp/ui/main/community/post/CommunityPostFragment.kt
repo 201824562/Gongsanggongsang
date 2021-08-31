@@ -13,8 +13,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.data.entity.NotificationData
 import com.example.userapp.data.entity.PostCommentDataClass
 import com.example.userapp.data.entity.PushNotification
 import com.example.userapp.databinding.FragmentCommunityPostBinding
@@ -46,7 +48,7 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
     private var postCommentsArray : ArrayList<PostCommentDataClass> = arrayListOf()
 
     private var localUserName = ""
-
+    private var token = ""
 
     override fun initViewbinding(
         inflater: LayoutInflater,
@@ -60,6 +62,8 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
 
 
     override fun initViewStart(savedInstanceState: Bundle?) {
+        val ac = activity as MainActivity
+        token = ac.token!!
         viewmodel.getUserInfo()
         collectionName = navArgs.postDataInfo.post_category
         documentName = navArgs.postDataInfo.post_id
@@ -100,11 +104,11 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                         }
                     }
                 }
-                /*val PushNotification = PushNotification(
+                val PushNotification = PushNotification(
                     NotificationData("StreetCat", "내가 쓴 게시글에 댓글이 달렸어요!"),
                     token
                 )
-                sendNotification(PushNotification)*/
+                sendNotification(PushNotification)
             }
             postRemoveButton.setOnClickListener{ makeDialog("정말로 글을 삭제할까요?", "isPost", PostCommentDataClass()) }
         }

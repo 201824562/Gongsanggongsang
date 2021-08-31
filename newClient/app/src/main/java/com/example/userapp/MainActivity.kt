@@ -44,7 +44,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController : NavController
     var selectedItems : ArrayList<String> = arrayListOf()
-
+    var token : String? = ""
     override fun initToolbar() {
         window.apply {
             navigationBarColor = ContextCompat.getColor(this@MainActivity, R.color.white)
@@ -137,7 +137,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
             }
 
             // Get new FCM registration token
-            val token = task.result
+            token = task.result
 
             // Log and toast
             Log.e("TAG", token.toString())
