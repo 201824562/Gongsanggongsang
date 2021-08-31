@@ -12,11 +12,15 @@ import com.example.userapp.base.BaseSessionViewModel
 import com.example.userapp.data.entity.PostCommentDataClass
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.data.repository.CommunityDataRepository
+import com.example.userapp.utils.SingleLiveEvent
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
 class CommunityViewModel(application: Application) : BaseSessionViewModel(application) {
+    private val firestore = FirebaseFirestore.getInstance()
+    var postCommentUploadSuccess : MutableLiveData<Boolean> = MutableLiveData()
     private val communityDataRepository : CommunityDataRepository = CommunityDataRepository.getInstance()
     fun getPostDataInCategory(collection_name: String) : LiveData<ArrayList<PostDataInfo>> {
         return communityDataRepository.getPostDataInCategory(agencyInfo, collection_name)
@@ -33,8 +37,22 @@ class CommunityViewModel(application: Application) : BaseSessionViewModel(applic
     fun insertPostData(it: PostDataInfo) : MutableLiveData<Boolean> {
         return communityDataRepository.insertPostData(agencyInfo, it)
     }
-    fun insertPostCommentData(collection_name: String, document_name: String, postComment : PostCommentDataClass) : MutableLiveData<Boolean> {
-        return communityDataRepository.insertPostCommentData(agencyInfo, collection_name, document_name, postComment)
+    fun insertPostCommentData(collection_name: String, document_name: String, postComment : PostCommentDataClass) {
+        firestore
+            .collection(agencyInfo)
+            .document("community")
+            .collection(collection_name)
+            .document(document_name)
+            .collection("post_comment")
+            .document(postComment.commentDate + postComment.commentTime + postComment.commentName)
+            .set(postComment)
+            .addOnSuccessListener {
+                postCommentUploadSuccess.postValue(true)
+            }
+    }
+    fun insertPostCommentSuccess(collection_name: String, document_name: String, postComment: PostCommentDataClass) : MutableLiveData<Boolean> {
+        insertPostCommentData(collection_name, document_name, postComment)
+        return postCommentUploadSuccess
     }
     fun deletePostCommentData(collection_name: String, document_name: String, postComment : PostCommentDataClass) : MutableLiveData<Boolean> {
         return communityDataRepository.deletePostCommentData(agencyInfo, collection_name, document_name, postComment)

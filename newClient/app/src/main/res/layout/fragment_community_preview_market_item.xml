@@ -15,7 +15,7 @@
             android:id="@+id/community_preview_point"
             android:layout_width="6dp"
             android:layout_height="6dp"
-            android:background="#ff7146"
+            android:background="@color/pale_orange"
             android:layout_gravity="center"/>
         <TextView
             android:id="@+id/community_market_preview_category"

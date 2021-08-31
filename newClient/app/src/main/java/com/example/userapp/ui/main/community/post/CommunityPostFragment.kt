@@ -8,8 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +26,7 @@ import com.example.userapp.ui.main.alarm.RetrofitInstance
 import com.example.userapp.ui.main.community.CommunityViewModel
 import com.example.userapp.ui.main.community.write.CommunityAttachPostPhotoRecyclerAdapter
 import com.example.userapp.utils.WrapedDialogBasicTwoButton
+import com.example.userapp.utils.hideKeyboard
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -92,9 +95,12 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                     commentAnonymous = false,
                     commentId = postDateNow + postTimeNow + localUserName,
                 )
-                viewmodel.insertPostCommentData(collectionName, documentName, postComment).observe(viewLifecycleOwner){
+                viewmodel.insertPostCommentSuccess(collectionName, documentName, postComment).observe(viewLifecycleOwner){
                     if(it){
+                        viewmodel.postCommentUploadSuccess = MutableLiveData()
                         showToast("댓글이 등록되었습니다.")
+                        writeComment.setText("")
+                        hideKeyboard(viewbinding.root)
                         viewmodel.getPostCommentData(collectionName, documentName).observe(viewLifecycleOwner){
                             postCommentsArray = it
                             commentRecyclerAdapter.notifyDataSetChanged()
@@ -102,13 +108,13 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                             communityPostCommentsNumber.text = it.size.toString()
                             viewmodel.modifyPostPartData(collectionName, documentName, "post_comments", it.size)
                         }
+                        val PushNotification = PushNotification(
+                            NotificationData("공생공생", "내가 쓴 게시글에 댓글이 달렸어요!"),
+                            token
+                        )
+                        sendNotification(PushNotification)
                     }
                 }
-                val PushNotification = PushNotification(
-                    NotificationData("공생공", "내가 쓴 게시글에 댓글이 달렸어요!"),
-                    token
-                )
-                sendNotification(PushNotification)
             }
             postRemoveButton.setOnClickListener{ makeDialog("정말로 글을 삭제할까요?", "isPost", PostCommentDataClass()) }
         }
@@ -163,7 +169,10 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
     private fun initWithPostView() {
         viewbinding.run {
             if(localUserName == navArgs.postDataInfo.post_name && !navArgs.postDataInfo.post_anonymous) { postWithComplete.visibility = View.VISIBLE }
-            if(navArgs.postDataInfo.post_state == "none" && !navArgs.postDataInfo.post_anonymous) { postCategory.text = "모집 중"}
+            if(navArgs.postDataInfo.post_state == "none" && !navArgs.postDataInfo.post_anonymous) {
+                postCategory.text = "모집 중"
+                postCategory.setTextColor(ContextCompat.getColor(requireContext(), R.color.pale_orange))
+            }
             if(navArgs.postDataInfo.post_state == "none" && navArgs.postDataInfo.post_anonymous) { postCategory.text = "모집 완료" }
             postWithCompleteButton.setOnClickListener {
                 viewmodel.modifyPostPartData(collectionName, documentName, "post_anonymous", true).observe(viewLifecycleOwner){

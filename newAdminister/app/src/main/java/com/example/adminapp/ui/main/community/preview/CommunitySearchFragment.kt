@@ -13,6 +13,7 @@ import com.example.adminapp.base.BaseSessionFragment
 import com.example.adminapp.data.model.PostDataInfo
 import com.example.adminapp.databinding.FragmentCommunitySearchBinding
 import com.example.adminapp.ui.main.community.CommunityViewModel
+import com.example.adminapp.utils.hideKeyboard
 
 class CommunitySearchFragment : BaseSessionFragment<FragmentCommunitySearchBinding, CommunityViewModel>(){
     override lateinit var viewbinding: FragmentCommunitySearchBinding
@@ -56,6 +57,8 @@ class CommunitySearchFragment : BaseSessionFragment<FragmentCommunitySearchBindi
             searchCompleteButton.setOnClickListener {
                 if(searchKeyword.text.isNotEmpty()){
                     viewmodel.getSearchPostData(collectionName, searchKeyword.text.toString()).observe(viewLifecycleOwner){
+                        searchKeyword.setText("")
+                        hideKeyboard(viewbinding.root)
                         if(it.isEmpty()) { searchNoResultPage.visibility = View.VISIBLE }
                         else {
                             when(collectionName){

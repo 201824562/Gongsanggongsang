@@ -9,8 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +23,7 @@ import com.example.adminapp.databinding.FragmentCommunityPostMarketBinding
 import com.example.adminapp.ui.main.community.CommunityViewModel
 import com.example.adminapp.ui.main.community.write.CommunityAttachPostPhotoRecyclerAdapter
 import com.example.adminapp.utils.WrapedDialogBasicTwoButton
+import com.example.adminapp.utils.hideKeyboard
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -94,7 +97,10 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                 )
                 viewmodel.insertPostCommentData(collectionName, documentName, postComment).observe(viewLifecycleOwner){
                     if(it){
+                        viewmodel.postCommentUploadSuccess = MutableLiveData()
                         showToast("댓글이 등록되었습니다.")
+                        writeComment.setText("")
+                        hideKeyboard(viewbinding.root)
                         viewmodel.getPostCommentData(collectionName, documentName).observe(viewLifecycleOwner){
                             postCommentsArray = it
                             commentRecyclerAdapter.notifyDataSetChanged()
@@ -155,7 +161,10 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
             }
             if(collectionName == "OUT" && !navPostDataInfo.postDataInfo.post_anonymous) {postCategory.text = "승인 대기"}
             if(collectionName == "OUT" && navPostDataInfo.postDataInfo.post_anonymous) {postCategory.text = "퇴실 완료"}
-            if(collectionName == "5_MARKET" && !navPostDataInfo.postDataInfo.post_anonymous) {postCategory.text = "판매 중"}
+            if(collectionName == "5_MARKET" && !navPostDataInfo.postDataInfo.post_anonymous) {
+                postCategory.text = "판매 중"
+                postCategory.setTextColor(ContextCompat.getColor(requireContext(), R.color.pale_orange))
+            }
             if(collectionName == "5_MARKET" && navPostDataInfo.postDataInfo.post_anonymous) {postCategory.text = "판매 완료"}
             if(navPostDataInfo.postDataInfo.post_date == postDateNow) {
                 val hour = postTimeNow.substring(0,2).toInt() - navPostDataInfo.postDataInfo.post_time.substring(0,2).toInt()
