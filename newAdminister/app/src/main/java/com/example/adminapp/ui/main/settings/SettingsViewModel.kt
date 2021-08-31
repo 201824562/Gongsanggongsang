@@ -24,6 +24,8 @@ class SettingsViewModel(application: Application) : BaseSessionViewModel(applica
     val onSuccessChangeInfoEvent : LiveData<Any> get() = _onSuccessChangeInfoEvent
     private val _onSuccessDeleteAdminInfo = SingleLiveEvent<Any>()
     val onSuccessDeleteUserInfo : LiveData<Any> get() = _onSuccessDeleteAdminInfo
+    private val _onSuccessDeleteFcmTokenFromServer = SingleLiveEvent<Any>()
+    val onSuccessDeleteFcmTokenFromServer : LiveData<Any> get() = _onSuccessDeleteFcmTokenFromServer
     private val _onSuccessDeleteUserInfoFromServer = SingleLiveEvent<Any>()
     val onSuccessDeleteUserInfoFromServer : LiveData<Any> get() = _onSuccessDeleteUserInfoFromServer
 
@@ -72,14 +74,19 @@ class SettingsViewModel(application: Application) : BaseSessionViewModel(applica
     }
     fun makeWaitingUserDelete(userdata: User){ apiCall(adminRepository.deleteWaitingUser(userdata)) }
 
-    fun makeWaitingUserAllow(userdata : User){ apiCall(adminRepository.acceptWaitingUser(userdata)) }
+    fun makeWaitingUserAllow(userdata : User){ apiCall(adminRepository.acceptWaitingUser(agencyInfo, userdata)) }
 
-    fun makeUserWithdrawal(userdata: User) { apiCall(adminRepository.withdrawalUser(userdata)) }
+    fun makeUserWithdrawal(userdata: User) { apiCall(adminRepository.withdrawalUser(agencyInfo, userdata)) }
 
     fun deleteAdminInfoFromServerDatabase() {
         apiCall(adminRepository.withdrawalAdminInfo(authToken),
             { _onSuccessDeleteUserInfoFromServer.value = true },
             { showSnackbar("회원탈퇴에 실패했습니다. 네트워크 상태를 체크해주세요.")})
+    }
+    fun deleteDeviceTokenFromServerDatabase(){
+        apiCall(adminRepository.deleteAdminDeviceToken(authToken, fcmToken),
+            { _onSuccessDeleteFcmTokenFromServer.value = true },
+            { showSnackbar("디바이스 로그아웃에 실패했습니다. 네트워크 상태를 체크해주세요.")})
     }
 
     fun deleteAdminInfoFromAppDatabase() {

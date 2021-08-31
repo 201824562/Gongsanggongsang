@@ -38,6 +38,7 @@ class SettingsFragment : BaseSessionFragment<FragmentSettingsBinding, SettingsVi
     override fun initDataBinding(savedInstanceState: Bundle?) {
         viewmodel.onSuccessGettingAdminInfo.observe(this, { showProfile(it)  })
         viewmodel.onSuccessGettingNullAdminInfo.observe(this, { restartActivity() })
+        viewmodel.onSuccessDeleteFcmTokenFromServer.observe(viewLifecycleOwner){ viewmodel.deleteAdminInfoFromAppDatabase() }
         viewmodel.onSuccessDeleteUserInfo.observe(viewLifecycleOwner){  logout() }
     }
 
@@ -87,7 +88,7 @@ class SettingsFragment : BaseSessionFragment<FragmentSettingsBinding, SettingsVi
             clickListener = object : WrapedDialogBasicTwoButton.DialogButtonClickListener{
                 override fun dialogCloseClickListener() { dismiss() }
                 override fun dialogCustomClickListener() {
-                    viewmodel.deleteAdminInfoFromAppDatabase()
+                    viewmodel.deleteDeviceTokenFromServerDatabase()
                     dismiss()
                 }
             }

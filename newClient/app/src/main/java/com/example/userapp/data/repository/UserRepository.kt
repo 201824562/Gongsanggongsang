@@ -17,7 +17,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.Completable
 import io.reactivex.Single
 
-//TODO : 와이파이(서버연결관련) 에러처리
 class UserRepository(appDatabase: AppDatabase) {
 
     companion object {
@@ -389,6 +388,29 @@ class UserRepository(appDatabase: AppDatabase) {
                 .addOnFailureListener { exception ->
                     Log.w(ContentValues.TAG, "Error todo changeUserInfo: ", exception)
                     emitter.onError(Throwable("Error doing changeUserInfo"))
+                }
+        }
+    }
+    fun deleteUsersDeviceToken(userId : String, deviceToken : String) : Completable {
+        return Completable.create{ emitter ->
+            fireStore.collection(FIRESTORE_ALLOWED_USER_INFO).document(userId)
+                .get()
+                .addOnSuccessListener {
+                    Log.d(ContentValues.TAG, "getUserInfo Successed!!")
+                    val fcmTokenList : MutableList<String> = it["fcmToken"] as ArrayList<String>
+                    fcmTokenList.removeIf { fcmToken -> fcmToken == deviceToken }
+                    fireStore.collection(FIRESTORE_ALLOWED_USER_INFO).document(userId).update("fcmToken", fcmTokenList)
+                        .addOnSuccessListener {
+                            Log.d(ContentValues.TAG, "delete UserDeviceToken Succeed!!")
+                            emitter.onComplete()
+                        }.addOnFailureListener { exception ->
+                            Log.w(ContentValues.TAG, "Error todo deleteDeviceToken: ", exception)
+                            emitter.onError(Throwable("Error doing deleteDeviceToken"))
+                        }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error todo deleteDeviceToken: ", exception)
+                    emitter.onError(Throwable("Error doing deleteDeviceToken"))
                 }
         }
     }
