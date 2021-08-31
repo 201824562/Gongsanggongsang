@@ -9,8 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +23,7 @@ import com.example.adminapp.databinding.FragmentCommunityPostBinding
 import com.example.adminapp.ui.main.community.CommunityViewModel
 import com.example.adminapp.ui.main.community.write.CommunityAttachPostPhotoRecyclerAdapter
 import com.example.adminapp.utils.WrapedDialogBasicTwoButton
+import com.example.adminapp.utils.hideKeyboard
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -92,7 +95,10 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                 )
                 viewmodel.insertPostCommentData(collectionName, documentName, postComment).observe(viewLifecycleOwner){
                     if(it){
+                        viewmodel.postCommentUploadSuccess = MutableLiveData()
                         showToast("댓글이 등록되었습니다.")
+                        writeComment.setText("")
+                        hideKeyboard(viewbinding.root)
                         viewmodel.getPostCommentData(collectionName, documentName).observe(viewLifecycleOwner){
                             postCommentsArray = it
                             commentRecyclerAdapter.notifyDataSetChanged()
@@ -141,7 +147,10 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
             if(navPostDataInfo.postDataInfo.post_name == localUserName) { postRemoveButton.visibility = View.VISIBLE }
             if(collectionName == "4_WITH" && localUserName == navPostDataInfo.postDataInfo.post_name && !navPostDataInfo.postDataInfo.post_anonymous) { postWithComplete.visibility = View.VISIBLE }
             if(navPostDataInfo.postDataInfo.post_state != "none"){ postCategory.text = navPostDataInfo.postDataInfo.post_state }
-            if(collectionName == "4_WITH" && navPostDataInfo.postDataInfo.post_state == "none" && !navPostDataInfo.postDataInfo.post_anonymous) {postCategory.text = "모집 중"}
+            if(collectionName == "4_WITH" && navPostDataInfo.postDataInfo.post_state == "none" && !navPostDataInfo.postDataInfo.post_anonymous) {
+                postCategory.text = "모집 중"
+                postCategory.setTextColor(ContextCompat.getColor(requireContext(), R.color.pale_orange))
+            }
             if(collectionName == "4_WITH" && navPostDataInfo.postDataInfo.post_state == "none" && navPostDataInfo.postDataInfo.post_anonymous) {postCategory.text = "모집 완료"}
 
             if(navPostDataInfo.postDataInfo.post_date == postDateNow) {

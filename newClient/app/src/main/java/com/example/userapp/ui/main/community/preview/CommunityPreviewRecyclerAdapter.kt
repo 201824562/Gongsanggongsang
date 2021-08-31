@@ -1,5 +1,7 @@
 package com.example.userapp.ui.main.community.preview
 
+import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,6 +10,7 @@ import androidx.core.view.isInvisible
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.userapp.R
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentCommunityPreviewItemBinding
 import com.example.userapp.ui.main.community.CommunityViewModel
@@ -44,6 +47,7 @@ class CommunityPreviewRecyclerAdapter(var postDataList : ArrayList<PostDataInfo>
     inner class CommunityPreviewViewHolder(viewbinding: FragmentCommunityPreviewItemBinding, itemview: ViewGroup, listener: OnCommunityMarketItemClickListener?) : RecyclerView.ViewHolder(viewbinding.root) {
         val binding = viewbinding
 
+        @SuppressLint("ResourceAsColor")
         @RequiresApi(Build.VERSION_CODES.O)
         fun bind(postDataInfo: PostDataInfo) {
             if(postDataInfo.post_category != "4_WITH" && postDataInfo.post_state != "none"){
@@ -56,8 +60,14 @@ class CommunityPreviewRecyclerAdapter(var postDataList : ArrayList<PostDataInfo>
             binding.communityPreviewTitle.text = postDataInfo.post_title
             binding.communityPreviewContents.text = postDataInfo.post_contents
             binding.communityPreviewPhotoNumber.text = postDataInfo.post_photo_uri.size.toString()
-            if(postDataInfo.post_category == "4_WITH" && !postDataInfo.post_anonymous){ binding.communityPreviewCategory.text = "모집 중" }
-            if(postDataInfo.post_category == "4_WITH" && postDataInfo.post_anonymous){ binding.communityPreviewCategory.text = "모집 완료" }
+            if(postDataInfo.post_category == "4_WITH" && !postDataInfo.post_anonymous){
+                binding.communityPreviewCategory.text = "모집 중"
+                binding.communityPreviewCategory.setTextColor(Color.parseColor("#ff9966"))
+            }
+            if(postDataInfo.post_category == "4_WITH" && postDataInfo.post_anonymous){
+                binding.communityPreviewCategory.text = "모집 완료"
+                binding.communityPreviewPoint.setBackgroundColor(Color.parseColor("#7f000000"))
+            }
 
             val postDateNow: String = LocalDate.now().toString()
             val postTimeNow: String = LocalTime.now().toString()

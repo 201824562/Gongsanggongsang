@@ -35,7 +35,7 @@ class HomeNoticeFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeBinding
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-        val ac = activity as MainActivity
+        collectionNameBundle = bundleOf("collection_name" to "notice")
         initNoticeRecyclerView()
     }
 

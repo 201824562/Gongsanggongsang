@@ -12,11 +12,14 @@ import com.example.adminapp.base.BaseSessionViewModel
 import com.example.adminapp.data.entity.PostCommentDataClass
 import com.example.adminapp.data.model.PostDataInfo
 import com.example.adminapp.data.repository.CommunityDataRepository
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
 class CommunityViewModel(application: Application) : BaseSessionViewModel(application) {
+    private val firestore = FirebaseFirestore.getInstance()
+    var postCommentUploadSuccess : MutableLiveData<Boolean> = MutableLiveData()
     private val communityDataRepository : CommunityDataRepository = CommunityDataRepository.getInstance()
     fun getPostDataInCategory(collection_name: String) : LiveData<ArrayList<PostDataInfo>> {
         return communityDataRepository.getPostDataInCategory(agencyInfo, collection_name)
@@ -34,7 +37,20 @@ class CommunityViewModel(application: Application) : BaseSessionViewModel(applic
         return communityDataRepository.insertPostData(agencyInfo, it)
     }
     fun insertPostCommentData(collection_name: String, document_name: String, postComment : PostCommentDataClass) : MutableLiveData<Boolean> {
-        return communityDataRepository.insertPostCommentData(agencyInfo, collection_name, document_name, postComment)
+        var postCommentUploadBool : Boolean = false
+        firestore
+            .collection(agencyInfo)
+            .document("community")
+            .collection(collection_name)
+            .document(document_name)
+            .collection("post_comment")
+            .document(postComment.commentDate + postComment.commentTime + postComment.commentName)
+            .set(postComment)
+            .addOnSuccessListener {
+                postCommentUploadBool = true
+                postCommentUploadSuccess.postValue(postCommentUploadBool)
+            }
+        return postCommentUploadSuccess
     }
     fun deletePostCommentData(collection_name: String, document_name: String, postComment : PostCommentDataClass) : MutableLiveData<Boolean> {
         return communityDataRepository.deletePostCommentData(agencyInfo, collection_name, document_name, postComment)
