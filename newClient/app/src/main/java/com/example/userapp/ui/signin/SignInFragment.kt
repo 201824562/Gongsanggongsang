@@ -1,7 +1,5 @@
 package com.example.userapp.ui.signin
 
-import android.location.LocationManager
-import android.net.ConnectivityManager
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Parcelable
