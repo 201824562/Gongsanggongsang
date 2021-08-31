@@ -49,6 +49,12 @@ class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityV
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewmodel.getUserInfo()
         viewbinding.run {
+            mainHomeToEquipmentReservation.setOnClickListener {
+                findNavController().navigate(R.id.action_mainFragment_to_reservationEquipmentFragment)
+            }
+            mainHomeToFacilityReservation.setOnClickListener {
+                findNavController().navigate(R.id.action_mainFragment_to_reservationFacilityFragment)
+            }
             mainHomeToSuggestCommunity.setOnClickListener {
                 toCollectionBundle = bundleOf( "getCollectionName" to "3_SUGGEST")
                 findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, toCollectionBundle)

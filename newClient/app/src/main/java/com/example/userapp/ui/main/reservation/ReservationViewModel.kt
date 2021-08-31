@@ -62,7 +62,6 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
         mutableListOf()
     )
 
-
     //뷰모델스코프를 이용해서 제어
     var viewmodelscope = viewModelScope
 
@@ -613,80 +612,70 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
             .document(reservationReserveFacility.startTime + "_" + reservationReserveFacility.document_name)
             .update("reservationState", "예약 취소")
 
-//        var tmpList = mutableListOf<DayTimeSlotForFirebaseUpdate>()
-//        lateinit var tmp: DayTimeSlotForFirebaseUpdate
-//        var startCal: Calendar = Calendar.getInstance()
-//        var endCal: Calendar = Calendar.getInstance()
-//        val sdf = SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS", Locale.KOREA)
-//
-//        database.collection("한국장학재단_부산").document("RESERVATION")
-//            .collection("FACILITY")
-//            .addSnapshotListener { value, e ->
-//                if (e != null) {
-//                    return@addSnapshotListener
-//                }
-//                for (document in value!!) {
-//                    if (document.id == reservationReserveFacility.document_name) {
-//                        (document.get(reservationReserveFacility.weekday) as ArrayList<HashMap<String, DayTimeSlot>>).let {
-//                            for (element in it) {
-//                                tmp = DayTimeSlotForFirebaseUpdate(
-//                                    element["buttonSelected"] as Boolean,
-//                                    (element["data"] as HashMap<String, Long>)["hour"]?.let { it1 ->
-//                                        (element["data"] as HashMap<String, Long>)["min"]?.let { it2 ->
-//                                            ReservationTimeData(
-//                                                it1, it2
-//                                            )
-//                                        }
-//                                    },
-//                                    element["index"] as Long,
-//                                    element["user"] as String
-//                                )
-//                                tmpList.add(tmp)
-//                            }
-//                        }
-//                        Log.e("tmpList", tmpList.toString())
-////                        FacilityDayInfoData = ReservationFacilityDayInfo(
-////                            document_name,
-////                            icon,
-////                            interval_time,
-////                            weekday,
-////                            tmpList
-////                        )
-//                    }
-//                    startCal.setTime(sdf.parse(reservationReserveFacility.startTime))
-//                    endCal.setTime(sdf.parse(reservationReserveFacility.endTime))
-//
-//                    for(element in tmpList){
-//                        var tmpCal: Calendar = Calendar.getInstance()
-//                        tmpCal.set(Calendar.DAY_OF_WEEK, weekdayStringToInt(reservationReserveFacility.weekday))
-//                        tmpCal.set(
-//                            Calendar.HOUR_OF_DAY,
-//                            Math.toIntExact(element.data?.hour!!)
+        var tmpList = mutableListOf<DayTimeSlotForFirebaseUpdate>()
+        lateinit var tmp: DayTimeSlotForFirebaseUpdate
+        var startCal: Calendar = Calendar.getInstance()
+        var endCal: Calendar = Calendar.getInstance()
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS", Locale.KOREA)
+
+        database.collection("한국장학재단_부산").document("RESERVATION")
+            .collection("FACILITY")
+            .get()
+            .addOnSuccessListener { value ->
+                for (document in value!!) {
+                    if (document.id == reservationReserveFacility.document_name) {
+                        (document.get(reservationReserveFacility.weekday) as ArrayList<HashMap<String, DayTimeSlot>>).let {
+                            for (element in it) {
+                                tmp = DayTimeSlotForFirebaseUpdate(
+                                    element["buttonSelected"] as Boolean,
+                                    (element["data"] as HashMap<String, Long>)["hour"]?.let { it1 ->
+                                        (element["data"] as HashMap<String, Long>)["min"]?.let { it2 ->
+                                            ReservationTimeData(
+                                                it1, it2
+                                            )
+                                        }
+                                    },
+                                    element["index"] as Long,
+                                    element["user"] as String
+                                )
+                                tmpList.add(tmp)
+                            }
+                        }
+                        Log.e("tmpList", tmpList.toString())
+//                        FacilityDayInfoData = ReservationFacilityDayInfo(
+//                            document_name,
+//                            icon,
+//                            interval_time,
+//                            weekday,
+//                            tmpList
 //                        )
-//                        tmpCal.set(
-//                            Calendar.MINUTE,
-//                            Math.toIntExact(element.data?.min!!)
-//                        )
-//
-//                        if(tmpCal.compareTo(startCal) >=0 && tmpCal.compareTo(endCal) < 0){
-//                            element.user = "Nope"
-//                        }
-//                    }
-//
-//
-//                }
-//
-//            }
-//        Log.e("modified tmpList", tmpList.toString())
-//        database.collection("한국장학재단_부산").document("RESERVATION")
-//            .collection("FACILITY").document(reservationReserveFacility.document_name)
-//            .update(reservationReserveFacility.weekday, tmpList)
-//
+                    }
+                    startCal.setTime(sdf.parse(reservationReserveFacility.startTime))
+                    endCal.setTime(sdf.parse(reservationReserveFacility.endTime))
 
+                    for(element in tmpList){
+                        var tmpCal: Calendar = Calendar.getInstance()
+                        tmpCal.set(Calendar.DAY_OF_WEEK, weekdayStringToInt(reservationReserveFacility.weekday))
+                        tmpCal.set(
+                            Calendar.HOUR_OF_DAY,
+                            Math.toIntExact(element.data?.hour!!)
+                        )
+                        tmpCal.set(
+                            Calendar.MINUTE,
+                            Math.toIntExact(element.data?.min!!)
+                        )
 
-
-
-
+                        if(tmpCal.compareTo(startCal) >=0 && tmpCal.compareTo(endCal) < 0){
+                            element.user = "Nope"
+                        }
+                    }
+                    Log.e("modified tmpList", tmpList.toString())
+                    database.collection("한국장학재단_부산").document("RESERVATION")
+                        .collection("FACILITY").document(reservationReserveFacility.document_name)
+                        .update(reservationReserveFacility.weekday, tmpList)
+                }
+            }
+        Log.e("modified tmpList2", tmpList.toString())
 
 
 //        var map1 = mutableMapOf<String, Any>()

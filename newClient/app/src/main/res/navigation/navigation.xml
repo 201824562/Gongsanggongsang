@@ -11,6 +11,12 @@
             app:destination="@+id/communityPreviewFragment"
             android:id="@+id/action_mainFragment_to_communityPreviewFragment"/>
         <action
+            app:destination="@+id/reservationEquipmentFragment"
+            android:id="@+id/action_mainFragment_to_reservationEquipmentFragment"/>
+        <action
+            app:destination="@+id/reservationFacilityFragment"
+            android:id="@+id/action_mainFragment_to_reservationFacilityFragment"/>
+        <action
             app:destination="@+id/reservationFacilitySelectFragment"
             android:id="@+id/action_mainFragment_to_reservationFacility">
             <argument
@@ -405,6 +411,16 @@
             android:name="myArg"
             app:argType="com.example.userapp.data.model.ReservationFacility" />
     </fragment>
+
+    <fragment
+        android:id="@id/reservationEquipmentFragment"
+        android:name="com.example.userapp.ui.main.reservation.ReservationEquipmentFragment">
+    </fragment>
+    <fragment
+        android:id="@id/reservationFacilityFragment"
+        android:name="com.example.userapp.ui.main.reservation.ReservationFacilityFragment">
+    </fragment>
+
     <fragment
         android:id="@+id/settingsChangeInfoFragment"
         android:name="com.example.userapp.ui.main.settings.SettingsChangeInfoFragment"

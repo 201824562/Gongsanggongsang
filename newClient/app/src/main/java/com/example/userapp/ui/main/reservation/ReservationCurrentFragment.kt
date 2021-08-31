@@ -67,14 +67,50 @@ class ReservationCurrentFragment :
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
+        var useEquipmentEmpty = false
+        var useFacilityEmpty = false
         viewmodel.UseEquipmentLiveData.observe(viewLifecycleOwner, {
             (viewbinding.equipmentUsingRecyclerView.adapter as EquipmentUsingAdapter).setData(it)
+            if(it.isEmpty()){
+                useEquipmentEmpty = true
+                viewbinding.equipmentUsingRecyclerView.visibility = View.GONE
+            }else{
+                useEquipmentEmpty = false
+                viewbinding.equipmentUsingRecyclerView.visibility = View.VISIBLE
+            }
+
+            if(useEquipmentEmpty && useFacilityEmpty){
+                viewbinding.noUsingTextmessageTextview.visibility = View.VISIBLE
+            }else{
+                viewbinding.noUsingTextmessageTextview.visibility = View.GONE
+            }
         })
         viewmodel.UseFacilityLiveData.observe(viewLifecycleOwner, {
             (viewbinding.facilityUsingRecyclerView.adapter as FacilityUsingAdapter).setData(it)
+            if(it.isEmpty()){
+                useFacilityEmpty = true
+                viewbinding.facilityUsingRecyclerView.visibility = View.GONE
+            }else{
+                useEquipmentEmpty = false
+                viewbinding.facilityUsingRecyclerView.visibility = View.VISIBLE
+            }
+
+            if(useEquipmentEmpty && useFacilityEmpty){
+                viewbinding.noUsingTextmessageTextview.visibility = View.VISIBLE
+            }else{
+                viewbinding.noUsingTextmessageTextview.visibility = View.GONE
+            }
         })
         viewmodel.FacilityReserveLiveData.observe(viewLifecycleOwner, {
             (viewbinding.facilityReserveRecyclerView.adapter as FacilityReserveAdapter).setData(it)
+            if(it.isEmpty()){
+                viewbinding.facilityReserveRecyclerView.visibility = View.GONE
+                viewbinding.noReserveTextmessageTextview.visibility = View.VISIBLE
+                //예약중인 내역이 없습니다 (박스)
+            }else{
+                viewbinding.facilityReserveRecyclerView.visibility = View.VISIBLE
+                viewbinding.noReserveTextmessageTextview.visibility = View.GONE
+            }
         })
     }
 

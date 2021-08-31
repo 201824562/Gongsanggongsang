@@ -1,5 +1,7 @@
 package com.example.userapp.ui.signin
 
+import android.location.LocationManager
+import android.net.ConnectivityManager
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Parcelable
@@ -14,6 +16,7 @@ import com.example.userapp.R
 import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.data.model.UserStatus
 import com.example.userapp.databinding.FragmentSigninBinding
+import com.example.userapp.restartActivity
 import com.example.userapp.restartActivity
 import com.example.userapp.service.getFCMToken
 import com.example.userapp.utils.WrapedDialogBasicOneButton
@@ -44,6 +47,12 @@ class SignInFragment : BaseSessionFragment<FragmentSigninBinding, SignInViewMode
             }else ->{ connectionManager = requireContext().getSystemService()!! }
         }
         viewbinding.fragmentContent.setOnClickListener { hideKeyboard(it) }
+        when (context){
+            null -> {
+                showToast("에러가 발생했습니다.\n앱을 재부팅합니다.")
+                restartActivity()
+            }else ->{ connectionManager = requireContext().getSystemService()!! }
+        }
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
