@@ -44,7 +44,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController : NavController
     var selectedItems : ArrayList<String> = arrayListOf()
-    var token : String? = ""
     override fun initToolbar() {
         window.apply {
             navigationBarColor = ContextCompat.getColor(this@MainActivity, R.color.white)
@@ -56,9 +55,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
         setContentView(viewbinding.root)
     }
 
-    override fun initViewStart(savedInstanceState: Bundle?) {
-        getToken()
-    }
+    override fun initViewStart(savedInstanceState: Bundle?) { }
 
     override fun initDataBinding(savedInstanceState: Bundle?) { }
 
@@ -127,21 +124,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     }
     fun getPhoto() : ArrayList<String>{
         return selectedItems
-    }
-
-    fun getToken(){
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
-            }
-
-            // Get new FCM registration token
-            token = task.result
-
-            // Log and toast
-            Log.e("TAG", token.toString())
-        })
     }
 }
 

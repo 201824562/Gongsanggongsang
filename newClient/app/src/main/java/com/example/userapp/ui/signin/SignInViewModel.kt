@@ -7,6 +7,7 @@ import com.example.userapp.base.BaseSessionViewModel
 import com.example.userapp.data.dto.UserModel
 import com.example.userapp.data.model.ReceiverSignIn
 import com.example.userapp.data.model.UserStatus
+import com.example.userapp.service.getFCMToken
 import com.example.userapp.utils.RegularExpressionUtils
 import com.example.userapp.utils.SingleLiveEvent
 import io.reactivex.Single
@@ -36,6 +37,8 @@ class SignInViewModel(application: Application) : BaseSessionViewModel(applicati
     val onSuccessFindInfo : LiveData<String> get() = _onSuccessFindInfo
     private val _onSuccessSaveUserInfo = SingleLiveEvent<Any>()
     val onSuccessSaveUserInfo : LiveData<Any> get() = _onSuccessSaveUserInfo
+    private val _deviceToken = SingleLiveEvent<String>()
+    val deviceToken : LiveData<String> get() = _deviceToken
     private val _userStatusEvent = SingleLiveEvent<UserStatus>()
     val userStatusEvent : LiveData<UserStatus> get() = _userStatusEvent
 
@@ -48,6 +51,9 @@ class SignInViewModel(application: Application) : BaseSessionViewModel(applicati
         findInfoType = FindInfoType.ID
         findInfoUserName = ""
         findInfoResultData = ""
+    }
+    fun getDeviceToken() {
+        apiCall(getFCMToken(), { _deviceToken.postValue(it) })
     }
 
     private fun checkForUserName(userName: String) : Boolean{
@@ -129,9 +135,9 @@ class SignInViewModel(application: Application) : BaseSessionViewModel(applicati
         }
     }
 
-    fun sendSignInInfo(userId : String, userPwd : String) {
+    fun sendSignInInfo(userId : String, userPwd : String, fcmToken : String) {
         apiCall(
-            Single.zip(userRepository.checkingAllowedSignIn(userId, userPwd), userRepository.checkingWaitingSignIn(userId, userPwd),
+            Single.zip(userRepository.checkingAllowedSignIn(userId, userPwd, fcmToken), userRepository.checkingWaitingSignIn(userId, userPwd),
             BiFunction<ReceiverSignIn, Boolean, UserStatus> { receivedAllowedData, waitingBoolean ->
                 var status = UserStatus.NOT_USER
                 if (receivedAllowedData.boolean) {
@@ -143,14 +149,15 @@ class SignInViewModel(application: Application) : BaseSessionViewModel(applicati
             }), {  _userStatusEvent.postValue(it) })
     }
 
-    fun saveUserInfo() {
+    fun saveUserInfo(fcmToken : String) {
         val context = getApplication<Application>().applicationContext
         userData?.let {
             apiCall(userRepository.saveUserInfo(it),{
                 _onSuccessSaveUserInfo.value = true
-                Log.e("c", "{$it}")
                 userRepository.saveAgencyInfo(it.agency, context)
-                userRepository.saveUserToken(it.id, context) } )
+                userRepository.saveUserToken(it.id, context)
+                userRepository.saveFCMToken(fcmToken, context)
+            } )
         }
     }
 

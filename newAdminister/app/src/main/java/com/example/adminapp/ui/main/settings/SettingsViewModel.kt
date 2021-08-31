@@ -87,6 +87,7 @@ class SettingsViewModel(application: Application) : BaseSessionViewModel(applica
         apiCall(adminRepository.deleteAdminInfo(authToken),
             {   adminRepository.removeAgencyInfo(context)
                 adminRepository.removeAdminToken(context)
+                adminRepository.removeFCMToken(context)
                 _onSuccessDeleteAdminInfo.value = true },
             {showSnackbar("로그아웃에 실패했습니다. 잠시후에 시도해주세요.")})
     }

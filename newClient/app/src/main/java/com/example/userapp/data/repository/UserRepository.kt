@@ -36,10 +36,12 @@ class UserRepository(appDatabase: AppDatabase) {
     }
 
     private val userdataDao = appDatabase.userDao()
-    private val SHARED_PREFERENCES_TOKEN = "client_login_token"
     private val SHARED_PREFERENCES_AGENCY = "client_agency_info"
-    private var storedToken: String? = null
+    private val SHARED_PREFERENCES_FCMTOKEN = "client_fcm_token"
+    private val SHARED_PREFERENCES_TOKEN = "client_login_token"
     private var storedAgency: String? = null
+    private var storeFcmToken : String? = null
+    private var storedToken: String? = null
 
     fun getAgencyInfo(application : Application)  : String? {
         val sharedPreferences = application.getSharedPreferences(SHARED_PREFERENCES_AGENCY, Context.MODE_PRIVATE)
@@ -65,6 +67,30 @@ class UserRepository(appDatabase: AppDatabase) {
         val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_AGENCY, Context.MODE_PRIVATE)
         storedAgency = null
         sharedPreferences.edit { remove(SHARED_PREFERENCES_AGENCY ) }
+    }
+
+    fun saveFCMToken(fcmToken: String, context: Context){
+        val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FCMTOKEN, Context.MODE_PRIVATE)
+        storeFcmToken = fcmToken
+        sharedPreferences.edit {
+            putString(SHARED_PREFERENCES_FCMTOKEN , fcmToken)
+            apply()
+        }
+    }
+    fun getFCMToken(application : Application)  : String? {
+        val sharedPreferences = application.getSharedPreferences(SHARED_PREFERENCES_FCMTOKEN, Context.MODE_PRIVATE)
+        return if (storeFcmToken != null) storeFcmToken
+        else {
+            if (sharedPreferences.getString(SHARED_PREFERENCES_FCMTOKEN , "") != "") {
+                storeFcmToken = sharedPreferences.getString(SHARED_PREFERENCES_FCMTOKEN , "")
+                storeFcmToken
+            }else storeFcmToken
+        }
+    }
+    fun removeFCMToken(context: Context) {
+        val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FCMTOKEN, Context.MODE_PRIVATE)
+        storeFcmToken = null
+        sharedPreferences.edit { remove(SHARED_PREFERENCES_FCMTOKEN ) }
     }
 
     fun getUserToken(application : Application)  : String? {
@@ -105,7 +131,6 @@ class UserRepository(appDatabase: AppDatabase) {
     }
 
     fun saveUserInfo(userData : UserModel) : Completable{
-        Log.e("checking", "$userData")
         return userdataDao.insertUserData(userData.getUserEntity())
     }
 
@@ -248,14 +273,14 @@ class UserRepository(appDatabase: AppDatabase) {
         }
     }
 
-    fun checkingAllowedSignIn(userId : String, userPwd : String) : Single<ReceiverSignIn> {
+    fun checkingAllowedSignIn(userId : String, userPwd : String, fcmToken: String) : Single<ReceiverSignIn> {
         return Single.create{ emitter ->
             fireStore.collection(FIRESTORE_ALLOWED_USER_INFO).document(userId)
                 .get()
                 .addOnSuccessListener {
                     Log.d(ContentValues.TAG, "Found SignIn ID!!")
                     if (it.data != null && it.data!!["id"] == userId && it.data!!["pwd"]==userPwd){
-                        Log.d(ContentValues.TAG, "SignIn Successed!!")
+                        fireStore.collection(FIRESTORE_ALLOWED_USER_INFO).document(userId).update("fcmToken", listOf(fcmToken))
                         emitter.onSuccess(
                             ReceiverSignIn(true, UserModel(it.data!!["id"].toString(), it.data!!["name"].toString(), it.data!!["nickname"].toString(),
                                 it.data!!["birthday"].toString(), it.data!!["smsInfo"].toString(), it.data!!["agency"].toString()))

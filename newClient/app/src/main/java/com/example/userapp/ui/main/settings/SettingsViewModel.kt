@@ -54,6 +54,7 @@ class SettingsViewModel(application: Application) : BaseSessionViewModel(applica
         val context = getApplication<Application>().applicationContext
         apiCall(userRepository.deleteUserInfo(authToken),
             {   userRepository.removeAgencyInfo(context)
+                userRepository.removeFCMToken(context)
                 userRepository.removeUserToken(context)
                 _onSuccessDeleteUserInfoFromApp.value = true },
             {showSnackbar("로그아웃에 실패했습니다. 잠시후에 시도해주세요.")})
