@@ -49,7 +49,8 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
 
     private var localUserName = "관리자"
     private var agency = ""
-    private var token = ""
+    private var tokenTitle = ""
+    private var tokenContent = ""
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -106,7 +107,11 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                             communityPostCommentsNumber.text = it.size.toString()
                             viewmodel.modifyPostPartData(collectionName, documentName, "post_comments", it.size)
                         }
-                        viewmodel.registerNotificationToFireStore("공생공생", "댓글이 달렸어요!")
+                        viewmodel.getUserToken(navPostDataInfo.postDataInfo.post_id).observe(viewLifecycleOwner){
+                            for(token in it){
+                                viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+                            }
+                        }
                     }
                 }
                 //sendNotification(PushNotification)
@@ -137,11 +142,22 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
 
         viewbinding.run {
             when(collectionName){
-                "1_FREE" -> postToolbarName.text = "자유게시판"
-                "2_EMERGENCY" -> postToolbarName.text = "긴급게시판"
-                "3_SUGGEST" -> postToolbarName.text = "건의게시판"
-                "4_WITH" -> postToolbarName.text = "함께게시판"
-                "5_MARKET" -> postToolbarName.text = "장터게시판"
+                "1_FREE" -> {
+                    postToolbarName.text = "자유게시판"
+                    tokenTitle = "자유"
+                }
+                "2_EMERGENCY" -> {
+                    postToolbarName.text = "긴급게시판"
+                    tokenTitle = "긴급"
+                }
+                "3_SUGGEST" -> {
+                    postToolbarName.text = "건의게시판"
+                    tokenTitle = "건의"
+                }
+                "4_WITH" -> {
+                    postToolbarName.text = "함께게시판"
+                    tokenTitle = "함께"
+                }
             }
             println(localUserName)
 

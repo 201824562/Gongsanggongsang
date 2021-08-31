@@ -112,8 +112,8 @@ abstract class BaseSessionViewModel(application: Application)  : AndroidViewMode
         _sessionInvalidEvent.call()
     }
 
-    fun registerNotificationToFireStore(title : String, content : String){
-        sendFireStoreNotification(title, content, fcmToken )
+    fun registerNotificationToFireStore(title : String, content : String, toToken : String){
+        sendFireStoreNotification(title, content, toToken)
     }
 
 }
