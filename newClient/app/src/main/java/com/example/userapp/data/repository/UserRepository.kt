@@ -280,7 +280,9 @@ class UserRepository(appDatabase: AppDatabase) {
                 .addOnSuccessListener {
                     Log.d(ContentValues.TAG, "Found SignIn ID!!")
                     if (it.data != null && it.data!!["id"] == userId && it.data!!["pwd"]==userPwd){
-                        fireStore.collection(FIRESTORE_ALLOWED_USER_INFO).document(userId).update("fcmToken", listOf(fcmToken))
+                        val fcmTokenList  : MutableList<String> = it.data!!["fcmToken"] as ArrayList<String>
+                        fcmTokenList.add(fcmToken)
+                        fireStore.collection(FIRESTORE_ALLOWED_USER_INFO).document(userId).update("fcmToken", fcmTokenList)
                         emitter.onSuccess(
                             ReceiverSignIn(true, UserModel(it.data!!["id"].toString(), it.data!!["name"].toString(), it.data!!["nickname"].toString(),
                                 it.data!!["birthday"].toString(), it.data!!["smsInfo"].toString(), it.data!!["agency"].toString()))

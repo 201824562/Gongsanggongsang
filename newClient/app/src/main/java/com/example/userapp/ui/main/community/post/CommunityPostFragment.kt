@@ -101,14 +101,9 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                             communityPostCommentsNumber.text = it.size.toString()
                             viewmodel.modifyPostPartData(collectionName, documentName, "post_comments", it.size)
                         }
-                        val PushNotification = PushNotification(
-                            NotificationData("공생공생", "내가 쓴 게시글에 댓글이 달렸어요!"),
-                            token
-                        )
-                        sendNotification(PushNotification)
+                        viewmodel.registerNotificationToFireStore("공생공생", "내가 쓴 게시글에 댓글이 달렸어요!")
                     }
                 }
-                viewmodel.registerNotificationToFireStore("공생공생", "내가 쓴 게시글에 댓글이 달렸어요!")
             }
             postRemoveButton.setOnClickListener{ makeDialog("정말로 글을 삭제할까요?", "isPost", PostCommentDataClass()) }
         }

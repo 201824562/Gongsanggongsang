@@ -146,9 +146,8 @@ class SignInViewModel (application: Application) : BaseSessionViewModel(applicat
         } else true
     }
 
-    fun sendSignInInfo(adminId : String, adminPwd : String) {
-        apiCall(adminRepository.checkingAdminSignIn(adminId, adminPwd), { receivedData ->
-            Log.e("checking", "$receivedData")
+    fun sendSignInInfo(adminId : String, adminPwd : String, fcmToken: String) {
+        apiCall(adminRepository.checkingAdminSignIn(adminId, adminPwd, fcmToken), { receivedData ->
             var status = AdminStatus.NOT_ADMIN
             if (receivedData.boolean) {
                 adminModelData = receivedData.adminModelData
@@ -159,7 +158,7 @@ class SignInViewModel (application: Application) : BaseSessionViewModel(applicat
         })
     }
 
-    fun saveUserInfo(fcmToken : String) {
+    fun saveAdminInfo(fcmToken : String) {
         val context = getApplication<Application>().applicationContext
         adminModelData?.let {
             apiCall(adminRepository.saveAdminInfo(it),{

@@ -162,14 +162,16 @@ class AdminRepository(appDatabase: AppDatabase) {
     }
 
 
-    fun checkingAdminSignIn(adminId : String, adminPwd : String) : Single<ReceiverAdmin> {
+    fun checkingAdminSignIn(adminId : String, adminPwd : String, fcmToken: String) : Single<ReceiverAdmin> {
         return Single.create{ emitter ->
             fireStore.collection(FIRESTORE_ADMINISTER).document(adminId)
                 .get()
                 .addOnSuccessListener {
                     Log.d(ContentValues.TAG, "Found SignIn ID!!")
                     if (it.data != null && it.data!!["id"] == adminId && it.data!!["pwd"]==adminPwd){
-                        Log.d(ContentValues.TAG, "SignIn Successed!!")
+                        val fcmTokenList  : MutableList<String> = it.data!!["fcmToken"] as ArrayList<String>
+                        fcmTokenList.add(fcmToken)
+                        fireStore.collection(FIRESTORE_ALLOWED_USER_INFO).document(adminId).update("fcmToken", fcmTokenList)
                         emitter.onSuccess(
                             ReceiverAdmin(true, AdminModel(it.data!!["agency"].toString(), it.data!!["id"].toString(), it.data!!["name"].toString(),
                                 it.data!!["birthday"].toString(),it.data!!["smsInfo"].toString())

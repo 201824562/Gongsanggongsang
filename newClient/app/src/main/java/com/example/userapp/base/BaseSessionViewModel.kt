@@ -111,7 +111,7 @@ abstract class BaseSessionViewModel(application: Application)  : AndroidViewMode
     }
 
     fun registerNotificationToFireStore(title : String, content : String){
-        sendFireStoreNotification(title, content, fcmToken )
+        sendFireStoreNotification(title, content, fcmToken)
     }
 
 
