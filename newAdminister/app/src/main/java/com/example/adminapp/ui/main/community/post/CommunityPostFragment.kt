@@ -106,6 +106,7 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                             communityPostCommentsNumber.text = it.size.toString()
                             viewmodel.modifyPostPartData(collectionName, documentName, "post_comments", it.size)
                         }
+                        viewmodel.registerNotificationToFireStore("공생공생", "댓글이 달렸어요!")
                     }
                 }
                 //sendNotification(PushNotification)
