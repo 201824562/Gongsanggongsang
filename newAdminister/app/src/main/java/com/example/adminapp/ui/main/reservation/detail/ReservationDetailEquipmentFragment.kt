@@ -111,7 +111,7 @@ class ReservationDetailEquipmentFragment() : BaseSessionFragment<FragmentReserva
     private fun showStopWarningDialog(){
         //TODO : 알람 처리 해주기.
         val dialog = WrapedDialogBasicTwoButton(requireContext(), "현재 사용중인 이용자가 있습니다.\n"+
-                "정말 강제 종료하시겠습니까?\n", "취소", "종료하기").apply {
+                "정말 사용모드를 종료하겠습니까?\n", "취소", "종료하기").apply {
             clickListener = object : WrapedDialogBasicTwoButton.DialogButtonClickListener{
                 override fun dialogCloseClickListener() { dismiss() }
                 override fun dialogCustomClickListener() {

@@ -168,8 +168,10 @@ class AdminRepository(appDatabase: AppDatabase) {
                 .get()
                 .addOnSuccessListener {
                     Log.d(ContentValues.TAG, "Found SignIn ID!!")
-                    if (it.data != null && it.data!!["id"] == adminId && it.data!!["pwd"]==adminPwd){
-                        val fcmTokenList  : MutableList<String> = it.data!!["fcmToken"] as ArrayList<String>
+                    if (it.data != null && it.data!!["id"] == adminId && it.data!!["pwd"]== adminPwd){
+                        val fcmTokenList = if (it.data!!["fcmToken"] == null) mutableListOf()
+                        else it.data!!["fcmToken"] as ArrayList<String>
+                        fcmTokenList.add(fcmToken)
                         fcmTokenList.add(fcmToken)
                         fireStore.collection(FIRESTORE_ALLOWED_USER_INFO).document(adminId).update("fcmToken", fcmTokenList)
                         emitter.onSuccess(
