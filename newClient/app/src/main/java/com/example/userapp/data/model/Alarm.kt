@@ -28,7 +28,7 @@ data class SignUpAlarmData(
 
 enum class AlarmType(val type : String) {
     NOTICE("공지"), RESERVATION("공용"), EMERGENCY("긴급"),
-    TOGETHER("함께"), SUGGEST("건의"), MARKET("장터"), GETOUT("퇴실"); //, SIGNUP("가입승인")
+    TOGETHER("함께"), SUGGEST("건의"), MARKET("장터"), OUT("퇴실"); //, SIGNUP("가입승인")
     companion object{
         fun makeStringToEnumData(type : String) : AlarmType{
             return values().first { it.type == type} }

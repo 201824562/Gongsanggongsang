@@ -71,6 +71,11 @@ class AlarmAllFragment() : BaseSessionFragment<FragmentAlarmChildBinding, AlarmV
                         val bundle = bundleOf("post_data_info" to postDataBundle)
                         findNavController().navigate(R.id.action_mainFragment_to_communityPostMarket, bundle)
                     }
+                    AlarmType.makeEnumDataToString(AlarmType.OUT) -> {
+                        postDataBundle = alarmData.postData!!.makeToPostDataInfo()
+                        val bundle = bundleOf("post_data_info" to postDataBundle)
+                        findNavController().navigate(R.id.action_mainFragment_to_communityPostMarket, bundle)
+                    }
                     else -> {
                         postDataBundle = alarmData.postData!!.makeToPostDataInfo()
                         val bundle = bundleOf("post_data_info" to postDataBundle)

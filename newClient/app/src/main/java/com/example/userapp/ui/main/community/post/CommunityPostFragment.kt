@@ -42,7 +42,6 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
     private val navArgs : CommunityPostFragmentArgs by navArgs()
     private lateinit var collectionName : String
     private lateinit var documentName : String
-    private lateinit var bundle: Bundle
 
     private lateinit var attachPostPhotoRecyclerAdapter: CommunityAttachPostPhotoRecyclerAdapter
     private var remoteGetPhotoUri : ArrayList<String> = arrayListOf()
@@ -113,7 +112,7 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                         }
                         val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
                         val data = AlarmItem(documentId, LocalDateTime.now().toString(), localUserName,
-                            tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", alarmType, null, navArgs.postDataInfo.makeToPostAlarmData() )
+                            tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData() )
                         viewmodel.getUserToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
                             for(token in it){
                                 viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
@@ -273,7 +272,7 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                     when(isPostOrComment){
                         "isPost" -> viewmodel.deletePostData(collectionName, documentName).observe(viewLifecycleOwner){
                             if(it){
-                                findNavController().navigate(R.id.action_community_post_pop, bundle)
+                                findNavController().navigate(R.id.action_community_post_pop)
                             }
                         }
                         "isComment" -> viewmodel.deletePostCommentData(collectionName, documentName, commentData).observe(viewLifecycleOwner){

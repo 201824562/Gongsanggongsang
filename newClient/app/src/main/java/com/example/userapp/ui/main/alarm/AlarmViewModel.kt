@@ -52,11 +52,11 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                     val alarmList: MutableList<AlarmItem> = mutableListOf()
                     for (document in snapshot) {
                         when (makeStringToEnumData((document.get("type") as String))){
-                            AlarmType.GETOUT -> {
+                            AlarmType.OUT -> {
                                 alarmList.add(
                                     AlarmItem(document.get("documentId") as String,
                                         document.get("time") as String,
-                                        document.get("userId") as String,
+                                        document.get("otherUser") as String,
                                         document.get("message") as String,
                                         document.get("type") as String,
                                         null, null))
@@ -66,7 +66,7 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                                     alarmList.add(
                                         AlarmItem(document.get("documentId") as String,
                                             document.get("time") as String,
-                                            document.get("userId") as String,
+                                            document.get("otherUser") as String,
                                             document.get("message") as String,
                                             document.get("type") as String,
                                             null, null))
@@ -77,7 +77,7 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                                     alarmList.add(
                                         AlarmItem(document.get("documentId") as String,
                                             document.get("time") as String,
-                                            document.get("userId") as String,
+                                            document.get("otherUser") as String,
                                             document.get("message") as String,
                                             document.get("type") as String,
                                             reservationData, null))
@@ -92,7 +92,7 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                                 alarmList.add(
                                     AlarmItem(document.get("documentId") as String,
                                         document.get("time") as String,
-                                        document.get("userId") as String,
+                                        document.get("otherUser") as String,
                                         document.get("message") as String,
                                         document.get("type") as String,
                                         null, postAlarmData))
@@ -130,7 +130,7 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                         alarmList.add(
                             AlarmItem(document.get("documentId") as String,
                                 document.get("time") as String,
-                                document.get("userId") as String,
+                                document.get("otherUser") as String,
                                 document.get("message") as String,
                                 document.get("type") as String,
                                 null, postAlarmData))
@@ -166,7 +166,7 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                         alarmList.add(
                             AlarmItem(document.get("documentId") as String,
                                 document.get("time") as String,
-                                document.get("userId") as String,
+                                document.get("otherUser") as String,
                                 document.get("message") as String,
                                 document.get("type") as String,
                                 null, postAlarmData))
@@ -197,7 +197,7 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                             alarmList.add(
                                 AlarmItem(document.get("documentId") as String,
                                     document.get("time") as String,
-                                    document.get("userId") as String,
+                                    document.get("otherUser") as String,
                                     document.get("message") as String,
                                     document.get("type") as String,
                                     null, null))
@@ -208,7 +208,7 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                             alarmList.add(
                                 AlarmItem(document.get("documentId") as String,
                                     document.get("time") as String,
-                                    document.get("userId") as String,
+                                    document.get("otherUser") as String,
                                     document.get("message") as String,
                                     document.get("type") as String,
                                     reservationData, null))

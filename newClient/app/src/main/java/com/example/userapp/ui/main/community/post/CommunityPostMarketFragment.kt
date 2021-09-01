@@ -127,7 +127,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                         }
                         val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
                         val data = AlarmItem(documentId, LocalDateTime.now().toString(), localUserName,
-                            tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", alarmType, null, navArgs.postDataInfo.makeToPostAlarmData() )
+                            tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData() )
                         viewmodel.registerAlarmData(navArgs.postDataInfo.post_name, documentId, data )
                     }
                 }
@@ -165,7 +165,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                 "OUT" -> {
                     postToolbarName.text = "퇴실 신청 내역"
                     tokenTitle = "퇴실"
-                    alarmType = AlarmType.GETOUT
+                    alarmType = AlarmType.OUT
                 }
             }
             writeCommentTagNameDeleteBtn.setOnClickListener {
