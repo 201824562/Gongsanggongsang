@@ -15,7 +15,7 @@ import com.example.userapp.data.model.*
 import com.example.userapp.databinding.FragmentAlarmChildBinding
 import com.example.userapp.utils.CustomedAlarmDialog
 
-class AlarmReservationFragment(): BaseSessionFragment<FragmentAlarmChildBinding, AlarmViewModel>(){
+class AlarmCommunityFragment() : BaseSessionFragment<FragmentAlarmChildBinding, AlarmViewModel>(){
     override lateinit var viewbinding: FragmentAlarmChildBinding
     override val viewmodel: AlarmViewModel by viewModels()
     private lateinit var alarmRVAdapter: AlarmRVAdapter
@@ -57,7 +57,6 @@ class AlarmReservationFragment(): BaseSessionFragment<FragmentAlarmChildBinding,
 
     private fun setRecyclerView() {
         alarmRVAdapter = AlarmRVAdapter(object : AlarmRVAdapter.OnItemClickListener {
-            @RequiresApi(Build.VERSION_CODES.O)
             override fun onItemClick(position: Int, alarmData: AlarmItem) {
                 when(alarmData.type){
                     AlarmType.RESERVATION -> {

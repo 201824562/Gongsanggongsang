@@ -26,7 +26,12 @@
         <action
             android:id="@+id/action_mainFragment_to_mainhomeNoticeFragment"
             app:destination="@id/mainhomeNoticeFragment" />
-
+        <action
+            app:destination="@+id/communityPostMarketFragment"
+            android:id="@+id/action_mainFragment_to_communityPostMarket"/>
+        <action
+            app:destination="@+id/communityPostFragment"
+            android:id="@+id/action_mainFragment_to_communityPost"/>
         <action
             android:id="@+id/action_mainFragment_to_settingsChangeInfoFragment"
             app:destination="@id/settingsChangeInfoFragment"

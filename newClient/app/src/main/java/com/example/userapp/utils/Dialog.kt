@@ -152,6 +152,7 @@ class WrapedDialogBasicOneButton (context: Context, content: String) : Dialog(co
         binding.dialogBtn.setOnClickListener { clickListener?.dialogClickListener() }
     }
 }
+@RequiresApi(Build.VERSION_CODES.O)
 class CustomedAlarmDialog (context: Context, reserveData : ReservationAlarmData?, signData : SignUpAlarmData?) : Dialog(context){
     var clickListener : DialogButtonClickListener ? = null
     interface DialogButtonClickListener {

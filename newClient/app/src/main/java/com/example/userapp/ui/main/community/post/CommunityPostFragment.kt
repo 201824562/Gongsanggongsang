@@ -18,6 +18,8 @@ import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.data.entity.PostCommentDataClass
+import com.example.userapp.data.model.AlarmItem
+import com.example.userapp.data.model.AlarmType
 import com.example.userapp.databinding.FragmentCommunityPostBinding
 import com.example.userapp.service.sendFireStoreNotification
 import com.example.userapp.ui.main.community.CommunityViewModel
@@ -29,6 +31,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 
 
@@ -75,6 +78,20 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
             initPostView()
             if(collectionName == "4_WITH") { initWithPostView() }
         })
+        viewmodel.onSuccessRegisterAlarmData.observe(viewLifecycleOwner){
+            viewmodel.getUserToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
+                for(token in it){
+                    viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+                }
+            }
+            if(tagName != ""){
+                viewmodel.getUserToken(tagName.substring(1)).observe(viewLifecycleOwner){
+                    for(token in it){
+                        viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 댓글에 답변이 달렸어요!", token)
+                    }
+                }
+            }
+        }
     }
     @RequiresApi(Build.VERSION_CODES.O)
     override fun initViewFinal(savedInstanceState: Bundle?) {
@@ -104,18 +121,10 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                             communityPostCommentsNumber.text = it.size.toString()
                             viewmodel.modifyPostPartData(collectionName, documentName, "post_comments", it.size)
                         }
-                        viewmodel.getUserToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
-                            for(token in it){
-                                viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
-                            }
-                        }
-                        if(tagName != ""){
-                            viewmodel.getUserToken(tagName.substring(1)).observe(viewLifecycleOwner){
-                                for(token in it){
-                                    viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 댓글에 답변이 달렸어요!", token)
-                                }
-                            }
-                        }
+                        val documentId = "헤헤헤헤" //TODO : 날짜 + 타입 + 보내는사람닉네임
+                        val data = AlarmItem(navArgs.postDataInfo.post_id, LocalDateTime.now().toString(), localUserName,
+                        "내가 쓴 글에 댓글이 달렸습니다.", AlarmType.TOGETHER, null, navArgs.postDataInfo.makeToPostAlarmData() )
+                        viewmodel.registerAlarmData(navArgs.postDataInfo.post_name, documentId, data )
                     }
                 }
             }

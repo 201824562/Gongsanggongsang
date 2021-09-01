@@ -38,6 +38,9 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
     private val onSuccessGetAlarmMarketList: LiveData<List<AlarmItem>> get() = _onSuccessGetAlarmMarketList
 
 
+    fun makeReservationLogUsing(documentId: String){ alarmRepository.makeReservationLogUsing(agencyInfo, documentId) }
+    fun makeReservationLogCancel(documentId: String) { alarmRepository.makeReservationLogCancel(agencyInfo, documentId) }
+
     fun getAlarmAllList(): LiveData<List<AlarmItem>> {
         getAlarmAllListFromFireBase()
         return onSuccessGetAlarmAllList
