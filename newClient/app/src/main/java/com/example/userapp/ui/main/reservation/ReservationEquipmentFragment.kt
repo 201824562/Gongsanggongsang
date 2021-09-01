@@ -83,7 +83,7 @@ class ReservationEquipmentFragment :
                                             e.printStackTrace()
                                         }
                                         Log.e("equipment endTime",endTimeStr)
-                                        (activity as MainActivity).setUseCompleteAlarm(endTimeCal,false,it.icon)
+                                        (activity as MainActivity).setUseCompleteAlarm(endTimeCal,false,it.document_name.hashCode())
                                     }
                                     confirmUsingDialog.dismiss()
                                     dismiss()

@@ -13,12 +13,12 @@ import androidx.core.app.NotificationCompat
 import com.example.userapp.MainActivity
 import com.example.userapp.R
 
-class ReservationAlarmReceiver : BroadcastReceiver() {
+class ReservationBeforeUseAlarmReceiver: BroadcastReceiver() {
 
     companion object {
         const val TAG = "AlarmReceiver"
-        const val NOTIFICATION_ID = 2
-        const val PRIMARY_CHANNEL_ID = "primary_notification_channel2"
+        const val NOTIFICATION_ID = 0
+        const val PRIMARY_CHANNEL_ID = "primary_notification_channel"
     }
 
     lateinit var notificationManager: NotificationManager
@@ -43,8 +43,8 @@ class ReservationAlarmReceiver : BroadcastReceiver() {
         val builder =
             NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_alarm)
-                .setContentTitle("물품/시설 사용완료")
-                .setContentText("물품/시설의 사용이 완료되었어요!")
+                .setContentTitle("예약사용알림")
+                .setContentText("예약하신 시설 사용까지 5분 남았어요!")
                 .setContentIntent(contentPendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true)

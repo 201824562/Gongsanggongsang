@@ -49,7 +49,7 @@ class ReservationCurrentFragment :
             emptyList(),
             onClickNoUsingIcon = {
                 viewmodel.end_use(it)
-                (activity as MainActivity).setUseCompleteAlarm(Calendar.getInstance(),true,it.icon)
+                (activity as MainActivity).setUseCompleteAlarm(Calendar.getInstance(),true,it.document_name.hashCode())
             }
         )
         viewbinding.facilityUsingRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -57,7 +57,7 @@ class ReservationCurrentFragment :
             emptyList(),
             onClickNoUsingIcon = {
                 viewmodel.end_use(it)
-                (activity as MainActivity).setUseCompleteAlarm(Calendar.getInstance(),true,it.icon)
+                (activity as MainActivity).setUseCompleteAlarm(Calendar.getInstance(),true,(it.document_name+it.endTime).hashCode())
             }
         )
         viewbinding.facilityReserveRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -65,6 +65,8 @@ class ReservationCurrentFragment :
             emptyList(),
             onClickNoUsingIcon = {
                 viewmodel.cancel_reserve(it)
+//                (activity as MainActivity).setUseCompleteAlarm(Calendar.getInstance(),true,(it.document_name+it.endTime).hashCode())
+
             }
         )
 

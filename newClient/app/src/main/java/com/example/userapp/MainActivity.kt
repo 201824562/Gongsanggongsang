@@ -1,11 +1,10 @@
 package com.example.userapp
 
 import android.app.*
-import android.app.PendingIntent.FLAG_ONE_SHOT
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.SystemClock
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
@@ -21,8 +20,9 @@ import androidx.viewbinding.ViewBinding
 import com.example.userapp.base.*
 import com.example.userapp.databinding.ActivityMainBinding
 import com.example.userapp.service.ReservationAlarmReceiver
+import com.example.userapp.service.ReservationBeforeUseAlarmReceiver
+import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() {
 
@@ -122,7 +122,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
         val alarmIntent = Intent(this, ReservationAlarmReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(
             this, notificationId, alarmIntent,
-            FLAG_ONE_SHOT)
+            PendingIntent.FLAG_UPDATE_CURRENT)
         if(!click){
             alarmManager.setExact(
                 AlarmManager.RTC_WAKEUP,
@@ -139,29 +139,38 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
 
     }
 
-//    fun setBeforeUseAlarm(startTime :Calendar, notificationId:Int) {
-//        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-//        val alarmIntent = Intent(this, ReservationAlarmReceiver::class.java)
-//        val pendingIntent = PendingIntent.getBroadcast(
-//            this, notificationId, alarmIntent,
-//            PendingIntent.FLAG_UPDATE_CURRENT)
-//        if(!click){
-//            alarmManager.setExact(
-//                AlarmManager.RTC_WAKEUP,
-//                endTimeCal.timeInMillis,
-//                pendingIntent
-//            )
-//        }else{
-//            alarmManager.set(   // 5
-//                AlarmManager.ELAPSED_REALTIME_WAKEUP,
-//                0,
-//                pendingIntent
-//            )
-//        }
-//
-//    }
+    fun setBeforeUseAlarm(startTimeCal :Calendar, notificationId:Int) {
+        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        val alarmIntent = Intent(this, ReservationBeforeUseAlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            this, notificationId, alarmIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT)
+        startTimeCal.add(Calendar.MINUTE,-5)
+        val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.KOREA)
+        Log.e("startTimeCal", sdf.format(startTimeCal.getTime()).toString())
+        alarmManager.setExact(
+            AlarmManager.RTC_WAKEUP,
+            startTimeCal.timeInMillis,
+            pendingIntent
+        )
+    }
+    fun setCancelUseAlarm(notificationId: Int){
+        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        val alarmIntent = Intent(this, ReservationAlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            this, notificationId, alarmIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT)
+        alarmManager.cancel(pendingIntent)
+    }
 
-
+    fun setCancelBeforeUseAlarm(notificationId: Int){
+        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        val alarmIntent = Intent(this, ReservationBeforeUseAlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            this, notificationId, alarmIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT)
+        alarmManager.cancel(pendingIntent)
+    }
 }
 
 fun <VB : ViewBinding, VM : BaseSessionViewModel> BaseSessionFragment<VB, VM>.restartActivity() {
