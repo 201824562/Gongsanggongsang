@@ -1,21 +1,15 @@
 package com.example.userapp
 
-import android.content.ContentValues.TAG
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
+import android.app.*
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -24,15 +18,11 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.viewbinding.ViewBinding
 import com.example.userapp.base.*
-import com.example.userapp.data.dto.UserModel
 import com.example.userapp.databinding.ActivityMainBinding
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.iid.FirebaseInstanceIdReceiver
-import com.google.firebase.iid.internal.FirebaseInstanceIdInternal
-import com.google.firebase.messaging.FirebaseMessaging
-import kotlinx.coroutines.channels.Channel
+import com.example.userapp.service.ReservationAlarmReceiver
+import com.example.userapp.service.ReservationBeforeUseAlarmReceiver
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() {
 
@@ -124,6 +114,62 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     }
     fun getPhoto() : ArrayList<String>{
         return selectedItems
+    }
+
+    // reservation alarm manager
+    fun setUseCompleteAlarm(endTimeCal :Calendar,click: Boolean, notificationId:Int) {
+        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        val alarmIntent = Intent(this, ReservationAlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            this, notificationId, alarmIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT)
+        if(!click){
+            alarmManager.setExact(
+                AlarmManager.RTC_WAKEUP,
+                endTimeCal.timeInMillis,
+                pendingIntent
+            )
+        }else{
+            alarmManager.set(   // 5
+                AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                0,
+                pendingIntent
+            )
+        }
+
+    }
+
+    fun setBeforeUseAlarm(startTimeCal :Calendar, notificationId:Int) {
+        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        val alarmIntent = Intent(this, ReservationBeforeUseAlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            this, notificationId, alarmIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT)
+        startTimeCal.add(Calendar.MINUTE,-5)
+        val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.KOREA)
+        Log.e("startTimeCal", sdf.format(startTimeCal.getTime()).toString())
+        alarmManager.setExact(
+            AlarmManager.RTC_WAKEUP,
+            startTimeCal.timeInMillis,
+            pendingIntent
+        )
+    }
+    fun setCancelUseAlarm(notificationId: Int){
+        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        val alarmIntent = Intent(this, ReservationAlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            this, notificationId, alarmIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT)
+        alarmManager.cancel(pendingIntent)
+    }
+
+    fun setCancelBeforeUseAlarm(notificationId: Int){
+        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        val alarmIntent = Intent(this, ReservationBeforeUseAlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            this, notificationId, alarmIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT)
+        alarmManager.cancel(pendingIntent)
     }
 }
 

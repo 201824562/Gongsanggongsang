@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.data.model.ReservationReserveFacility
@@ -24,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 class ReservationCurrentFragment :
     BaseSessionFragment<FragmentMainhomeReservationCurrentBinding, ReservationViewModel>() {
@@ -47,6 +49,7 @@ class ReservationCurrentFragment :
             emptyList(),
             onClickNoUsingIcon = {
                 viewmodel.end_use(it)
+                (activity as MainActivity).setUseCompleteAlarm(Calendar.getInstance(),true,it.document_name.hashCode())
             }
         )
         viewbinding.facilityUsingRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -54,6 +57,7 @@ class ReservationCurrentFragment :
             emptyList(),
             onClickNoUsingIcon = {
                 viewmodel.end_use(it)
+                (activity as MainActivity).setUseCompleteAlarm(Calendar.getInstance(),true,(it.document_name+it.endTime).hashCode())
             }
         )
         viewbinding.facilityReserveRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -61,6 +65,8 @@ class ReservationCurrentFragment :
             emptyList(),
             onClickNoUsingIcon = {
                 viewmodel.cancel_reserve(it)
+//                (activity as MainActivity).setUseCompleteAlarm(Calendar.getInstance(),true,(it.document_name+it.endTime).hashCode())
+
             }
         )
 

@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -16,25 +15,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.userapp.MainActivity
 import com.example.userapp.R
-import com.example.userapp.base.BaseFragment
 import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.data.dto.UserModel
 import com.example.userapp.data.entity.DayTimeSlot
-import com.example.userapp.data.entity.ReservationTimeData
-import com.example.userapp.data.model.ReservationFacilityDayInfo
-import com.example.userapp.data.model.ReservationFacilityTimeSlot
 import com.example.userapp.databinding.FragmentMainhomeReservationFacilitySelectBinding
 import com.example.userapp.databinding.FragmentMainhomeReservationFacilitySelectItemBinding
 import com.example.userapp.restartActivity
 import com.example.userapp.utils.CautionMessageDialog
 import com.example.userapp.utils.ConfirmReserveDialog
-import com.example.userapp.utils.ConfirmUsingDialog
-import com.example.userapp.utils.InputUsingTimeDialog
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.util.*
-import kotlin.collections.HashMap
 
 class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservationFacilitySelectBinding, ReservationViewModel>() {
     override lateinit var viewbinding: FragmentMainhomeReservationFacilitySelectBinding
@@ -243,8 +234,6 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
         })
 
         viewbinding.nextBtn.setOnClickListener {
-
-
             val confirmUsingDialog = ConfirmReserveDialog(requireContext(), args.myArg, viewmodel.getReserveFacilityStartTime(), viewmodel.getReserveFacilityEndTime()) //사용하는
             confirmUsingDialog.clickListener = object : ConfirmReserveDialog.DialogButtonClickListener {
                 override fun dialogAgainClickListener() {
@@ -252,7 +241,16 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
                 }
 
                 override fun dialogReserveClickListener() {
-                    userInfo?.let { info ->  viewmodel.add_reserve(info, args.myArg) }
+                    var endTimeCal = Calendar.getInstance()
+                    var startTimeCal = Calendar.getInstance()
+                    var calPair = Pair(startTimeCal,endTimeCal)
+
+                    userInfo?.let { info ->
+                        calPair = viewmodel.add_reserve(info, args.myArg)
+                    }
+                    val sdf = SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS", Locale.KOREA)
+                    (activity as MainActivity).setUseCompleteAlarm(calPair.second,false,(args.myArg.document_name+sdf.format(calPair.second.getTime()).toString()).hashCode())
+                    (activity as MainActivity).setBeforeUseAlarm(calPair.first,(args.myArg.document_name+sdf.format(calPair.second.getTime()).toString()).hashCode())
                     confirmUsingDialog.dismiss()
                 }
             }
