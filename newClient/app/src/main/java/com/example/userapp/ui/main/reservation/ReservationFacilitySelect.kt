@@ -31,6 +31,7 @@ import com.example.userapp.utils.ConfirmReserveDialog
 import com.example.userapp.utils.ConfirmUsingDialog
 import com.example.userapp.utils.InputUsingTimeDialog
 import com.google.firebase.firestore.FirebaseFirestore
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
@@ -243,8 +244,6 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
         })
 
         viewbinding.nextBtn.setOnClickListener {
-
-
             val confirmUsingDialog = ConfirmReserveDialog(requireContext(), args.myArg, viewmodel.getReserveFacilityStartTime(), viewmodel.getReserveFacilityEndTime()) //사용하는
             confirmUsingDialog.clickListener = object : ConfirmReserveDialog.DialogButtonClickListener {
                 override fun dialogAgainClickListener() {
@@ -252,7 +251,11 @@ class ReservationFacilitySelect : BaseSessionFragment<FragmentMainhomeReservatio
                 }
 
                 override fun dialogReserveClickListener() {
-                    userInfo?.let { info ->  viewmodel.add_reserve(info, args.myArg) }
+                    var endTimeCal = Calendar.getInstance()
+                    userInfo?.let { info ->
+                        endTimeCal = viewmodel.add_reserve(info, args.myArg)
+                    }
+                    (activity as MainActivity).setUseCompleteAlarm(endTimeCal,false,args.myArg.category_icon)
                     confirmUsingDialog.dismiss()
                 }
             }

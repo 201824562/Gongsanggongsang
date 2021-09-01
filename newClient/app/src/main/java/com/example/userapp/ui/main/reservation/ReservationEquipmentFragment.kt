@@ -1,8 +1,6 @@
 package com.example.userapp.ui.main.reservation
 
 import android.annotation.SuppressLint
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -20,12 +18,16 @@ import com.example.userapp.data.model.ReservationEquipment
 import com.example.userapp.databinding.FragmentMainhomeReservationEquipmentBinding
 import com.example.userapp.databinding.FragmentMainhomeReservationEquipmentItemBinding
 import com.example.userapp.restartActivity
+import com.example.userapp.ui.main.reservation.CategoryResources.Companion.makeIconStringToDrawableID
 import com.example.userapp.utils.ConfirmUsingDialog
 import com.example.userapp.utils.InputUsingTimeDialog
 import com.google.firebase.firestore.FirebaseFirestore
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import java.util.*
 
 
 class ReservationEquipmentFragment :
@@ -34,6 +36,7 @@ class ReservationEquipmentFragment :
     override val viewmodel: ReservationViewModel by viewModels()
     val database = FirebaseFirestore.getInstance()
     private var userInfo : UserModel? = null
+    //알람부분
 
     override fun initViewbinding(
         inflater: LayoutInflater,
@@ -65,7 +68,22 @@ class ReservationEquipmentFragment :
 
                                 override fun dialogUsingClickListener() {
                                     if (usingtime > 0) { //사용시간이 0보다 큰 경우만 사용
-                                        userInfo?.let { info ->  viewmodel.add_use(info,it,usingtime) }
+                                        val sdf = SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS", Locale.KOREA)
+                                        val endTimeCal = Calendar.getInstance()
+                                        var endTimeStr: String = "noStr"
+                                        userInfo?.let { info ->
+                                            endTimeStr = viewmodel.add_use(info,it,usingtime)
+                                        }
+
+                                        //여기에 알람매니저 구현
+                                        try {
+                                            val date: Date = sdf.parse(endTimeStr)
+                                            endTimeCal.setTime(date)
+                                        } catch (e: ParseException) {
+                                            e.printStackTrace()
+                                        }
+                                        Log.e("equipment endTime",endTimeStr)
+                                        (activity as MainActivity).setUseCompleteAlarm(endTimeCal,false,it.icon)
                                     }
                                     confirmUsingDialog.dismiss()
                                     dismiss()
