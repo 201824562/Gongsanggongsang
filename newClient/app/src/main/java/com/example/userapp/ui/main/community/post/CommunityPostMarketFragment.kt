@@ -17,12 +17,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.R
 import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.data.entity.PostCommentDataClass
+import com.example.userapp.data.model.AlarmItem
+import com.example.userapp.data.model.AlarmType
 import com.example.userapp.databinding.FragmentCommunityPostMarketBinding
 import com.example.userapp.ui.main.community.CommunityViewModel
 import com.example.userapp.ui.main.community.write.CommunityAttachPostPhotoRecyclerAdapter
 import com.example.userapp.utils.WrapedDialogBasicTwoButton
 import com.example.userapp.utils.hideKeyboard
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 
 
@@ -43,6 +46,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
     private var tokenTitle = ""
     private var localUserName = ""
     private var agency = ""
+    private lateinit var alarmType : AlarmType
     private var token = ""
     override fun initViewbinding(
         inflater: LayoutInflater,
@@ -67,7 +71,20 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
-
+        viewmodel.onSuccessRegisterAlarmData.observe(viewLifecycleOwner){
+            viewmodel.getUserToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
+                for(token in it){
+                    viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+                }
+            }
+            if(viewbinding.writeCommentTagName.text != ""){
+                viewmodel.getUserToken(viewbinding.writeCommentTagName.text.substring(1)).observe(viewLifecycleOwner){
+                    for(token in it){
+                        viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 댓글에 답변이 달렸어요!", token)
+                    }
+                }
+            }
+        }
     }
 
     override fun onDestroy() {
@@ -108,19 +125,10 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                             communityPostCommentsNumber.text = it.size.toString()
                             viewmodel.modifyPostPartData(collectionName, documentName, "post_comments", it.size)
                         }
-                        viewmodel.getUserToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
-                            for(token in it){
-                                viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
-                            }
-                        }
-
-                        if(writeCommentTagName.text != ""){
-                            viewmodel.getUserToken(writeCommentTagName.text.substring(1)).observe(viewLifecycleOwner){
-                                for(token in it){
-                                    viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 댓글에 답변이 달렸어요!", token)
-                                }
-                            }
-                        }
+                        val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
+                        val data = AlarmItem(documentId, LocalDateTime.now().toString(), localUserName,
+                            tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", alarmType, null, navArgs.postDataInfo.makeToPostAlarmData() )
+                        viewmodel.registerAlarmData(navArgs.postDataInfo.post_name, documentId, data )
                     }
                 }
             }
@@ -152,10 +160,12 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                 "5_MARKET" -> {
                     postToolbarName.text = "장터게시판"
                     tokenTitle = "장터"
+                    alarmType = AlarmType.MARKET
                 }
                 "OUT" -> {
                     postToolbarName.text = "퇴실 신청 내역"
                     tokenTitle = "퇴실"
+                    alarmType = AlarmType.GETOUT
                 }
             }
             writeCommentTagNameDeleteBtn.setOnClickListener {

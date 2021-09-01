@@ -17,6 +17,7 @@ import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.data.repository.AlarmRepository
 import com.example.userapp.data.repository.CommunityDataRepository
 import com.example.userapp.utils.SingleLiveEvent
+import com.google.firebase.auth.UserInfo
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -100,13 +101,14 @@ class CommunityViewModel(application: Application) : BaseSessionViewModel(applic
     }
     fun getUserToken(userNickname : String) : MutableLiveData<ArrayList<String>> {
         var getToken: ArrayList<String> = arrayListOf()
+        var getId : String = ""
         firestore.collection("USER_INFO")
             .whereEqualTo("nickname", userNickname)
             .get()
             .addOnSuccessListener {
                 for (result in it) {
                     getToken = result["fcmToken"] as ArrayList<String>
-                    Log.e("chekckck", "{$getToken}")
+                    getId = result["id"] as String
                 }
                 getTokenArrayList.postValue(getToken)
             }

@@ -78,20 +78,7 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
             initPostView()
             if(collectionName == "4_WITH") { initWithPostView() }
         })
-        viewmodel.onSuccessRegisterAlarmData.observe(viewLifecycleOwner){
-            viewmodel.getUserToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
-                for(token in it){
-                    viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
-                }
-            }
-            if(tagName != ""){
-                viewmodel.getUserToken(tagName.substring(1)).observe(viewLifecycleOwner){
-                    for(token in it){
-                        viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 댓글에 답변이 달렸어요!", token)
-                    }
-                }
-            }
-        }
+
     }
     @RequiresApi(Build.VERSION_CODES.O)
     override fun initViewFinal(savedInstanceState: Bundle?) {
@@ -126,8 +113,19 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                         }
                         val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
                         val data = AlarmItem(documentId, LocalDateTime.now().toString(), localUserName,
-                        "내가 쓴 글에 댓글이 달렸습니다.", alarmType, null, navArgs.postDataInfo.makeToPostAlarmData() )
-                        viewmodel.registerAlarmData(navArgs.postDataInfo.post_name, documentId, data )
+                            tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", alarmType, null, navArgs.postDataInfo.makeToPostAlarmData() )
+                        viewmodel.getUserToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
+                            for(token in it){
+                                viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+                            }
+                        }
+                        if(viewbinding.writeCommentTagName.text != ""){
+                            viewmodel.getUserToken(viewbinding.writeCommentTagName.text.substring(1)).observe(viewLifecycleOwner){
+                                for(token in it){
+                                    viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 댓글에 답변이 달렸어요!", token)
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -155,17 +153,18 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                 "2_EMERGENCY" -> {
                     postToolbarName.text = "긴급게시판"
                     tokenTitle = "긴급"
-                    alarmType = AlarmType.EMERGENCY
                 }
                 "3_SUGGEST" -> {
                     postToolbarName.text = "건의게시판"
                     tokenTitle = "건의"
-                    alarmType = AlarmType.SUGGEST
                 }
                 "4_WITH" -> {
                     postToolbarName.text = "함께게시판"
                     tokenTitle = "함께"
-                    alarmType = AlarmType.TOGETHER
+                }
+                "notice" -> {
+                    postToolbarName.text = "공지 글"
+                    tokenTitle = "공지"
                 }
             }
             writeCommentTagNameDeleteBtn.setOnClickListener {
