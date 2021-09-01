@@ -26,16 +26,10 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
     private val onSuccessGetAlarmAllList: LiveData<List<AlarmItem>> get() = _onSuccessGetAlarmAllList
     private val _onSuccessGetAlarmNoticeList = SingleLiveEvent<List<AlarmItem>>()
     private val onSuccessGetAlarmNoticeList: LiveData<List<AlarmItem>> get() = _onSuccessGetAlarmNoticeList
+    private val _onSuccessGetAlarmCommunityList = SingleLiveEvent<List<AlarmItem>>()
+    private val onSuccessGetAlarmCommunityList: LiveData<List<AlarmItem>> get() = _onSuccessGetAlarmCommunityList
     private val _onSuccessGetAlarmReservationList = SingleLiveEvent<List<AlarmItem>>()
     private val onSuccessGetAlarmReservationList: LiveData<List<AlarmItem>> get() = _onSuccessGetAlarmReservationList
-    private val _onSuccessGetAlarmEmergencyList = SingleLiveEvent<List<AlarmItem>>()
-    private val onSuccessGetAlarmEmergencyList: LiveData<List<AlarmItem>> get() = _onSuccessGetAlarmEmergencyList
-    private val _onSuccessGetAlarmTogetherList = SingleLiveEvent<List<AlarmItem>>()
-    private val onSuccessGetAlarmTogetherList: LiveData<List<AlarmItem>> get() = _onSuccessGetAlarmTogetherList
-    private val _onSuccessGetAlarmSuggestList = SingleLiveEvent<List<AlarmItem>>()
-    private val onSuccessGetAlarmSuggestList: LiveData<List<AlarmItem>> get() = _onSuccessGetAlarmSuggestList
-    private val _onSuccessGetAlarmMarketList = SingleLiveEvent<List<AlarmItem>>()
-    private val onSuccessGetAlarmMarketList: LiveData<List<AlarmItem>> get() = _onSuccessGetAlarmMarketList
 
 
     fun makeReservationLogUsing(documentId: String){ alarmRepository.makeReservationLogUsing(agencyInfo, documentId) }
@@ -57,20 +51,38 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                 else {
                     val alarmList: MutableList<AlarmItem> = mutableListOf()
                     for (document in snapshot) {
-                        val type = makeStringToEnumData((document.get("type") as String))
-                        when (type){
-                            AlarmType.RESERVATION ->{
-                                val reservationData : ReservationAlarmData= (document.get("reservationData")  as HashMap<String, ReservationAlarmData>).let {
-                                    ReservationAlarmData(it["documentId"] as String, it["name"] as String,
-                                        it["startTime"] as String, it["endTime"] as String) }
+                        when (makeStringToEnumData((document.get("type") as String))){
+                            AlarmType.GETOUT -> {
                                 alarmList.add(
                                     AlarmItem(document.get("documentId") as String,
                                         document.get("time") as String,
                                         document.get("userId") as String,
                                         document.get("message") as String,
-                                        makeStringToEnumData((document.get("type") as String)),
-                                        reservationData, null)) }
-                            else -> {
+                                        document.get("type") as String,
+                                        null, null))
+                            }
+                            AlarmType.RESERVATION ->{
+                                if (document.get("reservationData") == null){
+                                    alarmList.add(
+                                        AlarmItem(document.get("documentId") as String,
+                                            document.get("time") as String,
+                                            document.get("userId") as String,
+                                            document.get("message") as String,
+                                            document.get("type") as String,
+                                            null, null))
+                                }else {
+                                    val reservationData : ReservationAlarmData= (document.get("reservationData")  as HashMap<String, ReservationAlarmData>).let {
+                                        ReservationAlarmData(it["documentId"] as String, it["name"] as String,
+                                            it["startTime"] as String, it["endTime"] as String) }
+                                    alarmList.add(
+                                        AlarmItem(document.get("documentId") as String,
+                                            document.get("time") as String,
+                                            document.get("userId") as String,
+                                            document.get("message") as String,
+                                            document.get("type") as String,
+                                            reservationData, null))
+                                }
+                            }else -> {
                                 val postAlarmData : PostAlarmData = (document.get("postData") as HashMap<String, PostAlarmData>).let {
                                     PostAlarmData(
                                         it["post_category"] as String, it["post_name"] as String, it["post_title"] as String,
@@ -82,12 +94,127 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                                         document.get("time") as String,
                                         document.get("userId") as String,
                                         document.get("message") as String,
-                                        makeStringToEnumData((document.get("type") as String)),
+                                        document.get("type") as String,
                                         null, postAlarmData))
                             }
                         }
                     }
                     _onSuccessGetAlarmAllList.postValue(alarmList)
+                }
+            }
+    }
+
+    fun getAlarmNoticeList(): LiveData<List<AlarmItem>> {
+        getAlarmNoticeListFromFireBase()
+        return onSuccessGetAlarmNoticeList
+    }
+
+    private fun getAlarmNoticeListFromFireBase(){
+        firestore.collection(agencyInfo).document(FIRESTORE_ALARM)
+            .collection(authToken).whereIn("type", listOf("공지", "긴급"))
+            .addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    Log.w(ContentValues.TAG, "Listen failed.", e)
+                    _onSuccessGetAlarmNoticeList.postValue(emptyList())
+                    return@addSnapshotListener }
+                if (snapshot == null) _onSuccessGetAlarmNoticeList.postValue(emptyList())
+                else {
+                    val alarmList: MutableList<AlarmItem> = mutableListOf()
+                    for (document in snapshot) {
+                        val postAlarmData : PostAlarmData = (document.get("postData") as HashMap<String, PostAlarmData>).let {
+                            PostAlarmData(
+                                it["post_category"] as String, it["post_name"] as String, it["post_title"] as String,
+                                it["post_contents"] as String, it["post_date"] as String, it["post_time"] as String,
+                                it["post_comments"] as Long, it["post_id"] as String, it["post_photo_uri"] as ArrayList<String>,
+                                it["post_state"] as String, it["post_anonymous"] as Boolean) }
+                        alarmList.add(
+                            AlarmItem(document.get("documentId") as String,
+                                document.get("time") as String,
+                                document.get("userId") as String,
+                                document.get("message") as String,
+                                document.get("type") as String,
+                                null, postAlarmData))
+                    }
+                    _onSuccessGetAlarmNoticeList.postValue(alarmList)
+                }
+            }
+    }
+
+    fun getAlarmCommunityList(): LiveData<List<AlarmItem>> {
+        getAlarmCommunityListFromFireBase()
+        return onSuccessGetAlarmCommunityList
+    }
+
+    private fun getAlarmCommunityListFromFireBase(){
+        firestore.collection(agencyInfo).document(FIRESTORE_ALARM)
+            .collection(authToken).whereIn("type", listOf("함께", "건의", "장터"))
+            .addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    Log.w(ContentValues.TAG, "Listen failed.", e)
+                    _onSuccessGetAlarmCommunityList.postValue(emptyList())
+                    return@addSnapshotListener }
+                if (snapshot == null) _onSuccessGetAlarmCommunityList.postValue(emptyList())
+                else {
+                    val alarmList: MutableList<AlarmItem> = mutableListOf()
+                    for (document in snapshot) {
+                        val postAlarmData : PostAlarmData = (document.get("postData") as HashMap<String, PostAlarmData>).let {
+                            PostAlarmData(
+                                it["post_category"] as String, it["post_name"] as String, it["post_title"] as String,
+                                it["post_contents"] as String, it["post_date"] as String, it["post_time"] as String,
+                                it["post_comments"] as Long, it["post_id"] as String, it["post_photo_uri"] as ArrayList<String>,
+                                it["post_state"] as String, it["post_anonymous"] as Boolean) }
+                        alarmList.add(
+                            AlarmItem(document.get("documentId") as String,
+                                document.get("time") as String,
+                                document.get("userId") as String,
+                                document.get("message") as String,
+                                document.get("type") as String,
+                                null, postAlarmData))
+                    }
+                    _onSuccessGetAlarmCommunityList.postValue(alarmList)
+                }
+            }
+    }
+
+    fun getAlarmReservationList(): LiveData<List<AlarmItem>> {
+        getAlarmReservationListFromFireBase()
+        return onSuccessGetAlarmReservationList
+    }
+
+    private fun getAlarmReservationListFromFireBase(){
+        firestore.collection(agencyInfo).document(FIRESTORE_ALARM)
+            .collection(authToken).whereIn("type", listOf("공용"))
+            .addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    Log.w(ContentValues.TAG, "Listen failed.", e)
+                    _onSuccessGetAlarmReservationList.postValue(emptyList())
+                    return@addSnapshotListener }
+                if (snapshot == null) _onSuccessGetAlarmReservationList.postValue(emptyList())
+                else {
+                    val alarmList: MutableList<AlarmItem> = mutableListOf()
+                    for (document in snapshot) {
+                        if (document.get("reservationData") == null){
+                            alarmList.add(
+                                AlarmItem(document.get("documentId") as String,
+                                    document.get("time") as String,
+                                    document.get("userId") as String,
+                                    document.get("message") as String,
+                                    document.get("type") as String,
+                                    null, null))
+                        }else {
+                            val reservationData : ReservationAlarmData= (document.get("reservationData")  as HashMap<String, ReservationAlarmData>).let {
+                                ReservationAlarmData(it["documentId"] as String, it["name"] as String,
+                                    it["startTime"] as String, it["endTime"] as String) }
+                            alarmList.add(
+                                AlarmItem(document.get("documentId") as String,
+                                    document.get("time") as String,
+                                    document.get("userId") as String,
+                                    document.get("message") as String,
+                                    document.get("type") as String,
+                                    reservationData, null))
+                        }
+                    }
+                    _onSuccessGetAlarmReservationList.postValue(alarmList)
                 }
             }
     }

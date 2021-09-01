@@ -42,8 +42,11 @@ class AlarmRVAdapter(private val  listener : OnItemClickListener)
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         getItem(position).let { item ->
-            if (item.type == AlarmType.RESERVATION) holder.binding.alarmMoveBtn.visibility = View.GONE //TODO : 추가디자인?
-            holder.binding.alarmTypeName.text = item.type.type
+            if (item.type == AlarmType.makeEnumDataToString(AlarmType.RESERVATION)) {
+                //TODO : 추가디자인?
+                holder.binding.alarmMoveBtn.visibility = View.GONE
+            }
+            holder.binding.alarmTypeName.text = item.type
             holder.binding.alarmPassedTime.text = getTimePassedString(item.time)
             holder.binding.alarmState.text = item.message
             holder.binding.itemContentLayout.setOnClickListener { listener.onItemClick(position, item) }
