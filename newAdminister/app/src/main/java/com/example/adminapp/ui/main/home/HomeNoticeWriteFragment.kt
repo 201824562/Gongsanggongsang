@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,17 +18,21 @@ import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.adminapp.MainActivity
 import com.example.adminapp.R
 import com.example.adminapp.base.BaseSessionFragment
+import com.example.adminapp.data.model.AlarmItem
 import com.example.adminapp.data.model.PostDataInfo
+import com.example.adminapp.data.model.RemoteUserInfo
 import com.example.adminapp.databinding.FragmentCommunityWriteBinding
 import com.example.adminapp.databinding.FragmentMainhomeHomeNoticeWriteBinding
 import com.example.adminapp.ui.main.community.CommunityViewModel
 import com.example.adminapp.ui.main.community.write.CommunityAttachPhotoRecyclerAdapter
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 
 class HomeNoticeWriteFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeWriteBinding, CommunityViewModel>() {
@@ -44,6 +49,8 @@ class HomeNoticeWriteFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeWr
     private val uriArray : ArrayList<Uri> = arrayListOf()
 
     var postPhotoUri : ArrayList<String> = arrayListOf()
+    private var tokenTitle = "공지"
+    private var getUserToken : ArrayList<RemoteUserInfo> = arrayListOf()
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -66,6 +73,11 @@ class HomeNoticeWriteFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeWr
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?){
+        viewmodel.getAllUserIdToken().observe(viewLifecycleOwner) {
+            viewmodel.getTokenArrayList = MutableLiveData()
+            Log.e("checkck", "{$it}")
+            getUserToken = it
+        }
     }
 
     override fun onDetach() {
@@ -110,7 +122,23 @@ class HomeNoticeWriteFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeWr
                     if(uriArray.isEmpty()){
                         viewmodel.insertPostData(postData).observe(viewLifecycleOwner){
                             if(it){
-                                findNavController().navigate(R.id.action_homeNoticeWrite_to_homeNoticePost, bundle)
+                                for(user in getUserToken){
+                                    for(token in user.fcmToken){
+                                        viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+                                    }
+                                    Log.e("chekckcck", "{$user.id}")
+                                    val documentId = LocalDateTime.now().toString() + "notice" + "관리자"  //TODO : 날짜 + 타입 + 보내는사람닉네임
+                                    val data = AlarmItem(documentId,
+                                        LocalDateTime.now().toString(),
+                                        user.id,
+                                        "공지사항이 있어요!", tokenTitle, null,
+                                        postData.makeToPostAlarmData(),
+                                        null)
+                                    viewmodel.registerAlarmData(user.id, documentId, data)
+                                }
+                                viewmodel.onSuccessRegisterAlarmData.observe(viewLifecycleOwner){
+                                    findNavController().navigate(R.id.action_homeNoticeWrite_to_homeNoticePost, bundle)
+                                }
                             }
                         }
                     }
@@ -120,7 +148,23 @@ class HomeNoticeWriteFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeWr
                             if(it){
                                 viewmodel.insertPostData(postData).observe(viewLifecycleOwner){
                                     if(it){
-                                        findNavController().navigate(R.id.action_homeNoticeWrite_to_homeNoticePost, bundle)
+                                        for(user in getUserToken){
+                                            for(token in user.fcmToken){
+                                                viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+                                            }
+                                            Log.e("chekckcck", "{$user.id}")
+                                            val documentId = LocalDateTime.now().toString() + collectionName + "관리자"  //TODO : 날짜 + 타입 + 보내는사람닉네임
+                                            val data = AlarmItem(documentId,
+                                                LocalDateTime.now().toString(),
+                                                user.id,
+                                                "공지사항 어요!", tokenTitle, null,
+                                                    postData.makeToPostAlarmData(),
+                                                null)
+                                            viewmodel.registerAlarmData(user.id, documentId, data)
+                                        }
+                                        viewmodel.onSuccessRegisterAlarmData.observe(viewLifecycleOwner){
+                                            findNavController().navigate(R.id.action_homeNoticeWrite_to_homeNoticePost, bundle)
+                                        }
                                     }
                                 }
                             }
@@ -165,7 +209,7 @@ class HomeNoticeWriteFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeWr
             cursor.close()
         }
         val bundle = bundleOf(
-            "collection_name" to collectionName,
+            "collection_name" to "notice",
             "photoUriArray" to uriArr
         )
         findNavController().navigate(R.id.action_homeNoticeWriteFragment_to_homeNoticePhotoFragment, bundle)

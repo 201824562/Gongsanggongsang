@@ -3,6 +3,7 @@ package com.example.adminapp.ui.main.community.post
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,12 +18,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.adminapp.R
 import com.example.adminapp.base.BaseSessionFragment
 import com.example.adminapp.data.entity.PostCommentDataClass
+import com.example.adminapp.data.model.AlarmItem
 import com.example.adminapp.databinding.FragmentCommunityPostMarketBinding
 import com.example.adminapp.ui.main.community.CommunityViewModel
 import com.example.adminapp.ui.main.community.write.CommunityAttachPostPhotoRecyclerAdapter
 import com.example.adminapp.utils.WrapedDialogBasicTwoButton
 import com.example.adminapp.utils.hideKeyboard
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 
 
@@ -44,6 +47,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
     private var localUserName = "관리자"
     private var agency = ""
     private var tokenTitle = ""
+    private var toUserNameTag = ""
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -105,16 +109,36 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                             communityPostCommentsNumber.text = it.size.toString()
                             viewmodel.modifyPostPartData(collectionName, documentName, "post_comments", it.size)
                         }
-                        viewmodel.getUserToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
-                            for(token in it){
-                                viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+                       if(localUserName != navArgs.postDataInfo.post_name){
+                            viewmodel.getUserToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
+                                viewmodel.getTokenArrayList = MutableLiveData()
+                                for(user in it){
+                                    for(token in user.fcmToken){
+                                        viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+                                    }
+                                    val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
+                                    val data = AlarmItem(documentId,
+                                        LocalDateTime.now().toString(),
+                                        user.id,
+                                        tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null,
+                                        navArgs.postDataInfo.makeToPostAlarmData(),
+                                        null)
+                                    viewmodel.registerAlarmData(user.id, documentId, data)
+                                }
                             }
                         }
-
-                        if(writeCommentTagName.text != ""){
-                            viewmodel.getUserToken(writeCommentTagName.text.substring(1)).observe(viewLifecycleOwner){
-                                for(token in it){
-                                    viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 댓글에 답변이 달렸어요!", token)
+                        if(toUserNameTag != ""){
+                            viewmodel.getTokenArrayList = MutableLiveData()
+                            viewmodel.getUserToken(toUserNameTag).observe(viewLifecycleOwner){
+                                viewmodel.getTokenArrayList = MutableLiveData()
+                                for(user in it){
+                                    for(token in user.fcmToken){
+                                        viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 댓글에 답변이 달렸어요!", token)
+                                    }
+                                    val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
+                                    val data = AlarmItem(documentId, LocalDateTime.now().toString(), user.id,
+                                        tokenTitle + "게시판에 올린 댓글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData(), null)
+                                    viewmodel.registerAlarmData(user.id, documentId, data)
                                 }
                             }
                         }
@@ -129,9 +153,26 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                 viewmodel.modifyPostPartData(collectionName, documentName, "post_anonymous", true).observe(viewLifecycleOwner){
                     if(it){
                         print("success")
-                        postWithComplete.visibility = View.GONE
                         if(collectionName == "5_MARKET") { postCategory.text = "판매 완료" }
-                        else { postCategory.text = "승인 완료" }
+                        else {
+                            viewmodel.getUserNameToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
+                                viewmodel.getTokenArrayList = MutableLiveData()
+                                for(user in it){
+                                    for(token in user.fcmToken){
+                                        viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "퇴실 신청이 승인되었어요!", token)
+                                    }
+                                    val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
+                                    val data = AlarmItem(documentId, LocalDateTime.now().toString(), user.id,
+                                        "퇴실 신청이 승인되었어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData(), null)
+                                    viewmodel.registerAlarmData(user.id, documentId, data)
+                                }
+                            }
+                            viewmodel.onSuccessRegisterAlarmData.observe(viewLifecycleOwner){
+                                postCategory.text = "승인 완료"
+                                postWithComplete.visibility = View.GONE
+                            }
+                        }
+
                     }
                     else{
                         print("fail")
@@ -165,6 +206,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                 writeCommentTagName.text = ""
                 writeCommentTagName.visibility = View.GONE
                 writeCommentTagNameDeleteBtn.visibility = View.GONE
+                toUserNameTag = ""
             }
             if(navArgs.postDataInfo.post_name == localUserName) { postRemoveButton.visibility = View.VISIBLE }
             if(collectionName == "5_MARKET") {postPrice.text = navArgs.postDataInfo.post_state + "원" }
@@ -229,6 +271,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                     viewbinding.writeCommentTagNameDeleteBtn.visibility = View.VISIBLE
                     viewbinding.writeCommentTagName.setText(tagName)
                     viewbinding.writeComment.setHint("")
+                    toUserNameTag = tagName.substring(1)
                 }
             }
         }
