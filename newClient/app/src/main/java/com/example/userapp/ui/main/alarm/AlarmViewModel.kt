@@ -35,6 +35,8 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
 
     fun makeReservationLogUsing(documentId: String){ alarmRepository.makeReservationLogUsing(agencyInfo, documentId) }
     fun makeReservationLogCancel(documentId: String) { alarmRepository.makeReservationLogCancel(agencyInfo, documentId) }
+    fun makeAlarmItemClickUnable(myToken : String, documentId: String) {
+        alarmRepository.makeAlarmDataClickUnable(agencyInfo, myToken, documentId ) }
 
     fun getAlarmAllList(): LiveData<List<AlarmItem>> {
         getAlarmAllListFromFireBase()
@@ -55,13 +57,19 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                     for (document in snapshot) {
                         when (makeStringToEnumData((document.get("type") as String))){
                             AlarmType.OUT -> {
+                                val postAlarmData : PostAlarmData = (document.get("postData") as HashMap<String, PostAlarmData>).let {
+                                    PostAlarmData(
+                                        it["post_category"] as String, it["post_name"] as String, it["post_title"] as String,
+                                        it["post_contents"] as String, it["post_date"] as String, it["post_time"] as String,
+                                        it["post_comments"] as Long, it["post_id"] as String, it["post_photo_uri"] as ArrayList<String>,
+                                        it["post_state"] as String, it["post_anonymous"] as Boolean) }
                                 alarmList.add(
                                     AlarmItem(document.get("documentId") as String,
                                         document.get("time") as String,
                                         document.get("otherUser") as String,
                                         document.get("message") as String,
                                         document.get("type") as String,
-                                        null, null, null))
+                                        null, postAlarmData, null))
                             }
                             AlarmType.RESERVATION ->{
                                 if (document.get("reservationData") == null){
@@ -135,7 +143,8 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                                 document.get("otherUser") as String,
                                 document.get("message") as String,
                                 document.get("type") as String,
-                                null, postAlarmData, null))
+                                null, postAlarmData, null,
+                                document.get("clicked") as Boolean))
                     }
                     _onSuccessGetAlarmNoticeList.postValue(alarmList)
                 }
@@ -171,7 +180,8 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                                 document.get("otherUser") as String,
                                 document.get("message") as String,
                                 document.get("type") as String,
-                                null, postAlarmData, null))
+                                null, postAlarmData, null,
+                                document.get("clicked") as Boolean))
                     }
                     _onSuccessGetAlarmCommunityList.postValue(alarmList)
                 }
@@ -202,7 +212,8 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                                     document.get("otherUser") as String,
                                     document.get("message") as String,
                                     document.get("type") as String,
-                                    null, null, null))
+                                    null, null, null,
+                                    document.get("clicked") as Boolean))
                         }else {
                             val reservationData : ReservationAlarmData= (document.get("reservationData")  as HashMap<String, ReservationAlarmData>).let {
                                 ReservationAlarmData(it["documentId"] as String, it["name"] as String,
@@ -213,7 +224,8 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                                     document.get("otherUser") as String,
                                     document.get("message") as String,
                                     document.get("type") as String,
-                                    reservationData, null, null))
+                                    reservationData, null, null,
+                                    document.get("clicked") as Boolean))
                         }
                     }
                     _onSuccessGetAlarmReservationList.postValue(alarmList)

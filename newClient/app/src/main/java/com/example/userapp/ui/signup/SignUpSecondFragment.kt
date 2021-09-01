@@ -84,7 +84,7 @@ class SignUpSecondFragment : BaseSessionFragment<FragmentSignupSecondBinding, Si
                 val signUpAlarmData = viewmodel.signUpInfo!!.makeToSignUpAlarmData()
                 val userName = signUpAlarmData.name
                 for (item in it){
-                    val documentId = LocalDateTime.now().toString() + "가입승인" + item.id
+                    val documentId = LocalDateTime.now().toString() + "가입승인" + signUpInfo!!.id
                     val data = AlarmItem(documentId, LocalDateTime.now().toString(), item.id,
                         "'$userName'님이 가입을 요청했어요!\n수락하시겠어요?", "가입승인" , null, null, signUpAlarmData)
                     viewmodel.registerAlarmData(item.id, documentId, data, signUpAlarmData.agency)

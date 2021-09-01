@@ -14,6 +14,8 @@ import com.example.adminapp.base.BaseSessionFragment
 import com.example.adminapp.data.model.*
 import com.example.adminapp.databinding.FragmentAlarmChildBinding
 import com.example.adminapp.utils.CustomedAlarmDialog
+import com.example.adminapp.utils.WrapedDialogBasicOneButton
+import com.example.adminapp.utils.WrapedDialogBasicTwoButton
 
 class AlarmAllFragment  : BaseSessionFragment<FragmentAlarmChildBinding, AlarmViewModel>(){
     override lateinit var viewbinding: FragmentAlarmChildBinding
@@ -38,16 +40,17 @@ class AlarmAllFragment  : BaseSessionFragment<FragmentAlarmChildBinding, AlarmVi
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun makeDialog(reserveData: ReservationAlarmData?, signData: SignUpAlarmData?){
+    private fun makeDialog(reserveData: ReservationAlarmData?, signData: SignUpAlarmData?, alarmData : AlarmItem?){
         val dialog = CustomedAlarmDialog(requireContext(), reserveData, signData).apply {
             clickListener = object : CustomedAlarmDialog.DialogButtonClickListener{
                 override fun dialogCloseClickListener() {
-                    signData?.let { view }
-                    reserveData?.let { viewmodel.makeReservationLogCancel(it.documentId) }
+                    signData?.let { viewmodel.deleteWaitingUser(User(it.agency, it.id, it.pwd, it.name, it.nickname, it.birthday, it.smsInfo, it.allowed)) }
+                    alarmData?.let { viewmodel.makeAlarmItemClickUnable(it.otherUser, it.documentId) }
                     dismiss()
                 }
                 override fun dialogClickListener() {
-                    reserveData?.let { viewmodel.makeReservationLogUsing(it.documentId) }
+                    signData?.let { viewmodel.allowWaitingUser(User(it.agency, it.id, it.pwd, it.name, it.nickname, it.birthday, it.smsInfo, it.allowed)) }
+                    alarmData?.let { viewmodel.makeAlarmItemClickUnable(it.otherUser, it.documentId) }
                     dismiss()
                 }
             }
@@ -55,6 +58,16 @@ class AlarmAllFragment  : BaseSessionFragment<FragmentAlarmChildBinding, AlarmVi
         showDialog(dialog, viewLifecycleOwner)
     }
 
+    private fun makeFalseDialog(){
+        val dialog = WrapedDialogBasicOneButton(requireContext(), "이미 처리된 알람입니다.").apply {
+            clickListener = object : WrapedDialogBasicOneButton.DialogButtonClickListener{
+                override fun dialogClickListener() {
+                    dismiss()
+                }
+            }
+        }
+        showDialog(dialog, viewLifecycleOwner)
+    }
 
     //TODO : 삭제된 아이템 클릭시 못넘어가게 해야됨.
     private fun setRecyclerView() {
@@ -63,7 +76,10 @@ class AlarmAllFragment  : BaseSessionFragment<FragmentAlarmChildBinding, AlarmVi
             override fun onItemClick(position: Int, alarmData: AlarmItem) {
                 when(alarmData.type){
                     AlarmType.makeEnumDataToString(AlarmType.SIGNUP) -> {
-                        alarmData.signData?.let { makeDialog(alarmData.reservationData, it) }
+                        alarmData.signData?.let {
+                            if(alarmData.clicked) makeFalseDialog()
+                            else makeDialog(alarmData.reservationData, it, alarmData)
+                        }
                     }
                     AlarmType.makeEnumDataToString(AlarmType.MARKET) -> {
                         postDataBundle = alarmData.postData!!.makeToPostDataInfo()

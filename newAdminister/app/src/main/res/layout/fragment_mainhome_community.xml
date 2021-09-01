@@ -5,6 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/community_toolbar_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center"
+            android:textStyle="normal"
+            android:textSize="24sp"
+            android:textColor="#de000000"
+            android:lineSpacingExtra="4sp"
+            android:text="커뮤니티"
+            android:fontFamily="@font/notosanskr_bold_hestia"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/light_gray"/>
     <LinearLayout
         android:id="@+id/community_free_button"
         android:clickable="true"

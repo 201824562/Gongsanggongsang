@@ -12,6 +12,7 @@ import com.example.adminapp.data.model.*
 import com.example.adminapp.data.model.AlarmType.Companion.makeStringToEnumData
 import com.example.adminapp.data.repository.AlarmRepository
 import com.example.adminapp.utils.SingleLiveEvent
+import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
@@ -32,12 +33,10 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
     private val _onSuccessGetAlarmOutList = SingleLiveEvent<List<AlarmItem>>()
     private val onSuccessGetAlarmOutList: LiveData<List<AlarmItem>> get() = _onSuccessGetAlarmOutList
 
-
-
-    fun makeReservationLogUsing(documentId: String){ alarmRepository.makeReservationLogUsing(agencyInfo, documentId) }
-    fun makeReservationLogCancel(documentId: String) { alarmRepository.makeReservationLogCancel(agencyInfo, documentId) }
-
-    //fun allowUser(documentId: String){ user }
+    fun allowWaitingUser(userData : User){ apiCall(adminRepository.acceptWaitingUser(userData)) }
+    fun deleteWaitingUser(userData: User) { apiCall(adminRepository.deleteWaitingUser(userData))}
+    fun makeAlarmItemClickUnable(myToken : String, documentId: String) {
+        alarmRepository.makeAlarmDataClickUnable(agencyInfo, myToken, documentId ) }
 
     fun getAlarmAllList(): LiveData<List<AlarmItem>> {
         getAlarmAllListFromFireBase()
@@ -50,7 +49,7 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     Log.w(ContentValues.TAG, "Listen failed.", e)
-                    _onSuccessGetAlarmAllList.postValue(emptyList())
+                    //_onSuccessGetAlarmAllList.postValue(emptyList())
                     return@addSnapshotListener }
                 if (snapshot == null) _onSuccessGetAlarmAllList.postValue(emptyList())
                 else {
@@ -58,13 +57,20 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                     for (document in snapshot) {
                         when (makeStringToEnumData((document.get("type") as String))){
                             AlarmType.OUT -> {
+                                val postAlarmData : PostAlarmData = (document.get("postData") as HashMap<String, PostAlarmData>).let {
+                                    PostAlarmData(
+                                        it["post_category"] as String, it["post_name"] as String, it["post_title"] as String,
+                                        it["post_contents"] as String, it["post_date"] as String, it["post_time"] as String,
+                                        it["post_comments"] as Long, it["post_id"] as String, it["post_photo_uri"] as ArrayList<String>,
+                                        it["post_state"] as String, it["post_anonymous"] as Boolean) }
                                 alarmList.add(
                                     AlarmItem(document.get("documentId") as String,
                                         document.get("time") as String,
                                         document.get("otherUser") as String,
                                         document.get("message") as String,
                                         document.get("type") as String,
-                                        null, null, null))
+                                        null, postAlarmData, null,
+                                        document.get("clicked") as Boolean))
                             }
                             AlarmType.RESERVATION ->{
                                 if (document.get("reservationData") == null){
@@ -74,7 +80,8 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                                             document.get("otherUser") as String,
                                             document.get("message") as String,
                                             document.get("type") as String,
-                                            null, null, null))
+                                            null, null, null,
+                                            document.get("clicked") as Boolean))
                                 }else {
                                     val reservationData : ReservationAlarmData= (document.get("reservationData")  as HashMap<String, ReservationAlarmData>).let {
                                         ReservationAlarmData(it["documentId"] as String, it["name"] as String,
@@ -85,7 +92,8 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                                             document.get("otherUser") as String,
                                             document.get("message") as String,
                                             document.get("type") as String,
-                                            reservationData, null, null))
+                                            reservationData, null, null,
+                                            document.get("clicked") as Boolean))
                                 }
                             }
                             AlarmType.SIGNUP -> {
@@ -98,7 +106,8 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                                         document.get("otherUser") as String,
                                         document.get("message") as String,
                                         document.get("type") as String,
-                                        null, null, signUpData))
+                                        null, null, signUpData,
+                                        document.get("clicked") as Boolean))
                             }else -> {
                                 val postAlarmData : PostAlarmData = (document.get("postData") as HashMap<String, PostAlarmData>).let {
                                     PostAlarmData(
@@ -112,7 +121,8 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                                         document.get("otherUser") as String,
                                         document.get("message") as String,
                                         document.get("type") as String,
-                                        null, postAlarmData, null))
+                                        null, postAlarmData, null,
+                                        document.get("clicked") as Boolean))
                             }
                         }
                     }
@@ -132,7 +142,7 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     Log.w(ContentValues.TAG, "Listen failed.", e)
-                    _onSuccessGetAlarmNoticeList.postValue(emptyList())
+                    //_onSuccessGetAlarmNoticeList.postValue(emptyList())
                     return@addSnapshotListener }
                 if (snapshot == null) _onSuccessGetAlarmNoticeList.postValue(emptyList())
                 else {
@@ -150,7 +160,8 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                                 document.get("otherUser") as String,
                                 document.get("message") as String,
                                 document.get("type") as String,
-                                null, postAlarmData, null))
+                                null, postAlarmData, null,
+                                document.get("clicked") as Boolean))
                     }
                     _onSuccessGetAlarmNoticeList.postValue(alarmList)
                 }
@@ -168,7 +179,7 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     Log.w(ContentValues.TAG, "Listen failed.", e)
-                    _onSuccessGetAlarmSuggestList.postValue(emptyList())
+                    //_onSuccessGetAlarmSuggestList.postValue(emptyList())
                     return@addSnapshotListener }
                 if (snapshot == null) _onSuccessGetAlarmSuggestList.postValue(emptyList())
                 else {
@@ -186,7 +197,8 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                                 document.get("otherUser") as String,
                                 document.get("message") as String,
                                 document.get("type") as String,
-                                null, postAlarmData, null))
+                                null, postAlarmData, null,
+                                document.get("clicked") as Boolean))
                     }
                     _onSuccessGetAlarmSuggestList.postValue(alarmList)
                 }
@@ -204,7 +216,7 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     Log.w(ContentValues.TAG, "Listen failed.", e)
-                    _onSuccessGetAlarmAllowList.postValue(emptyList())
+                    //_onSuccessGetAlarmAllowList.postValue(emptyList())
                     return@addSnapshotListener }
                 if (snapshot == null) _onSuccessGetAlarmAllowList.postValue(emptyList())
                 else {
@@ -219,7 +231,8 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                                 document.get("otherUser") as String,
                                 document.get("message") as String,
                                 document.get("type") as String,
-                                null, null, signUpData))
+                                null, null, signUpData,
+                                document.get("clicked") as Boolean))
                     }
                     _onSuccessGetAlarmAllowList.postValue(alarmList)
                 }
@@ -239,7 +252,7 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     Log.w(ContentValues.TAG, "Listen failed.", e)
-                    _onSuccessGetAlarmOutList.postValue(emptyList())
+                    //_onSuccessGetAlarmOutList.postValue(emptyList())
                     return@addSnapshotListener }
                 if (snapshot == null) _onSuccessGetAlarmOutList.postValue(emptyList())
                 else {
@@ -257,7 +270,8 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                                 document.get("otherUser") as String,
                                 document.get("message") as String,
                                 document.get("type") as String,
-                                null, postAlarmData, null))
+                                null, postAlarmData, null,
+                                document.get("clicked") as Boolean))
                     }
                     _onSuccessGetAlarmOutList.postValue(alarmList)
                 }

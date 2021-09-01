@@ -40,9 +40,9 @@ class AlarmFragment: BaseSessionFragment<FragmentMainhomeAlarmBinding, AlarmView
             alarmViewPagerAdapter  = AlarmViewPagerAdapter(requireActivity())
             alarmViewpager.adapter = alarmViewPagerAdapter
             alarmTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                override fun onTabSelected(tab: TabLayout.Tab?) { viewbinding.alarmViewpager.currentItem = tab!!.position }
+                override fun onTabSelected(tab: TabLayout.Tab?) { viewbinding.alarmViewpager.setCurrentItem(tab!!.position, false) }
                 override fun onTabUnselected(tab: TabLayout.Tab?) {}
-                override fun onTabReselected(tab: TabLayout.Tab?) { viewbinding.alarmViewpager.currentItem = tab!!.position } })
+                override fun onTabReselected(tab: TabLayout.Tab?) { viewbinding.alarmViewpager.setCurrentItem(tab!!.position, false) } })
             TabLayoutMediator(alarmTab, alarmViewpager){ tab, position ->
                 val tabTextList = arrayListOf("전체","공지/긴급","건의","가입승인","퇴실신청")
                 tab.text = tabTextList[position] }.attach() }
