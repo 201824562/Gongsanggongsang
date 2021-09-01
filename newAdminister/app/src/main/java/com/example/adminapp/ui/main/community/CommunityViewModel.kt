@@ -4,14 +4,20 @@ import android.app.Application
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.adminapp.base.BaseSessionViewModel
+import com.example.adminapp.data.AppDatabase
 import com.example.adminapp.data.entity.PostCommentDataClass
+import com.example.adminapp.data.model.AlarmItem
 import com.example.adminapp.data.model.PostDataInfo
+import com.example.adminapp.data.model.RemoteUserInfo
+import com.example.adminapp.data.repository.AlarmRepository
 import com.example.adminapp.data.repository.CommunityDataRepository
+import com.example.adminapp.utils.SingleLiveEvent
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,7 +26,8 @@ import kotlinx.coroutines.launch
 class CommunityViewModel(application: Application) : BaseSessionViewModel(application) {
     private val firestore = FirebaseFirestore.getInstance()
     var postCommentUploadSuccess : MutableLiveData<Boolean> = MutableLiveData()
-    var getTokenArrayList : MutableLiveData<ArrayList<String>> = MutableLiveData()
+    var getTokenArrayList : MutableLiveData<ArrayList<RemoteUserInfo>> = MutableLiveData()
+    private val alarmRepository: AlarmRepository = AlarmRepository.getInstance(AppDatabase.getDatabase(application, viewModelScope))
     private val communityDataRepository : CommunityDataRepository = CommunityDataRepository.getInstance()
     fun getPostDataInCategory(collection_name: String) : LiveData<ArrayList<PostDataInfo>> {
         return communityDataRepository.getPostDataInCategory(agencyInfo, collection_name)
@@ -90,18 +97,41 @@ class CommunityViewModel(application: Application) : BaseSessionViewModel(applic
     fun getSearchPostData(collectionName: String, searchKeyword : String) : MutableLiveData<ArrayList<PostDataInfo>>{
         return communityDataRepository.getSearchPostData(agencyInfo, collectionName, searchKeyword)
     }
-    fun getUserToken(userNickname : String) : MutableLiveData<ArrayList<String>> {
-        var getToken: ArrayList<String> = arrayListOf()
+    fun getUserToken(userNickname : String) : MutableLiveData<ArrayList<RemoteUserInfo>> {
+        var remoteUserInfo: ArrayList<RemoteUserInfo> = arrayListOf()
         firestore.collection("USER_INFO")
             .whereEqualTo("nickname", userNickname)
             .get()
             .addOnSuccessListener {
                 for (result in it) {
-                    getToken = result["fcmToken"] as ArrayList<String>
+                    val remoteInfo = RemoteUserInfo (result["id"] as String, result["fcmToken"] as ArrayList<String>)
+                    remoteUserInfo.add(remoteInfo)
                 }
-                getTokenArrayList.postValue(getToken)
+                getTokenArrayList.postValue(remoteUserInfo)
+            }
+        return getTokenArrayList
+    }
+    fun getAllUserIdToken() : MutableLiveData<ArrayList<RemoteUserInfo>> {
+        var remoteUserInfo: ArrayList<RemoteUserInfo> = arrayListOf()
+        firestore.collection("USER_INFO")
+            .get()
+            .addOnSuccessListener {
+                for (result in it) {
+                    var remoteInfo : RemoteUserInfo = RemoteUserInfo()
+                    if(result["fcmToken"] != null ){
+                        remoteInfo = RemoteUserInfo (result["id"] as String, result["fcmToken"] as ArrayList<String>)
+                    }
+                    remoteUserInfo.add(remoteInfo)
+                }
+                getTokenArrayList.postValue(remoteUserInfo)
             }
         return getTokenArrayList
     }
 
+    private val _onSuccessRegisterAlarmData = SingleLiveEvent<AlarmItem>()
+    val onSuccessRegisterAlarmData : LiveData<AlarmItem> get() = _onSuccessRegisterAlarmData
+
+    fun registerAlarmData(toOther : String, documentId : String, alarmData : AlarmItem)  {
+        apiCall(alarmRepository.registerAlarmData(agencyInfo, toOther, documentId, alarmData), { _onSuccessRegisterAlarmData.call() })
+    }
 }
