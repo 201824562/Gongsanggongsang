@@ -81,7 +81,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                     }
                     val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
                     val data = AlarmItem(documentId, LocalDateTime.now().toString(), user.id,
-                        tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData() )
+                        tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData() , null)
 
                 }
             }
@@ -93,7 +93,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                         }
                         val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
                         val data = AlarmItem(documentId, LocalDateTime.now().toString(), user.id,
-                            tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData() )
+                            tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData() , null)
 
                     }
                 }
@@ -141,7 +141,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                         }
                         val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
                         val data = AlarmItem(documentId, LocalDateTime.now().toString(), localUserName,
-                            tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData() )
+                            tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData() , null)
                         if(localUserName != navArgs.postDataInfo.post_name){
                             viewmodel.getUserToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
                                 viewmodel.getTokenArrayList = MutableLiveData()
@@ -152,7 +152,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                                     Log.e("chekckcck", "{$user.id}")
                                     val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
                                     val data = AlarmItem(documentId, LocalDateTime.now().toString(), user.id,
-                                        tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData() )
+                                        tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData() , null)
                                     viewmodel.registerAlarmData(user.id, documentId, data)
                                 }
                             }
@@ -168,7 +168,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                                     Log.e("chekckcck", user.id)
                                     val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
                                     val data = AlarmItem(documentId, LocalDateTime.now().toString(), user.id,
-                                        tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData() )
+                                        tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData() , null)
                                     viewmodel.registerAlarmData(user.id, documentId, data)
                                 }
                             }

@@ -3,6 +3,7 @@ package com.example.userapp.ui.signup
 import android.R.attr.typeface
 import android.graphics.Typeface
 import android.net.ConnectivityManager
+import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
@@ -12,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.widget.addTextChangedListener
@@ -20,9 +22,12 @@ import androidx.navigation.navGraphViewModels
 import com.example.userapp.R
 import com.example.userapp.base.BaseFragment
 import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.data.model.AlarmItem
+import com.example.userapp.data.model.SignUpAlarmData
 import com.example.userapp.databinding.FragmentSignupSecondBinding
 import com.example.userapp.restartActivity
 import com.example.userapp.utils.hideKeyboard
+import java.time.LocalDateTime
 
 
 class SignUpSecondFragment : BaseSessionFragment<FragmentSignupSecondBinding, SignUpViewModel>() {
@@ -50,6 +55,7 @@ class SignUpSecondFragment : BaseSessionFragment<FragmentSignupSecondBinding, Si
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun initDataBinding(savedInstanceState: Bundle?) {
         viewmodel.run {
             invalidUserIdEventLiveData.observe(viewLifecycleOwner) { setIdErrorMessage(it) }
@@ -73,10 +79,25 @@ class SignUpSecondFragment : BaseSessionFragment<FragmentSignupSecondBinding, Si
             sendSignUpInfoEventLiveData.observe(viewLifecycleOwner){
                 viewmodel.sendSignUpInfoToServer(getUserId(), getUserPwd(), getUserNickname())
             }
-            onSuccessSignUpEvent.observe(viewLifecycleOwner){ findNavController().navigate(R.id.action_signUpSecondFragment_to_signUpWaitFragment) }
+            onSuccessSignUpEvent.observe(viewLifecycleOwner){ viewmodel.selectedAgency?.let { viewmodel.getAdminNotifyInfo(it.key) } }
+            onSuccessGettingAdminNotifyInfo.observe(viewLifecycleOwner){
+                val signUpAlarmData = viewmodel.signUpInfo!!.makeToSignUpAlarmData()
+                val userName = signUpAlarmData.name
+                for (item in it){
+                    val documentId = LocalDateTime.now().toString() + "가입승인" + item.id
+                    val data = AlarmItem(documentId, LocalDateTime.now().toString(), item.id,
+                        "'$userName'님이 가입을 요청했어요!\n수락하시겠어요?", "가입승인" , null, null, signUpAlarmData)
+                    viewmodel.registerAlarmData(item.id, documentId, data, signUpAlarmData.agency)
+                    for (token in item.fcmTokenList){
+                        viewmodel.registerNotificationToFireStore("가입승인", "공생공생에 입주하고 싶은 입주자가 있습니다!", token)
+                    }
+                }
+                findNavController().navigate(R.id.action_signUpSecondFragment_to_signUpWaitFragment)
+            }
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun initViewFinal(savedInstanceState: Bundle?) {
 
         viewbinding.run {
@@ -106,7 +127,7 @@ class SignUpSecondFragment : BaseSessionFragment<FragmentSignupSecondBinding, Si
             }
             editTextNickname.setOnFocusChangeListener { v, hasFocus ->
                 if (hasFocus && (getUserNickname().isEmpty()|| getUserNickname().isBlank())) {
-                    setNicknameErrorMessage("5~10자리의 한글로 입력해주세요.")
+                    setNicknameErrorMessage("2~8자리의 한글로 입력해주세요.")
                     setIdEmptyMessage()
                     setPwdEmptyMessage()
                     setPwd2EmptyMessage()
@@ -121,7 +142,7 @@ class SignUpSecondFragment : BaseSessionFragment<FragmentSignupSecondBinding, Si
             editTextNickname.addTextChangedListener {
                 viewmodel.clearCheckedNickname()
                 checkNicknameBtn.isSelected = false
-                if (it.toString().isEmpty() || it.toString().isBlank()) setIdErrorMessage("5~10자리의 한글로 입력해주세요.")
+                if (it.toString().isEmpty() || it.toString().isBlank()) setNicknameErrorMessage("2~8자리의 한글로 입력해주세요.")
                 else setNicknameEmptyMessage()
             }
 

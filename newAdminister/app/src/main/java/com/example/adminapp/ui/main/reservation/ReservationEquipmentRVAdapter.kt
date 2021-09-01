@@ -1,10 +1,12 @@
 package com.example.adminapp.ui.main.reservation
 
 import android.content.Context
+import android.os.Build
 import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -41,6 +43,7 @@ class ReservationEquipmentRVAdapter(private val context : Context, private val v
         return ViewHolder(ItemReservationBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         getItem(position)?.let { item ->
             if (holder.timer != null) { holder.timer!!.cancel() }

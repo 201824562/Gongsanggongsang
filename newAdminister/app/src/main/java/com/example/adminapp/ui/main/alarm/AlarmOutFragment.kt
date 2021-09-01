@@ -61,8 +61,8 @@ class AlarmOutFragment  : BaseSessionFragment<FragmentAlarmChildBinding, AlarmVi
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onItemClick(position: Int, alarmData: AlarmItem) {
                 when(alarmData.type){
-                    AlarmType.makeEnumDataToString(AlarmType.RESERVATION) -> {
-                        if (alarmData.reservationData != null) makeDialog(alarmData.reservationData, null)
+                    AlarmType.makeEnumDataToString(AlarmType.SIGNUP) -> {
+                        alarmData.signData?.let { makeDialog(alarmData.reservationData, it) }
                     }
                     AlarmType.makeEnumDataToString(AlarmType.MARKET) -> {
                         postDataBundle = alarmData.postData!!.makeToPostDataInfo()

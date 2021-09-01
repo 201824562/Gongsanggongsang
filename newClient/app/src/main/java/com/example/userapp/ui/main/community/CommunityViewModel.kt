@@ -29,7 +29,7 @@ class CommunityViewModel(application: Application) : BaseSessionViewModel(applic
     var postCommentUploadSuccess : MutableLiveData<Boolean> = MutableLiveData()
     var getTokenArrayList : MutableLiveData<ArrayList<RemoteUserInfo>> = MutableLiveData()
     private val communityDataRepository : CommunityDataRepository = CommunityDataRepository.getInstance()
-    private val alarmRepository: AlarmRepository = AlarmRepository.getInstance(AppDatabase.getDatabase(application, viewModelScope))
+
 
     fun getPostDataInCategory(collection_name: String) : LiveData<ArrayList<PostDataInfo>> {
         return communityDataRepository.getPostDataInCategory(agencyInfo, collection_name)
@@ -113,13 +113,6 @@ class CommunityViewModel(application: Application) : BaseSessionViewModel(applic
                 getTokenArrayList.postValue(remoteUserInfo)
             }
         return getTokenArrayList
-    }
-
-    private val _onSuccessRegisterAlarmData = SingleLiveEvent<AlarmItem>()
-    val onSuccessRegisterAlarmData : LiveData<AlarmItem> get() = _onSuccessRegisterAlarmData
-
-    fun registerAlarmData(toOther : String, documentId : String, alarmData : AlarmItem)  {
-        apiCall(alarmRepository.registerAlarmData(agencyInfo, toOther, documentId, alarmData), { _onSuccessRegisterAlarmData.call() })
     }
 
 

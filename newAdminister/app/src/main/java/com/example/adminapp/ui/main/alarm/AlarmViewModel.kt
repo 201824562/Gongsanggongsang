@@ -33,8 +33,11 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
     private val onSuccessGetAlarmOutList: LiveData<List<AlarmItem>> get() = _onSuccessGetAlarmOutList
 
 
+
     fun makeReservationLogUsing(documentId: String){ alarmRepository.makeReservationLogUsing(agencyInfo, documentId) }
     fun makeReservationLogCancel(documentId: String) { alarmRepository.makeReservationLogCancel(agencyInfo, documentId) }
+
+    //fun allowUser(documentId: String){ user }
 
     fun getAlarmAllList(): LiveData<List<AlarmItem>> {
         getAlarmAllListFromFireBase()

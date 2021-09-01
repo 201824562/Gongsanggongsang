@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.example.userapp.data.AppDatabase
 import com.example.userapp.data.dto.UserModel
+import com.example.userapp.data.model.AlarmItem
+import com.example.userapp.data.repository.AlarmRepository
 import com.example.userapp.data.repository.UserRepository
 import com.example.userapp.service.sendFireStoreNotification
 import com.example.userapp.utils.SingleLiveEvent
@@ -65,6 +67,9 @@ abstract class BaseSessionViewModel(application: Application)  : AndroidViewMode
     private val _onSuccessGettingNullUserInfo = SingleLiveEvent<UserModel>()
     val onSuccessGettingNullUserInfo : LiveData<UserModel> get() = _onSuccessGettingNullUserInfo
 
+
+    data class AdminNotifyInfo(val id : String, val fcmTokenList : List<String>)
+
     fun getUserInfo()  {
         apiCall(userRepository.getUserInfo(), {
             _onSuccessGettingUserInfo.postValue(it) },
@@ -110,6 +115,26 @@ abstract class BaseSessionViewModel(application: Application)  : AndroidViewMode
         _sessionInvalidEvent.call()
     }
 
+
+    private val alarmRepository: AlarmRepository = AlarmRepository.getInstance(AppDatabase.getDatabase(application, viewModelScope))
+
+    private val _onSuccessGettingAdminToken = SingleLiveEvent<List<String>>()
+    val onSuccessGettingAdminToken : LiveData<List<String>> get() = _onSuccessGettingAdminToken
+    private val _onSuccessGettingAdminNotifyInfo = SingleLiveEvent<List<AdminNotifyInfo>>()
+    val onSuccessGettingAdminNotifyInfo : LiveData<List<AdminNotifyInfo>> get() = _onSuccessGettingAdminNotifyInfo
+    private val _onSuccessRegisterAlarmData = SingleLiveEvent<AlarmItem>()
+    val onSuccessRegisterAlarmData : LiveData<AlarmItem> get() = _onSuccessRegisterAlarmData
+
+    fun getAdminTokens(agency : String) {
+        apiCall(userRepository.getAdminTokens(agency), { _onSuccessGettingAdminToken.postValue(it) })
+    }
+    fun getAdminNotifyInfo(agency: String) {
+        apiCall(userRepository.getAdminNotifyInfo(agency) , { _onSuccessGettingAdminNotifyInfo.postValue(it)})
+    }
+    fun registerAlarmData(toOther : String, documentId : String, alarmData : AlarmItem, agency: String = "")  {
+        if (agency != "") apiCall(alarmRepository.registerAlarmData(agency!!, toOther, documentId, alarmData), { _onSuccessRegisterAlarmData.call() })
+        else apiCall(alarmRepository.registerAlarmData(agencyInfo, toOther, documentId, alarmData), { _onSuccessRegisterAlarmData.call() })
+    }
     fun registerNotificationToFireStore(title : String, content : String, toToken : String){
         sendFireStoreNotification(title, content, toToken)
     }

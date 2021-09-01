@@ -116,7 +116,7 @@ class SettingsOutWriteFragment : BaseSessionFragment<FragmentSettingsOutWriteBin
                                     }
                                     val documentId = LocalDateTime.now().toString() + collectionName + userName  //TODO : 날짜 + 타입 + 보내는사람닉네임
                                     val data = AlarmItem(documentId, LocalDateTime.now().toString(), user.id,
-                                        "퇴실 신청이 등록됐어요!", "퇴실", null,  postData.makeToPostAlarmData())
+                                        "퇴실 신청이 등록됐어요!", "퇴실", null,  postData.makeToPostAlarmData() , null)
                                     viewmodel.registerAlarmData(user.id, documentId, data)
                                 }
                             }

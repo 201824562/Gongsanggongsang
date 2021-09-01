@@ -4,8 +4,11 @@ data class SignUpInfo (
     val agency : String,
     val name: String,
     val birthday: String,
-    val SmsInfo : String,
+    val smsInfo : String,
     val id: String,
     val pwd: String,
     val nickname: String,
-    var allowed: Boolean)
+    var allowed: Boolean){
+    fun makeToSignUpAlarmData() : SignUpAlarmData = SignUpAlarmData(agency, id, pwd, name, nickname, birthday,
+    smsInfo, allowed)
+}
