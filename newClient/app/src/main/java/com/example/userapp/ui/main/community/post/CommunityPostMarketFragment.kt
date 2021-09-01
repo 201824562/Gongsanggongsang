@@ -3,6 +3,7 @@ package com.example.userapp.ui.main.community.post
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,6 +47,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
     private var localUserName = ""
     private var agency = ""
     private lateinit var alarmType : AlarmType
+    private var toUserNameTag = ""
     private var token = ""
     override fun initViewbinding(
         inflater: LayoutInflater,
@@ -115,7 +117,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                 val postTimeNow : String = LocalTime.now().toString()
                 val postComment = PostCommentDataClass(
                     localUserName,
-                    commentContents = writeComment.text.toString(),
+                    commentContents = toUserNameTag + writeComment.text.toString(),
                     commentDate = postDateNow,
                     commentTime = postTimeNow,
                     commentAnonymous = false,
@@ -140,7 +142,37 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                         val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
                         val data = AlarmItem(documentId, LocalDateTime.now().toString(), localUserName,
                             tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData() )
-                        viewmodel.registerAlarmData(navArgs.postDataInfo.post_name, documentId, data )
+                        if(localUserName != navArgs.postDataInfo.post_name){
+                            viewmodel.getUserToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
+                                viewmodel.getTokenArrayList = MutableLiveData()
+                                for(user in it){
+                                    for(token in user.fcmToken){
+                                        viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+                                    }
+                                    Log.e("chekckcck", "{$user.id}")
+                                    val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
+                                    val data = AlarmItem(documentId, LocalDateTime.now().toString(), user.id,
+                                        tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData() )
+                                    viewmodel.registerAlarmData(user.id, documentId, data)
+                                }
+                            }
+                        }
+                        if(toUserNameTag != ""){
+                            viewmodel.getTokenArrayList = MutableLiveData()
+                            viewmodel.getUserToken(toUserNameTag).observe(viewLifecycleOwner){
+                                viewmodel.getTokenArrayList = MutableLiveData()
+                                for(user in it){
+                                    for(token in user.fcmToken){
+                                        viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+                                    }
+                                    Log.e("chekckcck", user.id)
+                                    val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
+                                    val data = AlarmItem(documentId, LocalDateTime.now().toString(), user.id,
+                                        tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData() )
+                                    viewmodel.registerAlarmData(user.id, documentId, data)
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -184,6 +216,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                 writeCommentTagName.text = ""
                 writeCommentTagName.visibility = View.GONE
                 writeCommentTagNameDeleteBtn.visibility = View.GONE
+                toUserNameTag = ""
             }
             if(collectionName == "5_MARKET") {postPrice.text = navArgs.postDataInfo.post_state + "원" }
             else { postPrice.text = navArgs.postDataInfo.post_state + "호"}
@@ -245,6 +278,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                     viewbinding.writeCommentTagNameDeleteBtn.visibility = View.VISIBLE
                     viewbinding.writeCommentTagName.setText(tagName)
                     viewbinding.writeComment.setHint("")
+                    toUserNameTag = tagName.substring(1)
                 }
             }
         }
