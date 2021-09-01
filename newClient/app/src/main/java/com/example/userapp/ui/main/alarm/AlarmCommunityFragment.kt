@@ -31,7 +31,7 @@ class AlarmCommunityFragment() : BaseSessionFragment<FragmentAlarmChildBinding, 
     override fun initDataBinding(savedInstanceState: Bundle?) { }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
-        viewmodel.getAlarmAllList().observe(viewLifecycleOwner){
+        viewmodel.getAlarmCommunityList().observe(viewLifecycleOwner){
             if (it.isEmpty()){ showEmptyView() }
             else showRV(it)
         }
@@ -57,12 +57,13 @@ class AlarmCommunityFragment() : BaseSessionFragment<FragmentAlarmChildBinding, 
 
     private fun setRecyclerView() {
         alarmRVAdapter = AlarmRVAdapter(object : AlarmRVAdapter.OnItemClickListener {
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onItemClick(position: Int, alarmData: AlarmItem) {
                 when(alarmData.type){
-                    AlarmType.RESERVATION -> {
+                    AlarmType.makeEnumDataToString(AlarmType.RESERVATION) -> {
                         if (alarmData.reservationData != null) makeDialog(alarmData.reservationData, null)
                     }
-                    AlarmType.MARKET -> {
+                    AlarmType.makeEnumDataToString(AlarmType.MARKET) -> {
                         postDataBundle = alarmData.postData!!.makeToPostDataInfo()
                         val bundle = bundleOf("post_data_info" to postDataBundle)
                         findNavController().navigate(R.id.action_mainFragment_to_communityPostMarket, bundle)

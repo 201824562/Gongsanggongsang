@@ -63,10 +63,10 @@ class AlarmAllFragment() : BaseSessionFragment<FragmentAlarmChildBinding, AlarmV
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onItemClick(position: Int, alarmData: AlarmItem) {
                 when(alarmData.type){
-                    AlarmType.RESERVATION -> {
+                    AlarmType.makeEnumDataToString(AlarmType.RESERVATION) -> {
                         if (alarmData.reservationData != null) makeDialog(alarmData.reservationData, null)
                     }
-                    AlarmType.MARKET -> {
+                    AlarmType.makeEnumDataToString(AlarmType.MARKET) -> {
                         postDataBundle = alarmData.postData!!.makeToPostDataInfo()
                         val bundle = bundleOf("post_data_info" to postDataBundle)
                         findNavController().navigate(R.id.action_mainFragment_to_communityPostMarket, bundle)

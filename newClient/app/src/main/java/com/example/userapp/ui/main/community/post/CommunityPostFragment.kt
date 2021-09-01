@@ -123,8 +123,8 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                         }
                         val documentId = "헤헤헤헤" //TODO : 날짜 + 타입 + 보내는사람닉네임
                         val data = AlarmItem(navArgs.postDataInfo.post_id, LocalDateTime.now().toString(), localUserName,
-                        "내가 쓴 글에 댓글이 달렸습니다.", AlarmType.TOGETHER, null, navArgs.postDataInfo.makeToPostAlarmData() )
-                        viewmodel.registerAlarmData(navArgs.postDataInfo.post_name, documentId, data )
+                        "내가 쓴 글에 댓글이 달렸습니다.", "함께", null, navArgs.postDataInfo.makeToPostAlarmData() )
+                        viewmodel.registerAlarmData(navArgs.postDataInfo.post_name, documentId, data)
                     }
                 }
             }
