@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.InsetDrawable
 import android.os.Build
+import android.view.Gravity
 import android.view.ViewGroup
 import android.view.Window
 import androidx.annotation.RequiresApi
@@ -112,6 +113,7 @@ class CustomedAlarmDialog (context: Context, reserveData : ReservationAlarmData?
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
         window?.run {
+            setGravity(Gravity.BOTTOM)
             setBackgroundDrawable(InsetDrawable(ColorDrawable(Color.TRANSPARENT), 0))
             attributes.width = ViewGroup.LayoutParams.MATCH_PARENT
             attributes.height = ViewGroup.LayoutParams.WRAP_CONTENT
@@ -135,7 +137,7 @@ class CustomedAlarmDialog (context: Context, reserveData : ReservationAlarmData?
             }
             if (signData != null){
                 val birth : String = signData.birthday.substring(0,4) + "/" + signData.birthday.substring(4,6) + "/" + signData.birthday.substring(6,8)
-                val phone : String = signData.smsInfo.substring(0,3) + "-" + signData.smsInfo.substring(4,8) + signData.smsInfo.substring(9,13)
+                val phone : String = signData.smsInfo.substring(0,3) + "-" + signData.smsInfo.substring(3,7) + signData.smsInfo.substring(7,11)
                 val msg : String =  "관리하시는 공간의 회원님이 맞다면\n가입승인을 눌러주세요."
                 dialogTitle.text = "가입 승인"
                 dialogContentText1.text = "이름"

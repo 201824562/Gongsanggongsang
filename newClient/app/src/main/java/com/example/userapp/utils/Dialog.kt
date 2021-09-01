@@ -164,6 +164,7 @@ class CustomedAlarmDialog (context: Context, reserveData : ReservationAlarmData?
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
         window?.run {
+            setGravity(Gravity.BOTTOM)
             setBackgroundDrawable(InsetDrawable(ColorDrawable(Color.TRANSPARENT), 0))
             attributes.width = ViewGroup.LayoutParams.MATCH_PARENT
             attributes.height = ViewGroup.LayoutParams.WRAP_CONTENT
