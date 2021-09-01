@@ -173,8 +173,7 @@ class AdminRepository(appDatabase: AppDatabase) {
                         val fcmTokenList = if (it.data!!["fcmToken"] == null) mutableListOf()
                         else it.data!!["fcmToken"] as ArrayList<String>
                         fcmTokenList.add(fcmToken)
-                        fcmTokenList.add(fcmToken)
-                        fireStore.collection(FIRESTORE_ALLOWED_USER_INFO).document(adminId).update("fcmToken", fcmTokenList)
+                        fireStore.collection(FIRESTORE_ADMINISTER).document(adminId).update("fcmToken", fcmTokenList)
                         emitter.onSuccess(
                             ReceiverAdmin(true, AdminModel(it.data!!["agency"].toString(), it.data!!["id"].toString(), it.data!!["name"].toString(),
                                 it.data!!["birthday"].toString(),it.data!!["smsInfo"].toString())
