@@ -13,6 +13,8 @@ class SettingsViewModel(application: Application) : BaseSessionViewModel(applica
 
     private val _onSuccessDeleteUserInfoFromServer = SingleLiveEvent<Any>()
     val onSuccessDeleteUserInfoFromServer : LiveData<Any> get() = _onSuccessDeleteUserInfoFromServer
+    private val _onSuccessDeleteFcmTokenFromServer = SingleLiveEvent<Any>()
+    val onSuccessDeleteFcmTokenFromServer : LiveData<Any> get() = _onSuccessDeleteFcmTokenFromServer
     private val _onSuccessDeleteUserInfoFromApp = SingleLiveEvent<Any>()
     val onSuccessDeleteUserInfoFromApp : LiveData<Any> get() = _onSuccessDeleteUserInfoFromApp
     private val _invalidUserIdEventLiveData = SingleLiveEvent<String>()
@@ -49,6 +51,11 @@ class SettingsViewModel(application: Application) : BaseSessionViewModel(applica
         apiCall(userRepository.withdrawalUserInfo(authToken),
             { _onSuccessDeleteUserInfoFromServer.value = true },
             { showSnackbar("회원탈퇴에 실패했습니다. 네트워크 상태를 체크해주세요.")})
+    }
+    fun deleteDeviceTokenFromServerDatabase(){
+        apiCall(userRepository.deleteUsersDeviceToken(authToken, fcmToken),
+            { _onSuccessDeleteFcmTokenFromServer.value = true },
+            { showSnackbar("디바이스 로그아웃에 실패했습니다. 네트워크 상태를 체크해주세요.")})
     }
     fun deleteUserInfoFromAppDatabase() {
         val context = getApplication<Application>().applicationContext

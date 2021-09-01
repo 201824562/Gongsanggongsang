@@ -30,6 +30,7 @@ class AdminRepository(appDatabase: AppDatabase) {
         private val FIRESTORE_ADMINISTER = "ADMINISTER"
         private val FIRESTORE_WAITING_USER_INFO = "USER_INFO_WAITING"
         private val FIRESTORE_ALLOWED_USER_INFO = "USER_INFO"
+        private val FIRESTORE_ALARM ="ALARM"
     }
 
 
@@ -298,7 +299,7 @@ class AdminRepository(appDatabase: AppDatabase) {
             }
     }
 
-    fun acceptWaitingUser(userdata: User) : Completable {
+    fun acceptWaitingUser(agencyInfo: String, userdata: User) : Completable {
         return Completable.create{ emitter ->
             userdata.allowed = true
             fireStore.collection(FIRESTORE_WAITING_USER_INFO).document(userdata.id)
@@ -306,6 +307,7 @@ class AdminRepository(appDatabase: AppDatabase) {
                 .addOnFailureListener { exception ->
                     Log.w(ContentValues.TAG, "Error getting documents: ", exception)
                     emitter.onError(Throwable("Error getting documents: ", exception)) }
+            //fireStore.collection(agencyInfo).document(FIRESTORE_ALARM).collection(userdata.id)
             fireStore.collection(FIRESTORE_ALLOWED_USER_INFO).document(userdata.id)
                 .set(userdata)
                 .addOnSuccessListener {
@@ -333,8 +335,9 @@ class AdminRepository(appDatabase: AppDatabase) {
         }
     }
 
-    fun withdrawalUser(userdata: User) : Completable {
+    fun withdrawalUser(agencyInfo: String, userdata: User) : Completable {
         return Completable.create { emitter ->
+            //fireStore.collection(agencyInfo).document(FIRESTORE_ALARM).collection(userdata.id).delete
             fireStore.collection(FIRESTORE_ALLOWED_USER_INFO).document(userdata.id)
                 .delete()
                 .addOnSuccessListener {
@@ -344,6 +347,29 @@ class AdminRepository(appDatabase: AppDatabase) {
                 .addOnFailureListener { exception ->
                     Log.w(ContentValues.TAG, "Error getting documents: ", exception)
                     emitter.onError(Throwable("Error getting documents: ", exception))
+                }
+        }
+    }
+    fun deleteAdminDeviceToken(adminId : String, deviceToken : String) : Completable {
+        return Completable.create{ emitter ->
+            fireStore.collection(FIRESTORE_ADMINISTER).document(adminId)
+                .get()
+                .addOnSuccessListener {
+                    Log.d(ContentValues.TAG, "getAdminInfo Successed!!")
+                    val fcmTokenList : MutableList<String> = it["fcmToken"] as ArrayList<String>
+                    fcmTokenList.removeIf { fcmToken -> fcmToken == deviceToken }
+                    fireStore.collection(FIRESTORE_ADMINISTER).document(adminId).update("fcmToken", fcmTokenList)
+                        .addOnSuccessListener {
+                            Log.d(ContentValues.TAG, "delete AdminDeviceToken Succeed!!")
+                            emitter.onComplete()
+                        }.addOnFailureListener { exception ->
+                            Log.w(ContentValues.TAG, "Error todo deleteDeviceToken: ", exception)
+                            emitter.onError(Throwable("Error doing deleteDeviceToken"))
+                        }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error todo deleteDeviceToken: ", exception)
+                    emitter.onError(Throwable("Error doing deleteDeviceToken"))
                 }
         }
     }

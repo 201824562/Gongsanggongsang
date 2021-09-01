@@ -1,10 +1,8 @@
-package com.example.adminapp.ui.main.reservation
+package com.example.userapp.ui.main.alarm
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import java.time.DayOfWeek
-import java.time.Duration
-import java.time.LocalDateTime
+import java.time.*
 import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -33,7 +31,6 @@ fun getHourMinuteString(stringTime : String) : String {
 fun getIntervalMinuteString(startTime : String, endTime : String ) : String {
     return calculateDuration(startTime, endTime).abs().toMinutes().toString()
 }
-
 @RequiresApi(Build.VERSION_CODES.O)
 fun getMonthString(stringTime : String) : String {
     val localTime = changeStringToLocalDateTime(stringTime)
@@ -46,8 +43,23 @@ fun getMonthDayString(stringTime : String) : String {
     return if (localTime.dayOfMonth < 10 ) "0${localTime.dayOfMonth}"
     else "${localTime.dayOfMonth}"
 }
- @RequiresApi(Build.VERSION_CODES.O)
- fun changeStringToLocalDateTime(str : String) : LocalDateTime {
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun getTimePassedString(stringTime: String) : String {
+    val localDate = changeStringToLocalDateTime(stringTime).toLocalDate()
+    val currentDate = LocalDate.now()
+    val localDateTime = changeStringToLocalDateTime(stringTime)
+    val currentDateTime = LocalDateTime.now()
+    val duration = Duration.between(localDateTime, currentDateTime)
+    return if (localDate.isEqual(currentDate)){
+        if (duration.toHours() == 0L) "${duration.toMinutes()}분 전"
+        else "${duration.toHours()}시간 전"
+    }
+    else localDate.toString().substring(5)
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun changeStringToLocalDateTime(str : String) : LocalDateTime {
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")
     return LocalDateTime.parse(str, formatter)
 }
@@ -57,8 +69,8 @@ fun calculateDuration(startTime : String, endTime: String) : Duration {
     val endLocalTime = changeStringToLocalDateTime(endTime)
     return Duration.between(startLocalTime, endLocalTime)
 }
- @RequiresApi(Build.VERSION_CODES.O)
- fun calculateDurationWithCurrent(compareTime : String) : Duration {
+@RequiresApi(Build.VERSION_CODES.O)
+fun calculateDurationWithCurrent(compareTime : String) : Duration {
     val currentLocalTime = LocalDateTime.now()
     val compareLocalTime = changeStringToLocalDateTime(compareTime)
     return Duration.between(currentLocalTime, compareLocalTime)

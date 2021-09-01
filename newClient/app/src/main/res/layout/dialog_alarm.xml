@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.AppCompat.Button.Borderless"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/view_12dp_white">
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="가입승인"
+        android:textSize="16dp"
+        android:textColor="@color/black_87"
+        android:fontFamily="@font/notosanskr_bold_hestia"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+    <LinearLayout
+        android:id="@+id/dialog_content_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/dialog_title"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="30dp"
+        android:padding="20dp"
+        android:background="@color/light_gray"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:background="@color/transparent"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/dialog_content_text1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:background="@color/transparent"
+                android:text="이름"
+                android:textSize="12sp"
+                android:textColor="@color/black_87"
+                android:fontFamily="@font/notosanskr_regular_hestia" />
+            <TextView
+                android:id="@+id/dialog_content_text2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:background="@color/transparent"
+                android:text="생년월일"
+                android:textSize="12sp"
+                android:textColor="@color/black_87"
+                android:fontFamily="@font/notosanskr_regular_hestia" />
+            <TextView
+                android:id="@+id/dialog_content_text3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:text="전화번호"
+                android:textSize="12sp"
+                android:textColor="@color/black_87"
+                android:fontFamily="@font/notosanskr_regular_hestia" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:layout_marginLeft="20dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/dialog_content_var1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:background="@color/transparent"
+                android:text="이지윤"
+                android:textSize="12sp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/notosanskr_regular_hestia" />
+            <TextView
+                android:id="@+id/dialog_content_var2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:background="@color/transparent"
+                android:text="1998/10/21"
+                android:textSize="12sp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/notosanskr_regular_hestia" />
+            <TextView
+                android:id="@+id/dialog_content_var3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:text="010-3472-3498"
+                android:textSize="12sp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/notosanskr_regular_hestia" />
+        </LinearLayout>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/dialog_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/dialog_content_layout"
+        android:layout_marginTop="22dp"
+        android:gravity="center"
+        android:text="관리하시는 공간의 회원님이 맞다면\n가입 승인을 눌러주세요."
+        android:textSize="14sp"
+        android:textColor="@color/black_80"
+        android:fontFamily="@font/notosanskr_regular_hestia" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/dialog_msg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="22dp"
+        android:layout_marginBottom="22dp"
+        android:paddingHorizontal="16dp"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/dialog_left_btn"
+            android:background="@drawable/button_10dp_stroke_rectangle_white_bluegreen"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="8dp"
+            android:text="가입 거절"
+            android:textSize="14sp"
+            android:textColor="@color/blue_green"
+            android:fontFamily="@font/notosanskr_bold_hestia"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/start_using_btn"
+            app:layout_constraintTop_toBottomOf="@id/message_textview" />
+        <Button
+            android:id="@+id/dialog_right_btn"
+            android:background="@drawable/button_10dp_rectangle_bluegreen"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="8dp"
+            android:text="가입 승인"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/notosanskr_bold_hestia" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -49,7 +49,7 @@ abstract class BaseSessionViewModel(application: Application)  : AndroidViewMode
     private var _agencyInfo: String? = null
     val agencyInfo: String get() = _agencyInfo!!
     private var _fcmToken: String? = null
-    private val fcmToken: String get() = _fcmToken!!
+    val fcmToken: String get() = _fcmToken!!
     private var _authToken: String? = null
     val authToken: String get() = _authToken!!
     val isTokenAvailable: Boolean get() = _authToken != null
