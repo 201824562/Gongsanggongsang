@@ -1,10 +1,8 @@
 package com.example.userapp.ui.main.community.post
 
 import android.annotation.SuppressLint
-import android.content.ContentValues.TAG
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,19 +16,12 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.R
 import com.example.userapp.base.BaseSessionFragment
-import com.example.userapp.service.NotificationData
 import com.example.userapp.data.entity.PostCommentDataClass
-import com.example.userapp.service.PushNotification
 import com.example.userapp.databinding.FragmentCommunityPostMarketBinding
-import com.example.userapp.service.RetrofitInstance
 import com.example.userapp.ui.main.community.CommunityViewModel
 import com.example.userapp.ui.main.community.write.CommunityAttachPostPhotoRecyclerAdapter
 import com.example.userapp.utils.WrapedDialogBasicTwoButton
 import com.example.userapp.utils.hideKeyboard
-import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -39,7 +30,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
     override lateinit var viewbinding: FragmentCommunityPostMarketBinding
     override val viewmodel: CommunityViewModel by viewModels()
 
-    private val navPostDataInfo : CommunityPostFragmentArgs by navArgs()
+    private val navArgs : CommunityPostFragmentArgs by navArgs()
     private lateinit var collectionName : String
     private lateinit var documentName : String
     private lateinit var bundle: Bundle
@@ -49,7 +40,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
 
     private lateinit var commentRecyclerAdapter: CommunityCommentRecyclerAdapter
     private var postCommentsArray : ArrayList<PostCommentDataClass> = arrayListOf()
-
+    private var tokenTitle = ""
     private var localUserName = ""
     private var agency = ""
     private var token = ""
@@ -107,12 +98,28 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                         showToast("댓글이 등록되었습니다.")
                         writeComment.setText("")
                         hideKeyboard(viewbinding.root)
+                        writeCommentTagName.text = ""
+                        writeCommentTagName.visibility = View.GONE
+                        writeCommentTagNameDeleteBtn.visibility = View.GONE
                         viewmodel.getPostCommentData(collectionName, documentName).observe(viewLifecycleOwner){
                             postCommentsArray = it
                             commentRecyclerAdapter.notifyDataSetChanged()
                             initCommentRecyclerView()
                             communityPostCommentsNumber.text = it.size.toString()
                             viewmodel.modifyPostPartData(collectionName, documentName, "post_comments", it.size)
+                        }
+                        viewmodel.getUserToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
+                            for(token in it){
+                                viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+                            }
+                        }
+
+                        if(writeCommentTagName.text != ""){
+                            viewmodel.getUserToken(writeCommentTagName.text.substring(1)).observe(viewLifecycleOwner){
+                                for(token in it){
+                                    viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 댓글에 답변이 달렸어요!", token)
+                                }
+                            }
                         }
                     }
                 }
@@ -134,43 +141,54 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
     private fun initPostView(){
         val postDateNow: String = LocalDate.now().toString()
         val postTimeNow: String = LocalTime.now().toString()
-        collectionName= navPostDataInfo.postDataInfo.post_category
-        documentName = navPostDataInfo.postDataInfo.post_id
+        collectionName= navArgs.postDataInfo.post_category
+        documentName = navArgs.postDataInfo.post_id
 
         initCommentRecyclerView()
         initPhotoRecyclerView()
 
         viewbinding.run {
             when(collectionName){
-                "5_MARKET" -> postToolbarName.text = "장터게시판"
-                "OUT" -> postToolbarName.text = "퇴실 신청 내역"
+                "5_MARKET" -> {
+                    postToolbarName.text = "장터게시판"
+                    tokenTitle = "장터"
+                }
+                "OUT" -> {
+                    postToolbarName.text = "퇴실 신청 내역"
+                    tokenTitle = "퇴실"
+                }
             }
-            if(collectionName == "5_MARKET") {postPrice.text = navPostDataInfo.postDataInfo.post_state + "원" }
-            else { postPrice.text = navPostDataInfo.postDataInfo.post_state + "호"}
-            if(navPostDataInfo.postDataInfo.post_name == localUserName) { postRemoveButton.visibility = View.VISIBLE }
-            if(collectionName == "5_MARKET" && localUserName == navPostDataInfo.postDataInfo.post_name && !navPostDataInfo.postDataInfo.post_anonymous) { postWithComplete.visibility = View.VISIBLE }
-            if(collectionName == "OUT" && !navPostDataInfo.postDataInfo.post_anonymous) {
+            writeCommentTagNameDeleteBtn.setOnClickListener {
+                writeCommentTagName.text = ""
+                writeCommentTagName.visibility = View.GONE
+                writeCommentTagNameDeleteBtn.visibility = View.GONE
+            }
+            if(collectionName == "5_MARKET") {postPrice.text = navArgs.postDataInfo.post_state + "원" }
+            else { postPrice.text = navArgs.postDataInfo.post_state + "호"}
+            if(navArgs.postDataInfo.post_name == localUserName) { postRemoveButton.visibility = View.VISIBLE }
+            if(collectionName == "5_MARKET" && localUserName == navArgs.postDataInfo.post_name && !navArgs.postDataInfo.post_anonymous) { postWithComplete.visibility = View.VISIBLE }
+            if(collectionName == "OUT" && !navArgs.postDataInfo.post_anonymous) {
                 postCategory.text = "승인 대기"
                 postCategory.setTextColor(ContextCompat.getColor(requireContext(), R.color.pale_orange))
             }
-            if(collectionName == "OUT" && navPostDataInfo.postDataInfo.post_anonymous) {postCategory.text = "퇴실 완료"}
-            if(collectionName == "5_MARKET" && !navPostDataInfo.postDataInfo.post_anonymous) {
+            if(collectionName == "OUT" && navArgs.postDataInfo.post_anonymous) {postCategory.text = "퇴실 완료"}
+            if(collectionName == "5_MARKET" && !navArgs.postDataInfo.post_anonymous) {
                 postCategory.text = "판매 중"
                 postCategory.setTextColor(ContextCompat.getColor(requireContext(), R.color.pale_orange))
             }
-            if(collectionName == "5_MARKET" && navPostDataInfo.postDataInfo.post_anonymous) {postCategory.text = "판매 완료"}
-            if(navPostDataInfo.postDataInfo.post_date == postDateNow) {
-                val hour = postTimeNow.substring(0,2).toInt() - navPostDataInfo.postDataInfo.post_time.substring(0,2).toInt()
-                val minute = postTimeNow.substring(3,5).toInt() - navPostDataInfo.postDataInfo.post_time.substring(3,5).toInt()
+            if(collectionName == "5_MARKET" && navArgs.postDataInfo.post_anonymous) {postCategory.text = "판매 완료"}
+            if(navArgs.postDataInfo.post_date == postDateNow) {
+                val hour = postTimeNow.substring(0,2).toInt() - navArgs.postDataInfo.post_time.substring(0,2).toInt()
+                val minute = postTimeNow.substring(3,5).toInt() - navArgs.postDataInfo.post_time.substring(3,5).toInt()
                 if(hour == 0){ communityPostTime.text = "${minute}분 전" }
                 else{ communityPostTime.text = "${hour}시간 전" }
             }
-            else{ communityPostTime.text = navPostDataInfo.postDataInfo.post_date.substring(5) }
-            communityPostName.text = navPostDataInfo.postDataInfo.post_name
-            postContents.text = navPostDataInfo.postDataInfo.post_contents
-            postTitle.text = navPostDataInfo.postDataInfo.post_title
+            else{ communityPostTime.text = navArgs.postDataInfo.post_date.substring(5) }
+            communityPostName.text = navArgs.postDataInfo.post_name
+            postContents.text = navArgs.postDataInfo.post_contents
+            postTitle.text = navArgs.postDataInfo.post_title
 
-            viewmodel.getPostPhotoData(navPostDataInfo.postDataInfo.post_photo_uri)
+            viewmodel.getPostPhotoData(navArgs.postDataInfo.post_photo_uri)
             viewmodel.getPostPhotoSuccess().observe(viewLifecycleOwner){
                 remoteGetPhotoUri = it
                 initPhotoRecyclerView()
@@ -201,7 +219,10 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
             tagListener = object  : CommunityCommentRecyclerAdapter.OnCommunityCommentItemTagClickListener{
                 override fun onCommentItemTagClick(position: Int) {
                     val tagName = "@" + getItem(position).commentName
-                    viewbinding.writeComment.setText(tagName)
+                    viewbinding.writeCommentTagName.visibility = View.VISIBLE
+                    viewbinding.writeCommentTagNameDeleteBtn.visibility = View.VISIBLE
+                    viewbinding.writeCommentTagName.setText(tagName)
+                    viewbinding.writeComment.setHint("")
                 }
             }
         }

@@ -97,6 +97,9 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                         showToast("댓글이 등록되었습니다.")
                         writeComment.setText("")
                         hideKeyboard(viewbinding.root)
+                        writeCommentTagName.text = ""
+                        writeCommentTagName.visibility = View.GONE
+                        writeCommentTagNameDeleteBtn.visibility = View.GONE
                         viewmodel.getPostCommentData(collectionName, documentName).observe(viewLifecycleOwner){
                             postCommentsArray = it
                             commentRecyclerAdapter.notifyDataSetChanged()
@@ -104,13 +107,14 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                             communityPostCommentsNumber.text = it.size.toString()
                             viewmodel.modifyPostPartData(collectionName, documentName, "post_comments", it.size)
                         }
+
                         viewmodel.getUserToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
                             for(token in it){
                                 viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
                             }
                         }
-                        if(tagName != ""){
-                            viewmodel.getUserToken(tagName.substring(1)).observe(viewLifecycleOwner){
+                        if(writeCommentTagName.text != ""){
+                            viewmodel.getUserToken(writeCommentTagName.text.substring(1)).observe(viewLifecycleOwner){
                                 for(token in it){
                                     viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 댓글에 답변이 달렸어요!", token)
                                 }
@@ -152,6 +156,11 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                     postToolbarName.text = "함께게시판"
                     tokenTitle = "함께"
                 }
+            }
+            writeCommentTagNameDeleteBtn.setOnClickListener {
+                writeCommentTagName.text = ""
+                writeCommentTagName.visibility = View.GONE
+                writeCommentTagNameDeleteBtn.visibility = View.GONE
             }
             if(navArgs.postDataInfo.post_name == localUserName) { postRemoveButton.visibility = View.VISIBLE }
             if(collectionName != "4_WITH" && navArgs.postDataInfo.post_state != "none"){ postCategory.text = navArgs.postDataInfo.post_state }
@@ -215,7 +224,10 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
             tagListener = object  : CommunityCommentRecyclerAdapter.OnCommunityCommentItemTagClickListener{
                 override fun onCommentItemTagClick(position: Int) {
                     tagName = "@" + getItem(position).commentName
-                    viewbinding.writeComment.setText(tagName)
+                    viewbinding.writeCommentTagName.visibility = View.VISIBLE
+                    viewbinding.writeCommentTagNameDeleteBtn.visibility = View.VISIBLE
+                    viewbinding.writeCommentTagName.setText(tagName)
+                    viewbinding.writeComment.setHint("")
                 }
             }
         }
