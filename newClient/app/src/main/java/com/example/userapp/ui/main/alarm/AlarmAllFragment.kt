@@ -1,10 +1,16 @@
 package com.example.userapp.ui.main.alarm
 
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.example.userapp.R
 import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.data.model.*
 import com.example.userapp.databinding.FragmentAlarmChildBinding
@@ -16,7 +22,7 @@ class AlarmAllFragment() : BaseSessionFragment<FragmentAlarmChildBinding, AlarmV
     override lateinit var viewbinding: FragmentAlarmChildBinding
     override val viewmodel: AlarmViewModel by viewModels()
     private lateinit var alarmRVAdapter: AlarmRVAdapter
-    private var postAlarmDataBundle : PostAlarmData? = null
+    private var postDataBundle : PostDataInfo? = null
 
     override fun initViewbinding(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewbinding = FragmentAlarmChildBinding.inflate(inflater, container, false)
@@ -34,14 +40,17 @@ class AlarmAllFragment() : BaseSessionFragment<FragmentAlarmChildBinding, AlarmV
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun makeDialog(reserveData: ReservationAlarmData?, signData: SignUpAlarmData?){
         val dialog = CustomedAlarmDialog(requireContext(), reserveData, signData).apply {
             clickListener = object : CustomedAlarmDialog.DialogButtonClickListener{
                 override fun dialogCloseClickListener() {
-                    //TODO : 로그 -> 사용취소로 바꾸기.(시간 남게 하나?)
+                    reserveData?.let { viewmodel.makeReservationLogCancel(it.documentId) }
+                    dismiss()
                 }
                 override fun dialogClickListener() {
-                    //TODO : 로그 -> 사용중으로 바꾸기.
+                    reserveData?.let { viewmodel.makeReservationLogUsing(it.documentId) }
+                    dismiss()
                 }
             }
         }
@@ -51,14 +60,21 @@ class AlarmAllFragment() : BaseSessionFragment<FragmentAlarmChildBinding, AlarmV
 
     private fun setRecyclerView() {
         alarmRVAdapter = AlarmRVAdapter(object : AlarmRVAdapter.OnItemClickListener {
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onItemClick(position: Int, alarmData: AlarmItem) {
                 when(alarmData.type){
                     AlarmType.RESERVATION -> {
                         if (alarmData.reservationData != null) makeDialog(alarmData.reservationData, null)
                     }
+                    AlarmType.MARKET -> {
+                        postDataBundle = alarmData.postData!!.makeToPostDataInfo()
+                        val bundle = bundleOf("post_data_info" to postDataBundle)
+                        findNavController().navigate(R.id.action_mainFragment_to_communityPostMarket, bundle)
+                    }
                     else -> {
-                        postAlarmDataBundle = alarmData.postData
-                        //글쓰기 세부페이지로 이동하기  //TODO!!
+                        postDataBundle = alarmData.postData!!.makeToPostDataInfo()
+                        val bundle = bundleOf("post_data_info" to postDataBundle)
+                        findNavController().navigate(R.id.action_mainFragment_to_communityPost, bundle)
                     }
                 }
             }

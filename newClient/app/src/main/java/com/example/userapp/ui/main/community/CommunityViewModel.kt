@@ -10,8 +10,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.userapp.base.BaseSessionViewModel
+import com.example.userapp.data.AppDatabase
 import com.example.userapp.data.entity.PostCommentDataClass
+import com.example.userapp.data.model.AlarmItem
 import com.example.userapp.data.model.PostDataInfo
+import com.example.userapp.data.repository.AlarmRepository
 import com.example.userapp.data.repository.CommunityDataRepository
 import com.example.userapp.utils.SingleLiveEvent
 import com.google.firebase.firestore.FirebaseFirestore
@@ -24,6 +27,8 @@ class CommunityViewModel(application: Application) : BaseSessionViewModel(applic
     var postCommentUploadSuccess : MutableLiveData<Boolean> = MutableLiveData()
     var getTokenArrayList : MutableLiveData<ArrayList<String>> = MutableLiveData()
     private val communityDataRepository : CommunityDataRepository = CommunityDataRepository.getInstance()
+    private val alarmRepository: AlarmRepository = AlarmRepository.getInstance(AppDatabase.getDatabase(application, viewModelScope))
+
     fun getPostDataInCategory(collection_name: String) : LiveData<ArrayList<PostDataInfo>> {
         return communityDataRepository.getPostDataInCategory(agencyInfo, collection_name)
     }
@@ -107,5 +112,13 @@ class CommunityViewModel(application: Application) : BaseSessionViewModel(applic
             }
         return getTokenArrayList
     }
+
+    private val _onSuccessRegisterAlarmData = SingleLiveEvent<AlarmItem>()
+    val onSuccessRegisterAlarmData : LiveData<AlarmItem> get() = _onSuccessRegisterAlarmData
+
+    fun registerAlarmData(toOther : String, documentId : String, alarmData : AlarmItem)  {
+        apiCall(alarmRepository.registerAlarmData(agencyInfo, toOther, documentId, alarmData), { _onSuccessRegisterAlarmData.call() })
+    }
+
 
 }

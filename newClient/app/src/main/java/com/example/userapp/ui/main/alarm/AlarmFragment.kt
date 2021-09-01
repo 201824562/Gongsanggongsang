@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.userapp.base.BaseFragment
 import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.databinding.FragmentMainhomeAlarmBinding
 import com.google.android.material.tabs.TabLayout
@@ -45,24 +44,21 @@ class AlarmFragment: BaseSessionFragment<FragmentMainhomeAlarmBinding, AlarmView
                 override fun onTabUnselected(tab: TabLayout.Tab?) {}
                 override fun onTabReselected(tab: TabLayout.Tab?) { viewbinding.alarmViewpager.currentItem = tab!!.position } })
             TabLayoutMediator(alarmTab, alarmViewpager){ tab, position ->
-                val tabTextList = arrayListOf("전체", "공지", "공용", "긴급", "함께", "건의", "장터")
+                val tabTextList = arrayListOf("전체", "공지/긴급","커뮤니티", "공용")
                 tab.text = tabTextList[position] }.attach() }
     }
 }
 
 class AlarmViewPagerAdapter (activity: FragmentActivity) : FragmentStateAdapter(activity) {
 
-    override fun getItemCount(): Int = 7
+    override fun getItemCount(): Int = 4
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> AlarmAllFragment()
             1 -> AlarmNoticeFragment()
-            2 -> AlarmReservationFragment()
-            3 -> AlarmEmergencyFragment()
-            4 -> AlarmTogetherFragment()
-            5 -> AlarmSuggestFragment()
-            6 -> AlarmMarketFragment()
+            2 -> AlarmCommunityFragment()
+            3 -> AlarmReservationFragment()
             else -> error("no such position: $position")
         }
     }
