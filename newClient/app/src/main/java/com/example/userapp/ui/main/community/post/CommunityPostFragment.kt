@@ -53,7 +53,7 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
     private var localUserName = ""
     private var tokenTitle = ""
     private var tagName = ""
-
+    private lateinit var alarmType : AlarmType
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -124,9 +124,9 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                             communityPostCommentsNumber.text = it.size.toString()
                             viewmodel.modifyPostPartData(collectionName, documentName, "post_comments", it.size)
                         }
-                        val documentId = "헤헤헤헤" //TODO : 날짜 + 타입 + 보내는사람닉네임
-                        val data = AlarmItem(navArgs.postDataInfo.post_id, LocalDateTime.now().toString(), localUserName,
-                        "내가 쓴 글에 댓글이 달렸습니다.", AlarmType.TOGETHER, null, navArgs.postDataInfo.makeToPostAlarmData() )
+                        val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
+                        val data = AlarmItem(documentId, LocalDateTime.now().toString(), localUserName,
+                        "내가 쓴 글에 댓글이 달렸습니다.", alarmType, null, navArgs.postDataInfo.makeToPostAlarmData() )
                         viewmodel.registerAlarmData(navArgs.postDataInfo.post_name, documentId, data )
                     }
                 }
@@ -155,14 +155,17 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                 "2_EMERGENCY" -> {
                     postToolbarName.text = "긴급게시판"
                     tokenTitle = "긴급"
+                    alarmType = AlarmType.EMERGENCY
                 }
                 "3_SUGGEST" -> {
                     postToolbarName.text = "건의게시판"
                     tokenTitle = "건의"
+                    alarmType = AlarmType.SUGGEST
                 }
                 "4_WITH" -> {
                     postToolbarName.text = "함께게시판"
                     tokenTitle = "함께"
+                    alarmType = AlarmType.TOGETHER
                 }
             }
             writeCommentTagNameDeleteBtn.setOnClickListener {
