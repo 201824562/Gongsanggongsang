@@ -109,10 +109,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                             communityPostCommentsNumber.text = it.size.toString()
                             viewmodel.modifyPostPartData(collectionName, documentName, "post_comments", it.size)
                         }
-                        val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
-                        val data = AlarmItem(documentId, LocalDateTime.now().toString(), localUserName,
-                            tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData(), null)
-                        if(localUserName != navArgs.postDataInfo.post_name){
+                       if(localUserName != navArgs.postDataInfo.post_name){
                             viewmodel.getUserToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
                                 viewmodel.getTokenArrayList = MutableLiveData()
                                 for(user in it){
@@ -136,11 +133,11 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                                 viewmodel.getTokenArrayList = MutableLiveData()
                                 for(user in it){
                                     for(token in user.fcmToken){
-                                        viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+                                        viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 댓글에 답변이 달렸어요!", token)
                                     }
                                     val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
                                     val data = AlarmItem(documentId, LocalDateTime.now().toString(), user.id,
-                                        tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData(), null)
+                                        tokenTitle + "게시판에 올린 댓글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData(), null)
                                     viewmodel.registerAlarmData(user.id, documentId, data)
                                 }
                             }
