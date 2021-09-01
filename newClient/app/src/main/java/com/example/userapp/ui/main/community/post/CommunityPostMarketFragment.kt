@@ -36,7 +36,6 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
     private val navArgs : CommunityPostFragmentArgs by navArgs()
     private lateinit var collectionName : String
     private lateinit var documentName : String
-    private lateinit var bundle: Bundle
 
     private lateinit var attachPostPhotoRecyclerAdapter: CommunityAttachPostPhotoRecyclerAdapter
     private var remoteGetPhotoUri : ArrayList<String> = arrayListOf()
@@ -70,17 +69,30 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
         })
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun initDataBinding(savedInstanceState: Bundle?) {
         viewmodel.onSuccessRegisterAlarmData.observe(viewLifecycleOwner){
             viewmodel.getUserToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
-                for(token in it){
-                    viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+                for(user in it){
+                    for(token in user.fcmToken){
+                        viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+                    }
+                    val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
+                    val data = AlarmItem(documentId, LocalDateTime.now().toString(), user.id,
+                        tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData() )
+
                 }
             }
             if(viewbinding.writeCommentTagName.text != ""){
                 viewmodel.getUserToken(viewbinding.writeCommentTagName.text.substring(1)).observe(viewLifecycleOwner){
-                    for(token in it){
-                        viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 댓글에 답변이 달렸어요!", token)
+                    for(user in it){
+                        for(token in user.fcmToken){
+                            viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+                        }
+                        val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
+                        val data = AlarmItem(documentId, LocalDateTime.now().toString(), user.id,
+                            tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData() )
+
                     }
                 }
             }
@@ -269,7 +281,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                     when(isPostOrComment){
                         "isPost" -> viewmodel.deletePostData(collectionName, documentName).observe(viewLifecycleOwner){
                             if(it){
-                                findNavController().navigate(R.id.action_community_post_pop, bundle)
+                                findNavController().navigate(R.id.action_community_post_pop)
                             }
                         }
                         "isComment" -> viewmodel.deletePostCommentData(collectionName, documentName, commentData).observe(viewLifecycleOwner){
