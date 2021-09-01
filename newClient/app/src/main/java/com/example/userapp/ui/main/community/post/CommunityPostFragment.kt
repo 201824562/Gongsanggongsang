@@ -2,6 +2,7 @@ package com.example.userapp.ui.main.community.post
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,6 +48,8 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
     private var postCommentsArray : ArrayList<PostCommentDataClass> = arrayListOf()
 
     private var localUserName = ""
+    private var tokenTitle = ""
+    private var tagName = ""
 
     override fun initViewbinding(
         inflater: LayoutInflater,
@@ -101,7 +104,18 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                             communityPostCommentsNumber.text = it.size.toString()
                             viewmodel.modifyPostPartData(collectionName, documentName, "post_comments", it.size)
                         }
-                        viewmodel.registerNotificationToFireStore("공생공생", "내가 쓴 게시글에 댓글이 달렸어요!")
+                        viewmodel.getUserToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
+                            for(token in it){
+                                viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+                            }
+                        }
+                        if(tagName != ""){
+                            viewmodel.getUserToken(tagName.substring(1)).observe(viewLifecycleOwner){
+                                for(token in it){
+                                    viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 댓글에 답변이 달렸어요!", token)
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -122,10 +136,22 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
 
         viewbinding.run {
             when(collectionName){
-                "1_FREE" -> postToolbarName.text = "자유게시판"
-                "2_EMERGENCY" -> postToolbarName.text = "긴급게시판"
-                "3_SUGGEST" -> postToolbarName.text = "건의게시판"
-                "4_WITH" -> postToolbarName.text = "함께게시판"
+                "1_FREE" -> {
+                    postToolbarName.text = "자유게시판"
+                    tokenTitle = "자유"
+                }
+                "2_EMERGENCY" -> {
+                    postToolbarName.text = "긴급게시판"
+                    tokenTitle = "긴급"
+                }
+                "3_SUGGEST" -> {
+                    postToolbarName.text = "건의게시판"
+                    tokenTitle = "건의"
+                }
+                "4_WITH" -> {
+                    postToolbarName.text = "함께게시판"
+                    tokenTitle = "함께"
+                }
             }
             if(navArgs.postDataInfo.post_name == localUserName) { postRemoveButton.visibility = View.VISIBLE }
             if(collectionName != "4_WITH" && navArgs.postDataInfo.post_state != "none"){ postCategory.text = navArgs.postDataInfo.post_state }
@@ -188,7 +214,7 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
             }
             tagListener = object  : CommunityCommentRecyclerAdapter.OnCommunityCommentItemTagClickListener{
                 override fun onCommentItemTagClick(position: Int) {
-                    val tagName = "@" + getItem(position).commentName
+                    tagName = "@" + getItem(position).commentName
                     viewbinding.writeComment.setText(tagName)
                 }
             }

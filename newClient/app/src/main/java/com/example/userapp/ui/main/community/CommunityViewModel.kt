@@ -4,6 +4,7 @@ import android.app.Application
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -21,6 +22,7 @@ import kotlinx.coroutines.launch
 class CommunityViewModel(application: Application) : BaseSessionViewModel(application) {
     private val firestore = FirebaseFirestore.getInstance()
     var postCommentUploadSuccess : MutableLiveData<Boolean> = MutableLiveData()
+    var getTokenArrayList : MutableLiveData<ArrayList<String>> = MutableLiveData()
     private val communityDataRepository : CommunityDataRepository = CommunityDataRepository.getInstance()
     fun getPostDataInCategory(collection_name: String) : LiveData<ArrayList<PostDataInfo>> {
         return communityDataRepository.getPostDataInCategory(agencyInfo, collection_name)
@@ -90,6 +92,20 @@ class CommunityViewModel(application: Application) : BaseSessionViewModel(applic
     }
     fun getSearchPostData(collectionName: String, searchKeyword : String) : MutableLiveData<ArrayList<PostDataInfo>>{
         return communityDataRepository.getSearchPostData(agencyInfo, collectionName, searchKeyword)
+    }
+    fun getUserToken(userNickname : String) : MutableLiveData<ArrayList<String>> {
+        var getToken: ArrayList<String> = arrayListOf()
+        firestore.collection("USER_INFO")
+            .whereEqualTo("nickname", userNickname)
+            .get()
+            .addOnSuccessListener {
+                for (result in it) {
+                    getToken = result["fcmToken"] as ArrayList<String>
+                    Log.e("chekckck", "{$getToken}")
+                }
+                getTokenArrayList.postValue(getToken)
+            }
+        return getTokenArrayList
     }
 
 }
