@@ -33,7 +33,7 @@ import java.time.LocalTime
 
 
 class SettingsOutWriteFragment : BaseSessionFragment<FragmentSettingsOutWriteBinding, CommunityViewModel>() {
-    private lateinit var collectionName : String
+    private var collectionName = "OUT"
     private lateinit var documentName : String
     private lateinit var bundle: Bundle
     override lateinit var viewbinding: FragmentSettingsOutWriteBinding
@@ -108,7 +108,7 @@ class SettingsOutWriteFragment : BaseSessionFragment<FragmentSettingsOutWriteBin
                     )
                     viewmodel.insertPostData(postData).observe(viewLifecycleOwner){
                         if(it){
-                            viewmodel.getUserToken("관리자").observe(viewLifecycleOwner){
+                            viewmodel.getAdminToken().observe(viewLifecycleOwner){
                                 viewmodel.getTokenArrayList = MutableLiveData()
                                 for(user in it){
                                     for(token in user.fcmToken){
@@ -116,11 +116,13 @@ class SettingsOutWriteFragment : BaseSessionFragment<FragmentSettingsOutWriteBin
                                     }
                                     val documentId = LocalDateTime.now().toString() + collectionName + userName  //TODO : 날짜 + 타입 + 보내는사람닉네임
                                     val data = AlarmItem(documentId, LocalDateTime.now().toString(), user.id,
-                                        "퇴실 신청이 등록됐어요!", "퇴실", null,  postData.makeToPostAlarmData())
+                                        "퇴실 신청이 등록됐어요!", "퇴실", null,  postData.makeToPostAlarmData(), null)
                                     viewmodel.registerAlarmData(user.id, documentId, data)
                                 }
                             }
-                            findNavController().navigate(R.id.action_settingOutWrite_to_settingOutLog)
+                            viewmodel.onSuccessRegisterAlarmData.observe(viewLifecycleOwner){
+                                findNavController().navigate(R.id.action_settingOutWrite_to_settingOutLog)
+                            }
                         }
                     }
                 }

@@ -153,23 +153,23 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                 viewmodel.modifyPostPartData(collectionName, documentName, "post_anonymous", true).observe(viewLifecycleOwner){
                     if(it){
                         print("success")
-                        postWithComplete.visibility = View.GONE
                         if(collectionName == "5_MARKET") { postCategory.text = "판매 완료" }
                         else {
-                            postCategory.text = "승인 완료"
-                            viewmodel.getTokenArrayList = MutableLiveData()
-                            viewmodel.getUserToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
+                            viewmodel.getUserNameToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
                                 viewmodel.getTokenArrayList = MutableLiveData()
                                 for(user in it){
                                     for(token in user.fcmToken){
-                                        viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+                                        viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "퇴실 신청이 승인되었어요!", token)
                                     }
-                                    Log.e("chekckcck", user.id)
                                     val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
                                     val data = AlarmItem(documentId, LocalDateTime.now().toString(), user.id,
                                         "퇴실 신청이 승인되었어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData(), null)
                                     viewmodel.registerAlarmData(user.id, documentId, data)
                                 }
+                            }
+                            viewmodel.onSuccessRegisterAlarmData.observe(viewLifecycleOwner){
+                                postCategory.text = "승인 완료"
+                                postWithComplete.visibility = View.GONE
                             }
                         }
 

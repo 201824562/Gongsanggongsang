@@ -5,7 +5,7 @@ import kotlinx.android.parcel.Parcelize
 
 data class AlarmItem(val documentId : String, val time : String, val otherUser : String,
                      val message : String, val type : String,
-                     val reservationData : ReservationAlarmData?, val postData : PostAlarmData?) //, val signData : SignUpAlarmData?
+                     val reservationData : ReservationAlarmData?, val postData : PostAlarmData?, val signData : SignUpAlarmData?) //, val signData : SignUpAlarmData?
 
 data class ReservationAlarmData(val documentId: String, val name : String,
                                 val startTime : String, val endTime : String)

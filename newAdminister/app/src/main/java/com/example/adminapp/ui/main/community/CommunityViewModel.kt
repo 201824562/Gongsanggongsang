@@ -127,6 +127,20 @@ class CommunityViewModel(application: Application) : BaseSessionViewModel(applic
             }
         return getTokenArrayList
     }
+    fun getUserNameToken(userNickname : String) : MutableLiveData<ArrayList<RemoteUserInfo>> {
+        var remoteUserInfo: ArrayList<RemoteUserInfo> = arrayListOf()
+        firestore.collection("USER_INFO")
+            .whereEqualTo("name", userNickname)
+            .get()
+            .addOnSuccessListener {
+                for (result in it) {
+                    val remoteInfo = RemoteUserInfo (result["id"] as String, result["fcmToken"] as ArrayList<String>)
+                    remoteUserInfo.add(remoteInfo)
+                }
+                getTokenArrayList.postValue(remoteUserInfo)
+            }
+        return getTokenArrayList
+    }
 
     private val _onSuccessRegisterAlarmData = SingleLiveEvent<AlarmItem>()
     val onSuccessRegisterAlarmData : LiveData<AlarmItem> get() = _onSuccessRegisterAlarmData

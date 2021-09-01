@@ -114,6 +114,24 @@ class CommunityViewModel(application: Application) : BaseSessionViewModel(applic
             }
         return getTokenArrayList
     }
+    fun getAdminToken() : MutableLiveData<ArrayList<RemoteUserInfo>> {
+        var remoteUserInfo: ArrayList<RemoteUserInfo> = arrayListOf()
+        firestore.collection("ADMINISTER")
+            .get()
+            .addOnSuccessListener {
+                for (result in it) {
+                    var remoteInfo: RemoteUserInfo = RemoteUserInfo()
+                    if (result["fcmToken"] != null) {
+                        remoteInfo = RemoteUserInfo(
+                            result["id"] as String,
+                            result["fcmToken"] as ArrayList<String>
+                        )
+                    }
+                    remoteUserInfo.add(remoteInfo)
+                }
+            }
+        return getTokenArrayList
+    }
 
     private val _onSuccessRegisterAlarmData = SingleLiveEvent<AlarmItem>()
     val onSuccessRegisterAlarmData : LiveData<AlarmItem> get() = _onSuccessRegisterAlarmData

@@ -61,7 +61,7 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                                         document.get("otherUser") as String,
                                         document.get("message") as String,
                                         document.get("type") as String,
-                                        null, null))
+                                        null, null, null))
                             }
                             AlarmType.RESERVATION ->{
                                 if (document.get("reservationData") == null){
@@ -71,7 +71,7 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                                             document.get("otherUser") as String,
                                             document.get("message") as String,
                                             document.get("type") as String,
-                                            null, null))
+                                            null, null, null))
                                 }else {
                                     val reservationData : ReservationAlarmData= (document.get("reservationData")  as HashMap<String, ReservationAlarmData>).let {
                                         ReservationAlarmData(it["documentId"] as String, it["name"] as String,
@@ -82,7 +82,7 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                                             document.get("otherUser") as String,
                                             document.get("message") as String,
                                             document.get("type") as String,
-                                            reservationData, null))
+                                            reservationData, null, null))
                                 }
                             }else -> {
                                 val postAlarmData : PostAlarmData = (document.get("postData") as HashMap<String, PostAlarmData>).let {
@@ -97,7 +97,7 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                                         document.get("otherUser") as String,
                                         document.get("message") as String,
                                         document.get("type") as String,
-                                        null, postAlarmData))
+                                        null, postAlarmData, null))
                             }
                         }
                     }
@@ -135,7 +135,7 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                                 document.get("otherUser") as String,
                                 document.get("message") as String,
                                 document.get("type") as String,
-                                null, postAlarmData))
+                                null, postAlarmData, null))
                     }
                     _onSuccessGetAlarmNoticeList.postValue(alarmList)
                 }
@@ -171,7 +171,7 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                                 document.get("otherUser") as String,
                                 document.get("message") as String,
                                 document.get("type") as String,
-                                null, postAlarmData))
+                                null, postAlarmData, null))
                     }
                     _onSuccessGetAlarmCommunityList.postValue(alarmList)
                 }
@@ -202,7 +202,7 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                                     document.get("otherUser") as String,
                                     document.get("message") as String,
                                     document.get("type") as String,
-                                    null, null))
+                                    null, null, null))
                         }else {
                             val reservationData : ReservationAlarmData= (document.get("reservationData")  as HashMap<String, ReservationAlarmData>).let {
                                 ReservationAlarmData(it["documentId"] as String, it["name"] as String,
@@ -213,7 +213,7 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
                                     document.get("otherUser") as String,
                                     document.get("message") as String,
                                     document.get("type") as String,
-                                    reservationData, null))
+                                    reservationData, null, null))
                         }
                     }
                     _onSuccessGetAlarmReservationList.postValue(alarmList)
