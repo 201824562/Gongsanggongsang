@@ -1,11 +1,12 @@
-package com.example.userapp.data.model
+package com.example.adminapp.data.model
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
+
 data class AlarmItem(val documentId : String, val time : String, val otherUser : String,
                      val message : String, val type : String,
-                     val reservationData : ReservationAlarmData?, val postData : PostAlarmData?) //, val signData : SignUpAlarmData?
+                     val reservationData : ReservationAlarmData?, val postData : PostAlarmData? , val signData : SignUpAlarmData?)
 
 data class ReservationAlarmData(val documentId: String, val name : String,
                                 val startTime : String, val endTime : String)
@@ -28,7 +29,7 @@ data class SignUpAlarmData(
 
 enum class AlarmType(val type : String) {
     NOTICE("공지"), RESERVATION("공용"), EMERGENCY("긴급"), FREE("자유"),
-    TOGETHER("함께"), SUGGEST("건의"), MARKET("장터"), OUT("퇴실"); //, SIGNUP("가입승인")
+    TOGETHER("함께"), SUGGEST("건의"), MARKET("장터"), OUT("퇴실") , SIGNUP("가입승인") ;
     companion object{
         fun makeStringToEnumData(type : String) : AlarmType{
             return values().first { it.type == type} }
@@ -37,4 +38,3 @@ enum class AlarmType(val type : String) {
         }
     }
 }
-

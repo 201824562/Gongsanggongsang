@@ -15,6 +15,7 @@ import com.example.userapp.data.model.ReservationAlarmData
 import com.example.userapp.data.repository.AlarmRepository
 import com.example.userapp.utils.SingleLiveEvent
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 
 class AlarmViewModel(application: Application) : BaseSessionViewModel(application)  {
 
@@ -42,7 +43,8 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
 
     private fun getAlarmAllListFromFireBase(){
         firestore.collection(agencyInfo).document(FIRESTORE_ALARM)
-            .collection(authToken).addSnapshotListener { snapshot, e ->
+            .collection(authToken).orderBy("time", Query.Direction.DESCENDING)
+            .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     Log.w(ContentValues.TAG, "Listen failed.", e)
                     _onSuccessGetAlarmAllList.postValue(emptyList())
@@ -111,7 +113,7 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
 
     private fun getAlarmNoticeListFromFireBase(){
         firestore.collection(agencyInfo).document(FIRESTORE_ALARM)
-            .collection(authToken).whereIn("type", listOf("공지", "긴급"))
+            .collection(authToken).whereIn("type", listOf("공지", "긴급")).orderBy("time", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     Log.w(ContentValues.TAG, "Listen failed.", e)
@@ -147,7 +149,7 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
 
     private fun getAlarmCommunityListFromFireBase(){
         firestore.collection(agencyInfo).document(FIRESTORE_ALARM)
-            .collection(authToken).whereIn("type", listOf("함께", "건의", "장터"))
+            .collection(authToken).whereIn("type", listOf("함께", "건의", "장터")).orderBy("time", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     Log.w(ContentValues.TAG, "Listen failed.", e)
@@ -183,7 +185,7 @@ class AlarmViewModel(application: Application) : BaseSessionViewModel(applicatio
 
     private fun getAlarmReservationListFromFireBase(){
         firestore.collection(agencyInfo).document(FIRESTORE_ALARM)
-            .collection(authToken).whereIn("type", listOf("공용"))
+            .collection(authToken).whereIn("type", listOf("공용")).orderBy("time", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
                     Log.w(ContentValues.TAG, "Listen failed.", e)

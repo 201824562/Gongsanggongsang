@@ -1,8 +1,7 @@
-package com.example.userapp.ui.main.alarm
+package com.example.adminapp.ui.main.alarm
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,15 +9,13 @@ import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.userapp.R
-import com.example.userapp.base.BaseSessionFragment
-import com.example.userapp.data.model.*
-import com.example.userapp.databinding.FragmentAlarmChildBinding
-import com.example.userapp.utils.CustomedAlarmDialog
-import kotlin.math.sign
+import com.example.adminapp.R
+import com.example.adminapp.base.BaseSessionFragment
+import com.example.adminapp.data.model.*
+import com.example.adminapp.databinding.FragmentAlarmChildBinding
+import com.example.adminapp.utils.CustomedAlarmDialog
 
-
-class AlarmAllFragment() : BaseSessionFragment<FragmentAlarmChildBinding, AlarmViewModel>(){
+class AlarmNoticeFragment : BaseSessionFragment<FragmentAlarmChildBinding, AlarmViewModel>(){
     override lateinit var viewbinding: FragmentAlarmChildBinding
     override val viewmodel: AlarmViewModel by viewModels()
     private lateinit var alarmRVAdapter: AlarmRVAdapter
@@ -34,7 +31,7 @@ class AlarmAllFragment() : BaseSessionFragment<FragmentAlarmChildBinding, AlarmV
     override fun initDataBinding(savedInstanceState: Bundle?) { }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
-        viewmodel.getAlarmAllList().observe(viewLifecycleOwner){
+        viewmodel.getAlarmNoticeList().observe(viewLifecycleOwner){
             if (it.isEmpty()){ showEmptyView() }
             else showRV(it)
         }

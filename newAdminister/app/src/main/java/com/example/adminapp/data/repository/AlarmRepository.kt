@@ -1,8 +1,8 @@
-package com.example.userapp.data.repository
+package com.example.adminapp.data.repository
 
 import android.util.Log
-import com.example.userapp.data.AppDatabase
-import com.example.userapp.data.model.AlarmItem
+import com.example.adminapp.data.AppDatabase
+import com.example.adminapp.data.model.AlarmItem
 import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.Completable
 
@@ -25,6 +25,7 @@ class AlarmRepository (appDatabase: AppDatabase) {
 
     private val firestore = FirebaseFirestore.getInstance()
 
+    //TODO : 승인 관련 로직으로 바꾸기.
     fun makeReservationLogUsing (agency: String, documentId: String){
         firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_LOG)
             .document(documentId).update("reservationState", "사용중")

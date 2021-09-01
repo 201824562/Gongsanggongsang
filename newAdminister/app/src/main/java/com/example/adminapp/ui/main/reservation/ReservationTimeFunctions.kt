@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import java.time.DayOfWeek
 import java.time.Duration
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -45,6 +46,19 @@ fun getMonthDayString(stringTime : String) : String {
     val localTime = changeStringToLocalDateTime(stringTime)
     return if (localTime.dayOfMonth < 10 ) "0${localTime.dayOfMonth}"
     else "${localTime.dayOfMonth}"
+}
+@RequiresApi(Build.VERSION_CODES.O)
+fun getTimePassedString(stringTime: String) : String {
+    val localDate = changeStringToLocalDateTime(stringTime).toLocalDate()
+    val currentDate = LocalDate.now()
+    val localDateTime = changeStringToLocalDateTime(stringTime)
+    val currentDateTime = LocalDateTime.now()
+    val duration = Duration.between(localDateTime, currentDateTime)
+    return if (localDate.isEqual(currentDate)){
+        if (duration.toHours() == 0L) "${duration.toMinutes()}분 전"
+        else "${duration.toHours()}시간 전"
+    }
+    else localDate.toString().substring(5)
 }
  @RequiresApi(Build.VERSION_CODES.O)
  fun changeStringToLocalDateTime(str : String) : LocalDateTime {

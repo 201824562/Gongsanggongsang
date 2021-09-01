@@ -25,6 +25,9 @@
     <style name="TabCustomText16" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">16sp</item>
     </style>
+    <style name="TabCustomText18" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">18sp</item>
+    </style>
     <!-- TODO : tabIndicator 탭 인디케이터  안보임 -->
     <style name="TabCustomStyle" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">16sp</item>
