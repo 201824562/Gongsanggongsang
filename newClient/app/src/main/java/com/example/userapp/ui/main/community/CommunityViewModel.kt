@@ -14,6 +14,7 @@ import com.example.userapp.data.AppDatabase
 import com.example.userapp.data.entity.PostCommentDataClass
 import com.example.userapp.data.model.AlarmItem
 import com.example.userapp.data.model.PostDataInfo
+import com.example.userapp.data.model.RemoteUserInfo
 import com.example.userapp.data.repository.AlarmRepository
 import com.example.userapp.data.repository.CommunityDataRepository
 import com.example.userapp.utils.SingleLiveEvent
@@ -26,7 +27,7 @@ import kotlinx.coroutines.launch
 class CommunityViewModel(application: Application) : BaseSessionViewModel(application) {
     private val firestore = FirebaseFirestore.getInstance()
     var postCommentUploadSuccess : MutableLiveData<Boolean> = MutableLiveData()
-    var getTokenArrayList : MutableLiveData<ArrayList<String>> = MutableLiveData()
+    var getTokenArrayList : MutableLiveData<ArrayList<RemoteUserInfo>> = MutableLiveData()
     private val communityDataRepository : CommunityDataRepository = CommunityDataRepository.getInstance()
     private val alarmRepository: AlarmRepository = AlarmRepository.getInstance(AppDatabase.getDatabase(application, viewModelScope))
 
@@ -99,18 +100,17 @@ class CommunityViewModel(application: Application) : BaseSessionViewModel(applic
     fun getSearchPostData(collectionName: String, searchKeyword : String) : MutableLiveData<ArrayList<PostDataInfo>>{
         return communityDataRepository.getSearchPostData(agencyInfo, collectionName, searchKeyword)
     }
-    fun getUserToken(userNickname : String) : MutableLiveData<ArrayList<String>> {
-        var getToken: ArrayList<String> = arrayListOf()
-        var getId : String = ""
+    fun getUserToken(userNickname : String) : MutableLiveData<ArrayList<RemoteUserInfo>> {
+        var remoteUserInfo: ArrayList<RemoteUserInfo> = arrayListOf()
         firestore.collection("USER_INFO")
             .whereEqualTo("nickname", userNickname)
             .get()
             .addOnSuccessListener {
                 for (result in it) {
-                    getToken = result["fcmToken"] as ArrayList<String>
-                    getId = result["id"] as String
+                    val remoteInfo = RemoteUserInfo (result["id"] as String, result["fcmToken"] as ArrayList<String>)
+                    remoteUserInfo.add(remoteInfo)
                 }
-                getTokenArrayList.postValue(getToken)
+                getTokenArrayList.postValue(remoteUserInfo)
             }
         return getTokenArrayList
     }
