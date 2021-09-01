@@ -100,6 +100,9 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                         showToast("댓글이 등록되었습니다.")
                         writeComment.setText("")
                         hideKeyboard(viewbinding.root)
+                        writeCommentTagName.text = ""
+                        writeCommentTagName.visibility = View.GONE
+                        writeCommentTagNameDeleteBtn.visibility = View.GONE
                         viewmodel.getPostCommentData(collectionName, documentName).observe(viewLifecycleOwner){
                             postCommentsArray = it
                             commentRecyclerAdapter.notifyDataSetChanged()
@@ -110,6 +113,13 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                         viewmodel.getUserToken(navPostDataInfo.postDataInfo.post_id).observe(viewLifecycleOwner){
                             for(token in it){
                                 viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+                            }
+                        }
+                        if(writeCommentTagName.text != ""){
+                            viewmodel.getUserToken(writeCommentTagName.text.substring(1)).observe(viewLifecycleOwner){
+                                for(token in it){
+                                    viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 댓글에 답변이 달렸어요!", token)
+                                }
                             }
                         }
                     }
@@ -159,7 +169,11 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                     tokenTitle = "함께"
                 }
             }
-            println(localUserName)
+            writeCommentTagNameDeleteBtn.setOnClickListener {
+                writeCommentTagName.text = ""
+                writeCommentTagName.visibility = View.GONE
+                writeCommentTagNameDeleteBtn.visibility = View.GONE
+            }
 
             if(navPostDataInfo.postDataInfo.post_name == localUserName) { postRemoveButton.visibility = View.VISIBLE }
             if(collectionName == "4_WITH" && localUserName == navPostDataInfo.postDataInfo.post_name && !navPostDataInfo.postDataInfo.post_anonymous) { postWithComplete.visibility = View.VISIBLE }
@@ -213,7 +227,10 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
             tagListener = object  : CommunityCommentRecyclerAdapter.OnCommunityCommentItemTagClickListener{
                 override fun onCommentItemTagClick(position: Int) {
                     val tagName = "@" + getItem(position).commentName
-                    viewbinding.writeComment.setText(tagName)
+                    viewbinding.writeCommentTagName.visibility = View.VISIBLE
+                    viewbinding.writeCommentTagNameDeleteBtn.visibility = View.VISIBLE
+                    viewbinding.writeCommentTagName.setText(tagName)
+                    viewbinding.writeComment.setHint("")
                 }
             }
         }
