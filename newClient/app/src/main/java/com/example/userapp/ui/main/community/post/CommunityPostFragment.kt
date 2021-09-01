@@ -48,7 +48,7 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
 
     private lateinit var commentRecyclerAdapter: CommunityCommentRecyclerAdapter
     private var postCommentsArray : ArrayList<PostCommentDataClass> = arrayListOf()
-
+    private var toUserNameTag = ""
     private var localUserName = ""
     private var tokenTitle = ""
     private var tagName = ""
@@ -88,7 +88,7 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                 val postTimeNow : String = LocalTime.now().toString()
                 val postComment = PostCommentDataClass(
                     localUserName,
-                    commentContents = writeComment.text.toString(),
+                    toUserNameTag + " " + writeComment.text,
                     commentDate = postDateNow,
                     commentTime = postTimeNow,
                     commentAnonymous = false,
@@ -113,21 +113,24 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                         val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
                         val data = AlarmItem(documentId, LocalDateTime.now().toString(), localUserName,
                             tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData() )
-                        viewmodel.getUserToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
-                            viewmodel.getTokenArrayList = MutableLiveData()
-                            for(user in it){
-                                for(token in user.fcmToken){
-                                    viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+                        if(localUserName != navArgs.postDataInfo.post_name){
+                            viewmodel.getUserToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
+                                viewmodel.getTokenArrayList = MutableLiveData()
+                                for(user in it){
+                                    for(token in user.fcmToken){
+                                        viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+                                    }
+                                    Log.e("chekckcck", "{$user.id}")
+                                    val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
+                                    val data = AlarmItem(documentId, LocalDateTime.now().toString(), user.id,
+                                        tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData() )
+                                    viewmodel.registerAlarmData(user.id, documentId, data)
                                 }
-                                Log.e("chekckcck", "{$user.id}")
-                                val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
-                                val data = AlarmItem(documentId, LocalDateTime.now().toString(), user.id,
-                                    tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData() )
-                                viewmodel.registerAlarmData(user.id, documentId, data)
                             }
                         }
-                        if(viewbinding.writeCommentTagName.text != ""){
-                            viewmodel.getUserToken(viewbinding.writeCommentTagName.text.substring(1)).observe(viewLifecycleOwner){
+                        if(toUserNameTag != ""){
+                            viewmodel.getTokenArrayList = MutableLiveData()
+                            viewmodel.getUserToken(toUserNameTag).observe(viewLifecycleOwner){
                                 viewmodel.getTokenArrayList = MutableLiveData()
                                 for(user in it){
                                     for(token in user.fcmToken){
@@ -186,6 +189,7 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                 writeCommentTagName.text = ""
                 writeCommentTagName.visibility = View.GONE
                 writeCommentTagNameDeleteBtn.visibility = View.GONE
+                toUserNameTag = ""
             }
             if(navArgs.postDataInfo.post_name == localUserName) { postRemoveButton.visibility = View.VISIBLE }
             if(collectionName != "4_WITH" && navArgs.postDataInfo.post_state != "none"){ postCategory.text = navArgs.postDataInfo.post_state }
@@ -253,6 +257,7 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                     viewbinding.writeCommentTagNameDeleteBtn.visibility = View.VISIBLE
                     viewbinding.writeCommentTagName.setText(tagName)
                     viewbinding.writeComment.setHint("")
+                    toUserNameTag = tagName.substring(1)
                 }
             }
         }

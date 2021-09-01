@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,16 +16,19 @@ import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.data.model.AlarmItem
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentSettingsOutWriteBinding
 import com.example.userapp.ui.main.community.CommunityViewModel
 import com.example.userapp.ui.main.community.write.CommunityAttachPhotoRecyclerAdapter
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 
 
@@ -104,6 +108,18 @@ class SettingsOutWriteFragment : BaseSessionFragment<FragmentSettingsOutWriteBin
                     )
                     viewmodel.insertPostData(postData).observe(viewLifecycleOwner){
                         if(it){
+                            viewmodel.getUserToken("관리자").observe(viewLifecycleOwner){
+                                viewmodel.getTokenArrayList = MutableLiveData()
+                                for(user in it){
+                                    for(token in user.fcmToken){
+                                        viewmodel.registerNotificationToFireStore("퇴실", "퇴실 신청이 등록됐어요!", token)
+                                    }
+                                    val documentId = LocalDateTime.now().toString() + collectionName + userName  //TODO : 날짜 + 타입 + 보내는사람닉네임
+                                    val data = AlarmItem(documentId, LocalDateTime.now().toString(), user.id,
+                                        "퇴실 신청이 등록됐어요!", "퇴실", null,  postData.makeToPostAlarmData())
+                                    viewmodel.registerAlarmData(user.id, documentId, data)
+                                }
+                            }
                             findNavController().navigate(R.id.action_settingOutWrite_to_settingOutLog)
                         }
                     }

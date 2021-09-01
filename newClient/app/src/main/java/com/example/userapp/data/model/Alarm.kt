@@ -27,7 +27,7 @@ data class SignUpAlarmData(
     val nickname: String = "", val birthday: String, val smsInfo : String, var allowed: Boolean)
 
 enum class AlarmType(val type : String) {
-    NOTICE("공지"), RESERVATION("공용"), EMERGENCY("긴급"),
+    NOTICE("공지"), RESERVATION("공용"), EMERGENCY("긴급"), FREE("자유"),
     TOGETHER("함께"), SUGGEST("건의"), MARKET("장터"), OUT("퇴실"); //, SIGNUP("가입승인")
     companion object{
         fun makeStringToEnumData(type : String) : AlarmType{
