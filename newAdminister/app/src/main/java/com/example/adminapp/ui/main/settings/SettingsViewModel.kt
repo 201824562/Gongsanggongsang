@@ -74,7 +74,7 @@ class SettingsViewModel(application: Application) : BaseSessionViewModel(applica
     }
     fun makeWaitingUserDelete(userdata: User){ apiCall(adminRepository.deleteWaitingUser(userdata)) }
 
-    fun makeWaitingUserAllow(userdata : User){ apiCall(adminRepository.acceptWaitingUser(agencyInfo, userdata)) }
+    fun makeWaitingUserAllow(userdata : User){ apiCall(adminRepository.acceptWaitingUser(userdata)) }
 
     fun makeUserWithdrawal(userdata: User) { apiCall(adminRepository.withdrawalUser(agencyInfo, userdata)) }
 

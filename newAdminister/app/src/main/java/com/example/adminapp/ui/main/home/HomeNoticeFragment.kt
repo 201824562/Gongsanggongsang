@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -56,7 +57,13 @@ class HomeNoticeFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeBinding
                 findNavController().navigate(R.id.action_communityNotice_to_communitySearch, collectionNameBundle)
             }
             previewWriteButton.setOnClickListener { findNavController().navigate(R.id.action_noticeFragment_to_noticeWriteFragment) }
+            mainhomeNoticeShowAllButton.isSelected = true
+            mainhomeNoticeShowAllButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.applemint))
             mainhomeNoticeShowAllButton.setOnClickListener {
+                makeButtonsUnselected()
+                it.isSelected = true
+                mainhomeNoticeShowAllButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.applemint))
+                mainhomeNoticeShowAllButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.applemint))
                 viewmodel.getNoticePostData().observe(viewLifecycleOwner){
                     noticePreviewItem = it
                     initNoticeRecyclerView()
@@ -64,6 +71,9 @@ class HomeNoticeFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeBinding
                 }
             }
             mainhomeNoticeShowNoticeButton.setOnClickListener {
+                makeButtonsUnselected()
+                it.isSelected = true
+                mainhomeNoticeShowNoticeButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.applemint))
                 viewmodel.getNoticeCategoryPostData("공지").observe(viewLifecycleOwner){
                     noticePreviewItem = it
                     initNoticeRecyclerView()
@@ -71,6 +81,9 @@ class HomeNoticeFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeBinding
                 }
             }
             mainhomeNoticeShowEventButton.setOnClickListener {
+                makeButtonsUnselected()
+                it.isSelected = true
+                mainhomeNoticeShowEventButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.applemint))
                 viewmodel.getNoticeCategoryPostData("행사").observe(viewLifecycleOwner){
                     noticePreviewItem = it
                     initNoticeRecyclerView()
@@ -79,6 +92,9 @@ class HomeNoticeFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeBinding
 
             }
             mainhomeNoticeShowEtcButton.setOnClickListener {
+                makeButtonsUnselected()
+                it.isSelected = true
+                mainhomeNoticeShowEtcButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.applemint))
                 viewmodel.getNoticeCategoryPostData("기타").observe(viewLifecycleOwner){
                     noticePreviewItem = it
                     initNoticeRecyclerView()
@@ -108,5 +124,22 @@ class HomeNoticeFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeBinding
                 }
         }
         noticePreviewRecyclerAdapter.notifyDataSetChanged()
+    }
+
+    private fun makeButtonsUnselected(){
+        viewbinding.run {
+            mainhomeNoticeShowAllButton.apply {
+                isSelected = false
+                setTextColor(ContextCompat.getColor(context, R.color.black_20)) }
+            mainhomeNoticeShowNoticeButton.apply {
+                isSelected = false
+                setTextColor(ContextCompat.getColor(context, R.color.black_20)) }
+            mainhomeNoticeShowEventButton.apply {
+                isSelected = false
+                setTextColor(ContextCompat.getColor(context, R.color.black_20)) }
+            mainhomeNoticeShowEtcButton.apply {
+                isSelected = false
+                setTextColor(ContextCompat.getColor(context, R.color.black_20)) }
+        }
     }
 }

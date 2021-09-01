@@ -15,6 +15,7 @@ import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.data.model.*
 import com.example.userapp.databinding.FragmentAlarmChildBinding
 import com.example.userapp.utils.CustomedAlarmDialog
+import com.example.userapp.utils.WrapedDialogBasicOneButton
 import kotlin.math.sign
 
 
@@ -41,15 +42,17 @@ class AlarmAllFragment() : BaseSessionFragment<FragmentAlarmChildBinding, AlarmV
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun makeDialog(reserveData: ReservationAlarmData?, signData: SignUpAlarmData?){
+    private fun makeDialog(reserveData: ReservationAlarmData?, signData: SignUpAlarmData?, alarmData : AlarmItem?){
         val dialog = CustomedAlarmDialog(requireContext(), reserveData, signData).apply {
             clickListener = object : CustomedAlarmDialog.DialogButtonClickListener{
                 override fun dialogCloseClickListener() {
                     reserveData?.let { viewmodel.makeReservationLogCancel(it.documentId) }
+                    alarmData?.let { viewmodel.makeAlarmItemClickUnable(it.otherUser, it.documentId) }
                     dismiss()
                 }
                 override fun dialogClickListener() {
                     reserveData?.let { viewmodel.makeReservationLogUsing(it.documentId) }
+                    alarmData?.let { viewmodel.makeAlarmItemClickUnable(it.otherUser, it.documentId) }
                     dismiss()
                 }
             }
@@ -57,6 +60,16 @@ class AlarmAllFragment() : BaseSessionFragment<FragmentAlarmChildBinding, AlarmV
         showDialog(dialog, viewLifecycleOwner)
     }
 
+    private fun makeFalseDialog(){
+        val dialog = WrapedDialogBasicOneButton(requireContext(), "이미 처리된 알람입니다.").apply {
+            clickListener = object : WrapedDialogBasicOneButton.DialogButtonClickListener{
+                override fun dialogClickListener() {
+                    dismiss()
+                }
+            }
+        }
+        showDialog(dialog, viewLifecycleOwner)
+    }
 
     //TODO : 삭제된 아이템 클릭시 못넘어가게 해야됨.
     private fun setRecyclerView() {
@@ -65,7 +78,10 @@ class AlarmAllFragment() : BaseSessionFragment<FragmentAlarmChildBinding, AlarmV
             override fun onItemClick(position: Int, alarmData: AlarmItem) {
                 when(alarmData.type){
                     AlarmType.makeEnumDataToString(AlarmType.RESERVATION) -> {
-                        if (alarmData.reservationData != null) makeDialog(alarmData.reservationData, null)
+                        alarmData.reservationData?.let {
+                            if(alarmData.clicked) makeFalseDialog()
+                            else makeDialog(alarmData.reservationData, null, alarmData)
+                        }
                     }
                     AlarmType.makeEnumDataToString(AlarmType.MARKET) -> {
                         postDataBundle = alarmData.postData!!.makeToPostDataInfo()

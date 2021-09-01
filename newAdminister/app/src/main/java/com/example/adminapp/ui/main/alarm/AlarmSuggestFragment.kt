@@ -42,11 +42,11 @@ class AlarmSuggestFragment  : BaseSessionFragment<FragmentAlarmChildBinding, Ala
         val dialog = CustomedAlarmDialog(requireContext(), reserveData, signData).apply {
             clickListener = object : CustomedAlarmDialog.DialogButtonClickListener{
                 override fun dialogCloseClickListener() {
-                    reserveData?.let { viewmodel.makeReservationLogCancel(it.documentId) }
+                    signData?.let { viewmodel.deleteWaitingUser(User(it.agency, it.id, it.pwd, it.name, it.nickname, it.birthday, it.smsInfo, it.allowed)) }
                     dismiss()
                 }
                 override fun dialogClickListener() {
-                    reserveData?.let { viewmodel.makeReservationLogUsing(it.documentId) }
+                    signData?.let { viewmodel.allowWaitingUser(User(it.agency, it.id, it.pwd, it.name, it.nickname, it.birthday, it.smsInfo, it.allowed)) }
                     dismiss()
                 }
             }

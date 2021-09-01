@@ -132,7 +132,7 @@ abstract class BaseSessionViewModel(application: Application)  : AndroidViewMode
         apiCall(userRepository.getAdminNotifyInfo(agency) , { _onSuccessGettingAdminNotifyInfo.postValue(it)})
     }
     fun registerAlarmData(toOther : String, documentId : String, alarmData : AlarmItem, agency: String = "")  {
-        if (agency != "") apiCall(alarmRepository.registerAlarmData(agency!!, toOther, documentId, alarmData), { _onSuccessRegisterAlarmData.call() })
+        if (agency != "") apiCall(alarmRepository.registerAlarmData(agency, toOther, documentId, alarmData), { _onSuccessRegisterAlarmData.call() })
         else apiCall(alarmRepository.registerAlarmData(agencyInfo, toOther, documentId, alarmData), { _onSuccessRegisterAlarmData.call() })
     }
     fun registerNotificationToFireStore(title : String, content : String, toToken : String){

@@ -298,7 +298,7 @@ class AdminRepository(appDatabase: AppDatabase) {
             }
     }
 
-    fun acceptWaitingUser(agencyInfo: String, userdata: User) : Completable {
+    fun acceptWaitingUser(userdata: User) : Completable {
         return Completable.create{ emitter ->
             userdata.allowed = true
             fireStore.collection(FIRESTORE_WAITING_USER_INFO).document(userdata.id)
