@@ -24,6 +24,7 @@ import com.example.userapp.R
 import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.data.model.AlarmItem
 import com.example.userapp.data.model.PostDataInfo
+import com.example.userapp.data.model.RemoteUserInfo
 import com.example.userapp.databinding.FragmentSettingsOutWriteBinding
 import com.example.userapp.ui.main.community.CommunityViewModel
 import com.example.userapp.ui.main.community.write.CommunityAttachPhotoRecyclerAdapter
@@ -45,7 +46,7 @@ class SettingsOutWriteFragment : BaseSessionFragment<FragmentSettingsOutWriteBin
     private val uriArray : ArrayList<Uri> = arrayListOf()
     private lateinit var userAgency : String
     lateinit var userName : String
-
+    var adminData : ArrayList<RemoteUserInfo> = arrayListOf()
     var postPhotoUri : ArrayList<String> = arrayListOf()
     override fun initViewbinding(
         inflater: LayoutInflater,
@@ -71,6 +72,11 @@ class SettingsOutWriteFragment : BaseSessionFragment<FragmentSettingsOutWriteBin
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?){
+        viewmodel.getAdminToken().observe(viewLifecycleOwner) {
+             viewmodel.getTokenArrayList = MutableLiveData()
+            Log.e("admin", "{$it}")
+            adminData = it
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -106,11 +112,11 @@ class SettingsOutWriteFragment : BaseSessionFragment<FragmentSettingsOutWriteBin
                     bundle = bundleOf(
                         "post_data_info" to postData
                     )
-                    viewmodel.insertPostData(postData).observe(viewLifecycleOwner){
-                        if(it){
-                            viewmodel.getAdminToken().observe(viewLifecycleOwner){
-                                viewmodel.getTokenArrayList = MutableLiveData()
-                                for(user in it){
+                    if(uriArray.isEmpty()) {
+                        viewmodel.insertPostData(postData).observe(viewLifecycleOwner) {
+                            if (it) {
+                                Log.e("checkck", "{$it}")
+                                for(user in adminData){
                                     for(token in user.fcmToken){
                                         viewmodel.registerNotificationToFireStore("퇴실", "퇴실 신청이 등록됐어요!", token)
                                     }
@@ -119,9 +125,33 @@ class SettingsOutWriteFragment : BaseSessionFragment<FragmentSettingsOutWriteBin
                                         "퇴실 신청이 등록됐어요!", "퇴실", null,  postData.makeToPostAlarmData(), null)
                                     viewmodel.registerAlarmData(user.id, documentId, data)
                                 }
+                                viewmodel.onSuccessRegisterAlarmData.observe(viewLifecycleOwner){
+                                    findNavController().navigate(R.id.action_settingOutWrite_to_settingOutLog)
+                                }
                             }
-                            viewmodel.onSuccessRegisterAlarmData.observe(viewLifecycleOwner){
-                                findNavController().navigate(R.id.action_settingOutWrite_to_settingOutLog)
+                        }
+                    }
+                    else{
+                        viewmodel.uploadPhoto(bitmapArray, uriArray)
+                        viewmodel.getUploadPhoto().observe(viewLifecycleOwner){
+                            if(it){
+                                viewmodel.insertPostData(postData).observe(viewLifecycleOwner){
+                                    if(it){
+                                        Log.e("checkck", "{$it}")
+                                        for(user in adminData){
+                                            for(token in user.fcmToken){
+                                                viewmodel.registerNotificationToFireStore("퇴실", "퇴실 신청이 등록됐어요!", token)
+                                            }
+                                            val documentId = LocalDateTime.now().toString() + collectionName + userName  //TODO : 날짜 + 타입 + 보내는사람닉네임
+                                            val data = AlarmItem(documentId, LocalDateTime.now().toString(), user.id,
+                                                "퇴실 신청이 등록됐어요!", "퇴실", null,  postData.makeToPostAlarmData(), null)
+                                            viewmodel.registerAlarmData(user.id, documentId, data)
+                                        }
+                                        viewmodel.onSuccessRegisterAlarmData.observe(viewLifecycleOwner){
+                                            findNavController().navigate(R.id.action_settingOutWrite_to_settingOutLog)
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
