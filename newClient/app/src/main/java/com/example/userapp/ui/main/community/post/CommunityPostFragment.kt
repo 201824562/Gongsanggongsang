@@ -20,6 +20,7 @@ import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.data.entity.PostCommentDataClass
 import com.example.userapp.data.model.AlarmItem
 import com.example.userapp.data.model.AlarmType
+import com.example.userapp.data.model.RemoteUserInfo
 import com.example.userapp.databinding.FragmentCommunityPostBinding
 import com.example.userapp.service.sendFireStoreNotification
 import com.example.userapp.ui.main.community.CommunityViewModel
@@ -45,7 +46,8 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
 
     private lateinit var attachPostPhotoRecyclerAdapter: CommunityAttachPostPhotoRecyclerAdapter
     private var remoteGetPhotoUri : ArrayList<String> = arrayListOf()
-
+    private var getAdminToken : ArrayList<RemoteUserInfo> = arrayListOf()
+    private var getUserToken : ArrayList<RemoteUserInfo> = arrayListOf()
     private lateinit var commentRecyclerAdapter: CommunityCommentRecyclerAdapter
     private var postCommentsArray : ArrayList<PostCommentDataClass> = arrayListOf()
     private var toUserNameTag = ""
@@ -77,6 +79,7 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
             initPostView()
             if(collectionName == "4_WITH") { initWithPostView() }
         })
+        if(navArgs.postDataInfo.post_name == "관리자"){ viewmodel.getAdminToken().observe(viewLifecycleOwner){ getAdminToken = it } }
 
     }
     @RequiresApi(Build.VERSION_CODES.O)
@@ -112,35 +115,12 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                         }
 
                         if(localUserName != navArgs.postDataInfo.post_name){
-                            viewmodel.getUserToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
-                                viewmodel.getTokenArrayList = MutableLiveData()
-                                for(user in it){
-                                    for(token in user.fcmToken){
-                                        viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
-                                    }
-
-                                    val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
-                                    val data = AlarmItem(documentId, LocalDateTime.now().toString(), user.id,
-                                        tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData(), null)
-                                    viewmodel.registerAlarmData(user.id, documentId, data)
-                                }
-                            }
+                            if(navArgs.postDataInfo.post_name == "관리자"){ toAdminPushAlarm() }
+                            else { toUserPushAlarm() }
                         }
                         if(toUserNameTag != ""){
-                            viewmodel.getTokenArrayList = MutableLiveData()
-                            viewmodel.getUserToken(toUserNameTag).observe(viewLifecycleOwner){
-                                viewmodel.getTokenArrayList = MutableLiveData()
-                                for(user in it){
-                                    for(token in user.fcmToken){
-                                        viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 댓글에 답변이 달렸어요!", token)
-                                    }
-                                    Log.e("chekckcck", user.id)
-                                    val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
-                                    val data = AlarmItem(documentId, LocalDateTime.now().toString(), user.id,
-                                        tokenTitle + "게시판에 올린 댓글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData(), null)
-                                    viewmodel.registerAlarmData(user.id, documentId, data)
-                                }
-                            }
+                            if(toUserNameTag == "관리자"){ toAdminPushAlarm() }
+                            else { toUserPushAlarm() }
                         }
                     }
                 }
@@ -310,5 +290,40 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
             }
         }
         showDialog(dialog, viewLifecycleOwner)
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun toUserPushAlarm(){
+        viewmodel.getUserToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
+            viewmodel.getTokenArrayList = MutableLiveData()
+            for(user in it){
+                for(token in user.fcmToken){
+                    viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+                }
+                val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
+                val data = AlarmItem(documentId,
+                    LocalDateTime.now().toString(),
+                    user.id,
+                    tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null,
+                    navArgs.postDataInfo.makeToPostAlarmData(),
+                    null)
+                viewmodel.registerAlarmData(user.id, documentId, data)
+            }
+        }
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun toAdminPushAlarm(){
+        for(user in getAdminToken){
+            for(token in user.fcmToken){
+                viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+            }
+            val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
+            val data = AlarmItem(documentId,
+                LocalDateTime.now().toString(),
+                user.id,
+                tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null,
+                navArgs.postDataInfo.makeToPostAlarmData(),
+                null)
+            viewmodel.registerAlarmData(user.id, documentId, data)
+        }
     }
 }
