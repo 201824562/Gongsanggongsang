@@ -42,7 +42,7 @@ class ReservationAlarmReceiver : BroadcastReceiver() {
         )
         val builder =
             NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_alarm)
+                .setSmallIcon(R.drawable.ic_alarm_item_icon)
                 .setContentTitle("물품/시설 사용완료")
                 .setContentText("물품/시설의 사용이 완료되었어요!")
                 .setContentIntent(contentPendingIntent)

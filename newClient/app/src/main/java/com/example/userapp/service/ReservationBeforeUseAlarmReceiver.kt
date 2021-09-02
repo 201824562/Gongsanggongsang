@@ -42,7 +42,7 @@ class ReservationBeforeUseAlarmReceiver: BroadcastReceiver() {
         )
         val builder =
             NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_alarm)
+                .setSmallIcon(R.drawable.ic_alarm_item_icon)
                 .setContentTitle("예약사용알림")
                 .setContentText("예약하신 시설 사용까지 5분 남았어요!")
                 .setContentIntent(contentPendingIntent)
