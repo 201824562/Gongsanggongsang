@@ -104,8 +104,10 @@ class CommunityViewModel(application: Application) : BaseSessionViewModel(applic
             .get()
             .addOnSuccessListener {
                 for (result in it) {
-                    val remoteInfo = RemoteUserInfo (result["id"] as String, result["fcmToken"] as ArrayList<String>)
-                    remoteUserInfo.add(remoteInfo)
+                    if(result["fcmToken"] != null){
+                        val remoteInfo = RemoteUserInfo (result["id"] as String, result["fcmToken"] as ArrayList<String>)
+                        remoteUserInfo.add(remoteInfo)
+                    }
                 }
                 getTokenArrayList.postValue(remoteUserInfo)
             }
@@ -134,8 +136,10 @@ class CommunityViewModel(application: Application) : BaseSessionViewModel(applic
             .get()
             .addOnSuccessListener {
                 for (result in it) {
-                    val remoteInfo = RemoteUserInfo (result["id"] as String, result["fcmToken"] as ArrayList<String>)
-                    remoteUserInfo.add(remoteInfo)
+                    if(result["fcmToken"] != null){
+                        val remoteInfo = RemoteUserInfo (result["id"] as String, result["fcmToken"] as ArrayList<String>)
+                        remoteUserInfo.add(remoteInfo)
+                    }
                 }
                 getTokenArrayList.postValue(remoteUserInfo)
             }
