@@ -127,7 +127,9 @@ class CommunityViewModel(application: Application) : BaseSessionViewModel(applic
                             result["fcmToken"] as ArrayList<String>
                         )
                     }
+                    Log.e("admin22", "{$remoteInfo}")
                     remoteUserInfo.add(remoteInfo)
+                    getTokenArrayList.postValue(remoteUserInfo)
                 }
             }
         return getTokenArrayList
