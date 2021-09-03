@@ -49,14 +49,14 @@ class ReservationCurrentFragment :
         viewbinding.equipmentUsingRecyclerView.adapter = EquipmentUsingAdapter(
             emptyList(),
             onClickNoUsingIcon = {
-                makeDialog(0, "해당 물품의 사용을 종료하시겠습니까?\n", "사용취소", it, null)
+                makeDialog(0, "해당 물품의 사용을 종료하시겠습니까?\n", "사용완료", it, null)
             }
         )
         viewbinding.facilityUsingRecyclerView.layoutManager = LinearLayoutManager(context)
         viewbinding.facilityUsingRecyclerView.adapter = FacilityUsingAdapter(
             emptyList(),
             onClickNoUsingIcon = {
-                makeDialog(1, "해당 시설의 사용을 종료하시겠습니까?\n", "사용취소", it, null)
+                makeDialog(1, "해당 시설의 사용을 종료하시겠습니까?\n", "사용완료", it, null)
 
             }
         )

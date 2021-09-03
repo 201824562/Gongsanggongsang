@@ -119,15 +119,16 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
                 if (e != null) {
                     return@addSnapshotListener
                 }
+                for(data in UseEquipmentData){
+                    data.countdowntimer?.cancel()
+                }
                 UseEquipmentData.clear()
-                for (document in value!!) {
+                for (document in value!!){
                     if (document.get("using") as Boolean) {
                         tmpId = document.getString("user") ?: " "
                         Log.e("test1", tmpId)
 
                         if (tmpId == authToken) { //userdata
-
-
                             remainMilli = (ChronoUnit.MILLIS.between(
                                 LocalDateTime.now(),
                                 LocalDateTime.parse(document.get("endTime") as String)
@@ -363,23 +364,24 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
         map4["using"] = true
         map5["documentId"] = map1["startTime"].toString() + "_" + ReservationEquipment.document_name
 
-
         database.collection("한국장학재단_부산").document("RESERVATION")
-            .collection("EQUIPMENT").document(ReservationEquipment.document_name)
-            .update(map4)
-        database.collection("한국장학재단_부산").document("RESERVATION")
-            .collection("EQUIPMENT").document(ReservationEquipment.document_name)
-            .update(map2)
-        database.collection("한국장학재단_부산").document("RESERVATION")
-            .collection("EQUIPMENT").document(ReservationEquipment.document_name)
-            .update(map3)
-        database.collection("한국장학재단_부산").document("RESERVATION")
-            .collection("EQUIPMENT").document(ReservationEquipment.document_name)
-            .update(map1)
-        database.collection("한국장학재단_부산").document("RESERVATION")
-            .collection("EQUIPMENT").document(ReservationEquipment.document_name)
-            .update(map5)
-
+            .collection("EQUIPMENT")
+            .document(ReservationEquipment.document_name)
+            .set(
+                ReservationEquipmentForUpdateFirebase(
+                    map1["startTime"].toString() + "_" + ReservationEquipment.document_name,
+                    true,
+                    map2["endTime"].toString(),
+                    map1["startTime"].toString(),
+                    true,
+                    ReservationEquipment.document_name,
+                    authToken,
+                    0L,
+                    makeDrawableIDToString(ReservationEquipment.icon),
+                    ReservationEquipment.maxTime
+                )
+            )
+        
         database.collection("한국장학재단_부산").document("RESERVATION")
             .collection("LOG")
             .document(map1["startTime"].toString() + "_" + ReservationEquipment.document_name)
