@@ -158,6 +158,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
             postWithCompleteButton.setOnClickListener {
                 viewmodel.modifyPostPartData(collectionName, documentName, "post_anonymous", true).observe(viewLifecycleOwner){
                     if(it){
+                        postCategory.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_50))
                         postWithComplete.visibility = View.GONE
                         postCategory.text = "판매 완료"
                     }

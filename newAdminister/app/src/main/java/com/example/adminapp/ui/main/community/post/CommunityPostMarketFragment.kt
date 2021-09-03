@@ -153,7 +153,11 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                 viewmodel.modifyPostPartData(collectionName, documentName, "post_anonymous", true).observe(viewLifecycleOwner){
                     if(it){
                         print("success")
-                        if(collectionName == "5_MARKET") { postCategory.text = "판매 완료" }
+                        if(collectionName == "5_MARKET") {
+                            postCategory.text = "판매 완료"
+                            postCategory.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_50))
+                            postWithComplete.visibility = View.GONE
+                        }
                         else {
                             viewmodel.getUserNameToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
                                 viewmodel.getTokenArrayList = MutableLiveData()
@@ -168,6 +172,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                                 }
                             }
                             viewmodel.onSuccessRegisterAlarmData.observe(viewLifecycleOwner){
+                                postCategory.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_50))
                                 postCategory.text = "승인 완료"
                                 postWithComplete.visibility = View.GONE
                             }

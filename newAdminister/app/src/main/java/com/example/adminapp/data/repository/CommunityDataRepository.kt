@@ -29,7 +29,7 @@ class CommunityDataRepository() {
     private var postCommentDeleteSuccess : MutableLiveData<Boolean> = MutableLiveData()
     private var postModifyPartDataSuccess : MutableLiveData<Boolean> = MutableLiveData()
     private var postDataInsertSuccess : MutableLiveData<Boolean> = MutableLiveData()
-    private var postSearchPostDataList : MutableLiveData<ArrayList<PostDataInfo>> = MutableLiveData()
+    var postSearchPostDataList : MutableLiveData<ArrayList<PostDataInfo>> = MutableLiveData()
     private var collectionPostDataListSuccess : MutableLiveData<Boolean> = MutableLiveData()
     private var postDeleteSuccess : MutableLiveData<Boolean> = MutableLiveData()
     private var getDocumentPostDataSuccess : MutableLiveData<Boolean> = MutableLiveData()
