@@ -49,6 +49,7 @@ class CommunityPreviewRecyclerAdapter(var postDataList : ArrayList<PostDataInfo>
             else{
                 binding.communityPreviewName.text = postDataInfo.post_name
             }
+            binding.communityPreviewName.text = postDataInfo.post_name
             binding.communityPreviewCommentsNumber.text = postDataInfo.post_comments.toString()
             binding.communityPreviewTitle.text = postDataInfo.post_title
             binding.communityPreviewContents.text = postDataInfo.post_contents

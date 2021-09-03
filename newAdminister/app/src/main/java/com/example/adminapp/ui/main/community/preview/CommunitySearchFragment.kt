@@ -1,6 +1,7 @@
 package com.example.adminapp.ui.main.community.preview
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,7 +38,7 @@ class CommunitySearchFragment : BaseSessionFragment<FragmentCommunitySearchBindi
     }
 
     override fun initViewStart(savedInstanceState: Bundle?) {
-        collectionName = arguments?.getString("collection_name").toString()
+        collectionName = arguments?.getString("getCollectionName").toString()
 
     }
 
@@ -57,12 +58,13 @@ class CommunitySearchFragment : BaseSessionFragment<FragmentCommunitySearchBindi
             searchCompleteButton.setOnClickListener {
                 if(searchKeyword.text.isNotEmpty()){
                     viewmodel.getSearchPostData(collectionName, searchKeyword.text.toString()).observe(viewLifecycleOwner){
+                        Log.e("checkck", "{$it}")
                         searchKeyword.setText("")
                         hideKeyboard(viewbinding.root)
                         if(it.isEmpty()) { searchNoResultPage.visibility = View.VISIBLE }
                         else {
                             when(collectionName){
-                                "5_market" -> {
+                                "5_MARKET" -> {
                                     communityPreviewMarketItem = it
                                     initMarketRecyclerView()
                                     communityPreviewMarketRecyclerAdapter.notifyDataSetChanged()

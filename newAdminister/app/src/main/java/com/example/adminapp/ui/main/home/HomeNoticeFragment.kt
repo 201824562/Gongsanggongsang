@@ -23,7 +23,7 @@ class HomeNoticeFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeBinding
     override val viewmodel: CommunityViewModel by viewModels()
     private lateinit var noticePreviewRecyclerAdapter: CommunityPreviewRecyclerAdapter
     private var noticePreviewItem : ArrayList<PostDataInfo> = arrayListOf()
-    private var collectionNameBundle : Bundle = bundleOf("collection_name" to "notice")
+    private var collectionNameBundle : Bundle = bundleOf("getCollectionName" to "notice")
 
     override fun initViewbinding(
         inflater: LayoutInflater,
