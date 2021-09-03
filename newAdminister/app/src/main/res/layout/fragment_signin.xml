@@ -40,7 +40,7 @@
                 android:singleLine="true"
                 android:textSize="14sp"
                 android:fontFamily="@font/notosanskr_regular_hestia"
-                android:textColorHint="@color/black_87"
+                android:textColorHint="@color/black_60"
                 android:textColor="@color/black_87"
                 android:imeOptions="actionNext" />
             <EditText
@@ -56,7 +56,7 @@
                 android:imeOptions="actionDone"
                 android:textSize="14sp"
                 android:fontFamily="@font/notosanskr_regular_hestia"
-                android:textColorHint="@color/black_87"
+                android:textColorHint="@color/black_60"
                 android:textColor="@color/black_87"  />
             <LinearLayout
                 android:id="@+id/findInfo_layout"
@@ -105,5 +105,14 @@
         android:textColor="@color/white"
         android:fontFamily="@font/notosanskr_bold_hestia"
         android:background="@drawable/button_5dp_rectangle_bluegreen" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/login_btn"
+        android:layout_marginTop="30dp"
+        android:textSize="14sp"
+        android:textColor="@color/black_20"
+        android:fontFamily="@font/notosanskr_regular_hestia"
+        android:text="관리자 앱의 경우, 공생공생에 문의해주시면 계정을 만들어드리는\n사업구조이기 때문에, 회원가입이 별도로 없습니다.\n*해커톤/ 테스트 아이디 : admin , 테스트 비밀번호 : abc123@"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
