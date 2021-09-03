@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.userapp.MainActivity
 import com.example.userapp.base.BaseSessionViewModel
 import com.example.userapp.data.dto.UserModel
 import com.example.userapp.data.entity.DayTimeSlot
@@ -19,6 +20,7 @@ import com.example.userapp.ui.main.reservation.CategoryResources.Companion.makeD
 import com.example.userapp.ui.main.reservation.CategoryResources.Companion.makeIconStringToDrawableID
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.*
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
@@ -35,7 +37,6 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
     val UseFacilityLiveData = MutableLiveData<List<ReservationUseEquipment>>()
     val EquipmentLiveData = MutableLiveData<List<ReservationEquipment>>()
     val FacilityLiveData = MutableLiveData<List<ReservationFacility>>()
-    val FacilityTimeSlotLiveData = MutableLiveData<List<ReservationFacilityTimeSlot>>()
     val FacilityReserveLiveData = MutableLiveData<List<ReservationReserveFacility>>()
     val FacilityDayInfoLiveData = MutableLiveData<ReservationFacilityDayInfo>()
     val FacilitySelectedTimeSlotLiveData = MutableLiveData<ReservationFacilityDayInfo>()
@@ -45,7 +46,6 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
     private val UseFacilityData = arrayListOf<ReservationUseEquipment>()
     private val EquipmentData = arrayListOf<ReservationEquipment>()
     private val FacilityData = arrayListOf<ReservationFacility>()
-    private val FacilityTimeSlotData = arrayListOf<ReservationFacilityTimeSlot>()
     private val FacilityReserveData = arrayListOf<ReservationReserveFacility>()
     private var FacilityDayInfoData = ReservationFacilityDayInfo(
         "default",
@@ -119,15 +119,16 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
                 if (e != null) {
                     return@addSnapshotListener
                 }
+                for(data in UseEquipmentData){
+                    data.countdowntimer?.cancel()
+                }
                 UseEquipmentData.clear()
-                for (document in value!!) {
-                    if (document.get("user") as String != "") {
+                for (document in value!!){
+                    if (document.get("using") as Boolean) {
                         tmpId = document.getString("user") ?: " "
                         Log.e("test1", tmpId)
 
                         if (tmpId == authToken) { //userdata
-
-
                             remainMilli = (ChronoUnit.MILLIS.between(
                                 LocalDateTime.now(),
                                 LocalDateTime.parse(document.get("endTime") as String)
@@ -167,17 +168,17 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
                     if((document.get("userId") as String == authToken && (document.get("reservationType") as String) == "예약 사용")){
 
                         Log.e("test1",document.id)
-                        val startTimeValid = (ChronoUnit.SECONDS.between(
+                        val startTimeValid = (ChronoUnit.MILLIS.between(
                             LocalDateTime.now(),
                             LocalDateTime.parse(document.get("startTime") as String)
                         ))
-                        val endTimeValid = (ChronoUnit.SECONDS.between(
+                        val endTimeValid = (ChronoUnit.MILLIS.between(
                             LocalDateTime.now(),
                             LocalDateTime.parse(document.get("endTime") as String)
                         ))
                         Log.e("test2",(document.get("reservationState") as String))
 
-                        if(startTimeValid < 0L && endTimeValid >= 0L ){
+                        if(startTimeValid < 0L && endTimeValid >= 0L && document.get("reservationState") as String != "사용 완료"){
                             Log.e("test2",document.id)
 
                             remainMilli = (ChronoUnit.MILLIS.between(
@@ -350,7 +351,7 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun add_use(userInfo: UserModel, ReservationEquipment: ReservationEquipment, usingtime: Int) {
+    fun add_use(userInfo: UserModel, ReservationEquipment: ReservationEquipment, usingtime: Int):String {
         var map1 = mutableMapOf<String, Any>()
         var map2 = mutableMapOf<String, Any>()
         var map3 = mutableMapOf<String, Any>()
@@ -363,23 +364,24 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
         map4["using"] = true
         map5["documentId"] = map1["startTime"].toString() + "_" + ReservationEquipment.document_name
 
-
         database.collection("한국장학재단_부산").document("RESERVATION")
-            .collection("EQUIPMENT").document(ReservationEquipment.document_name)
-            .update(map1)
-        database.collection("한국장학재단_부산").document("RESERVATION")
-            .collection("EQUIPMENT").document(ReservationEquipment.document_name)
-            .update(map2)
-        database.collection("한국장학재단_부산").document("RESERVATION")
-            .collection("EQUIPMENT").document(ReservationEquipment.document_name)
-            .update(map3)
-        database.collection("한국장학재단_부산").document("RESERVATION")
-            .collection("EQUIPMENT").document(ReservationEquipment.document_name)
-            .update(map4)
-        database.collection("한국장학재단_부산").document("RESERVATION")
-            .collection("EQUIPMENT").document(ReservationEquipment.document_name)
-            .update(map5)
-
+            .collection("EQUIPMENT")
+            .document(ReservationEquipment.document_name)
+            .set(
+                ReservationEquipmentForUpdateFirebase(
+                    map1["startTime"].toString() + "_" + ReservationEquipment.document_name,
+                    true,
+                    map2["endTime"].toString(),
+                    map1["startTime"].toString(),
+                    true,
+                    ReservationEquipment.document_name,
+                    authToken,
+                    0L,
+                    makeDrawableIDToString(ReservationEquipment.icon),
+                    ReservationEquipment.maxTime
+                )
+            )
+        
         database.collection("한국장학재단_부산").document("RESERVATION")
             .collection("LOG")
             .document(map1["startTime"].toString() + "_" + ReservationEquipment.document_name)
@@ -398,10 +400,17 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
             )
 
         EquipmentLiveData.value = EquipmentData
+        return map2["endTime"].toString()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun end_use(ReservationUseEquipment: ReservationUseEquipment) {
+        val documentId = LocalDateTime.now().toString() + "공용" + authToken
+        //val reserveData = ReservationAlarmData(documentId, data1.document_name, data1.startTime, data1.endTime)
+        val data = AlarmItem(documentId, LocalDateTime.now().toString(), authToken,
+            "'${ReservationUseEquipment.document_name}' 사용이 종료되었습니다!\n", "공용" , null, null, null)
+        this.registerAlarmData(authToken, documentId, data)
+
         ReservationUseEquipment.countdowntimer?.cancel()
         var map1 = mutableMapOf<String, Any?>()
         var map2 = mutableMapOf<String, Any?>()
@@ -429,7 +438,7 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
         //EQUIPMENT UPDATE
         database.collection("한국장학재단_부산").document("RESERVATION")
             .collection("EQUIPMENT").document(ReservationUseEquipment.document_name)
-            .update(map1)
+            .update(map4)
         database.collection("한국장학재단_부산").document("RESERVATION")
             .collection("EQUIPMENT").document(ReservationUseEquipment.document_name)
             .update(map2)
@@ -438,7 +447,7 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
             .update(map3)
         database.collection("한국장학재단_부산").document("RESERVATION")
             .collection("EQUIPMENT").document(ReservationUseEquipment.document_name)
-            .update(map4)
+            .update(map1)
         database.collection("한국장학재단_부산").document("RESERVATION")
             .collection("EQUIPMENT").document(ReservationUseEquipment.document_name)
             .update(map5)
@@ -527,7 +536,7 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
 
     @SuppressLint("SimpleDateFormat")
     @RequiresApi(Build.VERSION_CODES.O)
-    fun add_reserve(userInfo: UserModel, reservationFacility: ReservationFacility) {
+    fun add_reserve(userInfo: UserModel, reservationFacility: ReservationFacility) : Pair<Calendar, Calendar> {
         var map1 = mutableMapOf<String, Any>()
         var map2 = mutableMapOf<String, Any>()
         var map3 = mutableMapOf<String, Any>()
@@ -539,6 +548,7 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
         val timeFmt: SimpleDateFormat = SimpleDateFormat("HH:mm:00.000")
         var startCal: Calendar = getReserveFacilityStartTime()
         var endCal: Calendar = getReserveFacilityEndTime()
+
 
         Log.e(
             "FacilityDayInfoData.day_time_slot_list2222",
@@ -603,9 +613,19 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
 
         clear_select_time_slot()
         FacilityReserveLiveData.value = FacilityReserveData
+        var calPair = Pair(startCal,endCal)
+        return calPair
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun cancel_reserve(reservationReserveFacility: ReservationReserveFacility) {
+
+        val documentId = LocalDateTime.now().toString() + "공용" + authToken
+        //val reserveData = ReservationAlarmData(documentId, data1.document_name, data1.startTime, data1.endTime)
+        val data = AlarmItem(documentId, LocalDateTime.now().toString(), authToken,
+            "'${reservationReserveFacility.document_name}' 사용이 종료되었습니다!\n", "공용" , null, null, null)
+        this.registerAlarmData(authToken, documentId, data)
+
         Log.e("reservation_weekday",reservationReserveFacility.weekday)
         database.collection("한국장학재단_부산").document("RESERVATION")
             .collection("LOG")
@@ -677,18 +697,6 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
             }
         Log.e("modified tmpList2", tmpList.toString())
 
-
-//        var map1 = mutableMapOf<String, Any>()
-//
-//        map1["name"] = "Nope" // name을 맨마지막으로 지우지 않으면 nullpointerexception 발생
-//
-//        for (timeslot in reservationReserveFacility.timeSlotList) {
-//            database.collection("COMMUNAL_Facility")
-//                .document(reservationReserveFacility.document_name)
-//                .collection(reservationReserveFacility.weekday).document(timeslot)
-//                .update(map1)
-//        }
-//        FacilityReserveLiveData.value = FacilityReserveData
     }
 
     fun weekdayStringToInt(weekdayString: String): Int {
@@ -762,7 +770,7 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
                 @RequiresApi(Build.VERSION_CODES.O)
                 override fun onFinish() {
                     end_use(reservationUseEquipment)
-                    }
+                }
             }.start()
         if(reservationUseEquipment.reservationType == "바로 사용") UseEquipmentData.add(reservationUseEquipment)
         else UseFacilityData.add(reservationUseEquipment)

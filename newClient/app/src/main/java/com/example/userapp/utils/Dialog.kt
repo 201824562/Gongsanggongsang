@@ -24,7 +24,12 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import androidx.core.content.ContextCompat
 import com.example.userapp.R
+import com.example.userapp.data.model.ReservationAlarmData
+import com.example.userapp.data.model.SignUpAlarmData
 import com.example.userapp.databinding.*
+import com.example.userapp.ui.main.alarm.getHourMinuteString
+import com.example.userapp.ui.main.alarm.getMonthDayString
+import com.example.userapp.ui.main.alarm.getMonthString
 import kotlin.system.exitProcess
 
 
@@ -145,6 +150,60 @@ class WrapedDialogBasicOneButton (context: Context, content: String) : Dialog(co
 
         binding.dialogContent.text = content
         binding.dialogBtn.setOnClickListener { clickListener?.dialogClickListener() }
+    }
+}
+@RequiresApi(Build.VERSION_CODES.O)
+class CustomedAlarmDialog (context: Context, reserveData : ReservationAlarmData?, signData : SignUpAlarmData?) : Dialog(context){
+    var clickListener : DialogButtonClickListener ? = null
+    interface DialogButtonClickListener {
+        fun dialogCloseClickListener()
+        fun dialogClickListener()
+    }
+    init {
+        val binding : DialogAlarmBinding = DialogAlarmBinding.inflate(layoutInflater)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        setContentView(binding.root)
+        window?.run {
+            setGravity(Gravity.BOTTOM)
+            setBackgroundDrawable(InsetDrawable(ColorDrawable(Color.TRANSPARENT), 0))
+            attributes.width = ViewGroup.LayoutParams.MATCH_PARENT
+            attributes.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        } ?: exitProcess(0)
+
+        binding.run {
+            if (reserveData != null){
+                val day : String = getMonthString(reserveData.startTime) + "/" + getMonthDayString(reserveData.startTime)
+                val time : String = getHourMinuteString(reserveData.startTime) + " - " + getHourMinuteString(reserveData.endTime)
+                val msg : String =  "메이트님의 예약 정보가 맞다면\n사용시작을 눌러주세요."
+                dialogTitle.text = "예약 사용"
+                dialogContentText1.text = "시설이름"
+                dialogContentText2.text = "예약날짜"
+                dialogContentText3.text = "예약시간"
+                dialogContentVar1.text = reserveData.name
+                dialogContentVar2.text = day
+                dialogContentVar3.text = time
+                dialogMsg.text = msg
+                dialogLeftBtn.text = "사용 취소"
+                dialogRightBtn.text = "사용 시작"
+            }
+            if (signData != null){
+                val birth : String = signData.birthday.substring(0,4) + "/" + signData.birthday.substring(4,6) + "/" + signData.birthday.substring(6,8)
+                val phone : String = signData.smsInfo.substring(0,3) + "-" + signData.smsInfo.substring(4,8) + signData.smsInfo.substring(9,13)
+                val msg : String =  "관리하시는 공간의 회원님이 맞다면\n가입승인을 눌러주세요."
+                dialogTitle.text = "가입 승인"
+                dialogContentText1.text = "이름"
+                dialogContentText2.text = "생년월일"
+                dialogContentText3.text = "전화번호"
+                dialogContentVar1.text = signData.name
+                dialogContentVar2.text = birth
+                dialogContentVar3.text = phone
+                dialogMsg.text = msg
+                dialogLeftBtn.text = "가입 거절"
+                dialogRightBtn.text = "가입 승인"
+            }
+            dialogLeftBtn.setOnClickListener { clickListener?.dialogCloseClickListener() }
+            dialogRightBtn.setOnClickListener { clickListener?.dialogClickListener() }
+        }
     }
 }
 

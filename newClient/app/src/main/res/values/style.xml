@@ -42,6 +42,9 @@
         <item name="tabIndicatorColor">@color/applemint</item>
         <item name="tabIndicatorHeight">3dp</item>
     </style>
+    <style name="TabCustomText18" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">18sp</item>
+    </style>
     <style name="TabCustomText16" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">16sp</item>
     </style>

@@ -55,13 +55,14 @@
                     android:src="@drawable/ic_mainhome_reservation_icon"
                     android:layout_weight="1"
                     android:background="@color/transparent"/>
+
                 <ImageButton
                     android:id="@+id/mainHome_to_suggestCommunity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_community_main_suggest_icon"
                     android:layout_weight="1"
-                    android:background="@color/transparent"/>
+                    android:background="@color/transparent"
+                    android:src="@drawable/ic_mainhome_goto_suggest" />
                 <ImageButton
                     android:id="@+id/mainHome_to_withCommunity"
                     android:layout_width="wrap_content"

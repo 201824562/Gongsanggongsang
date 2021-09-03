@@ -78,7 +78,7 @@ class SignUpViewModel(application: Application) : BaseSessionViewModel(applicati
     var checkedId : String ?= null
     var checkedNickname : String ?= null
     private var personalSignUpInfo : PersonalSignUpInfo ?= null
-    private var signUpInfo : SignUpInfo? =null
+    var signUpInfo : SignUpInfo? =null
 
     fun clearSecondFragmentVar(){
         clearCheckedId()

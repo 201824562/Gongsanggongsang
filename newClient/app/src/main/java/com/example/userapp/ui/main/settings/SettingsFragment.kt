@@ -39,6 +39,7 @@ class SettingsFragment : BaseSessionFragment<FragmentSettingsBinding, SettingsVi
         viewmodel.onSuccessGettingUserInfo.observe(this, { showProfile(it)  })
         viewmodel.onSuccessGettingNullUserInfo.observe(this, { restartActivity() })
         viewmodel.onSuccessDeleteUserInfoFromServer.observe(viewLifecycleOwner){ viewmodel.deleteUserInfoFromAppDatabase() }
+        viewmodel.onSuccessDeleteFcmTokenFromServer.observe(viewLifecycleOwner){  viewmodel.deleteUserInfoFromAppDatabase() }
         viewmodel.onSuccessDeleteUserInfoFromApp.observe(viewLifecycleOwner){ logout() }
     }
 
@@ -87,7 +88,7 @@ class SettingsFragment : BaseSessionFragment<FragmentSettingsBinding, SettingsVi
             clickListener = object : WrapedDialogBasicTwoButton.DialogButtonClickListener{
                 override fun dialogCloseClickListener() { dismiss() }
                 override fun dialogCustomClickListener() {
-                    viewmodel.deleteUserInfoFromAppDatabase()
+                    viewmodel.deleteDeviceTokenFromServerDatabase()
                     dismiss()
                 }
             }

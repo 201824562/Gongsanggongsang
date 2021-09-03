@@ -1,7 +1,9 @@
 package com.example.adminapp.data.repository
 
 import android.content.ContentValues.TAG
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.adminapp.data.model.*
@@ -328,6 +330,7 @@ class ReservationRepository() {
             }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun getReservationUsingFacilityLogList(agency: String, index: Int) : LiveData<List<ReservationFacilityLog>> {
         getReservationUsingFacilityLogListFromFirebase(agency, index)
         return when (index) {
@@ -336,6 +339,7 @@ class ReservationRepository() {
             else -> onSuccessGetReservationUsingFacilityLogList
         }
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun getReservationUsingFacilityLogListFromFirebase(agency: String, index: Int) {
         firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_LOG)
             .whereEqualTo("reservationType", "예약 사용").whereEqualTo("reservationState", "사용중")

@@ -51,7 +51,7 @@ class ReservationLogRVAdapter(private val viewModel : ReservationViewModel) : Li
                                 if (checkingPassTime.isNegative) viewModel.makeReservationLogFinished(item.equipmentLog.documentId) }
                             holder.binding.itemReservationLogReservationType.text = "바로 사용"
                             holder.binding.itemReservationLogName.text = item.equipmentLog.name
-                            holder.binding.itemReservationLogMonth.text = withContext(Dispatchers.IO){ getMonthString(item.equipmentLog.startTime) }
+                                holder.binding.itemReservationLogMonth.text = withContext(Dispatchers.IO){ getMonthString(item.equipmentLog.startTime) }
                             holder.binding.itemReservationLogDay.text = withContext(Dispatchers.IO){ getMonthDayString(item.equipmentLog.startTime) }
                             holder.binding.itemReservationLogStartTime.text = withContext(Dispatchers.IO) { getHourMinuteString(item.equipmentLog.startTime) }
                             holder.binding.itemReservationLogEndTime.text = withContext(Dispatchers.IO) { getHourMinuteString(item.equipmentLog.endTime) }

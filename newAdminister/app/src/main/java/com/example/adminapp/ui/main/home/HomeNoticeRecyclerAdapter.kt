@@ -1,10 +1,15 @@
 package com.example.adminapp.ui.main.home
 
 import android.os.Build
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.core.os.bundleOf
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.example.adminapp.R
 import com.example.adminapp.data.model.PostDataInfo
 import com.example.adminapp.databinding.FragmentMainhomeHomePartItemBinding
 import java.time.LocalDate
@@ -48,6 +53,10 @@ class HomeNoticeRecyclerAdapter(var postDataList : ArrayList<PostDataInfo>): Rec
                     else{ homeNoticePartItemDate.text = "${hour}시간 전" }
                 }
                 else{ homeNoticePartItemDate.text = it.post_date.substring(5) }
+                itemLayout.setOnClickListener {view ->
+                    val bundle = bundleOf("post_data_info" to it)
+                    view.findNavController().navigate(R.id.action_mainFragment_to_communityPostMarket, bundle)
+                }
             }
         }
     }

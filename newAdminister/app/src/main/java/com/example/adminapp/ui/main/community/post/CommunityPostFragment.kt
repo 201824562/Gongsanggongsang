@@ -1,7 +1,6 @@
 package com.example.adminapp.ui.main.community.post
 
 import android.annotation.SuppressLint
-import android.content.ContentValues.TAG
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -19,16 +18,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.adminapp.R
 import com.example.adminapp.base.BaseSessionFragment
 import com.example.adminapp.data.entity.PostCommentDataClass
+import com.example.adminapp.data.model.AlarmItem
 import com.example.adminapp.databinding.FragmentCommunityPostBinding
 import com.example.adminapp.ui.main.community.CommunityViewModel
 import com.example.adminapp.ui.main.community.write.CommunityAttachPostPhotoRecyclerAdapter
 import com.example.adminapp.utils.WrapedDialogBasicTwoButton
 import com.example.adminapp.utils.hideKeyboard
-import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 
 
@@ -36,7 +33,7 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
     override lateinit var viewbinding: FragmentCommunityPostBinding
     override val viewmodel: CommunityViewModel by viewModels()
 
-    private val navPostDataInfo : CommunityPostFragmentArgs by navArgs()
+    private val navArgs : CommunityPostFragmentArgs by navArgs()
     private lateinit var collectionName : String
     private lateinit var documentName : String
     private lateinit var bundle: Bundle
@@ -49,7 +46,9 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
 
     private var localUserName = "관리자"
     private var agency = ""
-    private var token = ""
+    private var tokenTitle = ""
+    private var toUserNameTag = ""
+    private var tokenContent = ""
     override fun initViewbinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -99,6 +98,9 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                         showToast("댓글이 등록되었습니다.")
                         writeComment.setText("")
                         hideKeyboard(viewbinding.root)
+                        writeCommentTagName.text = ""
+                        writeCommentTagName.visibility = View.GONE
+                        writeCommentTagNameDeleteBtn.visibility = View.GONE
                         viewmodel.getPostCommentData(collectionName, documentName).observe(viewLifecycleOwner){
                             postCommentsArray = it
                             commentRecyclerAdapter.notifyDataSetChanged()
@@ -106,7 +108,40 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                             communityPostCommentsNumber.text = it.size.toString()
                             viewmodel.modifyPostPartData(collectionName, documentName, "post_comments", it.size)
                         }
-                        viewmodel.registerNotificationToFireStore("공생공생", "댓글이 달렸어요!")
+                        if(localUserName != navArgs.postDataInfo.post_name){
+                            viewmodel.getUserToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
+                                viewmodel.getTokenArrayList = MutableLiveData()
+                                for(user in it){
+                                    for(token in user.fcmToken){
+                                        viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+                                    }
+                                    val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
+                                    val data = AlarmItem(documentId,
+                                        LocalDateTime.now().toString(),
+                                        user.id,
+                                        tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null,
+                                        navArgs.postDataInfo.makeToPostAlarmData(),
+                                        null)
+                                    viewmodel.registerAlarmData(user.id, documentId, data)
+                                }
+                            }
+                        }
+                        if(toUserNameTag != ""){
+                            viewmodel.getTokenArrayList = MutableLiveData()
+                            viewmodel.getUserToken(toUserNameTag).observe(viewLifecycleOwner){
+                                viewmodel.getTokenArrayList = MutableLiveData()
+                                for(user in it){
+                                    for(token in user.fcmToken){
+                                        viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 댓글에 답변이 달렸어요!", token)
+                                    }
+                                    Log.e("chekckcck", user.id)
+                                    val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
+                                    val data = AlarmItem(documentId, LocalDateTime.now().toString(), user.id,
+                                        tokenTitle + "게시판에 올린 댓글에 답변이 달렸어요!", tokenTitle, null, navArgs.postDataInfo.makeToPostAlarmData(), null)
+                                    viewmodel.registerAlarmData(user.id, documentId, data)
+                                }
+                            }
+                        }
                     }
                 }
                 //sendNotification(PushNotification)
@@ -129,44 +164,60 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
     private fun initPostView(){
         val postDateNow: String = LocalDate.now().toString()
         val postTimeNow: String = LocalTime.now().toString()
-        collectionName= navPostDataInfo.postDataInfo.post_category
-        documentName = navPostDataInfo.postDataInfo.post_id
+        collectionName= navArgs.postDataInfo.post_category
+        documentName = navArgs.postDataInfo.post_id
 
         initCommentRecyclerView()
         initPhotoRecyclerView()
 
         viewbinding.run {
             when(collectionName){
-                "1_FREE" -> postToolbarName.text = "자유게시판"
-                "2_EMERGENCY" -> postToolbarName.text = "긴급게시판"
-                "3_SUGGEST" -> postToolbarName.text = "건의게시판"
-                "4_WITH" -> postToolbarName.text = "함께게시판"
-                "5_MARKET" -> postToolbarName.text = "장터게시판"
+                "1_FREE" -> {
+                    postToolbarName.text = "자유게시판"
+                    tokenTitle = "자유"
+                }
+                "2_EMERGENCY" -> {
+                    postToolbarName.text = "긴급게시판"
+                    tokenTitle = "긴급"
+                }
+                "3_SUGGEST" -> {
+                    postToolbarName.text = "건의게시판"
+                    tokenTitle = "건의"
+                }
+                "4_WITH" -> {
+                    postToolbarName.text = "함께게시판"
+                    tokenTitle = "함께"
+                }
             }
-            println(localUserName)
+            writeCommentTagNameDeleteBtn.setOnClickListener {
+                writeCommentTagName.text = ""
+                writeCommentTagName.visibility = View.GONE
+                writeCommentTagNameDeleteBtn.visibility = View.GONE
+                toUserNameTag = ""
+            }
 
-            if(navPostDataInfo.postDataInfo.post_name == localUserName) { postRemoveButton.visibility = View.VISIBLE }
-            if(collectionName == "4_WITH" && localUserName == navPostDataInfo.postDataInfo.post_name && !navPostDataInfo.postDataInfo.post_anonymous) { postWithComplete.visibility = View.VISIBLE }
-            if(navPostDataInfo.postDataInfo.post_state != "none"){ postCategory.text = navPostDataInfo.postDataInfo.post_state }
-            if(collectionName == "4_WITH" && navPostDataInfo.postDataInfo.post_state == "none" && !navPostDataInfo.postDataInfo.post_anonymous) {
+            if(navArgs.postDataInfo.post_name == localUserName) { postRemoveButton.visibility = View.VISIBLE }
+            if(collectionName == "4_WITH" && localUserName == navArgs.postDataInfo.post_name && !navArgs.postDataInfo.post_anonymous) { postWithComplete.visibility = View.VISIBLE }
+            if(navArgs.postDataInfo.post_state != "none"){ postCategory.text = navArgs.postDataInfo.post_state }
+            if(collectionName == "4_WITH" && navArgs.postDataInfo.post_state == "none" && !navArgs.postDataInfo.post_anonymous) {
                 postCategory.text = "모집 중"
                 postCategory.setTextColor(ContextCompat.getColor(requireContext(), R.color.pale_orange))
             }
-            if(collectionName == "4_WITH" && navPostDataInfo.postDataInfo.post_state == "none" && navPostDataInfo.postDataInfo.post_anonymous) {postCategory.text = "모집 완료"}
+            if(collectionName == "4_WITH" && navArgs.postDataInfo.post_state == "none" && navArgs.postDataInfo.post_anonymous) {postCategory.text = "모집 완료"}
 
-            if(navPostDataInfo.postDataInfo.post_date == postDateNow) {
-                val hour = postTimeNow.substring(0,2).toInt() - navPostDataInfo.postDataInfo.post_time.substring(0,2).toInt()
-                val minute = postTimeNow.substring(3,5).toInt() - navPostDataInfo.postDataInfo.post_time.substring(3,5).toInt()
+            if(navArgs.postDataInfo.post_date == postDateNow) {
+                val hour = postTimeNow.substring(0,2).toInt() - navArgs.postDataInfo.post_time.substring(0,2).toInt()
+                val minute = postTimeNow.substring(3,5).toInt() - navArgs.postDataInfo.post_time.substring(3,5).toInt()
                 if(hour == 0){ communityPostTime.text = "${minute}분 전" }
                 else{ communityPostTime.text = "${hour}시간 전" }
             }
-            else{ communityPostTime.text = navPostDataInfo.postDataInfo.post_date.substring(5) }
+            else{ communityPostTime.text = navArgs.postDataInfo.post_date.substring(5) }
 
-            communityPostName.text = navPostDataInfo.postDataInfo.post_name
-            postContents.text = navPostDataInfo.postDataInfo.post_contents
-            postTitle.text = navPostDataInfo.postDataInfo.post_title
+            communityPostName.text = navArgs.postDataInfo.post_name
+            postContents.text = navArgs.postDataInfo.post_contents
+            postTitle.text = navArgs.postDataInfo.post_title
 
-            viewmodel.getPostPhotoData(navPostDataInfo.postDataInfo.post_photo_uri)
+            viewmodel.getPostPhotoData(navArgs.postDataInfo.post_photo_uri)
             viewmodel.getPostPhotoSuccess().observe(viewLifecycleOwner){
                 remoteGetPhotoUri = it
                 initPhotoRecyclerView()
@@ -197,7 +248,11 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
             tagListener = object  : CommunityCommentRecyclerAdapter.OnCommunityCommentItemTagClickListener{
                 override fun onCommentItemTagClick(position: Int) {
                     val tagName = "@" + getItem(position).commentName
-                    viewbinding.writeComment.setText(tagName)
+                    viewbinding.writeCommentTagName.visibility = View.VISIBLE
+                    viewbinding.writeCommentTagNameDeleteBtn.visibility = View.VISIBLE
+                    viewbinding.writeCommentTagName.setText(tagName)
+                    viewbinding.writeComment.setHint("")
+                    toUserNameTag = tagName.substring(1)
                 }
             }
         }

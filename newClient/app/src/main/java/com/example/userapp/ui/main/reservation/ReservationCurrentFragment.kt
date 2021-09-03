@@ -12,18 +12,23 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.data.model.AlarmItem
+import com.example.userapp.data.model.ReservationAlarmData
 import com.example.userapp.data.model.ReservationReserveFacility
 import com.example.userapp.data.model.ReservationUseEquipment
 import com.example.userapp.databinding.FragmentMainhomeReservationCurrentBinding
 import com.example.userapp.databinding.FragmentMainhomeReservationCurrentReserveItemBinding
 import com.example.userapp.databinding.FragmentMainhomeReservationCurrentUsingFacilityItemBinding
 import com.example.userapp.databinding.FragmentMainhomeReservationCurrentUsingItemBinding
+import com.example.userapp.utils.WrapedDialogBasicTwoButton
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 class ReservationCurrentFragment :
     BaseSessionFragment<FragmentMainhomeReservationCurrentBinding, ReservationViewModel>() {
@@ -40,27 +45,29 @@ class ReservationCurrentFragment :
         return viewbinding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    //@RequiresApi(Build.VERSION_CODES.O)
     override fun initViewStart(savedInstanceState: Bundle?) {
         viewbinding.equipmentUsingRecyclerView.layoutManager = LinearLayoutManager(context)
         viewbinding.equipmentUsingRecyclerView.adapter = EquipmentUsingAdapter(
             emptyList(),
             onClickNoUsingIcon = {
-                viewmodel.end_use(it)
+                makeDialog(0, "해당 물품의 사용을 종료하시겠습니까?\n", "사용완료", it, null)
             }
         )
         viewbinding.facilityUsingRecyclerView.layoutManager = LinearLayoutManager(context)
         viewbinding.facilityUsingRecyclerView.adapter = FacilityUsingAdapter(
             emptyList(),
             onClickNoUsingIcon = {
-                viewmodel.end_use(it)
+                makeDialog(1, "해당 시설의 사용을 종료하시겠습니까?\n", "사용완료", it, null)
+
             }
         )
         viewbinding.facilityReserveRecyclerView.layoutManager = LinearLayoutManager(context)
         viewbinding.facilityReserveRecyclerView.adapter = FacilityReserveAdapter(
             emptyList(),
             onClickNoUsingIcon = {
-                viewmodel.cancel_reserve(it)
+                makeDialog(2, "해당 시설의 예약을 취소하시겠습니까?\n", "예약취소", null, it)
+
             }
         )
 
@@ -120,6 +127,34 @@ class ReservationCurrentFragment :
         viewmodel.getUseFacilityData()
         viewmodel.getReserveFacilityData()
     }
+
+    private fun makeDialog(type : Int, content : String, btnText : String, data1 : ReservationUseEquipment?, data2 : ReservationReserveFacility?){
+        val dialog = WrapedDialogBasicTwoButton(requireContext(), content , "취소", btnText).apply {
+            clickListener = object : WrapedDialogBasicTwoButton.DialogButtonClickListener{
+                override fun dialogCloseClickListener() { dismiss() }
+                @RequiresApi(Build.VERSION_CODES.O)
+                override fun dialogCustomClickListener() {
+                    when(type){
+                        0 -> {
+                            viewmodel.end_use(data1!!)
+                            (activity as MainActivity).setUseCompleteAlarm(Calendar.getInstance(),true, data1.document_name.hashCode())
+                        }
+                        1 -> {
+                            viewmodel.end_use(data1!!)
+                            (activity as MainActivity).setUseCompleteAlarm(Calendar.getInstance(),true,(data1.document_name+data1.endTime).hashCode())
+                        }
+                        2 -> {
+                            viewmodel.cancel_reserve(data2!!)
+                            (activity as MainActivity).setUseCompleteAlarm(Calendar.getInstance(),true,(data2.document_name+ data2.endTime).hashCode())
+                        }
+                    }
+                    dismiss()
+                }
+            }
+        }
+        showDialog(dialog, viewLifecycleOwner)
+    }
+
 }
 
 class EquipmentUsingAdapter(
@@ -169,6 +204,7 @@ class EquipmentUsingAdapter(
     }
 
     override fun getItemCount() = dataSet.size
+
 }
 
 class FacilityUsingAdapter(

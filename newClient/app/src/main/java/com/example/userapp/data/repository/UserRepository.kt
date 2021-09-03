@@ -5,11 +5,9 @@ import android.content.ContentValues
 import android.content.Context
 import android.util.Log
 import androidx.core.content.edit
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import com.example.userapp.base.BaseSessionViewModel
 import com.example.userapp.data.AppDatabase
 import com.example.userapp.data.dto.UserModel
-import com.example.userapp.data.entity.User
 import com.example.userapp.data.model.Agency
 import com.example.userapp.data.model.ReceiverSignIn
 import com.example.userapp.data.model.SignUpInfo
@@ -17,7 +15,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.Completable
 import io.reactivex.Single
 
-//TODO : 와이파이(서버연결관련) 에러처리
 class UserRepository(appDatabase: AppDatabase) {
 
     companion object {
@@ -30,6 +27,7 @@ class UserRepository(appDatabase: AppDatabase) {
                     instance
                 }
         }
+        private val FIRESTORE_ADMINISTER = "ADMINISTER"
         private val FIRESTORE_AGENCY = "SIGN_UP_AGENCY"
         private val FIRESTORE_WAITING_USER_INFO = "USER_INFO_WAITING"
         private val FIRESTORE_ALLOWED_USER_INFO = "USER_INFO"
@@ -42,6 +40,61 @@ class UserRepository(appDatabase: AppDatabase) {
     private var storedAgency: String? = null
     private var storeFcmToken : String? = null
     private var storedToken: String? = null
+
+
+    fun getAdminTokens(agencyInfo: String) : Single<List<String>> {
+        return Single.create{ emitter ->
+            fireStore.collection(FIRESTORE_ADMINISTER).whereEqualTo("agency", agencyInfo)
+                .get()
+                .addOnSuccessListener {
+                    when {
+                        it.isEmpty -> emitter.onError(Throwable("Error getting SEARCHED AGENGYINFO at SIGN_UP_AGENCY"))
+                        it.documents.isEmpty() -> emitter.onError(Throwable("Error getting SEARCHED AGENGYINFO at SIGN_UP_AGENCY"))
+                        else ->
+                        {   val tokenList : MutableList<String> = mutableListOf()
+                            for (document in it){
+                                if ((document["fcmToken"] != null)){
+                                        val list : List<String> = document["fcmToken"] as ArrayList<String>
+                                        tokenList.addAll(list)
+                                    }
+                            }
+                            emitter.onSuccess(tokenList)
+                        }
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                    emitter.onError(Throwable("Error getting SEARCHED AGENGYINFO at SIGN_UP_AGENCY"))
+                }
+        }
+    }
+
+    fun getAdminNotifyInfo(agencyInfo: String) : Single<List<BaseSessionViewModel.AdminNotifyInfo>> {
+        return Single.create{ emitter ->
+            fireStore.collection(FIRESTORE_ADMINISTER).whereEqualTo("agency", agencyInfo)
+                .get()
+                .addOnSuccessListener {
+                    when {
+                        it.isEmpty -> emitter.onError(Throwable("Error getting SEARCHED AGENGYINFO at SIGN_UP_AGENCY"))
+                        it.documents.isEmpty() -> emitter.onError(Throwable("Error getting SEARCHED AGENGYINFO at SIGN_UP_AGENCY"))
+                        else ->
+                        {   val tokenList : MutableList<BaseSessionViewModel.AdminNotifyInfo> = mutableListOf()
+                            for (document in it){
+                                if ((document["fcmToken"] != null)){
+                                    val adminNotifyInfo = BaseSessionViewModel.AdminNotifyInfo(document["id"] as String, document["fcmToken"] as ArrayList<String>)
+                                    tokenList.add(adminNotifyInfo)
+                                }
+                            }
+                            emitter.onSuccess(tokenList)
+                        }
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                    emitter.onError(Throwable("Error getting SEARCHED AGENGYINFO at SIGN_UP_AGENCY"))
+                }
+        }
+    }
 
     fun getAgencyInfo(application : Application)  : String? {
         val sharedPreferences = application.getSharedPreferences(SHARED_PREFERENCES_AGENCY, Context.MODE_PRIVATE)
@@ -389,6 +442,29 @@ class UserRepository(appDatabase: AppDatabase) {
                 .addOnFailureListener { exception ->
                     Log.w(ContentValues.TAG, "Error todo changeUserInfo: ", exception)
                     emitter.onError(Throwable("Error doing changeUserInfo"))
+                }
+        }
+    }
+    fun deleteUsersDeviceToken(userId : String, deviceToken : String) : Completable {
+        return Completable.create{ emitter ->
+            fireStore.collection(FIRESTORE_ALLOWED_USER_INFO).document(userId)
+                .get()
+                .addOnSuccessListener {
+                    Log.d(ContentValues.TAG, "getUserInfo Successed!!")
+                    val fcmTokenList : MutableList<String> = it["fcmToken"] as ArrayList<String>
+                    fcmTokenList.removeIf { fcmToken -> fcmToken == deviceToken }
+                    fireStore.collection(FIRESTORE_ALLOWED_USER_INFO).document(userId).update("fcmToken", fcmTokenList)
+                        .addOnSuccessListener {
+                            Log.d(ContentValues.TAG, "delete UserDeviceToken Succeed!!")
+                            emitter.onComplete()
+                        }.addOnFailureListener { exception ->
+                            Log.w(ContentValues.TAG, "Error todo deleteDeviceToken: ", exception)
+                            emitter.onError(Throwable("Error doing deleteDeviceToken"))
+                        }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error todo deleteDeviceToken: ", exception)
+                    emitter.onError(Throwable("Error doing deleteDeviceToken"))
                 }
         }
     }
