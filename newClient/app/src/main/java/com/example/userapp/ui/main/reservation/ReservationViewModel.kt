@@ -405,6 +405,12 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun end_use(ReservationUseEquipment: ReservationUseEquipment) {
+        val documentId = LocalDateTime.now().toString() + "공용" + authToken
+        //val reserveData = ReservationAlarmData(documentId, data1.document_name, data1.startTime, data1.endTime)
+        val data = AlarmItem(documentId, LocalDateTime.now().toString(), authToken,
+            "'${ReservationUseEquipment.document_name}' 사용이 종료되었습니다!\n", "공용" , null, null, null)
+        this.registerAlarmData(authToken, documentId, data)
+
         ReservationUseEquipment.countdowntimer?.cancel()
         var map1 = mutableMapOf<String, Any?>()
         var map2 = mutableMapOf<String, Any?>()
@@ -611,7 +617,15 @@ class ReservationViewModel(application: Application) : BaseSessionViewModel(appl
         return calPair
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun cancel_reserve(reservationReserveFacility: ReservationReserveFacility) {
+
+        val documentId = LocalDateTime.now().toString() + "공용" + authToken
+        //val reserveData = ReservationAlarmData(documentId, data1.document_name, data1.startTime, data1.endTime)
+        val data = AlarmItem(documentId, LocalDateTime.now().toString(), authToken,
+            "'${reservationReserveFacility.document_name}' 사용이 종료되었습니다!\n", "공용" , null, null, null)
+        this.registerAlarmData(authToken, documentId, data)
+
         Log.e("reservation_weekday",reservationReserveFacility.weekday)
         database.collection("한국장학재단_부산").document("RESERVATION")
             .collection("LOG")

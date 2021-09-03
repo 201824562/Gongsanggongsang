@@ -15,6 +15,8 @@ import coil.load
 import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.data.model.AlarmItem
+import com.example.userapp.data.model.ReservationAlarmData
 import com.example.userapp.data.model.ReservationReserveFacility
 import com.example.userapp.data.model.ReservationUseEquipment
 import com.example.userapp.databinding.FragmentMainhomeReservationCurrentBinding
@@ -143,8 +145,7 @@ class ReservationCurrentFragment :
                         }
                         2 -> {
                             viewmodel.cancel_reserve(data2!!)
-                            // (activity as MainActivity).setUseCompleteAlarm(Calendar.getInstance(),true,(it.document_name+it.endTime).hashCode())
-
+                            (activity as MainActivity).setUseCompleteAlarm(Calendar.getInstance(),true,(data2.document_name+ data2.endTime).hashCode())
                         }
                     }
                     dismiss()
