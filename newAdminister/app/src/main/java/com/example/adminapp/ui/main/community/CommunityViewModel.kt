@@ -150,6 +150,6 @@ class CommunityViewModel(application: Application) : BaseSessionViewModel(applic
     val onSuccessRegisterAlarmData : LiveData<AlarmItem> get() = _onSuccessRegisterAlarmData
 
     fun registerAlarmData(toOther : String, documentId : String, alarmData : AlarmItem)  {
-        apiCall(alarmRepository.registerAlarmData(agencyInfo, toOther, documentId, alarmData), { _onSuccessRegisterAlarmData.call() })
+        apiCall(alarmRepository.registerAlarmData(agencyInfo, toOther, documentId, alarmData), { _onSuccessRegisterAlarmData.call() }, {})
     }
 }

@@ -36,7 +36,7 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 
 class HomeNoticeWriteFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeWriteBinding, CommunityViewModel>() {
-    private lateinit var collectionName : String
+    private var collectionName : String = "notice"
 
     override lateinit var viewbinding: FragmentMainhomeHomeNoticeWriteBinding
     override val viewmodel: CommunityViewModel by viewModels()
@@ -152,12 +152,11 @@ class HomeNoticeWriteFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeWr
                                             for(token in user.fcmToken){
                                                 viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
                                             }
-                                            Log.e("chekckcck", "{$user.id}")
                                             val documentId = LocalDateTime.now().toString() + collectionName + "관리자"  //TODO : 날짜 + 타입 + 보내는사람닉네임
                                             val data = AlarmItem(documentId,
                                                 LocalDateTime.now().toString(),
                                                 user.id,
-                                                "공지사항 어요!", tokenTitle, null,
+                                                "공지사항이 있어요!", tokenTitle, null,
                                                     postData.makeToPostAlarmData(),
                                                 null)
                                             viewmodel.registerAlarmData(user.id, documentId, data)

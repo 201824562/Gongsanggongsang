@@ -70,6 +70,11 @@ class SettingsOutWriteFragment : BaseSessionFragment<FragmentSettingsOutWriteBin
 
         initAttachPhotoRecycler()
     }
+    override fun onDetach() {
+        super.onDetach()
+        val ac = activity as MainActivity
+        ac.selectedItems.clear()
+    }
 
     override fun initDataBinding(savedInstanceState: Bundle?){
         viewmodel.getAdminToken().observe(viewLifecycleOwner) {

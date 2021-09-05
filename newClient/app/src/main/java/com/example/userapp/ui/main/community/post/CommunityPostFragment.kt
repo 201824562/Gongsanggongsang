@@ -120,7 +120,7 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
                         }
                         if(toUserNameTag != ""){
                             if(toUserNameTag == "관리자"){ toAdminPushAlarm() }
-                            else { toUserPushAlarm() }
+                            else { toUserTagPushAlarm() }
                         }
                     }
                 }
@@ -295,6 +295,25 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun toUserPushAlarm(){
         viewmodel.getUserToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
+            viewmodel.getTokenArrayList = MutableLiveData()
+            for(user in it){
+                for(token in user.fcmToken){
+                    viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+                }
+                val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
+                val data = AlarmItem(documentId,
+                    LocalDateTime.now().toString(),
+                    user.id,
+                    tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null,
+                    navArgs.postDataInfo.makeToPostAlarmData(),
+                    null)
+                viewmodel.registerAlarmData(user.id, documentId, data)
+            }
+        }
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun toUserTagPushAlarm(){
+        viewmodel.getUserToken(toUserNameTag).observe(viewLifecycleOwner){
             viewmodel.getTokenArrayList = MutableLiveData()
             for(user in it){
                 for(token in user.fcmToken){

@@ -8,6 +8,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.userapp.MainActivity
 import com.example.userapp.R
 import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.data.model.PostDataInfo
@@ -40,7 +41,7 @@ class SettingsOutFragment : BaseSessionFragment<FragmentSettingsOutBinding, Comm
     override fun initDataBinding(savedInstanceState: Bundle?) {
 
     }
-
+    
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run {
             previewWriteRegisterButton.setOnClickListener { findNavController().navigate(R.id.action_settingsOut_to_settingsOutWrite) }

@@ -64,6 +64,8 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
     override fun initViewStart(savedInstanceState: Bundle?) {
         //val ac = activity as MainActivity
         //token = ac.token
+        collectionName = navArgs.postDataInfo.post_category
+        documentName = navArgs.postDataInfo.post_id
         viewmodel.getUserInfo()
         viewmodel.onSuccessGettingUserInfo.observe(this, {
             agency = it.agency
@@ -147,7 +149,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                         }
                         if(toUserNameTag != ""){
                             if(toUserNameTag == "관리자"){ toAdminPushAlarm() }
-                            else { toUserPushAlarm() }
+                            else { toUserTagPushAlarm() }
                         }
                     }
                 }
@@ -290,14 +292,14 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                 }
                 override fun dialogCustomClickListener() {
                     when(isPostOrComment){
-                        "isPost" -> viewmodel.deletePostData(collectionName, documentName).observe(viewLifecycleOwner){
+                        "isPost" -> viewmodel.deletePostData(navArgs.postDataInfo.post_category, documentName).observe(viewLifecycleOwner){
                             if(it){
                                 findNavController().navigate(R.id.action_community_post_pop)
                             }
                         }
                         "isComment" -> viewmodel.deletePostCommentData(collectionName, documentName, commentData).observe(viewLifecycleOwner){
                             if(it){
-                                viewmodel.getPostCommentData(collectionName, documentName).observe(viewLifecycleOwner){
+                                viewmodel.getPostCommentData(navArgs.postDataInfo.post_category, documentName).observe(viewLifecycleOwner){
                                     postCommentsArray = it
                                     viewmodel.modifyPostPartData(collectionName, documentName, "post_comments", it.size)
                                     commentRecyclerAdapter.notifyDataSetChanged()
@@ -315,6 +317,25 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
     @RequiresApi(Build.VERSION_CODES.O)
     private fun toUserPushAlarm(){
         viewmodel.getUserToken(navArgs.postDataInfo.post_name).observe(viewLifecycleOwner){
+            viewmodel.getTokenArrayList = MutableLiveData()
+            for(user in it){
+                for(token in user.fcmToken){
+                    viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+                }
+                val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
+                val data = AlarmItem(documentId,
+                    LocalDateTime.now().toString(),
+                    user.id,
+                    tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", tokenTitle, null,
+                    navArgs.postDataInfo.makeToPostAlarmData(),
+                    null)
+                viewmodel.registerAlarmData(user.id, documentId, data)
+            }
+        }
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun toUserTagPushAlarm(){
+        viewmodel.getUserToken(toUserNameTag).observe(viewLifecycleOwner){
             viewmodel.getTokenArrayList = MutableLiveData()
             for(user in it){
                 for(token in user.fcmToken){

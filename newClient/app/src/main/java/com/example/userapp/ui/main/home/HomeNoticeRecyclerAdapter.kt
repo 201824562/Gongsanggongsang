@@ -53,7 +53,7 @@ class HomeNoticeRecyclerAdapter(var postDataList : ArrayList<PostDataInfo>): Rec
                 else{ homeNoticePartItemDate.text = it.post_date.substring(5) }
                 itemLayout.setOnClickListener {view ->
                     val bundle = bundleOf("post_data_info" to it)
-                    view.findNavController().navigate(R.id.action_mainFragment_to_communityPostMarket, bundle)
+                    view.findNavController().navigate(R.id.action_mainFragment_to_communityPost, bundle)
                 }
             }
         }

@@ -64,6 +64,8 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
         //val ac = activity as MainActivity
         //token = ac.token
         initPostView()
+        collectionName = navArgs.postDataInfo.post_category
+        documentName = navArgs.postDataInfo.post_id
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
