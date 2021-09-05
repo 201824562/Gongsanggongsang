@@ -124,7 +124,7 @@ class HomeNoticeWriteFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeWr
                             if(it){
                                 for(user in getUserToken){
                                     for(token in user.fcmToken){
-                                        viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+                                        viewmodel.registerNotificationToFireStore(tokenTitle, "공지사항이 있어요!", token)
                                     }
                                     Log.e("chekckcck", "{$user.id}")
                                     val documentId = LocalDateTime.now().toString() + "notice" + "관리자"  //TODO : 날짜 + 타입 + 보내는사람닉네임
@@ -150,7 +150,7 @@ class HomeNoticeWriteFragment : BaseSessionFragment<FragmentMainhomeHomeNoticeWr
                                     if(it){
                                         for(user in getUserToken){
                                             for(token in user.fcmToken){
-                                                viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "게시판에 올린 글에 답변이 달렸어요!", token)
+                                                viewmodel.registerNotificationToFireStore(tokenTitle, "공지사항이 있어요!", token)
                                             }
                                             val documentId = LocalDateTime.now().toString() + collectionName + "관리자"  //TODO : 날짜 + 타입 + 보내는사람닉네임
                                             val data = AlarmItem(documentId,

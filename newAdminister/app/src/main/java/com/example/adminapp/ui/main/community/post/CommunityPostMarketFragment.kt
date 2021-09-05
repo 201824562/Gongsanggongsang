@@ -163,7 +163,7 @@ class CommunityPostMarketFragment : BaseSessionFragment<FragmentCommunityPostMar
                                 viewmodel.getTokenArrayList = MutableLiveData()
                                 for(user in it){
                                     for(token in user.fcmToken){
-                                        viewmodel.registerNotificationToFireStore(tokenTitle, tokenTitle + "퇴실 신청이 승인되었어요!", token)
+                                        viewmodel.registerNotificationToFireStore(tokenTitle, "퇴실 신청이 승인되었어요!", token)
                                     }
                                     val documentId = LocalDateTime.now().toString() + collectionName + localUserName  //TODO : 날짜 + 타입 + 보내는사람닉네임
                                     val data = AlarmItem(documentId, LocalDateTime.now().toString(), user.id,
