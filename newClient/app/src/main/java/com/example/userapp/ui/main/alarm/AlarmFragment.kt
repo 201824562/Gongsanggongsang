@@ -44,21 +44,19 @@ class AlarmFragment: BaseSessionFragment<FragmentMainhomeAlarmBinding, AlarmView
                 override fun onTabUnselected(tab: TabLayout.Tab?) {}
                 override fun onTabReselected(tab: TabLayout.Tab?) { viewbinding.alarmViewpager.setCurrentItem(tab!!.position, false) } })
             TabLayoutMediator(alarmTab, alarmViewpager){ tab, position ->
-                val tabTextList = arrayListOf("전체", "공지/긴급","커뮤니티", "공용")
+                val tabTextList = arrayListOf("전체", "공지")
                 tab.text = tabTextList[position] }.attach() }
     }
 }
 
 class AlarmViewPagerAdapter (activity: FragmentActivity) : FragmentStateAdapter(activity) {
 
-    override fun getItemCount(): Int = 4
+    override fun getItemCount(): Int = 2
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> AlarmAllFragment()
             1 -> AlarmNoticeFragment()
-            2 -> AlarmCommunityFragment()
-            3 -> AlarmReservationFragment()
             else -> error("no such position: $position")
         }
     }

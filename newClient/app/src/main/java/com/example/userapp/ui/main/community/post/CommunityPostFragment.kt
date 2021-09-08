@@ -77,7 +77,6 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
         viewmodel.onSuccessGettingUserInfo.observe(this, {
             localUserName = it.nickname
             initPostView()
-            if(collectionName == "4_WITH") { initWithPostView() }
         })
         if(navArgs.postDataInfo.post_name == "관리자"){ viewmodel.getAdminToken().observe(viewLifecycleOwner){ getAdminToken = it } }
 
@@ -142,22 +141,6 @@ class CommunityPostFragment : BaseSessionFragment<FragmentCommunityPostBinding, 
 
         viewbinding.run {
             when(collectionName){
-                "1_FREE" -> {
-                    postToolbarName.text = "자유게시판"
-                    tokenTitle = "자유"
-                }
-                "2_EMERGENCY" -> {
-                    postToolbarName.text = "긴급게시판"
-                    tokenTitle = "긴급"
-                }
-                "3_SUGGEST" -> {
-                    postToolbarName.text = "건의게시판"
-                    tokenTitle = "건의"
-                }
-                "4_WITH" -> {
-                    postToolbarName.text = "함께게시판"
-                    tokenTitle = "함께"
-                }
                 "notice" -> {
                     postToolbarName.text = "공지 글"
                     tokenTitle = "공지"

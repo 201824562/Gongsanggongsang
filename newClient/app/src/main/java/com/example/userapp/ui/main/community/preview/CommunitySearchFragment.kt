@@ -26,8 +26,6 @@ class CommunitySearchFragment : BaseSessionFragment<FragmentCommunitySearchBindi
 
     private lateinit var communityPreviewRecyclerAdapter : CommunityPreviewRecyclerAdapter
     private var communityPreviewItem : ArrayList<PostDataInfo> = arrayListOf()
-    private lateinit var communityPreviewMarketRecyclerAdapter: CommunityPreviewMarketRecyclerAdapter
-    private var communityPreviewMarketItem = arrayListOf<PostDataInfo>()
 
     private lateinit var collectionName : String
     override fun initViewbinding(
@@ -66,9 +64,6 @@ class CommunitySearchFragment : BaseSessionFragment<FragmentCommunitySearchBindi
                         else {
                             when(collectionName){
                                 "5_market" -> {
-                                    communityPreviewMarketItem = it
-                                    initMarketRecyclerView()
-                                    communityPreviewMarketRecyclerAdapter.notifyDataSetChanged()
                                 }
                                 else -> {
                                     communityPreviewItem = it
@@ -106,24 +101,5 @@ class CommunitySearchFragment : BaseSessionFragment<FragmentCommunitySearchBindi
                 }
         }
         communityPreviewRecyclerAdapter.notifyDataSetChanged()
-    }
-    private fun initMarketRecyclerView(){
-        viewbinding.communityPreviewRecyclerView.run {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context)
-            adapter = CommunityPreviewMarketRecyclerAdapter(communityPreviewMarketItem)
-        }
-        communityPreviewMarketRecyclerAdapter = CommunityPreviewMarketRecyclerAdapter(communityPreviewMarketItem)
-        viewbinding.communityPreviewRecyclerView.adapter = communityPreviewMarketRecyclerAdapter.apply {
-            listener = object : CommunityPreviewMarketRecyclerAdapter.OnCommunityMarketItemClickListener {
-                override fun onPreviewItemClick(position: Int) {
-                    var postItemDataInfo : PostDataInfo = getItem(position)
-                    var bundle = bundleOf(
-                        "post_data_info" to postItemDataInfo
-                    )
-                    findNavController().navigate(R.id.action_communitySearch_to_communityPostMarket, bundle)
-                }
-            }
-        }
     }
 }

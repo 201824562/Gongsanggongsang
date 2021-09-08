@@ -14,7 +14,6 @@ import com.example.userapp.base.BaseSessionFragment
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentMainhomeHomeBinding
 import com.example.userapp.ui.main.community.CommunityViewModel
-import com.example.userapp.ui.main.community.preview.CommunityPreviewMarketRecyclerAdapter
 
 class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityViewModel>(){
     override lateinit var viewbinding: FragmentMainhomeHomeBinding
@@ -48,32 +47,12 @@ class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityV
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewmodel.getUserInfo()
-        viewbinding.run {
-            mainHomeToEquipmentReservation.setOnClickListener {
-                findNavController().navigate(R.id.action_mainFragment_to_reservationEquipmentFragment)
-            }
-            mainHomeToFacilityReservation.setOnClickListener {
-                findNavController().navigate(R.id.action_mainFragment_to_reservationFacilityFragment)
-            }
-            mainHomeToSuggestCommunity.setOnClickListener {
-                toCollectionBundle = bundleOf( "getCollectionName" to "3_SUGGEST")
-                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, toCollectionBundle)
-            }
-            mainHomeToWithCommunity.setOnClickListener {
-                toCollectionBundle = bundleOf( "getCollectionName" to "4_WITH")
-                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, toCollectionBundle)
-            }
-            mainHomeToMarketCommunity.setOnClickListener {
-                toCollectionBundle = bundleOf( "getCollectionName" to "5_MARKET")
-                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, toCollectionBundle)
-            }
-            mainHomeNoticeAllButton.setOnClickListener {
-                findNavController().navigate(R.id.action_mainFragment_to_mainhomeNoticeFragment)
-            }
-        }
     }
     private fun initMainHomeNoticeRecyclerView(){
         viewbinding.run {
+            mainHomeNoticeAllButton.setOnClickListener {
+                findNavController().navigate(R.id.action_mainFragment_to_mainhomeNoticeFragment)
+            }
             homeNoticeRecyclerAdapter = HomeNoticeRecyclerAdapter(homeNoticeItem)
             mainHomeNoticeNoticeRecycler.run {
                 setHasFixedSize(true)
