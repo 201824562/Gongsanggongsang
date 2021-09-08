@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.R
-import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.ui.base.BaseSessionFragment
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentMainhomeHomeBinding
 import com.example.userapp.ui.main.community.CommunityViewModel

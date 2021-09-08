@@ -3,7 +3,6 @@ package com.example.adminapp
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
@@ -16,10 +15,9 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.viewbinding.ViewBinding
-import com.example.adminapp.base.BaseActivity
-import com.example.adminapp.base.BaseSessionFragment
-import com.example.adminapp.base.BaseSessionViewModel
-import com.example.adminapp.data.model.AdminModel
+import com.example.adminapp.ui.base.BaseActivity
+import com.example.adminapp.ui.base.BaseSessionFragment
+import com.example.adminapp.ui.base.BaseSessionViewModel
 import com.example.adminapp.databinding.ActivityMainBinding
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() {

@@ -5,12 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.adminapp.MainActivity
 import com.example.adminapp.R
-import com.example.adminapp.base.BaseSessionFragment
+import com.example.adminapp.ui.base.BaseSessionFragment
 import com.example.adminapp.data.model.AdminModel
 import com.example.adminapp.databinding.FragmentSettingsBinding
 import com.example.adminapp.restartActivity

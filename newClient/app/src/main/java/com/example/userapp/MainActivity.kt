@@ -17,7 +17,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.viewbinding.ViewBinding
-import com.example.userapp.base.*
+import com.example.userapp.ui.base.*
 import com.example.userapp.databinding.ActivityMainBinding
 import com.example.userapp.service.ReservationAlarmReceiver
 import com.example.userapp.service.ReservationBeforeUseAlarmReceiver

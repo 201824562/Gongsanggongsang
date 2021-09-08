@@ -11,7 +11,7 @@ import androidx.core.content.getSystemService
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.adminapp.R
-import com.example.adminapp.base.BaseSessionFragment
+import com.example.adminapp.ui.base.BaseSessionFragment
 import com.example.adminapp.databinding.FragmentSplashBinding
 import com.example.adminapp.restartActivity
 import kotlinx.coroutines.*
@@ -58,7 +58,7 @@ class SplashFragment : BaseSessionFragment<FragmentSplashBinding, SplashViewMode
         findNavController().navigate(R.id.action_splashFragment_to_mainFragment)
     }
 
-    private fun notUserEvent() {  // App 내 Token 은 유효하지만 서버 Token 이 유효하지 않을 때
+    private fun notUserEvent() {
         try { } catch (e: Exception) {
             findNavController().navigate(R.id.action_global_signInFragment)
         } finally {

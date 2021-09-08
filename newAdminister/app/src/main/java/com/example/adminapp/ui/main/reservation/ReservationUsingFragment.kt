@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.adminapp.base.BaseSessionFragment
+import com.example.adminapp.ui.base.BaseSessionFragment
 import com.example.adminapp.data.model.*
 import com.example.adminapp.databinding.FragmentReservationChildUsingBinding
 import com.example.adminapp.ui.main.MainFragmentDirections

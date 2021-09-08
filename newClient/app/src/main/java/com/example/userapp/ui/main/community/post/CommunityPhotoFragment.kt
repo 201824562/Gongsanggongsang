@@ -11,8 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.R
-import com.example.userapp.base.BaseFragment
-import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.ui.base.BaseFragment
+import com.example.userapp.ui.base.BaseSessionFragment
 import com.example.userapp.databinding.FragmentCommunityPhotoBinding
 import com.example.userapp.ui.main.community.CommunityViewModel
 import com.example.userapp.ui.main.community.write.CommunityPhotoRecyclerAdapter

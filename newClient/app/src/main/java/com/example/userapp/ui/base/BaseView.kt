@@ -1,4 +1,4 @@
-package com.example.userapp.base
+package com.example.userapp.ui.base
 
 import android.app.Activity
 import android.view.View

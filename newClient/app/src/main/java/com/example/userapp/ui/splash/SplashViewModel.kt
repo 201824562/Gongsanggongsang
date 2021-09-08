@@ -2,7 +2,7 @@ package com.example.userapp.ui.splash
 
 import android.app.Application
 import androidx.lifecycle.LiveData
-import com.example.userapp.base.BaseSessionViewModel
+import com.example.userapp.ui.base.BaseSessionViewModel
 import com.example.userapp.utils.SingleLiveEvent
 
 class SplashViewModel(application: Application) : BaseSessionViewModel(application) {

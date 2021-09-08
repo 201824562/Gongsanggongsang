@@ -1,24 +1,20 @@
 package com.example.adminapp.ui.main.reservation.edit
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.example.adminapp.base.BaseSessionFragment
+import com.example.adminapp.ui.base.BaseSessionFragment
 import com.example.adminapp.data.model.*
 import com.example.adminapp.databinding.FragmentReservationEditChildBinding
 import com.example.adminapp.databinding.ItemReservationEditSettingBinding
-import com.example.adminapp.ui.main.reservation.ReservationViewModel
-import com.example.adminapp.ui.main.reservation.edit.ReservationEditFragmentDirections
 
 class ReservationEditEquipmentFragment : BaseSessionFragment<FragmentReservationEditChildBinding, ReservationEditViewModel>() {
 

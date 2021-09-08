@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import com.example.adminapp.base.BaseSessionFragment
+import com.example.adminapp.ui.base.BaseSessionFragment
 import com.example.adminapp.data.model.ReservationLogItem
 import com.example.adminapp.databinding.FragmentReservationChildLogChildBinding
 import com.example.adminapp.ui.main.reservation.log.ReservationLogFragment.Companion.TAB_INDEX_ALL

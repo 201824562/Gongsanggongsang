@@ -2,7 +2,7 @@ package com.example.adminapp.ui.splash
 
 import android.app.Application
 import androidx.lifecycle.LiveData
-import com.example.adminapp.base.BaseSessionViewModel
+import com.example.adminapp.ui.base.BaseSessionViewModel
 import com.example.adminapp.utils.SingleLiveEvent
 
 

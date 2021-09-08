@@ -11,8 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.example.userapp.base.BaseFragment
-import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.ui.base.BaseFragment
+import com.example.userapp.ui.base.BaseSessionFragment
 import com.example.userapp.databinding.FragmentMainhomeReservationBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator

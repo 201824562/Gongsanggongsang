@@ -14,11 +14,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.adminapp.R
-import com.example.adminapp.base.BaseSessionFragment
+import com.example.adminapp.ui.base.BaseSessionFragment
 import com.example.adminapp.data.model.*
 import com.example.adminapp.databinding.FragmentReservationDetailFacilityLogBinding
 import com.example.adminapp.databinding.ItemReservationDetail2Binding
-import com.example.adminapp.databinding.ItemReservationDetailBinding
 import com.example.adminapp.ui.main.reservation.*
 import com.example.adminapp.utils.WrapedDialogBasicTwoButton
 import kotlinx.coroutines.CoroutineScope

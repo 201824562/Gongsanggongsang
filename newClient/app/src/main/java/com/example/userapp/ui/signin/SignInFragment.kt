@@ -11,7 +11,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.example.userapp.R
-import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.ui.base.BaseSessionFragment
 import com.example.userapp.data.model.UserStatus
 import com.example.userapp.databinding.FragmentSigninBinding
 import com.example.userapp.restartActivity

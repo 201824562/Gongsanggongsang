@@ -5,7 +5,7 @@ import android.content.ContentValues
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.adminapp.base.BaseSessionViewModel
+import com.example.adminapp.ui.base.BaseSessionViewModel
 import com.example.adminapp.data.model.*
 import com.example.adminapp.data.repository.ReservationRepository
 import com.example.adminapp.utils.SingleLiveEvent

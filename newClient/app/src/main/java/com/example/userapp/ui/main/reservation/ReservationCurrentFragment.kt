@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.userapp.MainActivity
 import com.example.userapp.R
-import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.ui.base.BaseSessionFragment
 import com.example.userapp.data.model.AlarmItem
 import com.example.userapp.data.model.ReservationAlarmData
 import com.example.userapp.data.model.ReservationReserveFacility

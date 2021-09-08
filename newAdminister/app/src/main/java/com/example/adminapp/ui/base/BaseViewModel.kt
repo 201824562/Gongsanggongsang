@@ -1,10 +1,9 @@
-package com.example.adminapp.base
+package com.example.adminapp.ui.base
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import com.example.adminapp.utils.SnackbarMessageString
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 
 abstract class BaseViewModel  : ViewModel(){
 
@@ -15,10 +14,6 @@ abstract class BaseViewModel  : ViewModel(){
     override fun onCleared() {
         compositeDisposable.dispose()
         super.onCleared()
-    }
-
-    private fun addDisposable(disposable: Disposable){
-        compositeDisposable.add(disposable)
     }
 
     fun observeSnackbarMessageString(lifecycleOwner: LifecycleOwner, ob: (String) -> Unit){

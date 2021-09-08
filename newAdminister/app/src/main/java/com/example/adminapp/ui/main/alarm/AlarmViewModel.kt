@@ -5,14 +5,12 @@ import android.content.ContentValues
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.example.adminapp.base.BaseSessionViewModel
-import com.example.adminapp.base.BaseViewModel
+import com.example.adminapp.ui.base.BaseSessionViewModel
 import com.example.adminapp.data.AppDatabase
 import com.example.adminapp.data.model.*
 import com.example.adminapp.data.model.AlarmType.Companion.makeStringToEnumData
 import com.example.adminapp.data.repository.AlarmRepository
 import com.example.adminapp.utils.SingleLiveEvent
-import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 

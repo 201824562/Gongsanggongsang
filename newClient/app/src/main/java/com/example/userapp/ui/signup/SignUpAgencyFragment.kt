@@ -17,8 +17,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.example.userapp.R
-import com.example.userapp.base.BaseFragment
-import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.ui.base.BaseFragment
+import com.example.userapp.ui.base.BaseSessionFragment
 import com.example.userapp.data.model.Agency
 import com.example.userapp.databinding.FragmentSignupAgencyBinding
 import com.example.userapp.restartActivity

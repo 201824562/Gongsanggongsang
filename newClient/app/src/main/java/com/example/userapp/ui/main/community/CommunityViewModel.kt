@@ -9,7 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.userapp.base.BaseSessionViewModel
+import com.example.userapp.ui.base.BaseSessionViewModel
 import com.example.userapp.data.AppDatabase
 import com.example.userapp.data.entity.PostCommentDataClass
 import com.example.userapp.data.model.AlarmItem

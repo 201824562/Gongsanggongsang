@@ -10,7 +10,7 @@ import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.userapp.base.BaseViewModel
+import com.example.userapp.ui.base.BaseViewModel
 import com.example.userapp.data.model.Agency
 import com.example.userapp.databinding.ItemSignupSearchListBinding
 

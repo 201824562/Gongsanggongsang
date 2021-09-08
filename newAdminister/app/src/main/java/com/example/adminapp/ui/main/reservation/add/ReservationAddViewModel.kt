@@ -3,7 +3,7 @@ package com.example.adminapp.ui.main.reservation.add
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.example.adminapp.base.BaseSessionViewModel
+import com.example.adminapp.ui.base.BaseSessionViewModel
 import com.example.adminapp.data.AppDatabase
 import com.example.adminapp.data.model.*
 import com.example.adminapp.data.repository.CategoryRepository

@@ -1,9 +1,8 @@
 package com.example.adminapp.ui.signin
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.LiveData
-import com.example.adminapp.base.BaseSessionViewModel
+import com.example.adminapp.ui.base.BaseSessionViewModel
 import com.example.adminapp.data.model.AdminModel
 import com.example.adminapp.data.model.AdminStatus
 import com.example.adminapp.service.getFCMToken

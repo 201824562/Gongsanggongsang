@@ -21,7 +21,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.MainActivity
 import com.example.userapp.R
-import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.ui.base.BaseSessionFragment
 import com.example.userapp.data.model.AlarmItem
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.data.model.RemoteUserInfo

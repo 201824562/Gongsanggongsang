@@ -20,8 +20,8 @@ import androidx.core.widget.addTextChangedListener
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.example.userapp.R
-import com.example.userapp.base.BaseFragment
-import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.ui.base.BaseFragment
+import com.example.userapp.ui.base.BaseSessionFragment
 import com.example.userapp.data.model.AlarmItem
 import com.example.userapp.data.model.SignUpAlarmData
 import com.example.userapp.databinding.FragmentSignupSecondBinding

@@ -16,7 +16,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.MainActivity
 import com.example.userapp.R
-import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.ui.base.BaseSessionFragment
 import com.example.userapp.data.entity.PostCommentDataClass
 import com.example.userapp.data.model.AlarmItem
 import com.example.userapp.data.model.AlarmType

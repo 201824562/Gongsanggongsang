@@ -4,7 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.example.userapp.base.BaseActivityViewModel
+import com.example.userapp.ui.base.BaseActivityViewModel
 import com.example.userapp.data.AppDatabase
 import com.example.userapp.data.dto.UserModel
 import com.example.userapp.data.repository.UserRepository

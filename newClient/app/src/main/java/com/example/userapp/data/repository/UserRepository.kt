@@ -5,7 +5,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.util.Log
 import androidx.core.content.edit
-import com.example.userapp.base.BaseSessionViewModel
+import com.example.userapp.ui.base.BaseSessionViewModel
 import com.example.userapp.data.AppDatabase
 import com.example.userapp.data.dto.UserModel
 import com.example.userapp.data.model.Agency

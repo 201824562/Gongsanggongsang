@@ -8,7 +8,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.userapp.R
-import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.ui.base.BaseSessionFragment
 import com.example.userapp.databinding.FragmentSettingsChangeInfoDetailBinding
 import com.example.userapp.databinding.FragmentSettingsChangePwdBinding
 import com.example.userapp.utils.WrapedDialogBasicTwoButton

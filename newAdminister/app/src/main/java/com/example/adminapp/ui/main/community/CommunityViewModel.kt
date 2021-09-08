@@ -4,12 +4,11 @@ import android.app.Application
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.adminapp.base.BaseSessionViewModel
+import com.example.adminapp.ui.base.BaseSessionViewModel
 import com.example.adminapp.data.AppDatabase
 import com.example.adminapp.data.entity.PostCommentDataClass
 import com.example.adminapp.data.model.AlarmItem

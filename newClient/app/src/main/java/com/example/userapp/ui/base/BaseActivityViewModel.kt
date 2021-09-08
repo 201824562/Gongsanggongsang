@@ -1,20 +1,26 @@
-package com.example.userapp.base
+package com.example.userapp.ui.base
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.example.userapp.utils.*
+import com.example.userapp.utils.SingleLiveEvent
+import com.example.userapp.utils.SnackbarMessageString
 import io.reactivex.Completable
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Action
 import java.util.concurrent.TimeUnit
 
-abstract class BaseViewModel  : ViewModel(){
+
+open class BaseActivityViewModel(application: Application): AndroidViewModel(application) {
+    private val  _onPermissionResult = SingleLiveEvent<Any>()
+    val onPermissionResult: LiveData<Any> = _onPermissionResult
 
     protected val compositeDisposable = CompositeDisposable()
 
@@ -43,14 +49,11 @@ abstract class BaseViewModel  : ViewModel(){
         addDisposable(single.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .timeout(timeout, TimeUnit.SECONDS)
-/*            .doOnSubscribe{ if(indicator) startLoadingIndicator() }
-            .doAfterTerminate { stopLoadingIndicator() }*/
             .subscribe(onSuccess, onError))
     }
 
     fun apiCall(completable: Completable,
                 onComplete: Action = Action{
-                    // default do nothing
                 },
                 onError: Consumer<Throwable> = Consumer {
                     _apiCallErrorEvent.postValue(it.message)
@@ -62,10 +65,6 @@ abstract class BaseViewModel  : ViewModel(){
             .observeOn(AndroidSchedulers.mainThread())
             .timeout(timeout, TimeUnit.SECONDS)
             .subscribe(onComplete, onError))
-    }
-
-    fun observeSnackbarMessageString(lifecycleOwner: LifecycleOwner, ob: (String) -> Unit){
-        snackbarMessageString.observe(lifecycleOwner, ob)
     }
 
     fun showSnackbar(str: String){

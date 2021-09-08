@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.adminapp.R
-import com.example.adminapp.base.BaseSessionFragment
+import com.example.adminapp.ui.base.BaseSessionFragment
 import com.example.adminapp.databinding.FragmentSettingsChangePwdBinding
 import com.example.adminapp.utils.WrapedDialogBasicTwoButton
 import com.example.adminapp.utils.hideKeyboard

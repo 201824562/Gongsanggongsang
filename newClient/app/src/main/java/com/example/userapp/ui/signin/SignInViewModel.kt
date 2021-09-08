@@ -3,7 +3,7 @@ package com.example.userapp.ui.signin
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
-import com.example.userapp.base.BaseSessionViewModel
+import com.example.userapp.ui.base.BaseSessionViewModel
 import com.example.userapp.data.dto.UserModel
 import com.example.userapp.data.model.ReceiverSignIn
 import com.example.userapp.data.model.UserStatus

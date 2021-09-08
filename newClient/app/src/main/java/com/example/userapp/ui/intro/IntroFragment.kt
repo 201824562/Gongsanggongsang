@@ -8,7 +8,7 @@ import androidx.activity.addCallback
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.userapp.R
-import com.example.userapp.base.BaseFragment
+import com.example.userapp.ui.base.BaseFragment
 import com.example.userapp.databinding.FragmentIntroBinding
 
 class IntroFragment : BaseFragment<FragmentIntroBinding, IntroViewModel>(){

@@ -5,7 +5,7 @@ import android.content.ContentValues
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.example.userapp.base.BaseSessionViewModel
+import com.example.userapp.ui.base.BaseSessionViewModel
 import com.example.userapp.data.AppDatabase
 import com.example.userapp.data.model.AlarmItem
 import com.example.userapp.data.model.AlarmType

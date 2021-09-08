@@ -10,7 +10,7 @@ import androidx.core.content.getSystemService
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.adminapp.R
-import com.example.adminapp.base.BaseSessionFragment
+import com.example.adminapp.ui.base.BaseSessionFragment
 import com.example.adminapp.data.model.AdminStatus
 import com.example.adminapp.databinding.FragmentSigninBinding
 import com.example.adminapp.restartActivity

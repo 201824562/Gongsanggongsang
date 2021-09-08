@@ -1,7 +1,5 @@
-package com.example.adminapp.base
+package com.example.adminapp.ui.base
 
-import android.app.Activity
-import android.view.View
 import androidx.annotation.StringRes
 
 interface BaseView {

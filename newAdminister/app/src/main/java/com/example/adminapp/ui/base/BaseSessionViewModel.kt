@@ -1,4 +1,4 @@
-package com.example.adminapp.base
+package com.example.adminapp.ui.base
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -34,8 +34,7 @@ abstract class BaseSessionViewModel(application: Application)  : AndroidViewMode
     }
 
     private val snackbarMessageString = SnackbarMessageString()
-/*    private val toastMessage = ToastMessage()
-    private val toastMessageString = ToastMessageString()*/
+
 
     fun showSnackbar(str: String){
         snackbarMessageString.postValue(str)
@@ -44,16 +43,6 @@ abstract class BaseSessionViewModel(application: Application)  : AndroidViewMode
     fun observeSnackbarMessageString(lifecycleOwner: LifecycleOwner, ob: (String) -> Unit){
         snackbarMessageString.observe(lifecycleOwner, ob)
     }
-/*
-
-    fun observeToastMessage(lifecycleOwner: LifecycleOwner, ob: (Int) -> Unit){
-        toastMessage.observe(lifecycleOwner, ob)
-    }
-
-    fun observeToastMessageStr(lifecycleOwner: LifecycleOwner, ob: (String) -> Unit){
-        toastMessageString.observe(lifecycleOwner, ob)
-    }
-*/
 
 
     private val _apiCallErrorEvent: SingleLiveEvent<String> = SingleLiveEvent()
@@ -73,7 +62,6 @@ abstract class BaseSessionViewModel(application: Application)  : AndroidViewMode
     open fun apiCall(
         completable: Completable,
         onComplete: Action = Action{
-            // default do nothing
         },
         onError: Consumer<Throwable> = Consumer {
             _apiCallErrorEvent.postValue(it.message)
@@ -102,14 +90,6 @@ abstract class BaseSessionViewModel(application: Application)  : AndroidViewMode
         _agencyInfo = adminRepository.getAgencyInfo(application)
         _authToken = adminRepository.getAdminToken(application)
         _fcmToken = adminRepository.getFCMToken(application)
-    }
-
-    private val _sessionInvalidEvent: SingleLiveEvent<Any> = SingleLiveEvent()
-    val sessionInvalidEvent: LiveData<Any> get() = _sessionInvalidEvent
-
-    //이거 필요한지?
-    fun callSessionInvalidEvent() {
-        _sessionInvalidEvent.call()
     }
 
     fun registerNotificationToFireStore(title : String, content : String, toToken : String){

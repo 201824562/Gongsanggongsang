@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.userapp.R
-import com.example.userapp.base.BaseFragment
-import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.ui.base.BaseFragment
+import com.example.userapp.ui.base.BaseSessionFragment
 import com.example.userapp.data.model.ReservationEquipment
 import com.example.userapp.data.model.ReservationFacility
 import com.example.userapp.databinding.FragmentMainhomeReservationEquipmentItemBinding

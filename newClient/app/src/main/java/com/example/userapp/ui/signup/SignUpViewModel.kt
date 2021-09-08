@@ -4,7 +4,7 @@ import android.app.Application
 import android.widget.CheckBox
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.userapp.base.BaseSessionViewModel
+import com.example.userapp.ui.base.BaseSessionViewModel
 import com.example.userapp.data.model.Agency
 import com.example.userapp.data.model.SignUpInfo
 import com.example.userapp.utils.RegularExpressionUtils

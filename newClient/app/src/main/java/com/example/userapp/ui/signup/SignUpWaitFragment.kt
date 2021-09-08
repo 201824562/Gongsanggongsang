@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.userapp.R
-import com.example.userapp.base.BaseFragment
+import com.example.userapp.ui.base.BaseFragment
 import com.example.userapp.databinding.FragmentSignupWaitBinding
 
 class SignUpWaitFragment : Fragment() {

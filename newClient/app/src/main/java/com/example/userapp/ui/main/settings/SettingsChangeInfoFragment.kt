@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.ui.base.BaseSessionFragment
 import com.example.userapp.databinding.FragmentSettingsBinding
 import com.example.userapp.databinding.FragmentSettingsChangeInfoBinding
 import kotlinx.android.parcel.Parcelize

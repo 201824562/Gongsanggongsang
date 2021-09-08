@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.userapp.MainActivity
 import com.example.userapp.R
-import com.example.userapp.base.BaseSessionFragment
+import com.example.userapp.ui.base.BaseSessionFragment
 import com.example.userapp.data.dto.UserModel
 import com.example.userapp.data.entity.DayTimeSlot
 import com.example.userapp.databinding.FragmentMainhomeReservationFacilitySelectBinding

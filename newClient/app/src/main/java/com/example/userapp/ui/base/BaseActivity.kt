@@ -1,4 +1,4 @@
-package com.example.userapp.base
+package com.example.userapp.ui.base
 
 import android.content.Intent
 import android.os.Bundle
@@ -39,13 +39,12 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseActivityViewModel>: AppCo
         initViewFinal(savedInstanceState)
 
         initToolbar()
-        //snackbarObserving()
     }
 
     abstract fun initViewbinding()
-    abstract fun initViewStart(savedInstanceState: Bundle?)     //첫번째, 레이아웃 초기 설정- 뷰&액티비티 (ex.리사이클러뷰, 툴바, 드로어뷰)
-    abstract fun initDataBinding(savedInstanceState: Bundle?)   //두번째, 데이터바인딩& RxJava 설정 (ex.RxJava observe, Databinding observe)
-    abstract fun initViewFinal(savedInstanceState: Bundle?)     //세번째, 마무리 커스텀 (ex. 클릭리스너 이벤트)
+    abstract fun initViewStart(savedInstanceState: Bundle?)
+    abstract fun initDataBinding(savedInstanceState: Bundle?)
+    abstract fun initViewFinal(savedInstanceState: Bundle?)
 
     abstract fun initToolbar()
 
@@ -55,7 +54,6 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseActivityViewModel>: AppCo
     fun showSnackbar(message: String) {
             Snackbar.make(viewbinding.root.findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT).show() }
 
-    //네트워크 콜처리 & 서비스 관련 추가해주기.
 
 
 }

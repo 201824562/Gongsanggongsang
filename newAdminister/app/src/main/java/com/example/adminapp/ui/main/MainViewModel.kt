@@ -1,8 +1,7 @@
 package com.example.adminapp.ui.main
 
 import androidx.lifecycle.LiveData
-import com.example.adminapp.MainActivityViewModel
-import com.example.adminapp.base.BaseViewModel
+import com.example.adminapp.ui.base.BaseViewModel
 import com.example.adminapp.utils.SingleLiveEvent
 import java.util.concurrent.TimeUnit
 

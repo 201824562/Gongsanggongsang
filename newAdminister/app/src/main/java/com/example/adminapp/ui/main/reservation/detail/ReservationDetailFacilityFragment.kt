@@ -1,7 +1,6 @@
 package com.example.adminapp.ui.main.reservation.detail
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,14 +12,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.adminapp.R
-import com.example.adminapp.base.BaseSessionFragment
+import com.example.adminapp.ui.base.BaseSessionFragment
 import com.example.adminapp.data.model.ReservationData
 import com.example.adminapp.data.model.ReservationFacilityBundle
 import com.example.adminapp.data.model.ReservationItem
 import com.example.adminapp.data.model.ReservationType
 import com.example.adminapp.databinding.FragmentReservationDetailFacilityBinding
-import com.example.adminapp.ui.main.reservation.edit.ReservationEditEquipmentFragment
-import com.example.adminapp.ui.main.reservation.edit.ReservationEditFacilityFragment
 
 
 class ReservationDetailFacilityFragment() : BaseSessionFragment<FragmentReservationDetailFacilityBinding, ReservationDetailFacilityViewModel>() {

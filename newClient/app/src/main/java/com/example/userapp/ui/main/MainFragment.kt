@@ -8,7 +8,7 @@ import androidx.activity.addCallback
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.example.userapp.R
-import com.example.userapp.base.BaseFragment
+import com.example.userapp.ui.base.BaseFragment
 import com.example.userapp.databinding.FragmentMainBinding
 
 class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>(){

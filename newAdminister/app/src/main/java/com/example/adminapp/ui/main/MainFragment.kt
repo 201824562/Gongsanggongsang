@@ -1,7 +1,6 @@
 package com.example.adminapp.ui.main
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +9,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.viewpager2.widget.ViewPager2
 import com.example.adminapp.R
-import com.example.adminapp.base.BaseFragment
+import com.example.adminapp.ui.base.BaseFragment
 import com.example.adminapp.databinding.FragmentMainBinding
-import com.example.adminapp.utils.setupKeyboardHide
 
 class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>(){
 

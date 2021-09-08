@@ -1,7 +1,7 @@
 package com.example.userapp.ui.intro
 
 import androidx.lifecycle.LiveData
-import com.example.userapp.base.BaseViewModel
+import com.example.userapp.ui.base.BaseViewModel
 import com.example.userapp.utils.SingleLiveEvent
 import java.util.concurrent.TimeUnit
 

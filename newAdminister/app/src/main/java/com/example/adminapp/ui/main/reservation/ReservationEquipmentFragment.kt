@@ -1,28 +1,15 @@
 package com.example.adminapp.ui.main.reservation
 
-import android.content.Context
 import android.os.Bundle
-import android.os.CountDownTimer
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
-import coil.load
-import com.example.adminapp.R
-import com.example.adminapp.base.BaseSessionFragment
+import com.example.adminapp.ui.base.BaseSessionFragment
 import com.example.adminapp.data.model.*
 import com.example.adminapp.databinding.FragmentReservationChildTypesBinding
-import com.example.adminapp.databinding.ItemReservationBinding
 import com.example.adminapp.ui.main.MainFragmentDirections
-import java.time.Duration
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 
 class ReservationEquipmentFragment : BaseSessionFragment<FragmentReservationChildTypesBinding, ReservationViewModel>() {

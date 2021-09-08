@@ -9,7 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.userapp.MainActivity
-import com.example.userapp.base.BaseSessionViewModel
+import com.example.userapp.ui.base.BaseSessionViewModel
 import com.example.userapp.data.dto.UserModel
 import com.example.userapp.data.entity.DayTimeSlot
 import com.example.userapp.data.entity.ReservationTimeData

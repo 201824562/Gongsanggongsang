@@ -1,4 +1,4 @@
-package com.example.userapp.base
+package com.example.userapp.ui.base
 
 import android.app.Application
 import androidx.lifecycle.*
@@ -92,9 +92,7 @@ abstract class BaseSessionViewModel(application: Application)  : AndroidViewMode
 
     open fun apiCall(
         completable: Completable,
-        onComplete: Action = Action{
-                    // default do nothing
-                },
+        onComplete: Action = Action{},
         onError: Consumer<Throwable> = Consumer {
                     _apiCallErrorEvent.postValue(it.message)
                     showSnackbar("오류가 발생했습니다. ${it.message}")
