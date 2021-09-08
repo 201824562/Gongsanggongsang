@@ -31,110 +31,13 @@
                 android:textStyle="bold"
                 android:textSize="24sp"
                 android:text="안녕하세요\n관리자님!"/>
-            <LinearLayout
-                android:id="@+id/main_home_shortcut_icon"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/main_home_hello"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:layout_marginTop="24dp"
-                android:gravity="bottom"
-                android:orientation="horizontal">
-                <ImageButton
-                    android:id="@+id/icon_mainHome_to_equipment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/transparent"
-                    android:src="@drawable/ic_mainhome_direct_reservation_icon" />
-                <ImageButton
-                    android:id="@+id/icon_mainHome_to_facility"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_mainhome_reservation_icon"
-                    android:layout_weight="1"
-                    android:background="@color/transparent"/>
 
-                <ImageButton
-                    android:id="@+id/mainHome_to_suggestCommunity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@color/transparent"
-                    android:src="@drawable/ic_mainhome_goto_suggest" />
-                <ImageButton
-                    android:id="@+id/mainHome_to_withCommunity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_community_main_with_icon"
-                    android:layout_weight="1"
-                    android:background="@color/transparent"/>
-                <ImageButton
-                    android:id="@+id/mainHome_to_marketCommunity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_community_main_emergency_icon"
-                    android:layout_weight="1"
-                    android:background="@color/transparent"/>
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/main_home_shortcut_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/main_home_shortcut_icon"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/text_mainHome_to_equipment"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="바로사용"
-                    android:lineSpacingExtra ="0dp"
-                    android:textSize="12sp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:background="@color/transparent"/>
-                <TextView
-                    android:id="@+id/text_mainHome_to_facility"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="예약사용"
-                    android:textSize="12sp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:background="@color/transparent"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="건의"
-                    android:textSize="12sp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:background="@color/transparent"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="함께"
-                    android:textSize="12sp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:background="@color/transparent"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="긴급"
-                    android:textSize="12sp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:background="@color/transparent"/>
-            </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/main_home_notice_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/main_home_shortcut_text"
+                app:layout_constraintTop_toBottomOf="@id/main_home_hello"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_marginTop="47dp">

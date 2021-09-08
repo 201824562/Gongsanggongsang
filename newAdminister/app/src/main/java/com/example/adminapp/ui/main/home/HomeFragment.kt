@@ -49,26 +49,6 @@ class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityV
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewbinding.run {
-            textMainHomeToEquipment.setOnClickListener {
-                findNavController().navigate(MainFragmentDirections.actionMainFragmentToReservationAddFragment(ReservationType.EQUIPMENT)) }
-            iconMainHomeToEquipment.setOnClickListener {
-                findNavController().navigate(MainFragmentDirections.actionMainFragmentToReservationAddFragment(ReservationType.EQUIPMENT)) }
-            textMainHomeToFacility.setOnClickListener {
-                findNavController().navigate(MainFragmentDirections.actionMainFragmentToReservationAddFragment(ReservationType.FACILITY)) }
-            iconMainHomeToFacility.setOnClickListener {
-                findNavController().navigate(MainFragmentDirections.actionMainFragmentToReservationAddFragment(ReservationType.FACILITY)) }
-            mainHomeToSuggestCommunity.setOnClickListener {
-                toCollectionBundle = bundleOf( "getCollectionName" to "3_SUGGEST")
-                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, toCollectionBundle)
-            }
-            mainHomeToWithCommunity.setOnClickListener {
-                toCollectionBundle = bundleOf( "getCollectionName" to "4_WITH")
-                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, toCollectionBundle)
-            }
-            mainHomeToMarketCommunity.setOnClickListener {
-                toCollectionBundle = bundleOf( "getCollectionName" to "2_EMERGENCY")
-                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, toCollectionBundle)
-            }
             mainHomeNoticeAllButton.setOnClickListener {
                 findNavController().navigate(R.id.action_mainFragment_to_mainhomeNoticeFragment)
             }

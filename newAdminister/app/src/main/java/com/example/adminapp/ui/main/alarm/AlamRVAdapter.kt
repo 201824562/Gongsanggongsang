@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.adminapp.data.model.AlarmItem
 import com.example.adminapp.data.model.AlarmType
 import com.example.adminapp.databinding.ItemAlarmBinding
-import com.example.adminapp.ui.main.reservation.getTimePassedString
 
 class AlarmRVAdapter(private val  listener : OnItemClickListener)
     : ListAdapter<AlarmItem, AlarmRVAdapter.ViewHolder>(
@@ -45,7 +44,6 @@ class AlarmRVAdapter(private val  listener : OnItemClickListener)
                 holder.binding.alarmMoveBtn.visibility = View.GONE
             }
             holder.binding.alarmTypeName.text = item.type
-            holder.binding.alarmPassedTime.text = getTimePassedString(item.time)
             holder.binding.alarmState.text = item.message
             holder.binding.itemContentLayout.setOnClickListener { listener.onItemClick(position, item) }
         }

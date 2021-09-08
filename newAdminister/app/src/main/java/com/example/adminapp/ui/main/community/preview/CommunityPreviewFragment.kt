@@ -22,7 +22,6 @@ class CommunityPreviewFragment : BaseSessionFragment<FragmentCommunityPreviewBin
 
     private lateinit var communityPreviewRecyclerAdapter: CommunityPreviewRecyclerAdapter
     private var communityPreviewItem = arrayListOf<PostDataInfo>()
-    private lateinit var communityPreviewMarketRecyclerAdapter: CommunityPreviewMarketRecyclerAdapter
     private var communityPreviewMarketItem = arrayListOf<PostDataInfo>()
 
     private val getArgs : CommunityPreviewFragmentArgs by navArgs()
@@ -52,11 +51,7 @@ class CommunityPreviewFragment : BaseSessionFragment<FragmentCommunityPreviewBin
             "OUT" ->  viewbinding.previewToolbarName.text = "퇴실 신청 내역"
         }
 
-        when(getCollection){
-            "5_MARKET" -> initMarketRecyclerView()
-            "OUT" -> initMarketRecyclerView()
-            else -> initMarketElseRecyclerView()
-        }
+
     }
 
     override fun onDetach() {
@@ -66,18 +61,10 @@ class CommunityPreviewFragment : BaseSessionFragment<FragmentCommunityPreviewBin
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
         viewmodel.getPostDataInCategory(getCollection).observe(viewLifecycleOwner){
-            when(getCollection){
-                "5_MARKET", "OUT" -> {
-                    communityPreviewMarketItem = it
-                    initMarketRecyclerView()
-                    communityPreviewMarketRecyclerAdapter.notifyDataSetChanged()
-                }
-                else -> {
-                    communityPreviewItem = it
-                    initMarketElseRecyclerView()
-                    communityPreviewRecyclerAdapter.notifyDataSetChanged()
-                }
-            }
+
+            communityPreviewItem = it
+            initMarketElseRecyclerView()
+            communityPreviewRecyclerAdapter.notifyDataSetChanged()
         }
     }
 
@@ -119,26 +106,6 @@ class CommunityPreviewFragment : BaseSessionFragment<FragmentCommunityPreviewBin
                 }
         }
         communityPreviewRecyclerAdapter.notifyDataSetChanged()
-    }
-
-    private fun initMarketRecyclerView(){
-        viewbinding.communityPreviewRecyclerView.run {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context)
-            adapter = CommunityPreviewMarketRecyclerAdapter(communityPreviewMarketItem)
-        }
-        communityPreviewMarketRecyclerAdapter = CommunityPreviewMarketRecyclerAdapter(communityPreviewMarketItem)
-        viewbinding.communityPreviewRecyclerView.adapter = communityPreviewMarketRecyclerAdapter.apply {
-            listener = object : CommunityPreviewMarketRecyclerAdapter.OnCommunityMarketItemClickListener {
-                    override fun onPreviewItemClick(position: Int) {
-                        var postItemDataInfo : PostDataInfo = getItem(position)
-                        var bundle = bundleOf(
-                            "post_data_info" to postItemDataInfo
-                        )
-                        findNavController().navigate(R.id.action_communityPreview_to_communityPostMarket, bundle)
-                    }
-                }
-        }
     }
 
 }

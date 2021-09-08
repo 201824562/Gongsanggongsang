@@ -16,9 +16,6 @@ import com.example.adminapp.databinding.DialogAccentTwobuttonBinding
 import com.example.adminapp.databinding.DialogAlarmBinding
 import com.example.adminapp.databinding.DialogBasicOnebuttonBinding
 import com.example.adminapp.databinding.DialogBasicTwobuttonBinding
-import com.example.adminapp.ui.main.reservation.getHourMinuteString
-import com.example.adminapp.ui.main.reservation.getMonthDayString
-import com.example.adminapp.ui.main.reservation.getMonthString
 
 import kotlin.system.exitProcess
 
@@ -121,16 +118,12 @@ class CustomedAlarmDialog (context: Context, reserveData : ReservationAlarmData?
 
         binding.run {
             if (reserveData != null){
-                val day : String = getMonthString(reserveData.startTime) + "/" + getMonthDayString(reserveData.startTime)
-                val time : String = getHourMinuteString(reserveData.startTime) + " - " + getHourMinuteString(reserveData.endTime)
                 val msg : String =  "메이트님의 예약 정보가 맞다면\n사용시작을 눌러주세요."
                 dialogTitle.text = "예약 사용"
                 dialogContentText1.text = "시설이름"
                 dialogContentText2.text = "예약날짜"
                 dialogContentText3.text = "예약시간"
                 dialogContentVar1.text = reserveData.name
-                dialogContentVar2.text = day
-                dialogContentVar3.text = time
                 dialogMsg.text = msg
                 dialogLeftBtn.text = "사용 취소"
                 dialogRightBtn.text = "사용 시작"
