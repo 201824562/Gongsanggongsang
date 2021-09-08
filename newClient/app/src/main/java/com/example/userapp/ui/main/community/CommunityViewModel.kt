@@ -43,9 +43,6 @@ class CommunityViewModel(application: Application) : BaseSessionViewModel(applic
     fun initPostData(){
         communityDataRepository.initPostData()
     }
-    fun insertPostData(it: PostDataInfo) : MutableLiveData<Boolean> {
-        return communityDataRepository.insertPostData(agencyInfo, it)
-    }
     fun insertPostCommentData(collection_name: String, document_name: String, postComment : PostCommentDataClass) {
         firestore
             .collection(agencyInfo)
@@ -81,15 +78,6 @@ class CommunityViewModel(application: Application) : BaseSessionViewModel(applic
     fun getPostPhotoData(photoUri : ArrayList<String>) = viewModelScope.launch(Dispatchers.IO) {
         communityDataRepository.updatePhotoData(photoUri)
     }
-
-    fun getUploadPhoto() : MutableLiveData<Boolean>{
-        return communityDataRepository.getUploadPhotoSuccess()
-    }
-    @RequiresApi(Build.VERSION_CODES.P)
-    fun uploadPhoto(bitmapArrayList: ArrayList<Bitmap>, uriArrayList : ArrayList<Uri>)= viewModelScope.launch(Dispatchers.Main){
-            communityDataRepository.uploadPhoto(bitmapArrayList, uriArrayList)
-        }
-
 
     fun getNoticeCategoryPostData(collectionName : String) : MutableLiveData<ArrayList<PostDataInfo>> {
         return communityDataRepository.getNoticeCategoryPostData(agencyInfo, collectionName)

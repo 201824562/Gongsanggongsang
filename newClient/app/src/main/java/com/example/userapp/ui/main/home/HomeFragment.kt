@@ -51,7 +51,7 @@ class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityV
     private fun initMainHomeNoticeRecyclerView(){
         viewbinding.run {
             mainHomeNoticeAllButton.setOnClickListener {
-                findNavController().navigate(R.id.action_mainFragment_to_communityPreviewFragment, bundleOf("getCollectionName" to "notice"))
+                findNavController().navigate(R.id.action_mainFragment_to_mainhomeNoticeFragment)
             }
             homeNoticeRecyclerAdapter = HomeNoticeRecyclerAdapter(homeNoticeItem)
             mainHomeNoticeNoticeRecycler.run {
