@@ -116,7 +116,7 @@ class SettingsOutWriteFragment : BaseSessionFragment<FragmentSettingsOutWriteBin
                         post_date = reservationDate,
                         post_time = reservationTime,
                         post_comments = 0,
-                        post_id = postDateNow + postTimeNow + userName,
+                        post_id = reservationDate + reservationTime + userName,
                         post_photo_uri = getLocalPhotoUri,
                         post_state = marketWritePrice.text.toString(),
                         post_anonymous = false
