@@ -59,10 +59,6 @@ class SettingsFragment : BaseSessionFragment<FragmentSettingsBinding, SettingsVi
             withdrawalBtn.setOnClickListener { makeWithdrawalDialog() }
             logoutBtn.setOnClickListener{ makeLogoutDialog() }
             gettingOutBtn.setOnClickListener{ findNavController().navigate(R.id.action_mainFragment_to_settingOutFragment)}
-            outdataInitBtn.setOnClickListener{
-                viewmodel.outInitialize()
-                Toast.makeText(requireContext(), "퇴실데이터가 현재 날짜 기준으로 초기화 되었습니다!", Toast.LENGTH_SHORT).show()
-            }
         }
     }
 

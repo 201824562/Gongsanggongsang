@@ -348,38 +348,6 @@ class SettingsViewModel(application: Application) : BaseSessionViewModel(applica
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun outInitialize(){
-        var map1 = mutableMapOf<String, Any>()
-        var settingOutInitData = arrayListOf<SettingItem>()
-        for(i in 0..143){
-            settingOutInitData.add(
-                SettingItem(
-                    false,
-                    SettingData(i/6,i%6*10),
-                    i,
-                    "Nope"
-                )
-            )
-        }
-        Log.e("setting", settingOutInitData.toString())
-
-        firestore.collection("한국장학재단_부산").document("community").collection("OUT_NOW")
-            .document("Out").set(SettingWeekItem(
-                settingOutInitData,
-                settingOutInitData,
-                settingOutInitData,
-                settingOutInitData,
-                settingOutInitData,
-                settingOutInitData,
-                settingOutInitData
-            ))
-
-        map1["initRefTime"] = LocalDateTime.now().toString()
-        firestore.collection("한국장학재단_부산").document("community").collection("OUT_NOW")
-            .document("Out").update(map1)
-    }
-
     //파이어베이스에서 가져옴
     @RequiresApi(Build.VERSION_CODES.O)
     fun getinitRefTimeData(){
@@ -499,53 +467,7 @@ class SettingsViewModel(application: Application) : BaseSessionViewModel(applica
         return OutReserveData
 
 
-//        var map1 = mutableMapOf<String, Any>()
-//        map1[FacilitySelectedTimeSlotData.weekday] = FacilitySelectedTimeSlotData.day_time_slot_list
-//        firestore.collection("한국장학재단_부산").document("community")
-//            .collection("OUT_NOW").document("Out")
-//            .update(map1)
-
-
     }
 
-//    fun add_reserve(userInfo: UserModel, reservationFacility: ReservationFacility) : List<DayTimeSlot> {
-//        var map1 = mutableMapOf<String, Any>()
-//        var map2 = mutableMapOf<String, Any>()
-//        var map3 = mutableMapOf<String, Any>()
-//
-//        var tempList = mutableListOf<String>()
-//        var startTime: String = "default"
-//        var endTime: String = "default"
-//        val dateFmt: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
-//        val timeFmt: SimpleDateFormat = SimpleDateFormat("HH:mm:00.000")
-//        var startCal: Calendar = getReserveFacilityStartTime()
-//        var endCal: Calendar = getReserveFacilityEndTime()
-//
-//
-//        for (timeslot in FacilityDayInfoData.day_time_slot_list) {
-//            if (timeslot !in FacilitySelectedTimeSlotData.day_time_slot_list) {
-//                FacilitySelectedTimeSlotData.day_time_slot_list.add(timeslot)
-//            }
-//        }
-//
-//        FacilitySelectedTimeSlotData.day_time_slot_list.sortBy { it.index }
-//        for (timeslot in FacilityDayInfoData.day_time_slot_list) {
-//            timeslot.buttonSelected = false
-//        }
-//
-//        map1[FacilitySelectedTimeSlotData.weekday] = FacilitySelectedTimeSlotData.day_time_slot_list
-//        map2["test"] = FacilitySelectedTimeSlotData
-//        map3["user"] = authToken
-//
-//        firestore.collection("한국장학재단_부산").document("community")
-//            .collection("OUT_NOW").document("1")
-//            .update(map1)
-//
-//
-//        clear_select_time_slot()
-//        FacilityReserveLiveData.value = FacilityReserveData
-//        var calPair = Pair(startCal,endCal)
-//        return calPair
-//    }
 
 }
