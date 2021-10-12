@@ -68,7 +68,7 @@ class SettingsOutWriteFragment : BaseSessionFragment<FragmentSettingsOutWriteBin
             userAgency = it.agency
             userName = it.name
         })
-        reservationTime = navArgs.settingDeliveryOutReserveData.outStartTime.subSequence(11, 17).toString()
+        reservationTime = navArgs.settingDeliveryOutReserveData.outStartTime.subSequence(11, 16).toString()
         reservationDate = navArgs.settingDeliveryOutReserveData.outStartTime.subSequence(0, 10).toString()
 
         val ac : MainActivity = activity as MainActivity
