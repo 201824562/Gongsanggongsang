@@ -67,7 +67,7 @@ class SettingsOutWriteFragment : BaseSessionFragment<FragmentSettingsOutWriteBin
             userAgency = it.agency
             userName = it.name
         })
-        reservationTime = navArgs.reservationTime
+        reservationTime = navArgs.settingDeliveryOutReserveData.
         val ac : MainActivity = activity as MainActivity
         getLocalPhotoUri = ac.getPhoto()
         getBitmap()

@@ -1,6 +1,8 @@
 package com.example.userapp.data.model
 
+import android.os.Parcelable
 import com.example.userapp.data.entity.DayTimeSlot
+import kotlinx.android.parcel.Parcelize
 
 data class SettingWeekItem(
     val monday : List<SettingItem>,
@@ -19,10 +21,12 @@ data class SettingItem(
     var user: String
 )
 
+@Parcelize
 data class SettingDeliveryOutReserveData(
     var modifiedSettingItemList: MutableList<DayTimeSlot>,
     var outStartTime : String,
     var weekDay: String
-)
+): Parcelable
+
 
 data class SettingData(var hour: Int = 0, var min: Int = 0)
