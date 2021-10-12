@@ -54,6 +54,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>(){
                 isUserInputEnabled = false
             }
 
+
             mainhomeBottomNavi.setOnNavigationItemSelectedListener { itemclicklistener ->
                 when(itemclicklistener.setChecked(true).itemId){
                     R.id.btn_home -> {

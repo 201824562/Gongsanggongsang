@@ -18,6 +18,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userapp.MainActivity
 import com.example.userapp.R
@@ -47,6 +48,8 @@ class SettingsOutWriteFragment : BaseSessionFragment<FragmentSettingsOutWriteBin
     private lateinit var userAgency : String
     lateinit var userName : String
     var adminData : ArrayList<RemoteUserInfo> = arrayListOf()
+    private val navArgs : SettingsOutWriteFragmentArgs by navArgs()
+    var reservationTime : String = ""
     var postPhotoUri : ArrayList<String> = arrayListOf()
     override fun initViewbinding(
         inflater: LayoutInflater,
@@ -64,6 +67,7 @@ class SettingsOutWriteFragment : BaseSessionFragment<FragmentSettingsOutWriteBin
             userAgency = it.agency
             userName = it.name
         })
+        reservationTime = navArgs.reservationTime
         val ac : MainActivity = activity as MainActivity
         getLocalPhotoUri = ac.getPhoto()
         getBitmap()

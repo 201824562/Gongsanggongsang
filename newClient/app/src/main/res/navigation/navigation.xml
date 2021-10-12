@@ -497,6 +497,10 @@
         android:id="@+id/settingsOutWriteFragment"
         android:name="com.example.userapp.ui.main.settings.SettingsOutWriteFragment"
         android:label="SettingsOutWriteFragment">
+        <argument
+            android:name="reservationTime"
+            app:argType="string"
+            android:defaultValue="0"/>
         <action
             android:id="@+id/action_settingOutWrite_to_settingOutLog"
             app:destination="@id/settingsOutFragment"
