@@ -49,6 +49,7 @@ class SettingsOutWriteFragment : BaseSessionFragment<FragmentSettingsOutWriteBin
     lateinit var userName : String
     var adminData : ArrayList<RemoteUserInfo> = arrayListOf()
     private val navArgs : SettingsOutWriteFragmentArgs by navArgs()
+    var reservationDate : String = ""
     var reservationTime : String = ""
     var postPhotoUri : ArrayList<String> = arrayListOf()
     override fun initViewbinding(
@@ -67,7 +68,9 @@ class SettingsOutWriteFragment : BaseSessionFragment<FragmentSettingsOutWriteBin
             userAgency = it.agency
             userName = it.name
         })
-        reservationTime = navArgs.settingDeliveryOutReserveData.
+        reservationTime = navArgs.settingDeliveryOutReserveData.outStartTime.subSequence(11, 17).toString()
+        reservationDate = navArgs.settingDeliveryOutReserveData.outStartTime.subSequence(0, 10).toString()
+
         val ac : MainActivity = activity as MainActivity
         getLocalPhotoUri = ac.getPhoto()
         getBitmap()
@@ -110,8 +113,8 @@ class SettingsOutWriteFragment : BaseSessionFragment<FragmentSettingsOutWriteBin
                         post_name = userName,
                         post_title = marketWriteTitle.text.toString(),
                         post_contents = marketWriteContent.text.toString(),
-                        post_date = postDateNow,
-                        post_time = postTimeNow,
+                        post_date = reservationDate,
+                        post_time = reservationTime,
                         post_comments = 0,
                         post_id = postDateNow + postTimeNow + userName,
                         post_photo_uri = getLocalPhotoUri,

@@ -3,6 +3,7 @@ package com.example.userapp.data.model
 import android.os.Parcelable
 import com.example.userapp.data.entity.DayTimeSlot
 import kotlinx.android.parcel.Parcelize
+import kotlinx.android.parcel.RawValue
 
 data class SettingWeekItem(
     val monday : List<SettingItem>,
