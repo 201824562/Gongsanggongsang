@@ -23,4 +23,4 @@ class MainViewPagerAdapter (activity: FragmentActivity) : FragmentStateAdapter(a
             else -> error("no such position: $position")
         }
     }
-}
+} 
