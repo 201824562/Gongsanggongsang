@@ -189,25 +189,27 @@ class SettingsOutReserveFragment : BaseSessionFragment<FragmentSettingsOutReserv
         })
 
         viewbinding.nextBtn.setOnClickListener {//주용이한테 넘겨줄 코드
-            val confirmUsingDialog = ConfirmReserveDialog(requireContext(), args.myArg, viewmodel.getReserveFacilityStartTime(), viewmodel.getReserveFacilityEndTime()) //사용하는
-            confirmUsingDialog.clickListener = object : ConfirmReserveDialog.DialogButtonClickListener {
-                override fun dialogAgainClickListener() {
-                    confirmUsingDialog.dismiss()
-                }
+            var tmp = viewmodel.create_deliveryOutReserveData()
+            findNavController().navigate(SettingsOutReserveFragmentDirections.actionSettingsOutReserveFragmentToSettingsOutWriteFragment(tmp))
 
-                override fun dialogReserveClickListener() {
-//                    var endTimeCal = Calendar.getInstance()
-//                    var startTimeCal = Calendar.getInstance()
-//                    var calPair = Pair(startTimeCal,endTimeCal)
-                    var tmp = viewmodel.create_deliveryOutReserveData()
-                    findNavController().navigate(SettingsOutReserveFragmentDirections.actionSettingsOutReserveFragmentToSettingsOutWriteFragment(tmp))
-
-                    val sdf = SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS", Locale.KOREA)
-                    //(activity as MainActivity).setUseCompleteAlarm(calPair.second,false,(args.myArg.document_name+sdf.format(calPair.second.getTime()).toString()).hashCode())
-                    confirmUsingDialog.dismiss()
-                }
-            }
-            showDialog(confirmUsingDialog, viewLifecycleOwner)
+//            val confirmUsingDialog = ConfirmReserveDialog(requireContext(), args.myArg, viewmodel.getReserveFacilityStartTime(), viewmodel.getReserveFacilityEndTime()) //사용하는
+//            confirmUsingDialog.clickListener = object : ConfirmReserveDialog.DialogButtonClickListener {
+//                override fun dialogAgainClickListener() {
+//                    confirmUsingDialog.dismiss()
+//                }
+//
+//                override fun dialogReserveClickListener() {
+////                    var endTimeCal = Calendar.getInstance()
+////                    var startTimeCal = Calendar.getInstance()
+////                    var calPair = Pair(startTimeCal,endTimeCal)
+//                    var tmp = viewmodel.create_deliveryOutReserveData()
+//
+//                    val sdf = SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS", Locale.KOREA)
+//                    //(activity as MainActivity).setUseCompleteAlarm(calPair.second,false,(args.myArg.document_name+sdf.format(calPair.second.getTime()).toString()).hashCode())
+//                    confirmUsingDialog.dismiss()
+//                }
+//            }
+//            showDialog(confirmUsingDialog, viewLifecycleOwner)
             button_not_selected()
         }
     }

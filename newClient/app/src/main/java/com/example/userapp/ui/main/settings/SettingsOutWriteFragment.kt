@@ -124,6 +124,7 @@ class SettingsOutWriteFragment : BaseSessionFragment<FragmentSettingsOutWriteBin
                     bundle = bundleOf(
                         "post_data_info" to postData
                     )
+                    viewmodel.add_OutReserve(navArgs.settingDeliveryOutReserveData.weekDay,navArgs.settingDeliveryOutReserveData.modifiedSettingItemList)
                     if(uriArray.isEmpty()) {
                         viewmodel.insertPostData(postData).observe(viewLifecycleOwner) {
                             if (it) {
