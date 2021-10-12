@@ -1,15 +1,20 @@
 package com.example.adminapp.ui.main.settings
 
 import android.app.Application
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
+import com.example.adminapp.data.model.*
 import com.example.adminapp.ui.base.BaseSessionViewModel
-import com.example.adminapp.data.model.AdminModel
-import com.example.adminapp.data.model.User
 import com.example.adminapp.utils.RegularExpressionUtils
 import com.example.adminapp.utils.SingleLiveEvent
+import com.google.firebase.firestore.FirebaseFirestore
+import java.time.LocalDateTime
 
 class SettingsViewModel(application: Application) : BaseSessionViewModel(application) {
 
+    val firestore = FirebaseFirestore.getInstance()
     private val _invalidUserPwdEventLiveData = SingleLiveEvent<String>()
     val invalidUserPwdEventLiveData: LiveData<String> get() = _invalidUserPwdEventLiveData
     private val _validUserPwdEventLiveData = SingleLiveEvent<Any>()
@@ -110,6 +115,40 @@ class SettingsViewModel(application: Application) : BaseSessionViewModel(applica
         apiCall(adminRepository.getAdminInfo(), {
             _onSuccessGettingAdminInfo.postValue(it) },
             { _onSuccessGettingNullAdminInfo.call() })
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun outInitialize(){
+        var map1 = mutableMapOf<String, Any>()
+        var settingOutInitData = arrayListOf<SettingItem>()
+        for(i in 0..143){
+            settingOutInitData.add(
+                SettingItem(
+                    false,
+                    SettingData(i/6,i%6*10),
+                    i,
+                    "Nope"
+                )
+            )
+        }
+        Log.e("setting", settingOutInitData.toString())
+
+        firestore.collection("한국장학재단_부산").document("community").collection("OUT_NOW")
+            .document("Out").set(
+                SettingWeekItem(
+                settingOutInitData,
+                settingOutInitData,
+                settingOutInitData,
+                settingOutInitData,
+                settingOutInitData,
+                settingOutInitData,
+                settingOutInitData
+            )
+            )
+
+        map1["initRefTime"] = LocalDateTime.now().toString()
+        firestore.collection("한국장학재단_부산").document("community").collection("OUT_NOW")
+            .document("Out").update(map1)
     }
 
     

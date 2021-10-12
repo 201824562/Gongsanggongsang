@@ -243,11 +243,29 @@
                     android:paddingTop="16dp"
                     android:paddingBottom="16dp"
                     android:paddingLeft="20dp"
-                    android:text="퇴실신청내역"
+                    android:text="퇴실 신청 내역"
                     android:textSize="14sp"
                     android:textColor="@color/black_87"
                     android:fontFamily="@font/notosanskr_regular_hestia"
                     android:clickable="false"/>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/outdata_init_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_underline_light_gray"
+                android:gravity="start"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:paddingLeft="20dp"
+                android:text="퇴실 데이터 초기화"
+                android:textSize="14sp"
+                android:textColor="@color/black_87"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:clickable="false"/>
             </androidx.cardview.widget.CardView>
             <androidx.cardview.widget.CardView
                 android:id="@+id/withdrawal_btn"
@@ -261,7 +279,7 @@
                     android:paddingTop="16dp"
                     android:paddingBottom="16dp"
                     android:paddingLeft="20dp"
-                    android:text="탈퇴신청"
+                    android:text="탈퇴 신청"
                     android:textSize="14sp"
                     android:textColor="@color/black_87"
                     android:fontFamily="@font/notosanskr_regular_hestia"

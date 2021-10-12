@@ -1,10 +1,13 @@
 package com.example.adminapp.ui.main.settings
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.adminapp.MainActivity
@@ -48,6 +51,7 @@ class SettingsFragment : BaseSessionFragment<FragmentSettingsBinding, SettingsVi
             allowUserBtn.setOnClickListener { findNavController().navigate(R.id.action_mainFragment_to_settingsAllowUserFragment) }
             manageUserBtn.setOnClickListener { findNavController().navigate(R.id.action_mainFragment_to_settingsManageUserFragment) }
             manageOutBtn.setOnClickListener { findNavController().navigate(R.id.action_mainFragment_to_settingsOutFragment)}
+            outdataInitBtn.setOnClickListener{ makeOutReserveDataDialog() }
             withdrawalBtn.setOnClickListener { makeWithdrawalDialog() }
             logoutBtn.setOnClickListener{ makeLogoutDialog() }
         }
@@ -113,6 +117,21 @@ class SettingsFragment : BaseSessionFragment<FragmentSettingsBinding, SettingsVi
         val dialog = WrapedDialogBasicOneButton(requireContext(), "관리자님의 탈퇴관련은\n 공생공생에 문의해주세요.")
             .apply { clickListener = object : WrapedDialogBasicOneButton.DialogButtonClickListener {
                 override fun dialogClickListener() { dismiss() } } }
+        showDialog(dialog, viewLifecycleOwner)
+    }
+
+    private fun makeOutReserveDataDialog(){
+        val dialog = WrapedDialogBasicTwoButton(requireContext(), "퇴실 데이터를 초기화 하시겠습니까?", "취소", "초기화").apply {
+            clickListener = object : WrapedDialogBasicTwoButton.DialogButtonClickListener{
+                override fun dialogCloseClickListener() { dismiss() }
+                @RequiresApi(Build.VERSION_CODES.O)
+                override fun dialogCustomClickListener() {
+                    viewmodel.outInitialize()
+                    Toast.makeText(requireContext(), "퇴실데이터가 현재 날짜 기준으로 초기화 되었습니다!", Toast.LENGTH_SHORT).show()
+                    dismiss()
+                }
+            }
+        }
         showDialog(dialog, viewLifecycleOwner)
     }
 
