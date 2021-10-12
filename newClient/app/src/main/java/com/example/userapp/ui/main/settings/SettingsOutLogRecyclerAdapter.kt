@@ -51,19 +51,10 @@ class SettingsOutLogRecyclerAdapter(var postDataList : ArrayList<PostDataInfo>):
            if(!postDataInfo.post_anonymous) { binding.settingsOutItemState.text = "승인대기" }
            else { binding.settingsOutItemState.text = "승인완료" }
 
-           if(postDataInfo.post_date == postDateNow){
-               val hour = postTimeNow.substring(0,2).toInt() - postDataInfo.post_time.substring(0,2).toInt()
-               val minute = postTimeNow.substring(3,5).toInt() - postDataInfo.post_time.substring(3,5).toInt()
-               if(hour == 0){
-                   binding.settingsOutItemTime.text = "${minute}분 전"
-               }
-               else{
-                   binding.settingsOutItemTime.text = "${hour}시간 전"
-               }
-           }
-           else{
-               binding.settingsOutItemTime.text = postDataInfo.post_date.substring(5)
-           }
+
+
+           binding.settingsOutItemTime.text = postDataInfo.post_date.substring(5) + "\n" + postDataInfo.post_time
+
        }
        init {
             itemView.setOnClickListener(){
