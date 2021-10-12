@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.userapp.ui.base.BaseSessionViewModel
 import com.example.userapp.data.AppDatabase
+import com.example.userapp.data.entity.DayTimeSlot
 import com.example.userapp.data.entity.PostCommentDataClass
 import com.example.userapp.data.model.AlarmItem
 import com.example.userapp.data.model.PostDataInfo
@@ -133,6 +134,14 @@ class CommunityViewModel(application: Application) : BaseSessionViewModel(applic
                 }
             }
         return getTokenArrayList
+    }
+
+    fun add_OutReserve(weekDay: String, modifiedSettingItemList: MutableList<DayTimeSlot>){
+        var map1 = mutableMapOf<String, Any>()
+        map1[weekDay] = modifiedSettingItemList
+        firestore.collection("한국장학재단_부산").document("community")
+            .collection("OUT_NOW").document("Out")
+            .update(map1)
     }
 
 
