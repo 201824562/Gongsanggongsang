@@ -13,6 +13,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +21,7 @@ import com.example.userapp.MainActivity
 import com.example.userapp.ui.base.BaseSessionFragment
 import com.example.userapp.data.dto.UserModel
 import com.example.userapp.data.entity.DayTimeSlot
+import com.example.userapp.data.model.ReservationFacility
 import com.example.userapp.databinding.FragmentSettingsOutReserveItemBinding
 import com.example.userapp.restartActivity
 import com.example.userapp.ui.base.sessionRestart
@@ -194,17 +196,12 @@ class SettingsOutReserveFragment : BaseSessionFragment<FragmentSettingsOutReserv
                 }
 
                 override fun dialogReserveClickListener() {
-                    var endTimeCal = Calendar.getInstance()
-                    var startTimeCal = Calendar.getInstance()
-                    var calPair = Pair(startTimeCal,endTimeCal)
+//                    var endTimeCal = Calendar.getInstance()
+//                    var startTimeCal = Calendar.getInstance()
+//                    var calPair = Pair(startTimeCal,endTimeCal)
+                    var tmp = viewmodel.create_deliveryOutReserveData()
+                    findNavController().navigate(SettingsOutReserveFragmentDirections.actionSettingsOutReserveFragmentToSettingsOutWriteFragment(tmp))
 
-                    userInfo?.let { info ->
-//                        calPair = viewmodel.add_reserve(info, args.myArg)
-                        var tmp = viewmodel.create_deliveryOutReserveData()
-                        Log.e("ofcourse tmp dayTimeSlot",tmp.modifiedSettingItemList.toString() )
-                        Log.e("ofcourse tmp startTime",tmp.outStartTime )
-                        Log.e("ofcourse tmp weekday",tmp.weekDay )
-                    }
                     val sdf = SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS", Locale.KOREA)
                     //(activity as MainActivity).setUseCompleteAlarm(calPair.second,false,(args.myArg.document_name+sdf.format(calPair.second.getTime()).toString()).hashCode())
                     confirmUsingDialog.dismiss()

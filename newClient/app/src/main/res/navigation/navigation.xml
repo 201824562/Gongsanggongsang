@@ -506,6 +506,9 @@
     <fragment
         android:id="@+id/settingsOutReserveFragment"
         android:name="com.example.userapp.ui.main.settings.SettingsOutReserveFragment">
+        <action
+            android:id="@+id/action_settingsOutReserveFragment_to_settingsOutWriteFragment"
+            app:destination="@id/settingsOutWriteFragment"/>
         <argument
             android:name="myArg"
             app:argType="com.example.userapp.data.model.ReservationFacility" />
@@ -515,9 +518,8 @@
         android:name="com.example.userapp.ui.main.settings.SettingsOutWriteFragment"
         android:label="SettingsOutWriteFragment">
         <argument
-            android:name="reservationTime"
-            app:argType="string"
-            android:defaultValue="0"/>
+            android:name="settingDeliveryOutReserveData"
+            app:argType="com.example.userapp.data.model.SettingDeliveryOutReserveData" />
         <action
             android:id="@+id/action_settingOutWrite_to_settingOutLog"
             app:destination="@id/settingsOutFragment"
