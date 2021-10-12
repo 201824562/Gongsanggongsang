@@ -1,12 +1,17 @@
 package com.example.userapp.ui.main.settings
 
 import android.content.Intent
+import android.os.Build
+import android.os.Build.VERSION
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.UserManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.userapp.MainActivity
@@ -43,14 +48,21 @@ class SettingsFragment : BaseSessionFragment<FragmentSettingsBinding, SettingsVi
         viewmodel.onSuccessDeleteUserInfoFromApp.observe(viewLifecycleOwner){ logout() }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun initViewFinal(savedInstanceState: Bundle?) {
         viewmodel.getUserInfo()
+        viewmodel.getinitRefTimeData()
+
         viewbinding.run {
             // changeInfoBtn.setOnClickListener { findNavController().navigate(R.id.action_mainFragment_to_settingsChangeInfoFragment) }
             changePwdBtn.setOnClickListener { findNavController().navigate(R.id.action_mainFragment_to_settingsChangePwdFragment) }
             withdrawalBtn.setOnClickListener { makeWithdrawalDialog() }
             logoutBtn.setOnClickListener{ makeLogoutDialog() }
             gettingOutBtn.setOnClickListener{ findNavController().navigate(R.id.action_mainFragment_to_settingOutFragment)}
+            outdataInitBtn.setOnClickListener{
+                viewmodel.outInitialize()
+                Toast.makeText(requireContext(), "퇴실데이터가 현재 날짜 기준으로 초기화 되었습니다!", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

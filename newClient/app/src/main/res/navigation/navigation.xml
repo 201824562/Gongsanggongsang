@@ -23,6 +23,7 @@
                 android:name="myArg"
                 app:argType="com.example.userapp.data.model.ReservationFacility" />
         </action>
+
         <action
             android:id="@+id/action_mainFragment_to_mainhomeNoticeFragment"
             app:destination="@id/mainhomeNoticeFragment" />
@@ -421,15 +422,16 @@
         android:id="@id/reservationEquipmentFragment"
         android:name="com.example.userapp.ui.main.reservation.ReservationEquipmentFragment">
     </fragment>
-    <fragment
-        android:id="@id/reservationFacilityFragment"
-        android:name="com.example.userapp.ui.main.reservation.ReservationFacilityFragment">
-    </fragment>
+
 
     <fragment
         android:id="@+id/settingsChangeInfoFragment"
         android:name="com.example.userapp.ui.main.settings.SettingsChangeInfoFragment"
         android:label="SettingsChangeInfoFragment" >
+        <fragment
+            android:id="@id/reservationFacilityFragment"
+            android:name="com.example.userapp.ui.main.reservation.ReservationFacilityFragment">
+        </fragment>
         <action
             android:id="@+id/action_settingsChangeInfoFragment_pop"
             app:popUpTo="@id/settingsChangeInfoFragment"
@@ -477,6 +479,7 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpToInclusive="true" />
     </fragment>
+
     <fragment
         android:id="@+id/settingsOutFragment"
         android:name="com.example.userapp.ui.main.settings.SettingsOutFragment"
@@ -492,6 +495,20 @@
             android:id="@+id/action_settingsOutFragment_pop"
             app:popUpTo="@id/settingsOutFragment"
             app:popUpToInclusive="true" />
+        <action
+            app:destination="@+id/settingsOutReserveFragment"
+            android:id="@+id/action_settingsOutFragment_to_settingsOutReserveFragment">
+            <argument
+                android:name="myArg"
+                app:argType="com.example.userapp.data.model.ReservationFacility" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/settingsOutReserveFragment"
+        android:name="com.example.userapp.ui.main.settings.SettingsOutReserveFragment">
+        <argument
+            android:name="myArg"
+            app:argType="com.example.userapp.data.model.ReservationFacility" />
     </fragment>
     <fragment
         android:id="@+id/settingsOutWriteFragment"
