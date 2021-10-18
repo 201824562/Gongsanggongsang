@@ -1,7 +1,6 @@
 package com.example.userapp.ui.main.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,13 +13,14 @@ import com.example.userapp.ui.base.BaseSessionFragment
 import com.example.userapp.data.model.PostDataInfo
 import com.example.userapp.databinding.FragmentMainhomeHomeBinding
 import com.example.userapp.ui.main.community.CommunityViewModel
-import com.example.userapp.ui.main.community.preview.CommunityPreviewMarketRecyclerAdapter
 
 class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityViewModel>(){
     override lateinit var viewbinding: FragmentMainhomeHomeBinding
     override val viewmodel: CommunityViewModel by viewModels()
+    val homeViewModel : HomeViewModel by viewModels()
 
     private lateinit var homeNoticeRecyclerAdapter: HomeNoticeRecyclerAdapter
+    private lateinit var homePreviewPhotoCardRecyclerAdapter: HomePreviewPhotoCardRecyclerAdapter
     private var homeNoticeItem : ArrayList<PostDataInfo> = arrayListOf()
 
     private lateinit var toCollectionBundle : Bundle
@@ -36,6 +36,7 @@ class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityV
 
     override fun initViewStart(savedInstanceState: Bundle?) {
         initMainHomeNoticeRecyclerView()
+        initMainHomePhotoCardRV()
     }
 
     override fun initDataBinding(savedInstanceState: Bundle?) {
@@ -43,6 +44,9 @@ class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityV
             homeNoticeItem = it
             homeNoticeRecyclerAdapter.notifyDataSetChanged()
             initMainHomeNoticeRecyclerView()
+        }
+        homeViewModel.getNoticePostData().observe(viewLifecycleOwner){
+            homePreviewPhotoCardRecyclerAdapter.submitList(it)
         }
     }
 
@@ -70,6 +74,9 @@ class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityV
             mainHomeNoticeAllButton.setOnClickListener {
                 findNavController().navigate(R.id.action_mainFragment_to_mainhomeNoticeFragment)
             }
+            mainHomePhotoCardAllButton.setOnClickListener {
+                findNavController().navigate(R.id.action_mainFragment_to_homePhotoCardFragment)
+            }
         }
     }
     private fun initMainHomeNoticeRecyclerView(){
@@ -80,6 +87,12 @@ class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityV
                 layoutManager = LinearLayoutManager(context)
                 adapter = homeNoticeRecyclerAdapter
             }
+        }
+    }
+    private fun initMainHomePhotoCardRV(){
+        viewbinding.run{
+            homePreviewPhotoCardRecyclerAdapter = HomePreviewPhotoCardRecyclerAdapter()
+            viewbinding.mainHomePhotoCardRv.adapter = homePreviewPhotoCardRecyclerAdapter
         }
     }
 }

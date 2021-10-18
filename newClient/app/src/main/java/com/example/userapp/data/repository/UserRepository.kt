@@ -5,12 +5,15 @@ import android.content.ContentValues
 import android.content.Context
 import android.util.Log
 import androidx.core.content.edit
+import androidx.lifecycle.LiveData
 import com.example.userapp.ui.base.BaseSessionViewModel
 import com.example.userapp.data.AppDatabase
 import com.example.userapp.data.dto.UserModel
 import com.example.userapp.data.model.Agency
+import com.example.userapp.data.model.PhotoCardInfo
 import com.example.userapp.data.model.ReceiverSignIn
 import com.example.userapp.data.model.SignUpInfo
+import com.example.userapp.utils.SingleLiveEvent
 import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -483,5 +486,7 @@ class UserRepository(appDatabase: AppDatabase) {
                 }
         }
     }
+
+
 
 }
