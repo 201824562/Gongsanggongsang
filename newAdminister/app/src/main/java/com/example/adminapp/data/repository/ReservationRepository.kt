@@ -777,12 +777,7 @@ class ReservationRepository() {
             if (needDel){
                 firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_EQUIPMENT_SETTINGS)
                     .document(oldItemName).delete()
-                    .addOnFailureListener { emitter.onError(Throwable("Error deleting RESERVATION_SETTING OF EQUIPMENT")) }
-                    .addOnSuccessListener { Log.e("checking", "삭제되었습니다!") }
-                firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_EQUIPMENT)
-                    .document(oldItemName).delete()
-                    .addOnSuccessListener { Log.e("checking", "삭제되었습니다!") }
-                    .addOnFailureListener { emitter.onError(Throwable("Error deleting RESERVATION_INFO OF EQUIPMENT")) }
+                    .addOnFailureListener{ emitter.onError(Throwable("Error deleting RESERVATION_INFO OF EQUIPMENT")) }
                 firestore.collection(agency).document(FIRESTORE_RESERVATION).collection(FIRESTORE_RESERVATION_EQUIPMENT)
                     .document(data.data.name).set(data.equipmentData.getNewThis())
                     .addOnFailureListener { emitter.onError(Throwable("Error saving RESERVATION_INFO OF EQUIPMENT")) }

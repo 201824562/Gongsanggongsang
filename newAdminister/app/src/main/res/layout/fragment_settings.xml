@@ -53,7 +53,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text=" 님의 프로필"
+                            android:text=" 님의 유저정보"
                             android:textSize="12sp"
                             android:textColor="@color/black_60"
                             android:fontFamily="@font/notosanskr_regular_hestia" />
@@ -177,6 +177,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="8dp"
                 android:background="@color/light_gray"/>
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/changePwd_btn"
                 android:layout_width="match_parent"

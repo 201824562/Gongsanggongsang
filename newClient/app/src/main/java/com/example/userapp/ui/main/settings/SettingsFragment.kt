@@ -55,6 +55,7 @@ class SettingsFragment : BaseSessionFragment<FragmentSettingsBinding, SettingsVi
 
         viewbinding.run {
             // changeInfoBtn.setOnClickListener { findNavController().navigate(R.id.action_mainFragment_to_settingsChangeInfoFragment) }
+            photoCardBtn.setOnClickListener { findNavController().navigate(R.id.action_mainFragment_to_settingsPhotoCardFragment ) }
             changePwdBtn.setOnClickListener { findNavController().navigate(R.id.action_mainFragment_to_settingsChangePwdFragment) }
             withdrawalBtn.setOnClickListener { makeWithdrawalDialog() }
             logoutBtn.setOnClickListener{ makeLogoutDialog() }

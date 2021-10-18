@@ -61,6 +61,13 @@
             app:exitAnim="@anim/slide_exit"
             app:popEnterAnim="@anim/slide_pop_enter"
             app:popExitAnim="@anim/slide_pop_exit" />
+        <action
+            android:id="@+id/action_mainFragment_to_settingsPhotoCardFragment"
+            app:destination="@id/settingsPhotoCardFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
     </fragment>
 
     <fragment
@@ -548,6 +555,24 @@
         <action
             android:id="@+id/action_homePhotoCardFragment_pop"
             app:popUpTo="@id/homePhotoCardFragment"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_homePhotoCardFragment_to_settingsPhotoCardFragment"
+            app:destination="@id/settingsPhotoCardFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+    </fragment>
+    <fragment
+        android:id="@+id/settingsPhotoCardFragment"
+        android:name="com.example.userapp.ui.main.settings.SettingsPhotoCardFragment"
+        android:label="SettingsPhotoCardFragment" >
+        <action
+            android:id="@+id/action_settingsPhotoCardFragment_pop"
+            app:popUpTo="@id/settingsPhotoCardFragment"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpToInclusive="true" />

@@ -1,4 +1,4 @@
-package com.example.userapp.ui.main.home
+package com.example.adminapp.ui.main.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.userapp.R
-import com.example.userapp.databinding.FragmentMainhomeDetailPhotoCardBinding
-import com.example.userapp.ui.base.BaseSessionFragment
+import com.example.adminapp.R
+import com.example.adminapp.databinding.FragmentMainhomeDetailPhotoCardBinding
+import com.example.adminapp.ui.base.BaseSessionFragment
 
 class HomePhotoCardFragment :  BaseSessionFragment<FragmentMainhomeDetailPhotoCardBinding, HomeViewModel>() {
     override lateinit var viewbinding: FragmentMainhomeDetailPhotoCardBinding
@@ -33,7 +33,7 @@ class HomePhotoCardFragment :  BaseSessionFragment<FragmentMainhomeDetailPhotoCa
     }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
-        viewbinding.myPhotoCardBtn.setOnClickListener { findNavController().navigate(R.id.action_homePhotoCardFragment_to_settingsPhotoCardFragment) }
+
     }
 
     private fun initMainHomePhotoCardRV(){

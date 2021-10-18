@@ -487,6 +487,24 @@ class UserRepository(appDatabase: AppDatabase) {
         }
     }
 
+    private val FIRESTORE_PHOTO_CARD = "PHOTO_CARD"
+
+    fun saveUserPhotoCard(token : String, data : PhotoCardInfo) : Completable {
+        return Completable.create { emitter ->
+            fireStore.collection(FIRESTORE_PHOTO_CARD)
+                .document(token).set(data)
+                .addOnSuccessListener { emitter.onComplete() }
+                .addOnFailureListener { emitter.onError(Throwable("Error saving PHOTO_CARD")) }
+        }
+    }
+    fun deleteUserPhotoCard(token : String) : Completable {
+        return Completable.create { emitter ->
+            fireStore.collection(FIRESTORE_PHOTO_CARD)
+                .document(token).delete()
+                .addOnSuccessListener { emitter.onComplete() }
+                .addOnFailureListener { emitter.onError(Throwable("Error delete PHOTO_CARD")) }
+        }
+    }
 
 
 }

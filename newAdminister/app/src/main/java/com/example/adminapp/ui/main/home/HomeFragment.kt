@@ -19,8 +19,10 @@ import com.example.adminapp.ui.main.community.CommunityViewModel
 class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityViewModel>(){
     override lateinit var viewbinding: FragmentMainhomeHomeBinding
     override val viewmodel: CommunityViewModel by viewModels()
+    private val homeViewModel : HomeViewModel by viewModels()
 
     private lateinit var homeNoticeRecyclerAdapter: HomeNoticeRecyclerAdapter
+    private lateinit var homePreviewPhotoCardRecyclerAdapter: HomePreviewPhotoCardRecyclerAdapter
     private var homeNoticeItem : ArrayList<PostDataInfo> = arrayListOf()
 
     private lateinit var toCollectionBundle : Bundle
@@ -43,6 +45,10 @@ class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityV
             homeNoticeItem = it
             homeNoticeRecyclerAdapter.notifyDataSetChanged()
             initMainHomeNoticeRecyclerView()
+            initMainHomePhotoCardRV()
+        }
+        homeViewModel.getUserPhotoCardDataList().observe(viewLifecycleOwner){
+            homePreviewPhotoCardRecyclerAdapter.submitList(it)
         }
     }
 
@@ -71,6 +77,9 @@ class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityV
             mainHomeNoticeAllButton.setOnClickListener {
                 findNavController().navigate(R.id.action_mainFragment_to_mainhomeNoticeFragment)
             }
+            mainHomePhotoCardAllButton.setOnClickListener {
+                findNavController().navigate(R.id.action_mainFragment_to_homePhotoCardFragment)
+            }
         }
     }
     private fun initMainHomeNoticeRecyclerView(){
@@ -81,6 +90,12 @@ class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityV
                 layoutManager = LinearLayoutManager(context)
                 adapter = homeNoticeRecyclerAdapter
             }
+        }
+    }
+    private fun initMainHomePhotoCardRV(){
+        viewbinding.run{
+            homePreviewPhotoCardRecyclerAdapter = HomePreviewPhotoCardRecyclerAdapter()
+            viewbinding.mainHomePhotoCardRv.adapter = homePreviewPhotoCardRecyclerAdapter
         }
     }
 }

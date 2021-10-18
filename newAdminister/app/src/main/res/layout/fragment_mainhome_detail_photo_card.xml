@@ -38,6 +38,7 @@
                 android:background="@color/transparent"
                 android:fontFamily="@font/notosanskr_regular_hestia"/>
             <Button
+                android:visibility="gone"
                 android:id="@+id/myPhotoCard_btn"
                 android:layout_width="25dp"
                 android:layout_height="25dp"

@@ -17,7 +17,7 @@ import com.example.userapp.ui.main.community.CommunityViewModel
 class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityViewModel>(){
     override lateinit var viewbinding: FragmentMainhomeHomeBinding
     override val viewmodel: CommunityViewModel by viewModels()
-    val homeViewModel : HomeViewModel by viewModels()
+    private val homeViewModel : HomeViewModel by viewModels()
 
     private lateinit var homeNoticeRecyclerAdapter: HomeNoticeRecyclerAdapter
     private lateinit var homePreviewPhotoCardRecyclerAdapter: HomePreviewPhotoCardRecyclerAdapter
@@ -45,7 +45,7 @@ class HomeFragment : BaseSessionFragment<FragmentMainhomeHomeBinding, CommunityV
             homeNoticeRecyclerAdapter.notifyDataSetChanged()
             initMainHomeNoticeRecyclerView()
         }
-        homeViewModel.getNoticePostData().observe(viewLifecycleOwner){
+        homeViewModel.getUserPhotoCardDataList().observe(viewLifecycleOwner){
             homePreviewPhotoCardRecyclerAdapter.submitList(it)
         }
     }

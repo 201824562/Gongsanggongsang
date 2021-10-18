@@ -3,14 +3,29 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Programs/ZProjects/AndroidProjects/Gongsanggongsang/newAdminister/app/src/main/res/drawable-v24/ic_basic_profile_photo.xml" value="0.26564102564102565" />
         <entry key="..\:/Programs/ZProjects/AndroidProjects/Gongsanggongsang/newAdminister/app/src/main/res/drawable-v24/view_border_light_gray.xml" value="0.25277777777777777" />
         <entry key="..\:/Programs/ZProjects/AndroidProjects/Gongsanggongsang/newAdminister/app/src/main/res/drawable/button_10dp_stroke_rectangle_black20.xml" value="0.25277777777777777" />
+        <entry key="..\:/Programs/ZProjects/AndroidProjects/Gongsanggongsang/newAdminister/app/src/main/res/drawable/button_5dp_event_stroke_rectangle_black20.xml" value="0.26979166666666665" />
+        <entry key="..\:/Programs/ZProjects/AndroidProjects/Gongsanggongsang/newAdminister/app/src/main/res/drawable/button_5dp_stroke_rectangle_black20.xml" value="0.26979166666666665" />
         <entry key="..\:/Programs/ZProjects/AndroidProjects/Gongsanggongsang/newAdminister/app/src/main/res/drawable/ic_arrow_back_basic.xml" value="0.25277777777777777" />
+        <entry key="..\:/Programs/ZProjects/AndroidProjects/Gongsanggongsang/newAdminister/app/src/main/res/drawable/ic_my_photo_card.xml" value="0.26979166666666665" />
+        <entry key="..\:/Programs/ZProjects/AndroidProjects/Gongsanggongsang/newAdminister/app/src/main/res/drawable/ic_user_email.xml" value="0.26979166666666665" />
         <entry key="..\:/Programs/ZProjects/AndroidProjects/Gongsanggongsang/newAdminister/app/src/main/res/layout/dialog_alarm.xml" value="0.151268115942029" />
+        <entry key="..\:/Programs/ZProjects/AndroidProjects/Gongsanggongsang/newAdminister/app/src/main/res/layout/fragment_main.xml" value="0.23802083333333332" />
+        <entry key="..\:/Programs/ZProjects/AndroidProjects/Gongsanggongsang/newAdminister/app/src/main/res/layout/fragment_mainhome_detail_photo_card.xml" value="0.25364583333333335" />
+        <entry key="..\:/Programs/ZProjects/AndroidProjects/Gongsanggongsang/newAdminister/app/src/main/res/layout/fragment_mainhome_home.xml" value="0.25364583333333335" />
         <entry key="..\:/Programs/ZProjects/AndroidProjects/Gongsanggongsang/newAdminister/app/src/main/res/layout/fragment_reservation_add.xml" value="0.25364583333333335" />
         <entry key="..\:/Programs/ZProjects/AndroidProjects/Gongsanggongsang/newAdminister/app/src/main/res/layout/fragment_reservation_child_types.xml" value="0.25364583333333335" />
+        <entry key="..\:/Programs/ZProjects/AndroidProjects/Gongsanggongsang/newAdminister/app/src/main/res/layout/fragment_reservation_detail_facility.xml" value="0.25364583333333335" />
+        <entry key="..\:/Programs/ZProjects/AndroidProjects/Gongsanggongsang/newAdminister/app/src/main/res/layout/fragment_reservation_edit.xml" value="0.25364583333333335" />
+        <entry key="..\:/Programs/ZProjects/AndroidProjects/Gongsanggongsang/newAdminister/app/src/main/res/layout/fragment_reservation_edit_detail.xml" value="0.25364583333333335" />
+        <entry key="..\:/Programs/ZProjects/AndroidProjects/Gongsanggongsang/newAdminister/app/src/main/res/layout/fragment_settings.xml" value="0.25364583333333335" />
         <entry key="..\:/Programs/ZProjects/AndroidProjects/Gongsanggongsang/newAdminister/app/src/main/res/layout/fragment_settings_manage_user.xml" value="0.25364583333333335" />
+        <entry key="..\:/Programs/ZProjects/AndroidProjects/Gongsanggongsang/newAdminister/app/src/main/res/layout/fragment_signin.xml" value="0.23802083333333332" />
         <entry key="..\:/Programs/ZProjects/AndroidProjects/Gongsanggongsang/newAdminister/app/src/main/res/layout/item_settings_allowed_user.xml" value="0.25364583333333335" />
+        <entry key="..\:/Programs/ZProjects/AndroidProjects/Gongsanggongsang/newAdminister/app/src/main/res/layout/item_user_photo_card.xml" value="0.25364583333333335" />
+        <entry key="..\:/Programs/ZProjects/AndroidProjects/Gongsanggongsang/newAdminister/app/src/main/res/layout/item_user_photo_card_preview.xml" value="0.25364583333333335" />
         <entry key="app/src/main/res/layout/dialog_accent_twobutton.xml" value="0.2296875" />
         <entry key="app/src/main/res/layout/dialog_basic_twobutton.xml" value="0.2296875" />
         <entry key="app/src/main/res/layout/fragment_reservation_add.xml" value="0.22685185185185186" />
@@ -19,5 +34,5 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_15_PREVIEW" project-jdk-name="15" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_15" project-jdk-name="15" project-jdk-type="JavaSDK" />
 </project>
