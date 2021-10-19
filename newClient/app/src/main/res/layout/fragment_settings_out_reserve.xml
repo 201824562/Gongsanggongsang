@@ -336,7 +336,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:textSize="12sp"
-            android:text="최대 예약 가능한 시간 : maxtime"
+            android:text="최대 예약 가능한 시간 : 10분"
             android:textColor="@color/black_87"
             android:fontFamily="@font/notosanskr_regular_hestia"
             app:layout_constraintTop_toBottomOf="@id/facility_timeslice_recyclerView"
