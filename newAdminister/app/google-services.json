@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:188121749461:android:3187eeb5859a2c9857cf5c",
         "android_client_info": {
-          "package_name": "com.example.adminapp"
+          "package_name": "com.parasol.adminapp"
         }
       },
       "oauth_client": [
