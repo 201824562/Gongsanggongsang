@@ -13,7 +13,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId 'com.example.userapp'
+        applicationId 'com.parasol.userapp'
         minSdkVersion 24
         targetSdkVersion 30
         versionCode 1

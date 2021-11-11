@@ -96,7 +96,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:188121749461:android:a900da6a75427d5557cf5c",
         "android_client_info": {
-          "package_name": "com.example.userapp"
+          "package_name": "com.parasol.userapp"
         }
       },
       "oauth_client": [
