@@ -35,6 +35,7 @@ class ReservationCurrentFragment :
     override lateinit var viewbinding: FragmentMainhomeReservationCurrentBinding
     override val viewmodel: ReservationViewModel by viewModels()
     val database = FirebaseFirestore.getInstance()
+    var tmp =2
 
     override fun initViewbinding(
         inflater: LayoutInflater,
@@ -67,7 +68,7 @@ class ReservationCurrentFragment :
             emptyList(),
             onClickNoUsingIcon = {
                 makeDialog(2, "해당 시설의 예약을 취소하시겠습니까?\n", "예약취소", null, it)
-
+                Log.e("tmp",tmp.toString())
             }
         )
 
