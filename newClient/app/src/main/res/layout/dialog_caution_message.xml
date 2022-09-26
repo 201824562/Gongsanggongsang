@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/view_12dp_white"
+    style="@style/Widget.AppCompat.Button.Borderless"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginHorizontal="16dp">
+
+    <TextView
+        android:id="@+id/message_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:text="message"
+        android:textSize="14sp"
+        android:textColor="@color/black_87"
+        android:fontFamily="@font/notosanskr_regular_hestia"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <Button
+        android:id="@+id/confirm_btn"
+        android:background="@drawable/button_18dp_storke_rectangle_bluegreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="6dp"
+        android:text="확인"
+        android:textSize="14dp"
+        android:textColor="@color/blue_green"
+        android:fontFamily="@font/notosanskr_regular_hestia"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/message_textview"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/confirm_btn"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_content_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@drawable/edittext_underline_black20"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+    <View
+        android:id="@+id/reserve_item_icon_background"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/view_oval_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/reserve_item_icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@color/transparent"
+        app:layout_constraintBottom_toBottomOf="@id/reserve_item_icon_background"
+        app:layout_constraintLeft_toLeftOf="@id/reserve_item_icon_background"
+        app:layout_constraintRight_toRightOf="@id/reserve_item_icon_background"
+        app:layout_constraintTop_toTopOf="@id/reserve_item_icon_background" />
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/ic_arrow_next" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/reserve_item_icon_background"
+        app:layout_constraintBottom_toBottomOf="@+id/reserve_item_icon_background"
+        app:layout_constraintLeft_toRightOf="@+id/reserve_item_icon_background"
+        android:layout_marginLeft="20dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/reserve_edit_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" - "
+            android:textColor="@color/black_87"
+            android:textSize="14sp"
+            android:fontFamily="@font/notosanskr_regular_hestia" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/reservation_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:text=" - "
+                android:textColor="@color/black_60"
+                android:textSize="12sp" />
+            <LinearLayout
+                android:id="@+id/reservation_using_state_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="15sp"
+                    android:background="@color/black_20"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"/>
+                <TextView
+                    android:id="@+id/reservation_endTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/notosanskr_regular_hestia"
+                    android:text=" - "
+                    android:textColor="@color/black_60"
+                    android:textSize="12sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/notosanskr_regular_hestia"
+                    android:text=" 종료"
+                    android:textColor="@color/black_60"
+                    android:textSize="12sp" />
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="15sp"
+                    android:background="@color/black_20"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"/>
+                <TextView
+                    android:id="@+id/reservation_leftTime_minute"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/notosanskr_regular_hestia"
+                    android:text=" - "
+                    android:textColor="@color/pinkish_orange"
+                    android:textSize="12sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/notosanskr_regular_hestia"
+                    android:text="분 "
+                    android:textColor="@color/pinkish_orange"
+                    android:textSize="12sp" />
+                <TextView
+                    android:id="@+id/reservation_leftTime_second"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/notosanskr_regular_hestia"
+                    android:text=" - "
+                    android:textColor="@color/pinkish_orange"
+                    android:textSize="12sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/notosanskr_regular_hestia"
+                    android:text="초"
+                    android:textColor="@color/pinkish_orange"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

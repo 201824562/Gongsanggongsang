@@ -1,23 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.userapp">
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!--네트워크 권한 열어주기 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="${applicationId}"
+        android:label="공생공생"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.BaseStructure"> <!--android:label="App ${variant}"/ android:label="@string/app_name" -->
-        <activity android:name="com.example.userapp.MainActivity">
+        android:theme="@style/Theme.BaseStructure"
+        android:usesCleartextTraffic="true">
+        <receiver
+            android:name=".service.ReservationAlarmReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name=".service.ReservationBeforeUseAlarmReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <!-- android:label="App ${variant}"/ android:label="@string/app_name" -->
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:name=".service.FirebaseService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

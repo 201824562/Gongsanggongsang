@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp">
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="10dp"
+        android:text="아이디 찾기"
+        android:textSize="24sp"
+        android:textColor="@color/applemint"
+        android:fontFamily="@font/notosanskr_bold_hestia" />
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/id_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="50dp"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintBottom_toTopOf="@id/findInfo_btn"
+        android:clipToPadding="false">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/text_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:text="이름"
+                android:textSize="14sp"
+                android:textColor="@color/black_gray"
+                android:fontFamily="@font/notosanskr_regular_hestia" />
+            <EditText
+                android:id="@+id/edit_text_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_underline_black20"
+                android:hint="이름을 입력해주세요."
+                android:imeOptions="actionNext"
+                android:inputType="textPersonName"
+                android:maxLength="10"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:singleLine="true"
+                android:textSize="12sp"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:textColorHint="@color/black_50"
+                android:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/text_name_warning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"
+                android:paddingLeft="8dp"
+                android:textColor="@color/pinkish_orange"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:text="" />
+            <TextView
+                android:id="@+id/text_BirthInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:paddingLeft="8dp"
+                android:text="생년월일(8자리)"
+                android:textSize="14sp"
+                android:textColor="@color/black_gray"
+                android:fontFamily="@font/notosanskr_regular_hestia" />
+            <EditText
+                android:id="@+id/edit_text_BirthInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_underline_black20"
+                android:hint="생년월일을 입력해주세요. (ex.20000101)"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:padding="8dp"
+                android:maxLength="8"
+                android:singleLine="true"
+                android:textSize="12sp"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:textColorHint="@color/black_50"
+                android:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/text_BirthInfo_warning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"
+                android:paddingLeft="8dp"
+                android:textColor="@color/pinkish_orange"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:text=""/>
+            <TextView
+                android:id="@+id/text_SmsInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:paddingLeft="8dp"
+                android:text="휴대폰 번호"
+                android:textSize="14sp"
+                android:textColor="@color/black_gray"
+                android:fontFamily="@font/notosanskr_regular_hestia" />
+            <EditText
+                android:id="@+id/edit_text_SmsInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_underline_black20"
+                android:hint="'-'없이 휴대폰번호를 입력해주세요."
+                android:imeOptions="actionDone"
+                android:inputType="number"
+                android:maxLength="11"
+                android:padding="8dp"
+                android:singleLine="true"
+                android:textSize="12sp"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:textColorHint="@color/black_50"
+                android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/text_SmsInfo_warning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"
+                android:paddingLeft="8dp"
+                android:textColor="@color/pinkish_orange"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:text=""/>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/pwd_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="50dp"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintBottom_toTopOf="@id/findInfo_btn"
+        android:clipToPadding="false"
+        android:visibility="gone">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/text_name2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:text="이름"
+                android:textSize="14sp"
+                android:textColor="@color/black_gray"
+                android:fontFamily="@font/notosanskr_regular_hestia" />
+            <EditText
+                android:id="@+id/edit_text_name2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_underline_black20"
+                android:hint="이름을 입력해주세요."
+                android:imeOptions="actionNext"
+                android:inputType="textPersonName"
+                android:maxLength="10"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:singleLine="true"
+                android:textSize="12sp"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:textColorHint="@color/black_50"
+                android:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/text_name_warning2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"
+                android:paddingLeft="8dp"
+                android:textColor="@color/pinkish_orange"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:text="" />
+            <TextView
+                android:id="@+id/text_Id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:paddingLeft="8dp"
+                android:text="아이디"
+                android:textSize="14sp"
+                android:textColor="@color/black_gray"
+                android:fontFamily="@font/notosanskr_regular_hestia" />
+            <EditText
+                android:id="@+id/edit_text_Id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_underline_black20"
+                android:hint="아이디를 입력해주세요."
+                android:imeOptions="actionDone"
+                android:inputType="textEmailAddress"
+                android:maxLength="11"
+                android:padding="8dp"
+                android:singleLine="true"
+                android:textSize="12sp"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:textColorHint="@color/black_50"
+                android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/text_Id_warning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"
+                android:paddingLeft="8dp"
+                android:textColor="@color/pinkish_orange"
+                android:fontFamily="@font/notosanskr_regular_hestia"
+                android:text=""/>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+    <Button
+        android:id="@+id/findInfo_btn"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="아이디 찾기"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/notosanskr_bold_hestia"
+        android:background="@drawable/button_5dp_rectangle_bluegreen" />
+</androidx.constraintlayout.widget.ConstraintLayout>

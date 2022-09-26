@@ -16,6 +16,11 @@
         <!-- Customize your theme here. -->
         <item name="android:textColorPrimary">@color/black</item> <!-- Toolbar Title Color -->
         <item name="android:textColorSecondary">@color/black</item> <!-- Toolbar Up Button Color -->
+        <item name="android:textViewStyle">@style/TextViewStyle</item>
+        <item name="android:buttonStyle">@style/ButtonStyle</item>
+        <item name="android:editTextStyle">@style/EditTextStyle</item>
+        <item name="android:radioButtonStyle">@style/RadioButtonStyle</item>
+        <item name="android:checkboxStyle">@style/CheckboxStyle</item>
     </style>
 
     <style name="CustomBottomSheetDialogStyle" parent="Theme.Design.Light.BottomSheetDialog">

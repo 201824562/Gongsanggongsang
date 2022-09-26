@@ -4,7 +4,8 @@ plugins {
     id 'koin'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
-    id "androidx.navigation.safeargs.kotlin"
+    //id 'kotlin-android-extensions'
+    id("androidx.navigation.safeargs.kotlin")
     id 'com.google.gms.google-services' //firbase
 }
 
@@ -14,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId 'com.example.adminapp'
-        minSdkVersion 28
+        minSdkVersion 24
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -28,60 +29,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-   /* def BASE_URL = "BASE_URL"
-    buildTypes {
-        //디폴트
-*//*        debug {
-            debuggable true
-        }*//*
-        staging{
-            initWith debug
-            applicationIdSuffix ".staging"
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", BASE_URL, '"www.jiyoon_stage.com"'
-        }
-        release {
-            applicationId ".release"
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", BASE_URL, '"www.jiyoon_release.com"'
-            initWith debug //일단
-            //signingConfig signingConfigs.release -> 후에 개발자 본인 키 넣어줌. ????
-        }
-    }
-
-    flavorDimensions "store" //, "pay"
-    productFlavors{
-        googlePlay{
-            dimension "store"
-            applicationIdSuffix ".googleplay"
-            buildConfigField "String", BASE_URL, '"www.jiyoon_googlePlay.com"'
-            resValue "string", "app_name", "googlePlay"
-        }
-        appStore{
-            dimension "store"
-            applicationIdSuffix ".appstore"
-            buildConfigField "String", BASE_URL, '"www.jiyoon_appStore.com"'
-            resValue "string", "app_name", "appStore"
-        }
-*//*        free{
-            dimension "pay"
-            applicationIdSuffix ".paid"
-            buildConfigField "String", BASE_URL, '"www.jiyoon_free.com"'
-            resValue "string", "app_name", "paid"
-            manifestPlaceholders variant : 'free'
-        }*//*
-    }
-
-    variantFilter{ variant ->
-        def name_types = variant.flavors*.name
-        def name = name_types.join()
-
-        if (variant.buildType.name == "release" ){ //&& !name.contains("googlePlay")
-            setIgnore(true)
-        }
-    }*/
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -92,45 +39,59 @@ android {
     }
     buildFeatures {
         viewBinding true
-        dataBinding false //BaseActivityDataBinding 사용할거면 해제.
+        dataBinding false
     }
 }
 
 dependencies {
 
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    // activity result
     implementation 'androidx.activity:activity-ktx:1.2.2'
     implementation 'androidx.fragment:fragment-ktx:1.3.2'
-    //androidx
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    implementation 'com.google.firebase:firebase-firestore-ktx:21.6.0'
+    implementation 'com.google.firebase:firebase-storage-ktx:20.0.0'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-
-    //androidx
-    implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
     implementation 'com.google.android.material:material:1.3.0'
+    implementation "io.coil-kt:coil:1.2.1"
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.21'
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
+    implementation "io.reactivex.rxjava2:rxkotlin:2.4.0"
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
 
-    // koin
-    implementation 'io.insert-koin:koin-core:3.0.1'
-    implementation 'io.insert-koin:koin-core-ext:3.0.1'
-    implementation 'io.insert-koin:koin-android:3.0.1'
-    implementation 'io.insert-koin:koin-android-ext:3.0.1'
-    testImplementation 'io.insert-koin:koin-test:3.0.1'
+    def room_version = "2.3.0"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version" // optional - Kotlin Extensions and Coroutines support for Room
+    implementation "androidx.room:room-ktx:$room_version" // optional - Test helpers
+    testImplementation "androidx.room:room-testing:$room_version"
+    implementation 'androidx.room:room-rxjava2:2.3.0'
 
+    //firebase
+    implementation 'com.google.firebase:firebase-firestore-ktx:23.0.0'
+    implementation platform('com.google.firebase:firebase-bom:28.0.1')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'  //firebase implementation
+    implementation 'com.google.firebase:firebase-messaging:17.3.4' //firebase 푸시알람 라이브러리
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+
+    //Okhttp
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    //Gson
+    implementation 'com.google.code.gson:gson:2.8.5'
     // retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
@@ -138,17 +99,5 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit-mock:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2'
 
-    //implementation
-    implementation platform('com.google.firebase:firebase-bom:28.0.1')
-    implementation 'com.google.firebase:firebase-analytics-ktx'
 
-    //room component
-    def room_version = "2.3.0"
-    implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version" // optional - Kotlin Extensions and Coroutines support for Room
-    implementation "androidx.room:room-ktx:$room_version" // optional - Test helpers
-    testImplementation "androidx.room:room-testing:$room_version"
-
-    //firebase
-    implementation 'com.google.firebase:firebase-firestore-ktx:23.0.0'
 }

@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_root_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
     android:padding="16dp">
     <!--    <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/Title_layout"
@@ -37,7 +38,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="135dp"
         android:src ="@drawable/image_mainimage"
         />
     <LinearLayout
@@ -54,7 +54,7 @@
             android:textSize="16sp"
             android:textColor="@color/blue_green"
             android:fontFamily="@font/notosanskr_bold_hestia"
-            android:background="@drawable/button_5dp_rectangle_white" />
+            android:background="@drawable/button_5dp_event_rectangle_white" />
         <Button
             android:id="@+id/signup_btn"
             android:layout_width="match_parent"
@@ -64,7 +64,7 @@
             android:textSize="16sp"
             android:textColor="@color/white"
             android:fontFamily="@font/notosanskr_bold_hestia"
-            android:background="@drawable/button_5dp_rectangle_bluegreen" />
+            android:background="@drawable/button_5dp_event_rectangle_bluegreen" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 

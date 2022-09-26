@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="false"
+    android:focusable="false"
+    android:background="@drawable/edittext_underline_light_gray"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    android:paddingLeft="18dp"
+    android:paddingRight="18dp"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp">
+        <TextView
+            android:id="@+id/item_reservation_detail_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" - "
+            android:textSize="12sp"
+            android:textColor="@color/black_87"
+            android:fontFamily="@font/notosanskr_regular_hestia" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="월 "
+            android:textSize="12sp"
+            android:textColor="@color/black_87"
+            android:fontFamily="@font/notosanskr_regular_hestia" />
+        <TextView
+            android:id="@+id/item_reservation_detail_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" - "
+            android:textSize="12sp"
+            android:textColor="@color/black_87"
+            android:fontFamily="@font/notosanskr_regular_hestia" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="일"
+            android:textSize="12sp"
+            android:textColor="@color/black_87"
+            android:fontFamily="@font/notosanskr_regular_hestia" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/item_reservation_detail_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" - "
+            android:textSize="16sp"
+            android:textColor="@color/black_87"
+            android:fontFamily="@font/notosanskr_regular_hestia" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="6dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사용자 : "
+            android:textSize="14sp"
+            android:textColor="@color/black_87"
+            android:fontFamily="@font/notosanskr_regular_hestia" />
+        <TextView
+            android:id="@+id/item_reservation_detail_userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" - "
+            android:textSize="14sp"
+            android:textColor="@color/black_87"
+            android:fontFamily="@font/notosanskr_regular_hestia" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="6dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사용시간 : "
+            android:textSize="14sp"
+            android:textColor="@color/black_87"
+            android:fontFamily="@font/notosanskr_regular_hestia" />
+        <TextView
+            android:id="@+id/item_reservation_detail_startTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="14sp"
+            android:textColor="@color/black_87"
+            android:fontFamily="@font/notosanskr_regular_hestia" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" - "
+            android:textSize="14sp"
+            android:textColor="@color/black_87"
+            android:fontFamily="@font/notosanskr_regular_hestia" />
+        <TextView
+            android:id="@+id/item_reservation_detail_endTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="14sp"
+            android:textColor="@color/black_87"
+            android:fontFamily="@font/notosanskr_regular_hestia" />
+    </LinearLayout>
+</LinearLayout>

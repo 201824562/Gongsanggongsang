@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TextViewStyle" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="background">@color/transparent</item>
+        <item name="android:fontFamily">@font/notosan_font_family</item>
+    </style>
+    <style name="ButtonStyle" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
+        <item name="android:fontFamily">@font/notosan_font_family</item>
+    </style>
+
+    <style name="EditTextStyle" parent="@android:style/Widget.DeviceDefault.EditText">
+        <item name="android:fontFamily">@font/notosan_font_family</item>
+    </style>
+
+    <style name="RadioButtonStyle" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
+        <item name="android:fontFamily">@font/notosan_font_family</item>
+    </style>
+
+    <style name="CheckboxStyle" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/notosan_font_family</item>
+    </style>
+    <style name="TabCustomText14" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="TabCustomText16" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="TabCustomText18" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">18sp</item>
+    </style>
+    <!-- TODO : tabIndicator 탭 인디케이터  안보임 -->
+    <style name="TabCustomStyle" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">16sp</item>
+        <item name="tabGravity">fill</item>
+        <item name="tabMaxWidth">0dp</item>
+        <item name="tabMode">fixed</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/black_60</item>
+        <item name="tabSelectedTextColor">@color/applemint</item>
+        <item name="android:fontFamily">@font/notosanskr_bold_hestia</item>
+        <item name="android:includeFontPadding">true</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="tabIndicatorColor">@color/applemint</item>
+        <item name="tabIndicatorHeight">3dp</item>
+    </style>
+    <style name="CustomBottomSheetDialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+    <style name="MyAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:fontFamily">@font/notosanskr_regular_hestia</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/black_87</item>
+        <item name="android:background">@android:color/white</item>
+    </style>
+    <style name="mySpinnerItemStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
+        <item name="android:textColor">@color/black_87</item>
+    </style>
+    <style name="ToggleButton.CustomTheme" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/black_50</item>
+        <item name="colorControlActivated">@color/pinkish_orange</item>
+    </style>
+</resources>

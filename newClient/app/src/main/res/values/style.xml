@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TextViewStyle" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:fontFamily">@font/notosan_font_family</item>
+    </style>
+    <style name="ButtonStyle" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
+        <item name="android:fontFamily">@font/notosan_font_family</item>
+    </style>
+
+    <style name="EditTextStyle" parent="@android:style/Widget.DeviceDefault.EditText">
+        <item name="android:fontFamily">@font/notosan_font_family</item>
+    </style>
+
+    <style name="RadioButtonStyle" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
+        <item name="android:fontFamily">@font/notosan_font_family</item>
+    </style>
+
+    <style name="CheckboxStyle" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/notosan_font_family</item>
+    </style>
+    <style name="DialogCustomTheme" parent="android:Theme.Holo.Dialog.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+    </style>
+    <style name="CommonTabCustom" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black_87</item>
+        <item name="android:fontFamily">@font/notosanskr_bold_hestia</item>
+    </style>
+    <!-- TODO : tabIndicator 탭 인디케이터  안보임 -->
+    <style name="TabCustomStyle" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">16sp</item>
+        <item name="tabGravity">fill</item>
+        <item name="tabMaxWidth">0dp</item>
+        <item name="tabMode">fixed</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/black_60</item>
+        <item name="tabSelectedTextColor">@color/applemint</item>
+        <item name="android:fontFamily">@font/notosanskr_bold_hestia</item>
+        <item name="android:includeFontPadding">true</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="tabIndicatorColor">@color/applemint</item>
+        <item name="tabIndicatorHeight">3dp</item>
+    </style>
+    <style name="TabCustomText18" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="TabCustomText16" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="SearchViewCustomText14" parent="Widget.AppCompat.SearchView">
+        <item name="android:textSize">14sp</item>
+    </style>
+</resources>

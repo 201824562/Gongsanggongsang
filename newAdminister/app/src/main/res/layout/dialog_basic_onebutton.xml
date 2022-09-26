@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="0dp"
+    app:cardCornerRadius="16dp"
+    app:cardUseCompatPadding="true"
+    app:cardBackgroundColor="@color/transparent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/dialog_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="가입 승인 대기중이에요.\n공간 관리자님께 문의해주세요."
+            android:textSize="14sp"
+            android:textColor="@color/black_87"
+            android:fontFamily="@font/notosanskr_regular_hestia"/>
+        <Button
+            android:id="@+id/dialog_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="20dp"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text="확인"
+            android:textColor="@color/applemint"
+            android:fontFamily="@font/notosanskr_bold_hestia"
+            android:textSize="14sp"
+            android:background="@drawable/button_20dp_event_stroke_rectangle_bluegreen"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

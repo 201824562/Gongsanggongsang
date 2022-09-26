@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_content_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@drawable/edittext_underline_black20"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+    <View
+        android:id="@+id/alarm_item_icon_background"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/view_oval_light_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/alarm_item_icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/ic_alarm_item_icon"
+        app:layout_constraintBottom_toBottomOf="@id/alarm_item_icon_background"
+        app:layout_constraintLeft_toLeftOf="@id/alarm_item_icon_background"
+        app:layout_constraintRight_toRightOf="@id/alarm_item_icon_background"
+        app:layout_constraintTop_toTopOf="@id/alarm_item_icon_background" />
+    <ImageButton
+        android:id="@+id/alarm_move_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/ic_arrow_next" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/alarm_item_icon_background"
+        app:layout_constraintBottom_toBottomOf="@+id/alarm_item_icon_background"
+        app:layout_constraintLeft_toRightOf="@+id/alarm_item_icon_background"
+        android:layout_marginLeft="12dp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/alarm_type_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:text="공지"
+                android:textColor="@color/black_87"
+                android:textSize="12sp"
+                android:fontFamily="@font/notosanskr_regular_hestia" />
+            <TextView
+                android:id="@+id/alarm_passed_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1분 전"
+                android:textColor="@color/applemint"
+                android:textSize="12sp"
+                android:fontFamily="@font/notosanskr_regular_hestia" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/alarm_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/notosanskr_regular_hestia"
+            android:text="새로운 공지사항이 등록됐어요. 확인해주세요!"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/black_60"
+            android:textSize="12sp" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

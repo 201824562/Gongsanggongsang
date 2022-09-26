@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/reservation_detail_empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingTop="150dp"
+        android:text="물품/시설의 예약내역이 없습니다."
+        android:textSize="14sp"
+        android:textColor="@color/black_87"
+        android:gravity="center"
+        android:visibility="visible" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/reservation_detail_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingBottom="?attr/actionBarSize"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_reservation_detail2"
+        android:visibility="gone"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

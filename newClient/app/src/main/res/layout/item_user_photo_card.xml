@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginBottom="4dp"
+    android:layout_marginTop="4dp"
+    app:cardElevation="0dp"
+    app:cardCornerRadius="16dp"
+    app:cardUseCompatPadding="true"
+    app:cardBackgroundColor="@color/transparent">
+    <LinearLayout
+        android:id="@+id/item_allowed_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:focusable="false"
+        android:background="@drawable/view_border_light_gray"
+        android:padding="20dp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/userProfileImage"
+                android:layout_width="80sp"
+                android:layout_height="80sp"
+                android:src="@drawable/ic_basic_profile_photo"
+                android:background="@drawable/view_oval_pale_orange"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp">
+                <TextView
+                    android:id="@+id/userName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:text="김활활"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/notosanskr_regular_hestia" />
+                <ImageView
+                    android:id="@+id/icon_userJob"
+                    android:layout_width="16sp"
+                    android:layout_height="16sp"
+                    android:src="@drawable/ic_user_job"
+                    android:background="@color/transparent"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/userName" />
+                <TextView
+                    android:id="@+id/userJob"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintLeft_toRightOf="@id/icon_userJob"
+                    app:layout_constraintTop_toBottomOf="@id/userName"
+                    android:layout_marginLeft="7dp"
+                    android:text="대학생"
+                    android:textSize="12sp"
+                    android:textColor="@color/black_50"
+                    android:fontFamily="@font/notosanskr_regular_hestia" />
+                <ImageView
+                    android:id="@+id/icon_userEmail"
+                    android:layout_width="16sp"
+                    android:layout_height="16sp"
+                    android:src="@drawable/ic_user_email"
+                    android:background="@color/transparent"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/userJob" />
+                <TextView
+                    android:id="@+id/userEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintLeft_toRightOf="@id/icon_userEmail"
+                    app:layout_constraintTop_toBottomOf="@id/userJob"
+                    android:layout_marginLeft="7dp"
+                    android:text="\@gongsang"
+                    android:textSize="12sp"
+                    android:textColor="@color/black_50"
+                    android:fontFamily="@font/notosanskr_regular_hestia" />
+                <TextView
+                    android:id="@+id/userIntroduce"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/userEmail"
+                    android:text="301호에 새로 들어왔어요~ 잘부탁드립니다. 현재 앱을 개발하는 일을 하고 있어요."
+                    android:textSize="12sp"
+                    android:textColor="@color/black_50"
+                    android:fontFamily="@font/notosanskr_regular_hestia" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+        <Button
+            android:visibility="gone"
+            android:id="@+id/deny_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_10dp_stroke_rectangle_black20"
+            android:fontFamily="@font/notosanskr_regular_hestia"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="회원 퇴출"
+            android:textColor="@color/pinkish_orange"
+            android:textSize="14sp" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

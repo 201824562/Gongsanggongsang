@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/document_name_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:text="documentname_예약"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/select_day_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="날짜선택"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/document_name_textview"/>
+
+    <TextView
+        android:id="@+id/message1_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        android:text="* 다음주 예약은 다음주 0시부터 가능합니다."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/document_name_textview"/>
+
+
+    <LinearLayout
+        android:id="@+id/mon_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:background="@drawable/button_6dp_event_rectangle_palegray"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tue_view"
+        app:layout_constraintTop_toBottomOf="@id/select_day_textview">
+
+        <TextView
+            android:id="@+id/mon_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="월"/>
+
+        <TextView
+            android:id="@+id/day_mon_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="19" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tue_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:background="@drawable/button_6dp_event_rectangle_palegray"
+        app:layout_constraintStart_toEndOf="@id/mon_view"
+        app:layout_constraintEnd_toStartOf="@id/wed_view"
+        app:layout_constraintTop_toBottomOf="@id/select_day_textview">
+
+        <TextView
+            android:id="@+id/tue_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="화"/>
+
+        <TextView
+            android:id="@+id/day_tue_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/wed_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:background="@drawable/button_6dp_event_rectangle_palegray"
+        app:layout_constraintStart_toEndOf="@id/tue_view"
+        app:layout_constraintEnd_toStartOf="@id/thu_view"
+        app:layout_constraintTop_toBottomOf="@id/select_day_textview">
+
+        <TextView
+            android:id="@+id/wed_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="수"/>
+
+        <TextView
+            android:id="@+id/day_wed_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="21"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/thu_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:background="@drawable/button_6dp_event_rectangle_palegray"
+        app:layout_constraintStart_toEndOf="@id/wed_view"
+        app:layout_constraintEnd_toStartOf="@id/fri_view"
+        app:layout_constraintTop_toBottomOf="@id/select_day_textview">
+
+        <TextView
+            android:id="@+id/thu_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="목"/>
+
+        <TextView
+            android:id="@+id/day_thu_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="21"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/fri_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:background="@drawable/button_6dp_event_rectangle_palegray"
+        app:layout_constraintStart_toEndOf="@id/thu_view"
+        app:layout_constraintEnd_toStartOf="@id/sat_view"
+        app:layout_constraintTop_toBottomOf="@id/select_day_textview">
+
+        <TextView
+            android:id="@+id/fri_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="금"/>
+
+        <TextView
+            android:id="@+id/day_fri_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="22"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sat_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:background="@drawable/button_6dp_event_rectangle_palegray"
+        app:layout_constraintStart_toEndOf="@id/fri_view"
+        app:layout_constraintEnd_toStartOf="@id/sun_view"
+        app:layout_constraintTop_toBottomOf="@id/select_day_textview">
+
+        <TextView
+            android:id="@+id/sat_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="토"/>
+
+        <TextView
+            android:id="@+id/day_sat_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="23"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sun_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:background="@drawable/button_6dp_event_rectangle_palegray"
+        app:layout_constraintStart_toEndOf="@id/sat_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/select_day_textview">
+
+        <TextView
+            android:id="@+id/sun_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="일"/>
+
+        <TextView
+            android:id="@+id/day_sun_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="24"/>
+    </LinearLayout>
+
+
+
+<!--    <Button-->
+<!--        android:id="@+id/mon_btn"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="월"-->
+<!--        android:background="@drawable/button_6dp_event_rectangle_palegray"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toStartOf="@id/tue_btn"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/select_day_textview"/>-->
+
+<!--    <Button-->
+<!--        android:id="@+id/tue_btn"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="화"-->
+<!--        android:background="@drawable/button_6dp_event_rectangle_palegray"-->
+<!--        app:layout_constraintStart_toEndOf="@id/mon_view"-->
+<!--        app:layout_constraintEnd_toStartOf="@id/wed_btn"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/select_day_textview"/>-->
+
+<!--    <Button-->
+<!--        android:id="@+id/wed_btn"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@drawable/button_6dp_event_rectangle_palegray"-->
+<!--        android:text="수"-->
+<!--        app:layout_constraintStart_toEndOf="@id/tue_btn"-->
+<!--        app:layout_constraintEnd_toStartOf="@id/thu_btn"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/select_day_textview"/>-->
+<!--    <Button-->
+<!--        android:id="@+id/thu_btn"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@drawable/button_6dp_event_rectangle_palegray"-->
+<!--        android:text="목"-->
+<!--        app:layout_constraintStart_toEndOf="@id/wed_btn"-->
+<!--        app:layout_constraintEnd_toStartOf="@id/fri_btn"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/select_day_textview"/>-->
+<!--    <Button-->
+<!--        android:id="@+id/fri_btn"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@drawable/button_6dp_event_rectangle_palegray"-->
+<!--        android:text="금"-->
+<!--        app:layout_constraintStart_toEndOf="@id/thu_btn"-->
+<!--        app:layout_constraintEnd_toStartOf="@id/sat_btn"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/select_day_textview"/>-->
+
+<!--    <Button-->
+<!--        android:id="@+id/sat_btn"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@drawable/button_6dp_event_rectangle_palegray"-->
+<!--        android:text="토"-->
+<!--        app:layout_constraintStart_toEndOf="@id/fri_btn"-->
+<!--        app:layout_constraintEnd_toStartOf="@id/sun_btn"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/select_day_textview"/>-->
+
+<!--    <Button-->
+<!--        android:id="@+id/sun_btn"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@drawable/button_6dp_event_rectangle_palegray"-->
+<!--        android:text="일"-->
+<!--        app:layout_constraintStart_toEndOf="@id/sat_btn"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/select_day_textview"/>-->
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

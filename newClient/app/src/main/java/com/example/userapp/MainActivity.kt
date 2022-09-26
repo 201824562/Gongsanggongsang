@@ -1,8 +1,10 @@
 package com.example.userapp
 
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
@@ -15,11 +17,14 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.viewbinding.ViewBinding
-import com.example.userapp.base.*
+import com.example.userapp.ui.base.*
 import com.example.userapp.databinding.ActivityMainBinding
+import com.example.userapp.service.ReservationAlarmReceiver
+import com.example.userapp.service.ReservationBeforeUseAlarmReceiver
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() {
-    companion object{ val TOOLBAR_TITLE = "title" }
 
     override lateinit var  viewbinding: ActivityMainBinding
     override val viewmodel: MainActivityViewModel by viewModels()
@@ -28,7 +33,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController : NavController
-
+    var selectedItems : ArrayList<String> = arrayListOf()
     override fun initToolbar() {
         window.apply {
             navigationBarColor = ContextCompat.getColor(this@MainActivity, R.color.white)
@@ -40,9 +45,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
         setContentView(viewbinding.root)
     }
 
-    override fun initViewStart(savedInstanceState: Bundle?) {}
+    override fun initViewStart(savedInstanceState: Bundle?) { }
 
-    override fun initDataBinding(savedInstanceState: Bundle?) {}
+    override fun initDataBinding(savedInstanceState: Bundle?) { }
 
     override fun initViewFinal(savedInstanceState: Bundle?) {
         setToolbarWithNavcontroller()
@@ -56,6 +61,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment
         navController = navHostFragment.navController
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
         appBarConfiguration = AppBarConfiguration(setOf(R.id.mainFragment))
         setupActionBarWithNavController(navController, appBarConfiguration)
 
@@ -64,12 +70,12 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
             viewbinding.toolbar.setNavigationOnClickListener{ findNavController(R.id.nav_host).navigateUp() }   //이거 필요한가?
             when (destination.id){
-                R.id.introFragment, R.id.signUpWaitFragment -> hideToolbar()
-                R.id.signInFragment, R.id.signUpFirstFragment,
-                R.id.signUpSecondFragment-> showToolbarTitle("")
-                R.id.mainFragment -> hideToolbar()
-
-                else -> showToolbarTitle("각자프래그에 맞는 이름으로 추가해주기.")
+                R.id.signInFragment, R.id.signInFindInfoFragment,
+                R.id.signUpPermissionFragment, R.id.signUpAgencyFragment, R.id.signUpFirstFragment, R.id.signUpSecondFragment,
+                R.id.reservationFacilitySelectFragment,
+                R.id.settingsChangePwdFragment, R.id.settingsChangeInfoDetailFragment -> showToolbarTitle("")
+                R.id.settingsChangeInfoFragment -> showToolbarTitle("계정 정보 관리")
+                else -> hideToolbar()
             }
         }
     }
@@ -80,7 +86,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
             R.layout.fragment_main -> {
                 finish()
                 return true }
-
         }
 
         return super.onOptionsItemSelected(item)
@@ -92,7 +97,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
         currentFocusedView?.let {
             inputMethodManager.hideSoftInputFromWindow(currentFocusedView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS) } }
 
-    private fun showToolbarTitle(title : String){
+    private fun showToolbarTitle( title : String){
         viewbinding.toolbar.visibility = View.VISIBLE
         viewbinding.toolbarText.text = title
         supportActionBar?.show()
@@ -106,6 +111,65 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>() 
         finish()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+    }
+    fun getPhoto() : ArrayList<String>{
+        return selectedItems
+    }
+
+    // reservation alarm manager
+    fun setUseCompleteAlarm(endTimeCal :Calendar,click: Boolean, notificationId:Int) {
+        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        val alarmIntent = Intent(this, ReservationAlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            this, notificationId, alarmIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT)
+        if(!click){
+            alarmManager.setExact(
+                AlarmManager.RTC_WAKEUP,
+                endTimeCal.timeInMillis,
+                pendingIntent
+            )
+        }else{
+            alarmManager.set(   // 5
+                AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                0,
+                pendingIntent
+            )
+        }
+
+    }
+
+    fun setBeforeUseAlarm(startTimeCal :Calendar, notificationId:Int) {
+        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        val alarmIntent = Intent(this, ReservationBeforeUseAlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            this, notificationId, alarmIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT)
+        startTimeCal.add(Calendar.MINUTE,-5)
+        val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.KOREA)
+        Log.e("startTimeCal", sdf.format(startTimeCal.getTime()).toString())
+        alarmManager.setExact(
+            AlarmManager.RTC_WAKEUP,
+            startTimeCal.timeInMillis,
+            pendingIntent
+        )
+    }
+    fun setCancelUseAlarm(notificationId: Int){
+        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        val alarmIntent = Intent(this, ReservationAlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            this, notificationId, alarmIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT)
+        alarmManager.cancel(pendingIntent)
+    }
+
+    fun setCancelBeforeUseAlarm(notificationId: Int){
+        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        val alarmIntent = Intent(this, ReservationBeforeUseAlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            this, notificationId, alarmIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT)
+        alarmManager.cancel(pendingIntent)
     }
 }
 

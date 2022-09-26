@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/spinner_list_item_text_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="8dp"
+    android:paddingVertical="15dp"
+    android:background="@drawable/edittext_underline_black20"
+    android:singleLine="true"
+    android:fontFamily="@font/notosanskr_regular_hestia"
+    android:gravity="center_vertical|start"
+    android:textSize="12sp"
+    tools:text="30분" />

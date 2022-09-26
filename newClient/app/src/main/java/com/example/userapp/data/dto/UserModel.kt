@@ -7,7 +7,9 @@ data class UserModel(
     val name: String = "",
     val nickname: String = "",
     val birth: String = "",
-    val phone: String = ""
+    val phone: String = "",
+    val agency : String = ""/*,
+    val fcmTokenList : List<String> = listOf()*/
 ){
-    fun getUserEntity() : User { return User(id, name, nickname, birth, phone) }
+    fun getUserEntity() : User { return User(id, name, nickname, birth, phone, agency) }
 }

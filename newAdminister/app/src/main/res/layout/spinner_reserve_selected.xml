@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/spinner_reserve_selected_text_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/transparent"
+    android:fontFamily="@font/notosanskr_regular_hestia"
+    android:gravity="center_vertical"
+    android:singleLine="true"
+    android:textSize="12sp"
+    android:textColor="@color/black_60"
+    app:drawableTint="@color/black_87"
+    app:tint="@color/white"
+    tools:text="단위시간을 선택해주세요. (단위: 분)" />

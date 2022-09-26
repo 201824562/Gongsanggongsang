@@ -2,36 +2,612 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navigation"
-    app:startDestination="@id/introFragment">
+    app:startDestination="@id/splashFragment">
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.adminapp.ui.mainhome.MainFragment"
+        android:name="com.example.adminapp.ui.main.MainFragment"
         android:label="MainFragment" >
         <action
-            android:id="@+id/action_mainFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
+            android:id="@+id/action_mainFragment_to_reservationEditFragment"
+            app:destination="@id/reservationEditFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+        <action
+            android:id="@+id/action_mainFragment_to_reservationSelectAddFragment"
+            app:destination="@id/reservationSelectAddFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+        <action
+            android:id="@+id/action_mainFragment_to_reservationAddFragment"
+            app:destination="@id/reservationAddFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit">
+            <argument
+                android:name="reservationType"
+                app:argType="com.example.adminapp.data.model.ReservationType"
+                app:nullable="true"
+                android:defaultValue="@null" />
+        </action>
+        <action
+            android:id="@+id/action_mainFragment_to_reservationDetailEquipmentFragment"
+            app:destination="@id/reservationDetailEquipmentFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit">
+            <argument
+                android:name="equipmentData"
+                app:argType="com.example.adminapp.data.model.ReservationEquipmentData"
+                app:nullable="true"
+                android:defaultValue="@null"/>
+            <argument
+                android:name="equipmentSettingData"
+                app:argType="com.example.adminapp.data.model.ReservationEquipmentSettingData"
+                app:nullable="true"
+                android:defaultValue="@null" />
+        </action>
+        <action
+            android:id="@+id/action_mainFragment_to_reservationDetailFacilityFragment"
+            app:destination="@id/reservationDetailFacilityFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit">
+            <argument
+                android:name="facilityBundle"
+                app:argType="com.example.adminapp.data.model.ReservationFacilityBundle"
+                app:nullable="true"
+                android:defaultValue="@null" />
+        </action>
+        <action
+            app:destination="@+id/communityPostMarketFragment"
+            android:id="@+id/action_mainFragment_to_communityPostMarket"/>
+        <action
+            app:destination="@+id/communityPostFragment"
+            android:id="@+id/action_mainFragment_to_communityPost"/>
+        <action
+            android:id="@+id/action_mainFragment_to_mainhomeNoticeFragment"
+            app:destination="@id/mainhomeNoticeFragment" />
+        <action
+            app:destination="@+id/communityPreviewFragment"
+            android:id="@+id/action_mainFragment_to_communityPreviewFragment"/>
+        <action
+            app:destination="@+id/settingsOutFragment"
+            android:id="@+id/action_mainFragment_to_settingsOutFragment"/>
+        <action
+            android:id="@+id/action_mainFragment_to_settingsChangePwdFragment"
+            app:destination="@id/settingsChangePwdFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+        <action
+            android:id="@+id/action_mainFragment_to_settingsAllowUserFragment"
+            app:destination="@id/settingsAllowUserFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+        <action
+            android:id="@+id/action_mainFragment_to_settingsManageUserFragment"
+            app:destination="@id/settingsManageUserFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+        <action
+            android:id="@+id/action_mainFragment_to_settingsManageOutFragment"
+            app:destination="@id/communityPreviewFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+        <action
+            android:id="@+id/action_mainFragment_to_homePhotoCardFragment"
+            app:destination="@id/homePhotoCardFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsOutFragment"
+        android:name="com.example.adminapp.ui.main.settings.SettingsOutFragment"
+        android:label="SettingsOutFragment">
+        <action
+            android:id="@+id/action_settingOut_to_settingOutPost"
+            app:destination="@id/communityPostMarketFragment" />
+        <action
+            android:id="@+id/action_settingsOutFragment_pop"
+            app:popUpTo="@id/settingsOutFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainhomeNoticeFragment"
+        android:name="com.example.adminapp.ui.main.home.HomeNoticeFragment">
+        <action
+            android:id="@+id/action_noticeFragment_to_noticeWriteFragment"
+            app:destination="@+id/homeNoticeWriteFragment"/>
+        <action
+            android:id="@+id/action_mainhomeNoticeFragment_to_noticePostFragment"
+            app:destination="@+id/communityPostFragment"/>
+        <action
+            android:id="@+id/action_communityNotice_to_communitySearch"
+            app:destination="@id/communitySearchFragment"/>
+        <action
+            android:id="@+id/action_mainNotice_pop"
+            app:popUpTo="@id/mainhomeNoticeFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
     <fragment
         android:id="@+id/splashFragment"
         android:name="com.example.adminapp.ui.splash.SplashFragment"
         android:label="SplashFragment" >
         <action
             android:id="@+id/action_splashFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            app:destination="@id/mainFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"
+            app:popUpTo="@+id/splashFragment"
+            app:popUpToInclusive="true"/>
         <action
-            android:id="@+id/action_splashFragment_to_introFragment"
-            app:destination="@id/introFragment" />
+            android:id="@+id/action_splashFragment_to_signInGraph"
+            app:destination="@id/signInGraph"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"
+            app:popUpTo="@+id/splashFragment"
+            app:popUpToInclusive="true" >
+        </action>
+    </fragment>
+    <action
+        android:id="@+id/action_global_signInFragment"
+        app:destination="@id/signInFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"
+        app:popUpTo="@id/mainFragment"
+        app:popUpToInclusive="true" />
+    <navigation
+        android:id="@+id/signInGraph"
+        app:startDestination="@id/signInFragment">
+        <argument
+            android:name="findInfoType"
+            app:argType="com.example.adminapp.ui.signin.FindInfoType"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+        <fragment
+            android:id="@+id/signInFragment"
+            android:name="com.example.adminapp.ui.signin.SignInFragment"
+            android:label="SignInFragment" >
+            <action
+                android:id="@+id/action_signInFragment_to_mainFragment"
+                app:destination="@id/mainFragment"
+                app:popEnterAnim="@anim/slide_pop_enter"
+                app:popExitAnim="@anim/slide_pop_exit"
+                />
+            <action
+                android:id="@+id/action_signInFragment_to_signInFindInfoFragment"
+                app:destination="@id/signInFindInfoFragment"
+                app:enterAnim="@anim/slide_enter"
+                app:exitAnim="@anim/slide_exit"
+                app:popEnterAnim="@anim/slide_pop_enter"
+                app:popExitAnim="@anim/slide_pop_exit" >
+                <argument
+                    android:name="findInfoType"
+                    app:argType="com.example.adminapp.ui.signin.FindInfoType"
+                    app:nullable="true"
+                    android:defaultValue="@null"/>
+            </action>
+        </fragment>
+        <fragment
+            android:id="@+id/signInFindInfoFragment"
+            android:name="com.example.adminapp.ui.signin.SignInFindInfoFragment"
+            android:label="SignInFindInfoFragment">
+            <argument
+                android:name="findInfoType"
+                app:argType="com.example.adminapp.ui.signin.FindInfoType"
+                app:nullable="true"
+                android:defaultValue="@null"/>
+            <action
+                android:id="@+id/action_signInFindInfoFragment_to_signInFindInfoResultFragment"
+                app:destination="@id/signInFindInfoResultFragment"
+                app:popUpTo="@id/signInFindInfoFragment"
+                app:popUpToInclusive="true"
+                app:exitAnim="@anim/slide_exit"
+                app:popEnterAnim="@anim/slide_pop_enter"
+                app:popExitAnim="@anim/slide_pop_exit">
+            </action>
+        </fragment>
+        <fragment
+            android:id="@+id/signInFindInfoResultFragment"
+            android:name="com.example.adminapp.ui.signin.SignInFindInfoResultFragment"
+            android:label="SignInFindInfoResultFragment">
+            <action
+                android:id="@+id/action_signInFindInfoResultFragment_pop"
+                app:popUpTo="@id/signInFindInfoResultFragment"
+                app:popUpToInclusive="true"
+                app:popEnterAnim="@anim/slide_pop_enter"
+                app:popExitAnim="@anim/slide_pop_exit" />
+            <action
+                android:id="@+id/action_signInFindInfoResultFragment_to_signInFindInfoFragment"
+                app:destination="@id/signInFindInfoFragment"
+                app:popUpTo="@id/signInFindInfoResultFragment"
+                app:popUpToInclusive="true" >
+            </action>
+        </fragment>
+    </navigation>
+    <fragment
+        android:id="@+id/reservationEditFragment"
+        android:name="com.example.adminapp.ui.main.reservation.edit.ReservationEditFragment"
+        android:label="ReservationEditFragment" >
+        <action
+            android:id="@+id/action_reservationEditFragment_pop"
+            app:popUpTo="@id/reservationEditFragment"
+            app:popUpToInclusive="true"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+        <action
+            android:id="@+id/action_reservationEditFragment_to_reservationEditDetailFragment"
+            app:destination="@id/reservationEditDetailFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit" >
+            <argument
+                android:name="reservationItem"
+                app:argType="com.example.adminapp.data.model.ReservationItem"
+                app:nullable="true"
+                android:defaultValue="@null"/>
+        </action>
     </fragment>
     <fragment
-        android:id="@+id/settingsFragment"
-        android:name="com.example.adminapp.ui.mainhome.settings.SettingsFragment"
-        android:label="SettingsFragment" />
-    <fragment
-        android:id="@+id/introFragment"
-        android:name="com.example.adminapp.ui.intro.IntroFragment"
-        android:label="IntroFragment" >
+        android:id="@+id/reservationEditDetailFragment"
+        android:name="com.example.adminapp.ui.main.reservation.edit.ReservationEditDetailFragment"
+        android:label="ReservationEditDetailFragment" >
+        <argument
+            android:name="reservationItem"
+            app:argType="com.example.adminapp.data.model.ReservationItem"
+            app:nullable="true"
+            android:defaultValue="@null"/>
         <action
-            android:id="@+id/action_introFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            android:id="@+id/action_reservationEditDetailFragment_pop"
+            app:popUpTo="@id/reservationEditDetailFragment"
+            app:popUpToInclusive="true"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+    </fragment>
+    <fragment
+        android:id="@+id/reservationSelectAddFragment"
+        android:name="com.example.adminapp.ui.main.reservation.add.ReservationSelectAddFragment"
+        android:label="ReservationSelectAddFragment" >
+        <argument
+            android:name="reservationType"
+            app:argType="com.example.adminapp.data.model.ReservationType"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_reservationSelectAddFragment_to_reservationAddFragment"
+            app:destination="@id/reservationAddFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+        <action
+            android:id="@+id/action_reservationSelectAddFragment_pop"
+            app:popUpTo="@id/reservationSelectAddFragment"
+            app:popUpToInclusive="true"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+    </fragment>
+    <fragment
+        android:id="@+id/reservationAddFragment"
+        android:name="com.example.adminapp.ui.main.reservation.add.ReservationAddFragment"
+        android:label="ReservationAddFragment" >
+        <argument
+            android:name="reservationType"
+            app:argType="com.example.adminapp.data.model.ReservationType"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_reservationAddFragment_pop"
+            app:popUpTo="@id/reservationAddFragment"
+            app:popUpToInclusive="true"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+    </fragment>
+    <fragment
+        android:id="@+id/reservationDetailEquipmentFragment"
+        android:name="com.example.adminapp.ui.main.reservation.detail.ReservationDetailEquipmentFragment"
+        android:label="ReservationDetailEquipmentFragment" >
+        <argument
+            android:name="equipmentData"
+            app:argType="com.example.adminapp.data.model.ReservationEquipmentData"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+        <argument
+            android:name="equipmentSettingData"
+            app:argType="com.example.adminapp.data.model.ReservationEquipmentSettingData"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_reservationDetailEquipmentFragment_pop"
+            app:popUpTo="@id/reservationDetailEquipmentFragment"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit"/>
+        <action
+            android:id="@+id/action_reservationDetailEquipmentFragment_to_reservationEditDetailFragment"
+            app:destination="@id/reservationEditDetailFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit" >
+            <argument
+                android:name="reservationItem"
+                app:argType="com.example.adminapp.data.model.ReservationItem"
+                app:nullable="true"
+                android:defaultValue="@null"/>
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/reservationDetailFacilityFragment"
+        android:name="com.example.adminapp.ui.main.reservation.detail.ReservationDetailFacilityFragment"
+        android:label="ReservationDetailFacilityFragment">
+        <argument
+            android:name="facilityBundle"
+            app:argType="com.example.adminapp.data.model.ReservationFacilityBundle"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_reservationDetailFacilityFragment_pop"
+            app:popUpTo="@id/reservationDetailFacilityFragment"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit" />
+        <action
+            android:id="@+id/action_reservationDetailFacilityFragment_to_reservationEditDetailFragment"
+            app:destination="@id/reservationEditDetailFragment"
+            app:enterAnim="@anim/slide_enter"
+            app:exitAnim="@anim/slide_exit"
+            app:popEnterAnim="@anim/slide_pop_enter"
+            app:popExitAnim="@anim/slide_pop_exit" >
+            <argument
+                android:name="reservationItem"
+                app:argType="com.example.adminapp.data.model.ReservationItem"
+                app:nullable="true"
+                android:defaultValue="@null"/>
+        </action>
+    </fragment>
+    <!--    community-->
+    <fragment
+        android:id="@+id/communityWriteFragment"
+        android:name="com.example.adminapp.ui.main.community.write.CommunityWriteFragment">
+        <action
+            android:id="@+id/action_communityWrite_to_communityGetPhoto"
+            app:destination="@+id/communityGetPhotoFragment"/>
+        <action
+            android:id="@+id/action_communityWrite_to_communityPost"
+            app:destination="@+id/communityPostFragment"
+            app:popUpTo="@id/communityPreviewFragment"/>
+        <argument
+            app:argType="string"
+            android:name="collection_name"
+            android:defaultValue="0"/>
+        <action
+            android:id="@+id/action_communityWrite_pop"
+            app:popUpTo="@id/communityWriteFragment"
+            app:popUpToInclusive="true" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/homeNoticeWriteFragment"
+        android:name="com.example.adminapp.ui.main.home.HomeNoticeWriteFragment"
+        android:label="HomeNoticeWriteFragment">
+        <action
+            android:id="@+id/action_homeNoticeWrite_to_homeNoticePost"
+            app:destination="@id/communityPostFragment"
+            app:popUpTo="@id/homeNoticeWriteFragment"
+            app:popUpToInclusive="true" />
+
+        <action
+            android:id="@+id/action_homeNoticeWriteFragment_pop"
+            app:popUpTo="@id/homeNoticeWriteFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_homeNoticeWriteFragment_to_homeNoticePhotoFragment"
+            app:destination="@id/communityGetPhotoFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/communityPreviewFragment"
+        android:name="com.example.adminapp.ui.main.community.preview.CommunityPreviewFragment">
+        <action
+            app:destination="@+id/communityWriteFragment"
+            android:id="@+id/action_communityPreview_to_communityWrite"/>
+        <action
+            app:destination="@+id/communityWriteMarketFragment"
+            android:id="@+id/action_communityPreview_to_communityWriteMarket"/>
+
+        <action
+            app:destination="@+id/communityPostMarketFragment"
+            android:id="@+id/action_communityPreview_to_communityPostMarket"/>
+        <action
+            app:destination="@+id/communityPostFragment"
+            android:id="@+id/action_communityPreview_to_communityPost"/>
+
+        <argument
+            app:argType="string"
+            android:name="collection_name"
+            android:defaultValue="0"/>
+        <action
+            android:id="@+id/action_communityPreviewFragment_pop"
+            app:popUpTo="@id/communityPreviewFragment"
+            app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_communityPreview_communitySearch"
+            app:destination="@id/communitySearchFragment" />
+    </fragment>
+    <fragment
+        android:id="@id/communityWriteMarketFragment"
+        android:name="com.example.adminapp.ui.main.community.write.CommunityWriteMarketFragment">
+        <action
+            android:id="@+id/action_communityWriteMarket_to_communityGetPhoto"
+            app:destination="@+id/communityGetPhotoFragment"/>
+        <action
+            android:id="@+id/action_communityWriteMarket_to_communityPostMarket"
+            app:destination="@+id/communityPostMarketFragment"
+            app:popUpTo="@id/communityPreviewFragment"/>
+        <action
+            android:id="@+id/action_communityWriteMarket_to_communityPhoto"
+            app:destination="@+id/communityPhotoFragment" />
+        <action
+            android:id="@+id/action_communityMarketWrite_pop"
+            app:popUpTo="@id/communityWriteMarketFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/communityPostFragment"
+        android:name="com.example.adminapp.ui.main.community.post.CommunityPostFragment">
+        <action
+            android:id="@+id/action_communityPost_to_communityPhoto"
+            app:destination="@+id/communityPhotoFragment"/>
+        <action
+            android:id="@+id/action_community_post_pop"
+            app:popUpTo="@id/communityPostFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            app:argType="string"
+            android:name="collection_name"
+            android:defaultValue="0"/>
+        <argument
+            app:argType="string"
+            android:name="document_name"
+            android:defaultValue="0"/>
+        <argument
+            android:name="post_data_info"
+            app:argType="com.example.adminapp.data.model.PostDataInfo" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/communityPostMarketFragment"
+        android:name="com.example.adminapp.ui.main.community.post.CommunityPostMarketFragment">
+        <action
+            android:id="@+id/action_communityPostMarketFragment_pop"
+            app:popUpTo="@id/communityPostMarketFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_communityPostMarket_to_communityPhoto"
+            app:destination="@+id/communityPhotoFragment"/>
+        <argument
+            android:name="post_data_info"
+            app:argType="com.example.adminapp.data.model.PostDataInfo" />
+    </fragment>
+
+    <fragment
+        android:id="@id/communityGetPhotoFragment"
+        android:name="com.example.adminapp.ui.main.community.write.CommunityGetPhotoFragment">
+        <action
+            android:id="@+id/action_communityGetPhotoFragment_pop"
+            app:popUpTo="@id/communityGetPhotoFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/communityPhotoFragment"
+        android:name="com.example.adminapp.ui.main.community.post.CommunityPhotoFragment">
+        <argument
+            android:name="photo_uri"
+            app:argType="string[]"/>
+        <action
+            android:id="@+id/action_communityPhotoFragment_pop"
+            app:popUpTo="@id/communityPhotoFragment"
+            app:popUpToInclusive="true" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/communitySearchFragment"
+        android:name="com.example.adminapp.ui.main.community.preview.CommunitySearchFragment"
+        android:label="CommunitySearchFragment">
+        <action
+            android:id="@+id/action_communitySearch_to_communityPost"
+            app:destination="@id/communityPostFragment"/>
+        <action
+            android:id="@+id/action_communitySearch_to_communityPostMarket"
+            app:destination="@id/communityPostMarketFragment"/>
+
+        <argument
+            android:name="getCollectionName"
+            app:argType="string"
+            android:defaultValue="0"/>
+        <action
+            android:id="@+id/action_communitySearch_pop"
+            app:popUpTo="@id/communitySearchFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/settingsChangePwdFragment"
+        android:name="com.example.adminapp.ui.main.settings.SettingsChangePwdFragment"
+        android:label="SettingsChangePwdFragment" >
+        <action
+            android:id="@+id/action_settingsChangePwdFragment_pop"
+            app:popUpTo="@id/settingsChangePwdFragment"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsAllowUserFragment"
+        android:name="com.example.adminapp.ui.main.settings.SettingsAllowUserFragment"
+        android:label="SettingsAllowUserFragment" >
+        <action
+            android:id="@+id/action_settingsAllowUserFragment_pop"
+            app:popUpTo="@id/settingsAllowUserFragment"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsManageUserFragment"
+        android:name="com.example.adminapp.ui.main.settings.SettingsManageUserFragment"
+        android:label="SettingsManageUserFragment">
+        <action
+            android:id="@+id/action_settingsManageUserFragment_pop"
+            app:popUpTo="@id/settingsManageUserFragment"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/homePhotoCardFragment"
+        android:name="com.example.adminapp.ui.main.home.HomePhotoCardFragment"
+        android:label="HomePhotoCardFragment" >
+        <action
+            android:id="@+id/action_homePhotoCardFragment_pop"
+            app:popUpTo="@id/homePhotoCardFragment"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>
