@@ -5,7 +5,7 @@
     app:startDestination="@id/splashFragment">
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.adminapp.ui.main.MainFragment"
+        android:name="com.parasol.adminapp.ui.main.MainFragment"
         android:label="MainFragment" >
         <action
             android:id="@+id/action_mainFragment_to_reservationEditFragment"
@@ -30,7 +30,7 @@
             app:popExitAnim="@anim/slide_pop_exit">
             <argument
                 android:name="reservationType"
-                app:argType="com.example.adminapp.data.model.ReservationType"
+                app:argType="com.parasol.adminapp.data.model.ReservationType"
                 app:nullable="true"
                 android:defaultValue="@null" />
         </action>
@@ -43,12 +43,12 @@
             app:popExitAnim="@anim/slide_pop_exit">
             <argument
                 android:name="equipmentData"
-                app:argType="com.example.adminapp.data.model.ReservationEquipmentData"
+                app:argType="com.parasol.adminapp.data.model.ReservationEquipmentData"
                 app:nullable="true"
                 android:defaultValue="@null"/>
             <argument
                 android:name="equipmentSettingData"
-                app:argType="com.example.adminapp.data.model.ReservationEquipmentSettingData"
+                app:argType="com.parasol.adminapp.data.model.ReservationEquipmentSettingData"
                 app:nullable="true"
                 android:defaultValue="@null" />
         </action>
@@ -61,7 +61,7 @@
             app:popExitAnim="@anim/slide_pop_exit">
             <argument
                 android:name="facilityBundle"
-                app:argType="com.example.adminapp.data.model.ReservationFacilityBundle"
+                app:argType="com.parasol.adminapp.data.model.ReservationFacilityBundle"
                 app:nullable="true"
                 android:defaultValue="@null" />
         </action>
@@ -118,7 +118,7 @@
     </fragment>
     <fragment
         android:id="@+id/settingsOutFragment"
-        android:name="com.example.adminapp.ui.main.settings.SettingsOutFragment"
+        android:name="com.parasol.adminapp.ui.main.settings.SettingsOutFragment"
         android:label="SettingsOutFragment">
         <action
             android:id="@+id/action_settingOut_to_settingOutPost"
@@ -130,7 +130,7 @@
     </fragment>
     <fragment
         android:id="@+id/mainhomeNoticeFragment"
-        android:name="com.example.adminapp.ui.main.home.HomeNoticeFragment">
+        android:name="com.parasol.adminapp.ui.main.home.HomeNoticeFragment">
         <action
             android:id="@+id/action_noticeFragment_to_noticeWriteFragment"
             app:destination="@+id/homeNoticeWriteFragment"/>
@@ -148,7 +148,7 @@
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.example.adminapp.ui.splash.SplashFragment"
+        android:name="com.parasol.adminapp.ui.splash.SplashFragment"
         android:label="SplashFragment" >
         <action
             android:id="@+id/action_splashFragment_to_mainFragment"
@@ -184,12 +184,12 @@
         app:startDestination="@id/signInFragment">
         <argument
             android:name="findInfoType"
-            app:argType="com.example.adminapp.ui.signin.FindInfoType"
+            app:argType="com.parasol.adminapp.ui.signin.FindInfoType"
             app:nullable="true"
             android:defaultValue="@null"/>
         <fragment
             android:id="@+id/signInFragment"
-            android:name="com.example.adminapp.ui.signin.SignInFragment"
+            android:name="com.parasol.adminapp.ui.signin.SignInFragment"
             android:label="SignInFragment" >
             <action
                 android:id="@+id/action_signInFragment_to_mainFragment"
@@ -206,18 +206,18 @@
                 app:popExitAnim="@anim/slide_pop_exit" >
                 <argument
                     android:name="findInfoType"
-                    app:argType="com.example.adminapp.ui.signin.FindInfoType"
+                    app:argType="com.parasol.adminapp.ui.signin.FindInfoType"
                     app:nullable="true"
                     android:defaultValue="@null"/>
             </action>
         </fragment>
         <fragment
             android:id="@+id/signInFindInfoFragment"
-            android:name="com.example.adminapp.ui.signin.SignInFindInfoFragment"
+            android:name="com.parasol.adminapp.ui.signin.SignInFindInfoFragment"
             android:label="SignInFindInfoFragment">
             <argument
                 android:name="findInfoType"
-                app:argType="com.example.adminapp.ui.signin.FindInfoType"
+                app:argType="com.parasol.adminapp.ui.signin.FindInfoType"
                 app:nullable="true"
                 android:defaultValue="@null"/>
             <action
@@ -232,7 +232,7 @@
         </fragment>
         <fragment
             android:id="@+id/signInFindInfoResultFragment"
-            android:name="com.example.adminapp.ui.signin.SignInFindInfoResultFragment"
+            android:name="com.parasol.adminapp.ui.signin.SignInFindInfoResultFragment"
             android:label="SignInFindInfoResultFragment">
             <action
                 android:id="@+id/action_signInFindInfoResultFragment_pop"
@@ -250,7 +250,7 @@
     </navigation>
     <fragment
         android:id="@+id/reservationEditFragment"
-        android:name="com.example.adminapp.ui.main.reservation.edit.ReservationEditFragment"
+        android:name="com.parasol.adminapp.ui.main.reservation.edit.ReservationEditFragment"
         android:label="ReservationEditFragment" >
         <action
             android:id="@+id/action_reservationEditFragment_pop"
@@ -267,18 +267,18 @@
             app:popExitAnim="@anim/slide_pop_exit" >
             <argument
                 android:name="reservationItem"
-                app:argType="com.example.adminapp.data.model.ReservationItem"
+                app:argType="com.parasol.adminapp.data.model.ReservationItem"
                 app:nullable="true"
                 android:defaultValue="@null"/>
         </action>
     </fragment>
     <fragment
         android:id="@+id/reservationEditDetailFragment"
-        android:name="com.example.adminapp.ui.main.reservation.edit.ReservationEditDetailFragment"
+        android:name="com.parasol.adminapp.ui.main.reservation.edit.ReservationEditDetailFragment"
         android:label="ReservationEditDetailFragment" >
         <argument
             android:name="reservationItem"
-            app:argType="com.example.adminapp.data.model.ReservationItem"
+            app:argType="com.parasol.adminapp.data.model.ReservationItem"
             app:nullable="true"
             android:defaultValue="@null"/>
         <action
@@ -290,11 +290,11 @@
     </fragment>
     <fragment
         android:id="@+id/reservationSelectAddFragment"
-        android:name="com.example.adminapp.ui.main.reservation.add.ReservationSelectAddFragment"
+        android:name="com.parasol.adminapp.ui.main.reservation.add.ReservationSelectAddFragment"
         android:label="ReservationSelectAddFragment" >
         <argument
             android:name="reservationType"
-            app:argType="com.example.adminapp.data.model.ReservationType"
+            app:argType="com.parasol.adminapp.data.model.ReservationType"
             app:nullable="true"
             android:defaultValue="@null" />
         <action
@@ -313,11 +313,11 @@
     </fragment>
     <fragment
         android:id="@+id/reservationAddFragment"
-        android:name="com.example.adminapp.ui.main.reservation.add.ReservationAddFragment"
+        android:name="com.parasol.adminapp.ui.main.reservation.add.ReservationAddFragment"
         android:label="ReservationAddFragment" >
         <argument
             android:name="reservationType"
-            app:argType="com.example.adminapp.data.model.ReservationType"
+            app:argType="com.parasol.adminapp.data.model.ReservationType"
             app:nullable="true"
             android:defaultValue="@null" />
         <action
@@ -329,16 +329,16 @@
     </fragment>
     <fragment
         android:id="@+id/reservationDetailEquipmentFragment"
-        android:name="com.example.adminapp.ui.main.reservation.detail.ReservationDetailEquipmentFragment"
+        android:name="com.parasol.adminapp.ui.main.reservation.detail.ReservationDetailEquipmentFragment"
         android:label="ReservationDetailEquipmentFragment" >
         <argument
             android:name="equipmentData"
-            app:argType="com.example.adminapp.data.model.ReservationEquipmentData"
+            app:argType="com.parasol.adminapp.data.model.ReservationEquipmentData"
             app:nullable="true"
             android:defaultValue="@null"/>
         <argument
             android:name="equipmentSettingData"
-            app:argType="com.example.adminapp.data.model.ReservationEquipmentSettingData"
+            app:argType="com.parasol.adminapp.data.model.ReservationEquipmentSettingData"
             app:nullable="true"
             android:defaultValue="@null" />
         <action
@@ -358,18 +358,18 @@
             app:popExitAnim="@anim/slide_pop_exit" >
             <argument
                 android:name="reservationItem"
-                app:argType="com.example.adminapp.data.model.ReservationItem"
+                app:argType="com.parasol.adminapp.data.model.ReservationItem"
                 app:nullable="true"
                 android:defaultValue="@null"/>
         </action>
     </fragment>
     <fragment
         android:id="@+id/reservationDetailFacilityFragment"
-        android:name="com.example.adminapp.ui.main.reservation.detail.ReservationDetailFacilityFragment"
+        android:name="com.parasol.adminapp.ui.main.reservation.detail.ReservationDetailFacilityFragment"
         android:label="ReservationDetailFacilityFragment">
         <argument
             android:name="facilityBundle"
-            app:argType="com.example.adminapp.data.model.ReservationFacilityBundle"
+            app:argType="com.parasol.adminapp.data.model.ReservationFacilityBundle"
             app:nullable="true"
             android:defaultValue="@null" />
         <action
@@ -389,7 +389,7 @@
             app:popExitAnim="@anim/slide_pop_exit" >
             <argument
                 android:name="reservationItem"
-                app:argType="com.example.adminapp.data.model.ReservationItem"
+                app:argType="com.parasol.adminapp.data.model.ReservationItem"
                 app:nullable="true"
                 android:defaultValue="@null"/>
         </action>
@@ -397,7 +397,7 @@
     <!--    community-->
     <fragment
         android:id="@+id/communityWriteFragment"
-        android:name="com.example.adminapp.ui.main.community.write.CommunityWriteFragment">
+        android:name="com.parasol.adminapp.ui.main.community.write.CommunityWriteFragment">
         <action
             android:id="@+id/action_communityWrite_to_communityGetPhoto"
             app:destination="@+id/communityGetPhotoFragment"/>
@@ -417,7 +417,7 @@
     </fragment>
     <fragment
         android:id="@+id/homeNoticeWriteFragment"
-        android:name="com.example.adminapp.ui.main.home.HomeNoticeWriteFragment"
+        android:name="com.parasol.adminapp.ui.main.home.HomeNoticeWriteFragment"
         android:label="HomeNoticeWriteFragment">
         <action
             android:id="@+id/action_homeNoticeWrite_to_homeNoticePost"
@@ -437,7 +437,7 @@
 
     <fragment
         android:id="@+id/communityPreviewFragment"
-        android:name="com.example.adminapp.ui.main.community.preview.CommunityPreviewFragment">
+        android:name="com.parasol.adminapp.ui.main.community.preview.CommunityPreviewFragment">
         <action
             app:destination="@+id/communityWriteFragment"
             android:id="@+id/action_communityPreview_to_communityWrite"/>
@@ -466,7 +466,7 @@
     </fragment>
     <fragment
         android:id="@id/communityWriteMarketFragment"
-        android:name="com.example.adminapp.ui.main.community.write.CommunityWriteMarketFragment">
+        android:name="com.parasol.adminapp.ui.main.community.write.CommunityWriteMarketFragment">
         <action
             android:id="@+id/action_communityWriteMarket_to_communityGetPhoto"
             app:destination="@+id/communityGetPhotoFragment"/>
@@ -485,7 +485,7 @@
 
     <fragment
         android:id="@+id/communityPostFragment"
-        android:name="com.example.adminapp.ui.main.community.post.CommunityPostFragment">
+        android:name="com.parasol.adminapp.ui.main.community.post.CommunityPostFragment">
         <action
             android:id="@+id/action_communityPost_to_communityPhoto"
             app:destination="@+id/communityPhotoFragment"/>
@@ -503,13 +503,13 @@
             android:defaultValue="0"/>
         <argument
             android:name="post_data_info"
-            app:argType="com.example.adminapp.data.model.PostDataInfo" />
+            app:argType="com.parasol.adminapp.data.model.PostDataInfo" />
 
     </fragment>
 
     <fragment
         android:id="@+id/communityPostMarketFragment"
-        android:name="com.example.adminapp.ui.main.community.post.CommunityPostMarketFragment">
+        android:name="com.parasol.adminapp.ui.main.community.post.CommunityPostMarketFragment">
         <action
             android:id="@+id/action_communityPostMarketFragment_pop"
             app:popUpTo="@id/communityPostMarketFragment"
@@ -519,12 +519,12 @@
             app:destination="@+id/communityPhotoFragment"/>
         <argument
             android:name="post_data_info"
-            app:argType="com.example.adminapp.data.model.PostDataInfo" />
+            app:argType="com.parasol.adminapp.data.model.PostDataInfo" />
     </fragment>
 
     <fragment
         android:id="@id/communityGetPhotoFragment"
-        android:name="com.example.adminapp.ui.main.community.write.CommunityGetPhotoFragment">
+        android:name="com.parasol.adminapp.ui.main.community.write.CommunityGetPhotoFragment">
         <action
             android:id="@+id/action_communityGetPhotoFragment_pop"
             app:popUpTo="@id/communityGetPhotoFragment"
@@ -533,7 +533,7 @@
 
     <fragment
         android:id="@+id/communityPhotoFragment"
-        android:name="com.example.adminapp.ui.main.community.post.CommunityPhotoFragment">
+        android:name="com.parasol.adminapp.ui.main.community.post.CommunityPhotoFragment">
         <argument
             android:name="photo_uri"
             app:argType="string[]"/>
@@ -546,7 +546,7 @@
 
     <fragment
         android:id="@+id/communitySearchFragment"
-        android:name="com.example.adminapp.ui.main.community.preview.CommunitySearchFragment"
+        android:name="com.parasol.adminapp.ui.main.community.preview.CommunitySearchFragment"
         android:label="CommunitySearchFragment">
         <action
             android:id="@+id/action_communitySearch_to_communityPost"
@@ -568,7 +568,7 @@
 
     <fragment
         android:id="@+id/settingsChangePwdFragment"
-        android:name="com.example.adminapp.ui.main.settings.SettingsChangePwdFragment"
+        android:name="com.parasol.adminapp.ui.main.settings.SettingsChangePwdFragment"
         android:label="SettingsChangePwdFragment" >
         <action
             android:id="@+id/action_settingsChangePwdFragment_pop"
@@ -579,7 +579,7 @@
     </fragment>
     <fragment
         android:id="@+id/settingsAllowUserFragment"
-        android:name="com.example.adminapp.ui.main.settings.SettingsAllowUserFragment"
+        android:name="com.parasol.adminapp.ui.main.settings.SettingsAllowUserFragment"
         android:label="SettingsAllowUserFragment" >
         <action
             android:id="@+id/action_settingsAllowUserFragment_pop"
@@ -590,7 +590,7 @@
     </fragment>
     <fragment
         android:id="@+id/settingsManageUserFragment"
-        android:name="com.example.adminapp.ui.main.settings.SettingsManageUserFragment"
+        android:name="com.parasol.adminapp.ui.main.settings.SettingsManageUserFragment"
         android:label="SettingsManageUserFragment">
         <action
             android:id="@+id/action_settingsManageUserFragment_pop"
@@ -601,7 +601,7 @@
     </fragment>
     <fragment
         android:id="@+id/homePhotoCardFragment"
-        android:name="com.example.adminapp.ui.main.home.HomePhotoCardFragment"
+        android:name="com.parasol.adminapp.ui.main.home.HomePhotoCardFragment"
         android:label="HomePhotoCardFragment" >
         <action
             android:id="@+id/action_homePhotoCardFragment_pop"
